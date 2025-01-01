@@ -1,0 +1,15 @@
+branchName: "#${issue.number}"
+openDraftPR: true
+copyIssueLabelsToPR: true
+copyIssueAssigneeToPR: true
+branches:
+  - label: 🚀Chore
+    prefix: chore/
+  - label: ✨ Feature
+    prefix: feat/
+  - label: 🚑Fix
+    prefix: fix/
+  - label: 🔨Refactor
+    prefix: refactor/
+  - label: 🎨Style
+    prefix: style/
