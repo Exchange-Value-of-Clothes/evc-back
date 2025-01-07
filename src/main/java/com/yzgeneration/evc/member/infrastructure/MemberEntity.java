@@ -4,15 +4,14 @@ import com.yzgeneration.evc.member.enums.MemberRole;
 import com.yzgeneration.evc.member.enums.MemberStatus;
 import com.yzgeneration.evc.member.model.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberEntity {
 
     @Id
@@ -31,16 +30,6 @@ public class MemberEntity {
     @Enumerated(EnumType.STRING)
     private MemberStatus memberStatus;
 
-    @Builder
-    public MemberEntity(Long id, MemberPrivateInformationEntity memberPrivateInformationEntity,
-                        MemberAuthenticationInformationEntity memberAuthenticationInformationEntity,
-                        MemberRole memberRole, MemberStatus memberStatus) {
-        this.id = id;
-        this.memberPrivateInformationEntity = memberPrivateInformationEntity;
-        this.memberAuthenticationInformationEntity = memberAuthenticationInformationEntity;
-        this.memberRole = memberRole;
-        this.memberStatus = memberStatus;
-    }
 
     public static MemberEntity from(Member member) {
         return MemberEntity.builder()

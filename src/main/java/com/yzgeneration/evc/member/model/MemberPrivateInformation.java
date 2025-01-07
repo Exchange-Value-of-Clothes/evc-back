@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.member.model;
 
-import com.yzgeneration.evc.member.dto.MemberRequest;
+import com.yzgeneration.evc.common.service.port.RandomHolder;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,10 +17,10 @@ public class MemberPrivateInformation {
     private String phoneNumber;
     private int point;
 
-    public static MemberPrivateInformation createByEmail(MemberEmailCreate memberEmailCreate) {
+    public static MemberPrivateInformation createByEmail(EmailSignup emailSignup, RandomHolder randomHolder) {
         return MemberPrivateInformation.builder()
-                .nickname(memberEmailCreate.getNickname())
-                .email(memberEmailCreate.getEmail())
+                .nickname(emailSignup.getNickname() + "#" + randomHolder.randomFourDigit())
+                .email(emailSignup.getEmail())
                 .build();
     }
 
