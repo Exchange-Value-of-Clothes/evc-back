@@ -1,0 +1,3 @@
+[submodule "evc-back-config"]
+	path = evc-back-config
+	url = https://github.com/Exchange-Value-of-Clothes/evc-back-config.git
