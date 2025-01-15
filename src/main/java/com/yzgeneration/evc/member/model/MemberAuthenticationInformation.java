@@ -1,6 +1,7 @@
 package com.yzgeneration.evc.member.model;
 
 import com.yzgeneration.evc.member.enums.ProviderType;
+import com.yzgeneration.evc.member.service.MemberAuthenticationService;
 import com.yzgeneration.evc.member.service.port.PasswordProcessor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,12 +13,11 @@ public class MemberAuthenticationInformation {
     private String providerId;
     private String password;
 
-    public static MemberAuthenticationInformation createByEmail(PasswordProcessor passwordProcessor, String rawPassword) {
+    public static MemberAuthenticationInformation createdByEmail(String rawPassword, PasswordProcessor passwordProcessor) {
         return MemberAuthenticationInformation.builder()
                 .providerType(ProviderType.EMAIL)
                 .password(passwordProcessor.encode(rawPassword))
                 .build();
     }
-
 
 }

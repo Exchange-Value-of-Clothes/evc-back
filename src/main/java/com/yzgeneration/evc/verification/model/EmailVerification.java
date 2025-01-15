@@ -11,16 +11,16 @@ import lombok.Getter;
 public class EmailVerification {
 
     private Long id;
-    private Long userId;
+    private Long memberId;
     private String emailAddress;
     private String verificationCode;
     private EmailVerificationType emailVerificationType;
     private boolean isVerified;
 
-    public static EmailVerification create(Long userId, String emailAddress, UuidHolder uuidHolder,
+    public static EmailVerification create(Long memberId, String emailAddress, UuidHolder uuidHolder,
                                            EmailVerificationType emailVerificationType) {
         return EmailVerification.builder()
-                .userId(userId)
+                .memberId(memberId)
                 .emailAddress(emailAddress)
                 .verificationCode(uuidHolder.random())
                 .emailVerificationType(emailVerificationType)

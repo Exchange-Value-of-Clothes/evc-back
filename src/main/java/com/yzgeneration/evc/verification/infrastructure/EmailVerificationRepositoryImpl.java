@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class EmailRepositoryImpl implements EmailRepository{
+public class EmailVerificationRepositoryImpl implements EmailVerificationRepository {
 
     private final EmailJpaRepository emailJpaRepository;
 

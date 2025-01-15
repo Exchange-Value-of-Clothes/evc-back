@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.common.service.port;
+package com.yzgeneration.evc.member.service.port;
 
 import com.yzgeneration.evc.verification.model.Email;
 

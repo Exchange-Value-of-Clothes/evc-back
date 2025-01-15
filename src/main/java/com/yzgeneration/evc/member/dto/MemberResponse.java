@@ -8,6 +8,6 @@ public class MemberResponse {
     @Getter
     @AllArgsConstructor
     public static class RegisterResponse {
-        private String verificationToken;
+        private String verificationCode;
     }
 }
