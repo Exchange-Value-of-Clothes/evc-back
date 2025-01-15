@@ -1,0 +1,10 @@
+[[member-register]]
+== 멤버 회원가입
+
+==== HTTP Request
+include::{snippets}/member-register/http-request.adoc[]
+include::{snippets}/member-register/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/member-register/http-response.adoc[]
+include::{snippets}/member-register/response-fields.adoc[]
