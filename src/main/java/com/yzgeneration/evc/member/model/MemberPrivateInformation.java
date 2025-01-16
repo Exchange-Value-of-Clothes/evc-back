@@ -17,7 +17,7 @@ public class MemberPrivateInformation {
     private String phoneNumber;
     private int point;
 
-    public static MemberPrivateInformation createByEmail(EmailSignup emailSignup, RandomHolder randomHolder) {
+    public static MemberPrivateInformation createdByEmail(EmailSignup emailSignup, RandomHolder randomHolder) {
         return MemberPrivateInformation.builder()
                 .nickname(emailSignup.getNickname() + "#" + randomHolder.randomFourDigit())
                 .email(emailSignup.getEmail())
