@@ -3,7 +3,6 @@ package com.yzgeneration.evc.useditem.controller;
 import com.yzgeneration.evc.useditem.dto.UsedItemRequest.CreateUsedItem;
 import com.yzgeneration.evc.useditem.dto.UsedItemResponse;
 import com.yzgeneration.evc.useditem.service.UsedItemService;
-import jakarta.mail.Multipart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
