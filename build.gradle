@@ -46,11 +46,19 @@ dependencies {
 
 }
 
+processResources.dependsOn('copyGitSubmodule')
 
+// Git Submodule 가져오기
+tasks.register('copyGitSubmodule', Copy) {
+	from ('./evc-back-config') {
+		include '*.yml'
+	}
+
+	into './src/main/resources'
+}
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
 
 ext { // 전역 변수
 	snippetsDir = file('build/generated-snippets')
@@ -76,4 +84,5 @@ bootJar {
 	from("${asciidoctor.outputDir}") {
 		into 'static/docs'
 	}
+  
 }
