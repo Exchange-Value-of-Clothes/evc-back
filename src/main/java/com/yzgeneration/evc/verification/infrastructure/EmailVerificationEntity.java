@@ -30,7 +30,7 @@ public class EmailVerificationEntity {
 
     public static EmailVerificationEntity from(EmailVerification emailVerification) {
         return EmailVerificationEntity.builder()
-                .userId(emailVerification.getUserId())
+                .userId(emailVerification.getMemberId())
                 .emailAddress(emailVerification.getEmailAddress())
                 .verificationCode(emailVerification.getVerificationCode())
                 .emailVerificationType(emailVerification.getEmailVerificationType())
@@ -41,7 +41,7 @@ public class EmailVerificationEntity {
     public EmailVerification toModel() {
         return EmailVerification.builder()
                 .id(id)
-                .userId(userId)
+                .memberId(userId)
                 .emailAddress(emailAddress)
                 .verificationCode(verificationCode)
                 .emailVerificationType(emailVerificationType)
