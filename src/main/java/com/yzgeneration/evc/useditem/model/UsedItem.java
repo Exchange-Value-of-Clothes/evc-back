@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Builder
@@ -22,7 +20,6 @@ public class UsedItem {
     private int viewCount;
     private int likeCount;
     private int chattingCount;
-    private List<String> imageName;
     private LocalDateTime createdAt;
 
     public static UsedItem create(CreateUsedItem createUsedItem) {
@@ -36,8 +33,6 @@ public class UsedItem {
                 .viewCount(0)
                 .likeCount(0)
                 .chattingCount(0)
-                // [notice] 이미지 처리 aws s3 연동 이후에 진행
-                .imageName(new ArrayList<>())
                 .createdAt(LocalDateTime.now())
                 .build();
     }
