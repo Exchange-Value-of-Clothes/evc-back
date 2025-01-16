@@ -4,6 +4,7 @@ import com.yzgeneration.evc.common.service.port.RandomHolder;
 import com.yzgeneration.evc.member.dto.MemberRequest.EmailSignup;
 import com.yzgeneration.evc.member.enums.MemberRole;
 import com.yzgeneration.evc.member.enums.MemberStatus;
+import com.yzgeneration.evc.member.implement.MemberCreator;
 import com.yzgeneration.evc.member.service.port.MemberRepository;
 import com.yzgeneration.evc.member.model.Member;
 import com.yzgeneration.evc.member.model.MemberAuthenticationInformation;
@@ -17,18 +18,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@Builder
 @RequiredArgsConstructor
 public class MemberAuthenticationService {
 
-    private final MemberRepository memberRepository;
-    private final PasswordProcessor passwordProcessor;
-    private final EmailVerificationProcessor emailVerificationProcessor;
-    private final RandomHolder randomHolder;
+    private final MemberCreator memberCreator;
+    private final EmailVerififcationProcessor emailVerificationProcessor;
 
     public Member createMemberByEmail(EmailSignup emailSignup) {
-        Member member = createMember(emailSignup);
-        return memberRepository.save(member);
+        return memberCreator.createByEmail(emailSignup);
     }
 
     public EmailVerification sendEmailForVerification(Member member) {
@@ -37,11 +34,6 @@ public class MemberAuthenticationService {
         return emailVerification;
     }
 
-    private Member createMember(EmailSignup emailSignup) {
-        MemberPrivateInformation privateInfo = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
-        MemberAuthenticationInformation authenticationInfo = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
-        return Member.create(privateInfo, authenticationInfo, MemberRole.USER, MemberStatus.PENDING);
-    }
 
 
 
