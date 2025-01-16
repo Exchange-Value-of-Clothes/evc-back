@@ -1,6 +1,6 @@
-package com.yzgeneration.evc.common.service.infrastructure;
+package com.yzgeneration.evc.member.service;
 
-import com.yzgeneration.evc.common.service.port.MailSender;
+import com.yzgeneration.evc.member.service.port.MailSender;
 import com.yzgeneration.evc.verification.model.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

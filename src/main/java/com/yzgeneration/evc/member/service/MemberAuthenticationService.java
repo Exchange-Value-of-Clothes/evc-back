@@ -12,11 +12,12 @@ import com.yzgeneration.evc.member.service.port.PasswordProcessor;
 import com.yzgeneration.evc.verification.enums.EmailVerificationType;
 import com.yzgeneration.evc.verification.model.EmailVerification;
 import com.yzgeneration.evc.verification.implement.EmailVerificationProcessor;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Builder
 @RequiredArgsConstructor
 public class MemberAuthenticationService {
 
@@ -25,8 +26,7 @@ public class MemberAuthenticationService {
     private final EmailVerificationProcessor emailVerificationProcessor;
     private final RandomHolder randomHolder;
 
-    @Transactional
-    public Member createByEmail(EmailSignup emailSignup) {
+    public Member createMemberByEmail(EmailSignup emailSignup) {
         Member member = createMember(emailSignup);
         return memberRepository.save(member);
     }
@@ -38,8 +38,8 @@ public class MemberAuthenticationService {
     }
 
     private Member createMember(EmailSignup emailSignup) {
-        MemberPrivateInformation privateInfo = MemberPrivateInformation.createByEmail(emailSignup, randomHolder);
-        MemberAuthenticationInformation authenticationInfo = MemberAuthenticationInformation.createByEmail(passwordProcessor, emailSignup.getPassword());
+        MemberPrivateInformation privateInfo = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberAuthenticationInformation authenticationInfo = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
         return Member.create(privateInfo, authenticationInfo, MemberRole.USER, MemberStatus.PENDING);
     }
 

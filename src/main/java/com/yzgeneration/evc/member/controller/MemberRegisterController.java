@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/members/register")
 @RequiredArgsConstructor
-public class RegisterMemberController {
+public class MemberRegisterController {
 
     private final MemberAuthenticationService memberAuthenticationService;
 
     @PostMapping
     public RegisterResponse register(@RequestBody @Valid EmailSignup emailSignup) {
-        Member member = memberAuthenticationService.createByEmail(emailSignup);
+        Member member = memberAuthenticationService.createMemberByEmail(emailSignup);
         EmailVerification emailVerification = memberAuthenticationService.sendEmailForVerification(member);
         return new RegisterResponse(emailVerification.getVerificationCode());
     }
