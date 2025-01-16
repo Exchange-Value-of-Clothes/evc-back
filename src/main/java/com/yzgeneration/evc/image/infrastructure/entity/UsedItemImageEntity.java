@@ -1,10 +1,7 @@
 package com.yzgeneration.evc.image.infrastructure.entity;
 
 import com.yzgeneration.evc.image.model.UsedItemImage;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -12,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @SuperBuilder
+@Table(name = "used_items_images")
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class UsedItemImageEntity extends BaseImageEntity {
