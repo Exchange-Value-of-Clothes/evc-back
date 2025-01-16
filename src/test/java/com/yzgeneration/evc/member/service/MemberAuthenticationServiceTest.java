@@ -4,6 +4,7 @@ import com.yzgeneration.evc.member.dto.MemberRequest.EmailSignup;
 import com.yzgeneration.evc.member.enums.MemberRole;
 import com.yzgeneration.evc.member.enums.MemberStatus;
 import com.yzgeneration.evc.member.enums.ProviderType;
+import com.yzgeneration.evc.member.implement.MemberCreator;
 import com.yzgeneration.evc.member.model.Member;
 import com.yzgeneration.evc.mock.StubUuidHolder;
 import com.yzgeneration.evc.mock.member.DummyEmailSender;
@@ -37,12 +38,12 @@ class MemberAuthenticationServiceTest {
                 .uuidHolder(new StubUuidHolder())
                 .build();
 
-        memberAuthenticationService = MemberAuthenticationService.builder()
-                .memberRepository(new FakeMemberRepository())
-                .passwordProcessor(new SpyPasswordProcessor())
-                .randomHolder(new StubRandomHolder())
-                .emailVerificationProcessor(emailVerificationProcessor)
-                .build();
+        MemberCreator memberCreator = new MemberCreator(
+                        new FakeMemberRepository(),
+                        new SpyPasswordProcessor(),
+                        new StubRandomHolder());
+
+        memberAuthenticationService = new MemberAuthenticationService(memberCreator, emailVerificationProcessor);
     }
 
     @Test
