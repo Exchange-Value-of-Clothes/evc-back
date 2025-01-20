@@ -29,4 +29,9 @@ public class FakeMemberRepository implements MemberRepository {
             return member;
         }
     }
+
+    @Override
+    public boolean checkDuplicateEmail(String email) {
+        return false;
+    }
 }
