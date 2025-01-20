@@ -20,10 +20,10 @@ public class UsedItemResponse {
     private final int viewCount;
     private final int likeCount;
     private final int chattingCount;
-    private final List<String> imageName;
+    private final List<String> imageURLs;
     private final LocalDateTime createAt;
 
-    public static UsedItemResponse from(UsedItem usedItem) {
+    public static UsedItemResponse from(UsedItem usedItem, List<String> imageURLs) {
         return UsedItemResponse.builder()
                 .memberId(usedItem.getId())
                 .title(usedItem.getTitle())
@@ -35,7 +35,7 @@ public class UsedItemResponse {
                 .viewCount(usedItem.getViewCount())
                 .likeCount(usedItem.getLikeCount())
                 .chattingCount(usedItem.getChattingCount())
-                .imageName(usedItem.getImageName())
+                .imageURLs(imageURLs)
                 .createAt(usedItem.getCreatedAt())
                 .build();
     }

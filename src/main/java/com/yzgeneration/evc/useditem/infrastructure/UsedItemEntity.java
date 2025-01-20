@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -40,10 +38,6 @@ public class UsedItemEntity {
 
     private int chattingCount;
 
-//    @ElementCollection
-//    @CollectionTable(name = "useditem_image", joinColumns = @JoinColumn(name = "used_items_id"))
-//    private List<String> imageName = new ArrayList<>();
-
     private LocalDateTime createdAt;
 
     public static UsedItemEntity from(UsedItem usedItem) {
@@ -57,7 +51,6 @@ public class UsedItemEntity {
                 .viewCount(usedItem.getViewCount())
                 .likeCount(usedItem.getLikeCount())
                 .chattingCount(usedItem.getChattingCount())
-//                .imageName(usedItem.getImageName())
                 .createdAt(usedItem.getCreatedAt()).build();
     }
 
@@ -73,7 +66,6 @@ public class UsedItemEntity {
                 .viewCount(viewCount)
                 .likeCount(likeCount)
                 .chattingCount(chattingCount)
-//                .imageName(imageName)
                 .createdAt(createdAt)
                 .build();
     }
