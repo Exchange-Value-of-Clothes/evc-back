@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@Builder
 @RequiredArgsConstructor
 public class EmailVerificationProcessor {
 
@@ -25,6 +24,11 @@ public class EmailVerificationProcessor {
     
     public void sendMail(EmailVerification emailVerification) {
         mailSender.send(Email.create(emailVerification));
+    }
+
+    public void verify(String token) {
+        EmailVerification emailVerification = emailVerificationRepository.get(token);
+        emailVerification.verify();
     }
 
 

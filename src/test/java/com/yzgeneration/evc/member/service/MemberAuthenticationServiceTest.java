@@ -5,7 +5,9 @@ import com.yzgeneration.evc.member.enums.MemberRole;
 import com.yzgeneration.evc.member.enums.MemberStatus;
 import com.yzgeneration.evc.member.enums.ProviderType;
 import com.yzgeneration.evc.member.implement.MemberCreator;
+import com.yzgeneration.evc.member.implement.MemberValidator;
 import com.yzgeneration.evc.member.model.Member;
+import com.yzgeneration.evc.member.service.port.MemberRepository;
 import com.yzgeneration.evc.mock.StubUuidHolder;
 import com.yzgeneration.evc.mock.member.DummyEmailSender;
 import com.yzgeneration.evc.mock.member.FakeEmailVerificationRepository;
@@ -32,16 +34,20 @@ class MemberAuthenticationServiceTest {
 
     @BeforeEach
     void init() {
-        EmailVerificationProcessor emailVerificationProcessor = EmailVerificationProcessor.builder()
-                .emailVerificationRepository(new FakeEmailVerificationRepository())
-                .mailSender(new DummyEmailSender())
-                .uuidHolder(new StubUuidHolder())
-                .build();
+        EmailVerificationProcessor emailVerificationProcessor = new EmailVerificationProcessor(
+                new FakeEmailVerificationRepository(),
+                new StubUuidHolder(),
+                new DummyEmailSender());
+
+        MemberRepository memberRepository = new FakeMemberRepository();
+        MemberValidator memberValidator = new MemberValidator(memberRepository);
+
 
         MemberCreator memberCreator = new MemberCreator(
-                        new FakeMemberRepository(),
+                        memberRepository,
                         new SpyPasswordProcessor(),
-                        new StubRandomHolder());
+                        new StubRandomHolder(),
+                        memberValidator);
 
         memberAuthenticationService = new MemberAuthenticationService(memberCreator, emailVerificationProcessor);
     }

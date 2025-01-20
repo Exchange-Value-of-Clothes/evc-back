@@ -16,4 +16,9 @@ public class MemberRepositoryImpl implements MemberRepository {
     public Member save(Member member) {
         return memberJpaRepository.save(MemberEntity.from(member)).toModel();
     }
+
+    @Override
+    public boolean checkDuplicateEmail(String email) {
+        return memberJpaRepository.existsByMemberPrivateInformationEntityEmail(email);
+    }
 }
