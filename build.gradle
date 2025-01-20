@@ -2,7 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.1'
 	id 'io.spring.dependency-management' version '1.1.7'
-	id "org.asciidoctor.jvm.convert" version "3.3.2"
+	id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
 group = 'com.yzgeneration'
@@ -43,37 +43,37 @@ dependencies {
 
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-
-}
-
-
-
-tasks.named('test') {
-	useJUnitPlatform()
 }
 
 ext {
+	// 전역 변수 정의
 	snippetsDir = file('build/generated-snippets')
 }
 
-test {
+tasks.test {
+	// 테스트 태스크에 JUnit Platform 사용 및 출력 디렉터리 지정
+	useJUnitPlatform()
 	outputs.dir snippetsDir
 }
 
-asciidoctor {
+tasks.named('asciidoctor') {
+	// Asciidoctor 태스크 설정
 	inputs.dir snippetsDir
 	configurations 'asciidoctorExt'
 
 	sources {
-		include("**/index.adoc")
+		include '**/index.adoc'
 	}
+
+	// 경로 베이스 설정
 	baseDirFollowsSourceFile()
-	dependsOn test
+	dependsOn tasks.test
 }
 
-bootJar {
-	dependsOn asciidoctor
-	from("${asciidoctor.outputDir}") {
-		into 'static/docs'
-	}
+tasks.named('bootJar') {
+	// BootJar 태스크 설정
+	dependsOn tasks.named('asciidoctor')
+	from {
+		tasks.named('asciidoctor').get().outputDir
+	} into 'static/docs'
 }
