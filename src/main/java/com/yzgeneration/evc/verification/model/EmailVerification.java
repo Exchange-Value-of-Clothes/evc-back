@@ -27,4 +27,8 @@ public class EmailVerification {
                 .build();
     }
 
+    public void verify() {
+        this.isVerified = true;
+    }
+
 }
