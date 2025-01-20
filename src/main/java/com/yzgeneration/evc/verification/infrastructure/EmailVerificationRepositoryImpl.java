@@ -14,4 +14,9 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
     public EmailVerification save(EmailVerification emailVerification) {
         return emailJpaRepository.save(EmailVerificationEntity.from(emailVerification)).toModel();
     }
+
+    @Override
+    public EmailVerification get(String code) {
+        return emailJpaRepository.findByVerificationCode(code).orElseThrow(()-> new RuntimeException()).toModel();
+    }
 }

@@ -4,4 +4,5 @@ import com.yzgeneration.evc.verification.model.EmailVerification;
 
 public interface EmailVerificationRepository {
     EmailVerification save(EmailVerification emailVerification);
+    EmailVerification get(String token);
 }
