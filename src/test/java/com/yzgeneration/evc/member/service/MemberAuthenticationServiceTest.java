@@ -20,14 +20,12 @@ import com.yzgeneration.evc.verification.model.EmailVerification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.yzgeneration.evc.fixture.MemberFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
-@SpringBootTest
 class MemberAuthenticationServiceTest {
 
     private MemberAuthenticationService memberAuthenticationService;
