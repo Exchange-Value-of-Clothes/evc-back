@@ -50,7 +50,7 @@ ext {
 	snippetsDir = file('build/generated-snippets')
 }
 
-tasks.test {
+test {
 	// 테스트 태스크에 JUnit Platform 사용 및 출력 디렉터리 지정
 	useJUnitPlatform()
 	outputs.dir snippetsDir
