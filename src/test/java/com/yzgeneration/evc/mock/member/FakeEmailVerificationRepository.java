@@ -32,4 +32,9 @@ public class FakeEmailVerificationRepository implements EmailVerificationReposit
         }
 
     }
+
+    @Override
+    public EmailVerification get(String token) {
+        return null;
+    }
 }
