@@ -21,10 +21,12 @@ public class MemberCreator {
     private final MemberRepository memberRepository;
     private final PasswordProcessor passwordProcessor;
     private final RandomHolder randomHolder;
+    private final MemberValidator memberValidator;
 
     public Member createByEmail(EmailSignup emailSignup) {
         MemberPrivateInformation privateInfo = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
         MemberAuthenticationInformation authenticationInfo = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
+        memberValidator.validate(privateInfo, authenticationInfo);
         Member member = Member.create(privateInfo, authenticationInfo, MemberRole.USER, MemberStatus.PENDING);
         return memberRepository.save(member);
     }
