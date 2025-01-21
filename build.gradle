@@ -9,9 +9,7 @@ group = 'com.yzgeneration'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+	sourceCompatibility = '17'
 }
 
 configurations {
@@ -46,14 +44,12 @@ dependencies {
 }
 
 ext {
-	// 전역 변수 정의
 	snippetsDir = file('build/generated-snippets')
 }
 
 test {
-	// 테스트 태스크에 JUnit Platform 사용 및 출력 디렉터리 지정
-	useJUnitPlatform()
 	outputs.dir snippetsDir
+	useJUnitPlatform()
 }
 
 tasks.named('asciidoctor') {
@@ -70,10 +66,12 @@ tasks.named('asciidoctor') {
 	dependsOn tasks.test
 }
 
-tasks.named('bootJar') {
-	// BootJar 태스크 설정
-	dependsOn tasks.named('asciidoctor')
-	from {
-		tasks.named('asciidoctor').get().outputDir
-	} into 'static/docs'
+bootJar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE // 중복 항목을 무시
+	dependsOn tasks.named('asciidoctor') // asciidoctor 작업 포함
+	from(tasks.named('asciidoctor').get().outputDir) {
+		into 'static/docs'
+	}
 }
+
+
