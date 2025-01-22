@@ -23,7 +23,7 @@ jobs:
         run: mkdir -p src/main/resources
 
       - name: application.yml 파일 만들기
-        run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > src/main/resources/applicaiton.yml
+        run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > src/main/resources/application.yml
 
       # 추가
       - name: gradlew 권한주기
