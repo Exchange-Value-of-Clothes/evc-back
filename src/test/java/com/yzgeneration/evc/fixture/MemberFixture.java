@@ -52,7 +52,7 @@ public abstract class MemberFixture {
                 .sample();
     }
 
-    public static Member createdMyEmail() {
+    public static Member createdByEmail() {
         return Member.builder()
                 .memberAuthenticationInformation(emailMemberAuthenticationInfo())
                 .memberPrivateInformation(fixNicknameAndEmail())
