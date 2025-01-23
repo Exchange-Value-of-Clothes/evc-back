@@ -3,7 +3,7 @@ package com.yzgeneration.evc.member.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.yzgeneration.evc.fixture.MemberFixture;
-import com.yzgeneration.evc.member.service.MemberAuthenticationService;
+import com.yzgeneration.evc.member.service.MemberRegisterService;
 import com.yzgeneration.evc.verification.model.EmailVerification;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,14 +31,14 @@ class MemberRegisterControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private MemberAuthenticationService memberAuthenticationService;
+    private MemberRegisterService memberRegisterService;
 
     @Test
     @WithMockUser
     @DisplayName("신규 회원을 생성한다.")
     void register() throws Exception {
         EmailSignup request = MemberFixture.fixEmailSignup();
-        given(memberAuthenticationService.sendEmailForVerification(any()))
+        given(memberRegisterService.sendEmailForRequestVerification(any()))
                 .willReturn(EmailVerification.builder()
                         .verificationCode("1234").build());
         mockMvc.perform(MockMvcRequestBuilders.post("/api/members/register")
@@ -46,6 +46,28 @@ class MemberRegisterControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf())
                 )
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("인증코드를 통해 인증한다.")
+    void verify() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/members/register/verify")
+                        .param("code", "1234")
+                        .with(csrf()))
+                    .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("인증코드를 요청한다.")
+    void resendVerificationCode() throws Exception {
+        given(memberRegisterService.resendVerificationCode(any()))
+                .willReturn("1234");
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/members/register/request-code")
+                        .param("email", "ssar@naver.com")
+                        .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

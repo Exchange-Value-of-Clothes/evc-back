@@ -32,6 +32,8 @@ public class FakeMemberRepository implements MemberRepository {
 
     @Override
     public boolean checkDuplicateEmail(String email) {
-        return false;
+        return data.stream()
+                .anyMatch(item -> item.getMemberPrivateInformation().getEmail().equals(email));
     }
+
 }

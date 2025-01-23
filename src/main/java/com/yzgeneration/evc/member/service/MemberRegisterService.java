@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberAuthenticationService {
+public class MemberRegisterService {
 
     private final MemberCreator memberCreator;
     private final EmailVerificationProcessor emailVerificationProcessor;
@@ -23,15 +23,18 @@ public class MemberAuthenticationService {
         return memberCreator.createByEmail(emailSignup);
     }
 
-    public EmailVerification sendEmailForVerification(Member member) {
+    public EmailVerification sendEmailForRequestVerification(Member member) {
         EmailVerification emailVerification = emailVerificationProcessor.createEmailVerification(member.getId(), member.getMemberPrivateInformation().getEmail(), EmailVerificationType.REGISTER);
         emailVerificationProcessor.sendMail(emailVerification);
         return emailVerification;
     }
 
+    public void verify(String code) {
+        emailVerificationProcessor.verify(code);
+    }
 
-
-
-
+    public String resendVerificationCode(String email) {
+        return emailVerificationProcessor.get(email);
+    }
 
 }
