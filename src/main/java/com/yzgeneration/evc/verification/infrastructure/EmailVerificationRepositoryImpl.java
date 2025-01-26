@@ -1,8 +1,11 @@
 package com.yzgeneration.evc.verification.infrastructure;
 
+import com.yzgeneration.evc.common.exception.CustomException;
 import com.yzgeneration.evc.verification.model.EmailVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import static com.yzgeneration.evc.common.exception.ErrorCode.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -16,7 +19,12 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
     }
 
     @Override
-    public EmailVerification get(String code) {
-        return emailJpaRepository.findByVerificationCode(code).orElseThrow(()-> new RuntimeException()).toModel();
+    public EmailVerification getByToken(String code) {
+        return emailJpaRepository.findByVerificationCode(code).orElseThrow(()-> new CustomException(EMAIL_VERIFICATION_NOT_FOUND)).toModel();
+    }
+
+    @Override
+    public EmailVerification getByEmail(String email) {
+        return emailJpaRepository.findByEmailAddress(email).orElseThrow(()-> new CustomException(EMAIL_VERIFICATION_NOT_FOUND)).toModel();
     }
 }

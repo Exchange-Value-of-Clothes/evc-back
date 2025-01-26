@@ -1,6 +1,7 @@
 package com.yzgeneration.evc.member.model;
 
 
+import com.yzgeneration.evc.common.exception.CustomException;
 import com.yzgeneration.evc.member.enums.MemberRole;
 import com.yzgeneration.evc.member.enums.MemberStatus;
 import com.yzgeneration.evc.member.enums.ProviderType;
@@ -11,6 +12,7 @@ import com.yzgeneration.evc.common.service.port.RandomHolder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.yzgeneration.evc.common.exception.ErrorCode.*;
 import static com.yzgeneration.evc.fixture.MemberFixture.fixtureMonkey;
 import static com.yzgeneration.evc.member.dto.MemberRequest.*;
 import static org.assertj.core.api.Assertions.*;
@@ -42,7 +44,7 @@ class MemberTest {
     }
 
     @Test
-    @DisplayName("잘못된 이메일 형식은 RuntimeException을 발생시킨다.")
+    @DisplayName("잘못된 이메일 형식은 예외을 발생시킨다.")
     void wrongEmailThrowsException() {
         // given
         EmailSignup emailSignup = fixtureMonkey.giveMeBuilder(EmailSignup.class)
@@ -53,7 +55,9 @@ class MemberTest {
         // when
         // then
         assertThatThrownBy(emailSignup::valid)
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", EMAIL_INCORRECT_FORMAT);
+
     }
 
     @Test
@@ -77,7 +81,7 @@ class MemberTest {
     }
 
     @Test
-    @DisplayName("비밀번호와 비밀번호확인 값이 다르면 RuntimeException을 발생시킨다.")
+    @DisplayName("비밀번호와 비밀번호확인 값이 다르면 예외를 발생시킨다.")
     void passwordValidThrowsException() {
         // given
         EmailSignup emailSignup = fixtureMonkey.giveMeBuilder(EmailSignup.class)
@@ -90,13 +94,14 @@ class MemberTest {
         // when
         // then
         assertThatThrownBy(emailSignup::valid)
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", PASSWORD_INCORRECT_FORMAT);
+
     }
 
     @Test
     @DisplayName("Member를 생성할 수 있다.")
     void createMember() {
-
         // given
         EmailSignup emailSignup = fixtureMonkey.giveMeBuilder(EmailSignup.class)
                 .set("email", "ssar@naver.com")

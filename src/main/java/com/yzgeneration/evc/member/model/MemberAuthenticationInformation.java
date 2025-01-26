@@ -1,7 +1,6 @@
 package com.yzgeneration.evc.member.model;
 
 import com.yzgeneration.evc.member.enums.ProviderType;
-import com.yzgeneration.evc.member.service.MemberAuthenticationService;
 import com.yzgeneration.evc.member.service.port.PasswordProcessor;
 import lombok.Builder;
 import lombok.Getter;

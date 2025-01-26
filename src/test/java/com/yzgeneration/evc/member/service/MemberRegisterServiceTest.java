@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.member.service;
 
+import com.yzgeneration.evc.common.exception.CustomException;
 import com.yzgeneration.evc.member.dto.MemberRequest.EmailSignup;
 import com.yzgeneration.evc.member.enums.MemberRole;
 import com.yzgeneration.evc.member.enums.MemberStatus;
@@ -7,6 +8,8 @@ import com.yzgeneration.evc.member.enums.ProviderType;
 import com.yzgeneration.evc.member.implement.MemberCreator;
 import com.yzgeneration.evc.member.implement.MemberValidator;
 import com.yzgeneration.evc.member.model.Member;
+import com.yzgeneration.evc.member.model.MemberAuthenticationInformation;
+import com.yzgeneration.evc.member.model.MemberPrivateInformation;
 import com.yzgeneration.evc.member.service.port.MemberRepository;
 import com.yzgeneration.evc.mock.StubUuidHolder;
 import com.yzgeneration.evc.mock.member.DummyEmailSender;
@@ -20,15 +23,15 @@ import com.yzgeneration.evc.verification.model.EmailVerification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
 
+import static com.yzgeneration.evc.common.exception.ErrorCode.*;
 import static com.yzgeneration.evc.fixture.MemberFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
-@Transactional
-class MemberAuthenticationServiceTest {
+class MemberRegisterServiceTest {
 
-    private MemberAuthenticationService memberAuthenticationService;
+    private MemberRegisterService memberRegisterService;
+    private MemberValidator memberValidator;
 
     @BeforeEach
     void init() {
@@ -38,7 +41,7 @@ class MemberAuthenticationServiceTest {
                 new DummyEmailSender());
 
         MemberRepository memberRepository = new FakeMemberRepository();
-        MemberValidator memberValidator = new MemberValidator(memberRepository);
+        memberValidator = new MemberValidator(memberRepository);
 
 
         MemberCreator memberCreator = new MemberCreator(
@@ -47,7 +50,7 @@ class MemberAuthenticationServiceTest {
                         new StubRandomHolder(),
                         memberValidator);
 
-        memberAuthenticationService = new MemberAuthenticationService(memberCreator, emailVerificationProcessor);
+        memberRegisterService = new MemberRegisterService(memberCreator, emailVerificationProcessor);
     }
 
     @Test
@@ -57,7 +60,7 @@ class MemberAuthenticationServiceTest {
         EmailSignup emailSignup = fixEmailSignup();
 
         // when
-        Member member = memberAuthenticationService.createMemberByEmail(emailSignup);
+        Member member = memberRegisterService.createMemberByEmail(emailSignup);
 
         // then
         assertThat(member.getMemberStatus()).isEqualTo(MemberStatus.PENDING);
@@ -70,16 +73,30 @@ class MemberAuthenticationServiceTest {
         assertThat(member.getMemberPrivateInformation().getPhoneNumber()).isNull();
         assertThat(member.getMemberPrivateInformation().getAccountName()).isNull();
         assertThat(member.getMemberPrivateInformation().getPoint()).isZero();
-
     }
 
     @Test
-    void sendEmailForVerification() {
+    @DisplayName("이미 가입된 이메일이 있다면 예외를 던진다.")
+    public void existedEmailThrowException() {
         // given
-        Member member = createdMyEmail();
+        EmailSignup emailSignup = fixEmailSignup();
+        memberRegisterService.createMemberByEmail(emailSignup);
 
         // when
-        EmailVerification emailVerification = memberAuthenticationService.sendEmailForVerification(member);
+        // then
+        assertThatThrownBy(() -> memberRegisterService.createMemberByEmail(emailSignup))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", EMAIL_DUPLICATION);
+    }
+
+    @Test
+    @DisplayName("인증 요청을 위해 이메일을 전송할 수 있다.")
+    void sendEmailForRequestVerification() {
+        // given
+        Member member = createdByEmail();
+
+        // when
+        EmailVerification emailVerification = memberRegisterService.sendEmailForRequestVerification(member);
 
         // then
         assertThat(emailVerification.getEmailVerificationType()).isEqualTo(EmailVerificationType.REGISTER);
@@ -87,4 +104,60 @@ class MemberAuthenticationServiceTest {
         assertThat(emailVerification.getEmailAddress()).isEqualTo(member.getMemberPrivateInformation().getEmail());
         assertThat(emailVerification.getVerificationCode()).isEqualTo("1234");
     }
+
+    @Test
+    @DisplayName("인증코드를 통해 인증을 할 수 있다.")
+    void verify() {
+        // given
+        Member member = createdByEmail();
+        memberRegisterService.sendEmailForRequestVerification(member);
+        // when
+        memberRegisterService.verify("1234");
+    }
+
+    @Test
+    @DisplayName("인증코드가 다르면 예외를 던진다.")
+    void verifyFailedThrowException() {
+        // given
+        Member member = createdByEmail();
+        memberRegisterService.sendEmailForRequestVerification(member);
+        // when
+        assertThatThrownBy(() -> memberRegisterService.verify("12345"))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", EMAIL_VERIFICATION_NOT_FOUND);
+
+    }
+
+    @Test
+    @DisplayName("인증코드를 재전송 할 수 있다.")
+    void resendVerificationCode() {
+        // given
+        String email = "ssar@naver.com";
+        EmailSignup emailSignup = fixEmailSignup();
+        Member member = memberRegisterService.createMemberByEmail(emailSignup);
+        memberRegisterService.sendEmailForRequestVerification(member);
+
+        // when
+        // then
+        memberRegisterService.resendVerificationCode(email);
+
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 이메일은 인증코드를 재전송 할 수 없다.")
+    void resendVerificationCodeFailed() {
+        // given
+        String email = "cos@naver.com";
+        EmailSignup emailSignup = fixEmailSignup();
+        Member member = memberRegisterService.createMemberByEmail(emailSignup);
+        memberRegisterService.sendEmailForRequestVerification(member);
+
+        // when
+        // then
+        assertThatThrownBy(() -> memberRegisterService.resendVerificationCode(email))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", EMAIL_VERIFICATION_NOT_FOUND);
+
+    }
+
 }
