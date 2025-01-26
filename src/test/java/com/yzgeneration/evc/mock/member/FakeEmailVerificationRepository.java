@@ -1,11 +1,14 @@
 package com.yzgeneration.evc.mock.member;
 
+import com.yzgeneration.evc.common.exception.CustomException;
 import com.yzgeneration.evc.verification.infrastructure.EmailVerificationRepository;
 import com.yzgeneration.evc.verification.model.EmailVerification;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.yzgeneration.evc.common.exception.ErrorCode.*;
 
 public class FakeEmailVerificationRepository implements EmailVerificationRepository {
 
@@ -30,11 +33,22 @@ public class FakeEmailVerificationRepository implements EmailVerificationReposit
             data.add(emailVerification);
             return emailVerification;
         }
-
     }
 
     @Override
-    public EmailVerification get(String token) {
-        return null;
+    public EmailVerification getByToken(String token) {
+        return data.stream()
+                .filter(item -> item.getVerificationCode().equals(token))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(EMAIL_VERIFICATION_NOT_FOUND));
     }
+
+    @Override
+    public EmailVerification getByEmail(String email) {
+        return data.stream()
+                .filter(item -> item.getEmailAddress().equals(email))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(EMAIL_VERIFICATION_NOT_FOUND));
+    }
+
 }

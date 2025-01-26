@@ -1,7 +1,6 @@
 package com.yzgeneration.evc.member.implement;
 
 import com.yzgeneration.evc.common.service.port.RandomHolder;
-import com.yzgeneration.evc.member.dto.MemberRequest;
 import com.yzgeneration.evc.member.enums.MemberRole;
 import com.yzgeneration.evc.member.enums.MemberStatus;
 import com.yzgeneration.evc.member.model.Member;

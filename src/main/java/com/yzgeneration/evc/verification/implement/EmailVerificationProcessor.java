@@ -6,7 +6,6 @@ import com.yzgeneration.evc.verification.infrastructure.EmailVerificationReposit
 import com.yzgeneration.evc.verification.model.Email;
 import com.yzgeneration.evc.verification.model.EmailVerification;
 import com.yzgeneration.evc.member.service.port.MailSender;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +25,13 @@ public class EmailVerificationProcessor {
         mailSender.send(Email.create(emailVerification));
     }
 
-    public void verify(String token) {
-        EmailVerification emailVerification = emailVerificationRepository.get(token);
+    public void verify(String code) {
+        EmailVerification emailVerification = emailVerificationRepository.getByToken(code);
         emailVerification.verify();
+        emailVerificationRepository.save(emailVerification);
     }
 
-
+    public String get(String email) {
+        return emailVerificationRepository.getByEmail(email).getVerificationCode();
+    }
 }
