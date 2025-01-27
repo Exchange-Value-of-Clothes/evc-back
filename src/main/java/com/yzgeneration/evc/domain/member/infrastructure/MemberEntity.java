@@ -1,8 +1,8 @@
-package com.yzgeneration.evc.member.infrastructure;
+package com.yzgeneration.evc.domain.member.infrastructure;
 
-import com.yzgeneration.evc.member.enums.MemberRole;
-import com.yzgeneration.evc.member.enums.MemberStatus;
-import com.yzgeneration.evc.member.model.Member;
+import com.yzgeneration.evc.domain.member.enums.MemberRole;
+import com.yzgeneration.evc.domain.member.enums.MemberStatus;
+import com.yzgeneration.evc.domain.member.model.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,9 +30,9 @@ public class MemberEntity {
     @Enumerated(EnumType.STRING)
     private MemberStatus memberStatus;
 
-
     public static MemberEntity from(Member member) {
         return MemberEntity.builder()
+                .id(member.getId())
                 .memberPrivateInformationEntity(MemberPrivateInformationEntity.from(member.getMemberPrivateInformation()))
                 .memberAuthenticationInformationEntity(MemberAuthenticationInformationEntity.from(member.getMemberAuthenticationInformation()))
                 .memberRole(member.getMemberRole())
@@ -48,6 +48,5 @@ public class MemberEntity {
                 .memberRole(memberRole)
                 .memberStatus(memberStatus)
                 .build();
-
     }
 }

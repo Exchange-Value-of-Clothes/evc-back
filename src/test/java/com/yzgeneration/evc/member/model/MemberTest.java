@@ -2,10 +2,13 @@ package com.yzgeneration.evc.member.model;
 
 
 import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.member.enums.MemberRole;
-import com.yzgeneration.evc.member.enums.MemberStatus;
-import com.yzgeneration.evc.member.enums.ProviderType;
-import com.yzgeneration.evc.member.service.port.PasswordProcessor;
+import com.yzgeneration.evc.domain.member.enums.MemberRole;
+import com.yzgeneration.evc.domain.member.enums.MemberStatus;
+import com.yzgeneration.evc.domain.member.enums.ProviderType;
+import com.yzgeneration.evc.domain.member.model.Member;
+import com.yzgeneration.evc.domain.member.model.MemberAuthenticationInformation;
+import com.yzgeneration.evc.domain.member.model.MemberPrivateInformation;
+import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
 import com.yzgeneration.evc.mock.member.SpyPasswordProcessor;
 import com.yzgeneration.evc.mock.StubRandomHolder;
 import com.yzgeneration.evc.common.service.port.RandomHolder;
@@ -13,8 +16,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.yzgeneration.evc.common.exception.ErrorCode.*;
+import static com.yzgeneration.evc.domain.member.dto.MemberRequest.*;
 import static com.yzgeneration.evc.fixture.MemberFixture.fixtureMonkey;
-import static com.yzgeneration.evc.member.dto.MemberRequest.*;
 import static org.assertj.core.api.Assertions.*;
 
 class MemberTest {
@@ -56,7 +59,7 @@ class MemberTest {
         // then
         assertThatThrownBy(emailSignup::valid)
                 .isInstanceOf(CustomException.class)
-                .hasFieldOrPropertyWithValue("errorCode", EMAIL_INCORRECT_FORMAT);
+                .hasFieldOrPropertyWithValue("errorCode", INVALID_EMAIL);
 
     }
 
@@ -67,15 +70,15 @@ class MemberTest {
         EmailSignup emailSignup = fixtureMonkey.giveMeBuilder(EmailSignup.class)
                 .set("email", "ssar@naver.com")
                 .set("nickname", "구코딩")
-                .set("password", "1234")
-                .set("checkPassword", "1234")
+                .set("password", "12345678")
+                .set("checkPassword", "12345678")
                 .sample();
 
         // when
         MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
 
         // then
-        assertThat(memberAuthenticationInformation.getPassword()).isEqualTo("1234");
+        assertThat(memberAuthenticationInformation.getPassword()).isEqualTo("12345678");
         assertThat(memberAuthenticationInformation.getProviderType()).isEqualTo(ProviderType.EMAIL);
         assertThat(memberAuthenticationInformation.getProviderId()).isNull();
     }
@@ -87,16 +90,15 @@ class MemberTest {
         EmailSignup emailSignup = fixtureMonkey.giveMeBuilder(EmailSignup.class)
                 .set("email", "ssar@naver.com")
                 .set("nickname", "구코딩")
-                .set("password", "1234")
-                .set("checkPassword", "12345")
+                .set("password", "12345678")
+                .set("checkPassword", "12345679")
                 .sample();
 
         // when
         // then
         assertThatThrownBy(emailSignup::valid)
                 .isInstanceOf(CustomException.class)
-                .hasFieldOrPropertyWithValue("errorCode", PASSWORD_INCORRECT_FORMAT);
-
+                .hasFieldOrPropertyWithValue("errorCode", INVALID_PASSWORD);
     }
 
     @Test
@@ -106,8 +108,8 @@ class MemberTest {
         EmailSignup emailSignup = fixtureMonkey.giveMeBuilder(EmailSignup.class)
                 .set("email", "ssar@naver.com")
                 .set("nickname", "구코딩")
-                .set("password", "1234")
-                .set("checkPassword", "12345")
+                .set("password", "12345678")
+                .set("checkPassword", "12345678")
                 .sample();
         MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
         MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
@@ -123,6 +125,66 @@ class MemberTest {
         assertThat(member.getMemberPrivateInformation()).isNotNull();
         assertThat(member.getMemberAuthenticationInformation()).isNotNull();
 
+    }
 
+    @Test
+    @DisplayName("Member의 상태를 Active로 변경할 수 있다.")
+    void activateMember() {
+        // given
+        EmailSignup emailSignup = fixtureMonkey.giveMeBuilder(EmailSignup.class)
+                .set("email", "ssar@naver.com")
+                .set("nickname", "구코딩")
+                .set("password", "12345678")
+                .set("checkPassword", "12345678")
+                .sample();
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
+        Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.PENDING);
+
+        // when
+        member.active();
+
+        // then
+        assertThat(member.getMemberStatus()).isEqualTo(MemberStatus.ACTIVE);
+    }
+
+    @Test
+    @DisplayName("Member의 상태가 ACTIVE 인지 확인할 수 있다.")
+    void checkStatus() {
+        // given
+        EmailSignup emailSignup = fixtureMonkey.giveMeBuilder(EmailSignup.class)
+                .set("email", "ssar@naver.com")
+                .set("nickname", "구코딩")
+                .set("password", "12345678")
+                .set("checkPassword", "12345678")
+                .sample();
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
+        Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.ACTIVE);
+
+        // when
+        // then
+        member.checkStatus();
+    }
+
+    @Test
+    @DisplayName("Member의 상태가 Active가 아니면 예외를 던진다.")
+    void notActive() {
+        // given
+        EmailSignup emailSignup = fixtureMonkey.giveMeBuilder(EmailSignup.class)
+                .set("email", "ssar@naver.com")
+                .set("nickname", "구코딩")
+                .set("password", "12345678")
+                .set("checkPassword", "12345678")
+                .sample();
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
+        Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.PENDING);
+
+        // when
+        // then
+        assertThatThrownBy(member::checkStatus).
+                isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("ErrorCode", INACTIVE_MEMBER);
     }
 }

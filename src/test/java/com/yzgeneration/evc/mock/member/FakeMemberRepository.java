@@ -1,11 +1,14 @@
 package com.yzgeneration.evc.mock.member;
 
-import com.yzgeneration.evc.member.model.Member;
-import com.yzgeneration.evc.member.service.port.MemberRepository;
+import com.yzgeneration.evc.common.exception.CustomException;
+import com.yzgeneration.evc.domain.member.model.Member;
+import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.yzgeneration.evc.common.exception.ErrorCode.MEMBER_NOT_FOUND;
 
 public class FakeMemberRepository implements MemberRepository {
 
@@ -34,6 +37,22 @@ public class FakeMemberRepository implements MemberRepository {
     public boolean checkDuplicateEmail(String email) {
         return data.stream()
                 .anyMatch(item -> item.getMemberPrivateInformation().getEmail().equals(email));
+    }
+
+    @Override
+    public Member getByEmail(String email) {
+        return data.stream()
+                .filter(item -> item.getMemberPrivateInformation().getEmail().equals(email))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+    }
+
+    @Override
+    public Member getById(Long id) {
+        return data.stream()
+                .filter(item -> item.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
 }

@@ -1,14 +1,15 @@
-package com.yzgeneration.evc.member.service;
+package com.yzgeneration.evc.domain.member.service;
 
-import com.yzgeneration.evc.member.dto.MemberRequest.EmailSignup;
+import com.yzgeneration.evc.domain.member.dto.MemberRequest.EmailSignup;
 
-import com.yzgeneration.evc.member.implement.MemberCreator;
+import com.yzgeneration.evc.domain.member.implement.MemberAppender;
 
-import com.yzgeneration.evc.member.model.Member;
+import com.yzgeneration.evc.domain.member.implement.MemberUpdater;
+import com.yzgeneration.evc.domain.member.model.Member;
 
-import com.yzgeneration.evc.verification.enums.EmailVerificationType;
-import com.yzgeneration.evc.verification.model.EmailVerification;
-import com.yzgeneration.evc.verification.implement.EmailVerificationProcessor;
+import com.yzgeneration.evc.domain.verification.enums.EmailVerificationType;
+import com.yzgeneration.evc.domain.verification.model.EmailVerification;
+import com.yzgeneration.evc.domain.verification.implement.EmailVerificationProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberRegisterService {
 
-    private final MemberCreator memberCreator;
+    private final MemberAppender memberAppender;
+    private final MemberUpdater memberUpdater;
     private final EmailVerificationProcessor emailVerificationProcessor;
 
     public Member createMemberByEmail(EmailSignup emailSignup) {
-        return memberCreator.createByEmail(emailSignup);
+        return memberAppender.createByEmail(emailSignup);
     }
 
     public EmailVerification sendEmailForRequestVerification(Member member) {
@@ -30,7 +32,8 @@ public class MemberRegisterService {
     }
 
     public void verify(String code) {
-        emailVerificationProcessor.verify(code);
+        Long memberId = emailVerificationProcessor.verify(code);
+        memberUpdater.active(memberId);
     }
 
     public String resendVerificationCode(String email) {

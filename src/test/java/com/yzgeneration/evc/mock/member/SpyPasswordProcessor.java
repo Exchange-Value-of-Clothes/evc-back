@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.mock.member;
 
-import com.yzgeneration.evc.member.service.port.PasswordProcessor;
+import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
 
 public class SpyPasswordProcessor implements PasswordProcessor {
     @Override
@@ -10,6 +10,6 @@ public class SpyPasswordProcessor implements PasswordProcessor {
 
     @Override
     public Boolean matches(String rawPassword, String encodedPassword) {
-        return null;
+        return rawPassword.equals(encodedPassword);
     }
 }
