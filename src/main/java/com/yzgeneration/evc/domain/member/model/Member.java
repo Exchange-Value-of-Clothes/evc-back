@@ -1,7 +1,10 @@
-package com.yzgeneration.evc.member.model;
+package com.yzgeneration.evc.domain.member.model;
 
-import com.yzgeneration.evc.member.enums.MemberRole;
-import com.yzgeneration.evc.member.enums.MemberStatus;
+import com.yzgeneration.evc.common.exception.CustomException;
+import com.yzgeneration.evc.common.exception.ErrorCode;
+import com.yzgeneration.evc.domain.member.enums.MemberRole;
+import com.yzgeneration.evc.domain.member.enums.MemberStatus;
+import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -25,4 +28,20 @@ public class Member {
                 .memberStatus(memberStatus)
                 .build();
     }
+
+    public void checkPassword(String rawPassword, PasswordProcessor passwordProcessor) {
+        if (passwordProcessor.matches(rawPassword, memberAuthenticationInformation.getPassword())) {
+            return;
+        }
+        throw new CustomException(ErrorCode.LOGIN_FAILED);
+    }
+
+    public void active() {
+        this.memberStatus = MemberStatus.ACTIVE;
+    }
+
+    public void checkStatus() {
+        memberStatus.checkStatus();
+    }
+
 }

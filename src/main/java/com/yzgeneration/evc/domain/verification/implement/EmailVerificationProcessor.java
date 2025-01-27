@@ -1,11 +1,11 @@
-package com.yzgeneration.evc.verification.implement;
+package com.yzgeneration.evc.domain.verification.implement;
 
 import com.yzgeneration.evc.common.service.port.UuidHolder;
-import com.yzgeneration.evc.verification.enums.EmailVerificationType;
-import com.yzgeneration.evc.verification.infrastructure.EmailVerificationRepository;
-import com.yzgeneration.evc.verification.model.Email;
-import com.yzgeneration.evc.verification.model.EmailVerification;
-import com.yzgeneration.evc.member.service.port.MailSender;
+import com.yzgeneration.evc.domain.verification.enums.EmailVerificationType;
+import com.yzgeneration.evc.domain.verification.infrastructure.EmailVerificationRepository;
+import com.yzgeneration.evc.domain.verification.model.Email;
+import com.yzgeneration.evc.domain.verification.model.EmailVerification;
+import com.yzgeneration.evc.domain.member.service.port.MailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +17,19 @@ public class EmailVerificationProcessor {
     private final UuidHolder uuidHolder;
     private final MailSender mailSender;
 
-    public EmailVerification createEmailVerification(Long userId, String emailAddress, EmailVerificationType emailVerificationType) {
-        return emailVerificationRepository.save(EmailVerification.create(userId, emailAddress, uuidHolder, emailVerificationType));
+    public EmailVerification createEmailVerification(Long memberId, String emailAddress, EmailVerificationType emailVerificationType) {
+        return emailVerificationRepository.save(EmailVerification.create(memberId, emailAddress, uuidHolder, emailVerificationType));
     }
     
     public void sendMail(EmailVerification emailVerification) {
         mailSender.send(Email.create(emailVerification));
     }
 
-    public void verify(String code) {
+    public Long verify(String code) {
         EmailVerification emailVerification = emailVerificationRepository.getByToken(code);
         emailVerification.verify();
         emailVerificationRepository.save(emailVerification);
+        return emailVerification.getMemberId();
     }
 
     public String get(String email) {
