@@ -1,8 +1,10 @@
 package com.yzgeneration.evc.common.exception;
 
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 
+@Getter
 @Builder
 public class ErrorResponse {
     private final String code;
@@ -13,7 +15,13 @@ public class ErrorResponse {
                 .status(errorCode.getHttpStatus())
                 .body(ErrorResponse.builder()
                         .code(errorCode.getCode())
-                        .msg(errorCode.getMsg())
+                        .msg(errorCode.getDefaultMessage())
                         .build());
+    }
+
+    public static ErrorResponse from(ErrorCode errorCode){
+        return ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .msg(errorCode.getDefaultMessage()).build();
     }
 }
