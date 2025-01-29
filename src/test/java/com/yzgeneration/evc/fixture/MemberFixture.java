@@ -1,42 +1,30 @@
 package com.yzgeneration.evc.fixture;
 
 import com.navercorp.fixturemonkey.ArbitraryBuilder;
-import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.introspector.BuilderArbitraryIntrospector;
-import com.navercorp.fixturemonkey.api.introspector.FailoverIntrospector;
-import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
-import com.yzgeneration.evc.member.enums.MemberRole;
-import com.yzgeneration.evc.member.enums.MemberStatus;
-import com.yzgeneration.evc.member.enums.ProviderType;
-import com.yzgeneration.evc.member.model.Member;
-import com.yzgeneration.evc.member.model.MemberAuthenticationInformation;
-import com.yzgeneration.evc.member.model.MemberPrivateInformation;
+import com.yzgeneration.evc.domain.member.enums.MemberRole;
+import com.yzgeneration.evc.domain.member.enums.MemberStatus;
+import com.yzgeneration.evc.domain.member.enums.ProviderType;
+import com.yzgeneration.evc.domain.member.model.Member;
+import com.yzgeneration.evc.domain.member.model.MemberAuthenticationInformation;
+import com.yzgeneration.evc.domain.member.model.MemberPrivateInformation;
 
-import java.util.List;
 
-import static com.yzgeneration.evc.member.dto.MemberRequest.*;
+import static com.yzgeneration.evc.domain.member.dto.MemberRequest.*;
 
-public abstract class MemberFixture {
-
-    public static final FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
-            .objectIntrospector(new FailoverIntrospector(
-                    List.of(BuilderArbitraryIntrospector.INSTANCE,FieldReflectionArbitraryIntrospector.INSTANCE)
-            ))
-            .defaultNotNull(true)
-            .build();
+public abstract class MemberFixture extends Fixture{
 
     public static EmailSignup fixEmailSignup() {
         return fixtureMonkey.giveMeBuilder(EmailSignup.class)
                 .set("email", "ssar@naver.com")
                 .set("nickname", "구코딩")
-                .set("password", "1234")
-                .set("checkPassword", "1234")
+                .set("password", "12345678")
+                .set("checkPassword", "12345678")
                 .sample();
     }
 
     private static ArbitraryBuilder<MemberAuthenticationInformation> fixPassword() {
         return fixtureMonkey.giveMeBuilder(MemberAuthenticationInformation.class)
-                .set("password", "1234");
+                .set("password", "12345678");
     }
 
     private static MemberAuthenticationInformation emailMemberAuthenticationInfo() {
@@ -52,11 +40,20 @@ public abstract class MemberFixture {
                 .sample();
     }
 
-    public static Member createdByEmail() {
+    public static Member createdByEmail_PENDING() {
         return Member.builder()
                 .memberAuthenticationInformation(emailMemberAuthenticationInfo())
                 .memberPrivateInformation(fixNicknameAndEmail())
                 .memberStatus(MemberStatus.PENDING)
+                .memberRole(MemberRole.USER)
+                .build();
+    }
+
+    public static Member createdByEmail_ACTIVE() {
+        return Member.builder()
+                .memberAuthenticationInformation(emailMemberAuthenticationInfo())
+                .memberPrivateInformation(fixNicknameAndEmail())
+                .memberStatus(MemberStatus.ACTIVE)
                 .memberRole(MemberRole.USER)
                 .build();
     }
