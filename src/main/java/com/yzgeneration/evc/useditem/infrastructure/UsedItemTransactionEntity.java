@@ -12,7 +12,7 @@ import lombok.*;
 @Getter
 @Embeddable
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UsedItemTransactionEntity {
     @Enumerated(EnumType.STRING)
