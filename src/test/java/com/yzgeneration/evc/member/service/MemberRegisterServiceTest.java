@@ -1,25 +1,26 @@
 package com.yzgeneration.evc.member.service;
 
 import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.member.dto.MemberRequest.EmailSignup;
-import com.yzgeneration.evc.member.enums.MemberRole;
-import com.yzgeneration.evc.member.enums.MemberStatus;
-import com.yzgeneration.evc.member.enums.ProviderType;
-import com.yzgeneration.evc.member.implement.MemberCreator;
-import com.yzgeneration.evc.member.implement.MemberValidator;
-import com.yzgeneration.evc.member.model.Member;
-import com.yzgeneration.evc.member.model.MemberAuthenticationInformation;
-import com.yzgeneration.evc.member.model.MemberPrivateInformation;
-import com.yzgeneration.evc.member.service.port.MemberRepository;
+import com.yzgeneration.evc.domain.member.dto.MemberRequest.EmailSignup;
+import com.yzgeneration.evc.domain.member.enums.MemberRole;
+import com.yzgeneration.evc.domain.member.enums.MemberStatus;
+import com.yzgeneration.evc.domain.member.enums.ProviderType;
+import com.yzgeneration.evc.domain.member.implement.MemberAppender;
+import com.yzgeneration.evc.domain.member.implement.MemberUpdater;
+import com.yzgeneration.evc.domain.member.implement.MemberValidator;
+import com.yzgeneration.evc.domain.member.model.Member;
+import com.yzgeneration.evc.domain.member.service.MemberRegisterService;
+import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
+import com.yzgeneration.evc.fixture.MemberFixture;
 import com.yzgeneration.evc.mock.StubUuidHolder;
 import com.yzgeneration.evc.mock.member.DummyEmailSender;
 import com.yzgeneration.evc.mock.member.FakeEmailVerificationRepository;
 import com.yzgeneration.evc.mock.member.FakeMemberRepository;
 import com.yzgeneration.evc.mock.member.SpyPasswordProcessor;
 import com.yzgeneration.evc.mock.StubRandomHolder;
-import com.yzgeneration.evc.verification.enums.EmailVerificationType;
-import com.yzgeneration.evc.verification.implement.EmailVerificationProcessor;
-import com.yzgeneration.evc.verification.model.EmailVerification;
+import com.yzgeneration.evc.domain.verification.enums.EmailVerificationType;
+import com.yzgeneration.evc.domain.verification.implement.EmailVerificationProcessor;
+import com.yzgeneration.evc.domain.verification.model.EmailVerification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,6 @@ import static org.assertj.core.api.Assertions.*;
 class MemberRegisterServiceTest {
 
     private MemberRegisterService memberRegisterService;
-    private MemberValidator memberValidator;
 
     @BeforeEach
     void init() {
@@ -41,16 +41,18 @@ class MemberRegisterServiceTest {
                 new DummyEmailSender());
 
         MemberRepository memberRepository = new FakeMemberRepository();
-        memberValidator = new MemberValidator(memberRepository);
+        MemberValidator memberValidator = new MemberValidator(memberRepository);
 
 
-        MemberCreator memberCreator = new MemberCreator(
+        MemberAppender memberAppender = new MemberAppender(
                         memberRepository,
                         new SpyPasswordProcessor(),
                         new StubRandomHolder(),
-                        memberValidator);
+                memberValidator);
 
-        memberRegisterService = new MemberRegisterService(memberCreator, emailVerificationProcessor);
+        MemberUpdater memberUpdater = new MemberUpdater(memberRepository);
+
+        memberRegisterService = new MemberRegisterService(memberAppender, memberUpdater,emailVerificationProcessor);
     }
 
     @Test
@@ -93,7 +95,7 @@ class MemberRegisterServiceTest {
     @DisplayName("인증 요청을 위해 이메일을 전송할 수 있다.")
     void sendEmailForRequestVerification() {
         // given
-        Member member = createdByEmail();
+        Member member = MemberFixture.createdByEmail_PENDING();
 
         // when
         EmailVerification emailVerification = memberRegisterService.sendEmailForRequestVerification(member);
@@ -109,7 +111,8 @@ class MemberRegisterServiceTest {
     @DisplayName("인증코드를 통해 인증을 할 수 있다.")
     void verify() {
         // given
-        Member member = createdByEmail();
+        EmailSignup emailSignup = fixEmailSignup();
+        Member member = memberRegisterService.createMemberByEmail(emailSignup);
         memberRegisterService.sendEmailForRequestVerification(member);
         // when
         memberRegisterService.verify("1234");
@@ -119,7 +122,7 @@ class MemberRegisterServiceTest {
     @DisplayName("인증코드가 다르면 예외를 던진다.")
     void verifyFailedThrowException() {
         // given
-        Member member = createdByEmail();
+        Member member = MemberFixture.createdByEmail_PENDING();
         memberRegisterService.sendEmailForRequestVerification(member);
         // when
         assertThatThrownBy(() -> memberRegisterService.verify("12345"))

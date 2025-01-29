@@ -1,8 +1,8 @@
 package com.yzgeneration.evc.mock.member;
 
 import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.verification.infrastructure.EmailVerificationRepository;
-import com.yzgeneration.evc.verification.model.EmailVerification;
+import com.yzgeneration.evc.domain.verification.infrastructure.EmailVerificationRepository;
+import com.yzgeneration.evc.domain.verification.model.EmailVerification;
 
 import java.util.ArrayList;
 import java.util.List;
