@@ -9,9 +9,9 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @SuperBuilder
-@Table(name = "used_items_images")
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "used_item_images")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UsedItemImageEntity extends BaseImageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

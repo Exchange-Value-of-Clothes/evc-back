@@ -21,6 +21,6 @@ public class UsedItemService {
     public UsedItemResponse createUsedITem(CreateUsedItem createUsedItem, List<MultipartFile> imageFiles) {
         UsedItem usedItem = usedItemRepository.save(UsedItem.create(createUsedItem));
         // [notice] 이미지 생성 로직 추가 & return 값 변경
-        return UsedItemResponse.from(usedItem, new ArrayList<>());
+        return UsedItemResponse.of(usedItem, new ArrayList<>());
     }
 }

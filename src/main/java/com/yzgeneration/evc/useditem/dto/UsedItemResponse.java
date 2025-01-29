@@ -23,7 +23,7 @@ public class UsedItemResponse {
     private final List<String> imageURLs;
     private final LocalDateTime createAt;
 
-    public static UsedItemResponse from(UsedItem usedItem, List<String> imageURLs) {
+    public static UsedItemResponse of(UsedItem usedItem, List<String> imageURLs) {
         return UsedItemResponse.builder()
                 .memberId(usedItem.getId())
                 .title(usedItem.getTitle())

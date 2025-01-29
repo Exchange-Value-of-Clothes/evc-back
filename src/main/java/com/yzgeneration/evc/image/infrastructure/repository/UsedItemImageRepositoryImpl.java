@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class UsedItemImageRepositoryImpl implements UsedItemImageRepository {
-    private final UsedItemImageJPARepository usedItemImageJPARepository;
+    private final UsedItemImageJpaRepository usedItemImageJPARepository;
 
     @Override
     public UsedItemImage save(UsedItemImage usedItemImage) {
