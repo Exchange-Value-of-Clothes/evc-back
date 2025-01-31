@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.mock;
 
-import com.yzgeneration.evc.common.service.port.UuidHolder;
+import com.yzgeneration.evc.common.implement.port.UuidHolder;
 
 public class StubUuidHolder implements UuidHolder {
     @Override
