@@ -1,8 +1,8 @@
 package com.yzgeneration.evc.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yzgeneration.evc.common.exception.ErrorCode;
-import com.yzgeneration.evc.common.exception.ErrorResponse;
+import com.yzgeneration.evc.exception.ErrorCode;
+import com.yzgeneration.evc.exception.ErrorResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
