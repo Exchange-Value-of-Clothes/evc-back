@@ -5,8 +5,8 @@ import com.yzgeneration.evc.domain.member.authentication.implement.Authenticatio
 import com.yzgeneration.evc.domain.member.authentication.implement.TokenProvider;
 import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
 import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
-import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.common.exception.ErrorCode;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
 import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;

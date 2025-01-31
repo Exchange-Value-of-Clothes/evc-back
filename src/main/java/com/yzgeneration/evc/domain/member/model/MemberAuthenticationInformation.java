@@ -19,4 +19,11 @@ public class MemberAuthenticationInformation {
                 .build();
     }
 
+    public static MemberAuthenticationInformation createdBySocialLogin(String providerType, String providerId) {
+        return MemberAuthenticationInformation.builder()
+                .providerType(ProviderType.valueOf(providerType))
+                .providerId(providerId)
+                .build();
+    }
+
 }
