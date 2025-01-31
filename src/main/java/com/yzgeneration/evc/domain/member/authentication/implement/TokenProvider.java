@@ -3,8 +3,8 @@ package com.yzgeneration.evc.domain.member.authentication.implement;
 import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
 import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
 
-import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.common.exception.ErrorCode;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

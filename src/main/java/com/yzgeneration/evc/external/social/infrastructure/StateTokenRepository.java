@@ -1,7 +1,7 @@
 package com.yzgeneration.evc.external.social.infrastructure;
 
-import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.common.exception.ErrorCode;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.external.social.CsrfRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

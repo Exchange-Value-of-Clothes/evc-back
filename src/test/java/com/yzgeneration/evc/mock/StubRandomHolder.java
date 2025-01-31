@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.mock;
 
-import com.yzgeneration.evc.common.service.port.RandomHolder;
+import com.yzgeneration.evc.common.implement.port.RandomHolder;
 
 public class StubRandomHolder implements RandomHolder {
     @Override
