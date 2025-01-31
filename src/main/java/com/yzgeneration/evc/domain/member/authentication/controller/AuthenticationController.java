@@ -1,7 +1,9 @@
 package com.yzgeneration.evc.domain.member.authentication.controller;
 
+import com.yzgeneration.evc.common.validator.EnumValidator;
 import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
 import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
+import com.yzgeneration.evc.domain.member.enums.ProviderType;
 import com.yzgeneration.evc.external.social.CsrfRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +32,9 @@ public class AuthenticationController {
     }
 
     @GetMapping("/code")
-    public void authorizationCode(@RequestParam("state") String state) {
-
+    public String authorizationCode(@RequestParam("providerType") String providerType, @RequestParam("state") String state) {
+        EnumValidator.validate(ProviderType.class, "providerType", providerType);
+        return authenticationService.authorizationCode(providerType, state);
     }
 
 }
