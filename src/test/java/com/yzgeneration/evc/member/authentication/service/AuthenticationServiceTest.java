@@ -10,13 +10,17 @@ import com.yzgeneration.evc.common.exception.ErrorCode;
 import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
 import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
+import com.yzgeneration.evc.external.social.SocialPlatformProvider;
 import com.yzgeneration.evc.fixture.MemberFixture;
 import com.yzgeneration.evc.mock.authentication.FakeRefreshTokenRepository;
+import com.yzgeneration.evc.mock.external.FakeSocialLogin;
 import com.yzgeneration.evc.mock.member.FakeMemberRepository;
 import com.yzgeneration.evc.mock.member.SpyPasswordProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -30,7 +34,7 @@ class AuthenticationServiceTest {
     void init() {
         memberRepository = new FakeMemberRepository();
         PasswordProcessor passwordProcessor = new SpyPasswordProcessor();
-        AuthenticationProcessor authenticationProcessor = new AuthenticationProcessor(memberRepository, passwordProcessor);
+        AuthenticationProcessor authenticationProcessor = new AuthenticationProcessor(memberRepository, passwordProcessor, new SocialPlatformProvider(List.of(new FakeSocialLogin())));
         String secret = "2VwKb97VKmrVskmUAedziOSJclcLxTO+xFiWZKh4vuE=";
         RefreshTokenRepository refreshTokenRepository = new FakeRefreshTokenRepository();
         TokenProvider tokenProvider = new TokenProvider(secret, refreshTokenRepository);
