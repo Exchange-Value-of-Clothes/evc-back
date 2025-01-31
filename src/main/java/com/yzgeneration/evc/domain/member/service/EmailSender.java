@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.domain.member.service;
 
-import com.yzgeneration.evc.common.exception.CustomException;
+import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.domain.member.service.port.MailSender;
 import com.yzgeneration.evc.domain.verification.model.Email;
 import jakarta.mail.MessagingException;
@@ -11,7 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import static com.yzgeneration.evc.common.exception.ErrorCode.*;
+import static com.yzgeneration.evc.exception.ErrorCode.*;
 
 @Component
 @RequiredArgsConstructor

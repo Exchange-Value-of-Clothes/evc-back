@@ -1,22 +1,28 @@
 package com.yzgeneration.evc.mock.external;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yzgeneration.evc.external.social.SocialLogin;
 import com.yzgeneration.evc.external.social.SocialPlatform;
+import com.yzgeneration.evc.external.social.SocialUserProfile;
+import org.springframework.http.ResponseEntity;
 
 public class FakeSocialLogin implements SocialLogin {
     @Override
-    public String getAuthorizationCode(String state) {
-        return "";
+    public ResponseEntity<Void> getAuthorizationCode(String state) {
+        return null;
     }
 
     @Override
-    public String getAccessToken(String authorizeCode, String state) throws JsonProcessingException {
+    public String getAccessToken(String authorizeCode, String state)  {
         return "";
     }
 
     @Override
     public SocialPlatform getSocialPlatform() {
+        return null;
+    }
+
+    @Override
+    public SocialUserProfile<?> getUserProfile(String accessToken) {
         return null;
     }
 }

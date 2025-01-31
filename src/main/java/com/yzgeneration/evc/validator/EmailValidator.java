@@ -1,11 +1,11 @@
-package com.yzgeneration.evc.common.validator;
+package com.yzgeneration.evc.validator;
 
-import com.yzgeneration.evc.common.exception.CustomException;
+import com.yzgeneration.evc.exception.CustomException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.yzgeneration.evc.common.exception.ErrorCode.*;
+import static com.yzgeneration.evc.exception.ErrorCode.*;
 
 public abstract class EmailValidator {
     public static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
