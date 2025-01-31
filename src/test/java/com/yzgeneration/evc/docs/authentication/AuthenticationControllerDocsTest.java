@@ -1,24 +1,26 @@
 package com.yzgeneration.evc.docs.authentication;
 
-import com.yzgeneration.evc.authentication.controller.AuthenticationController;
-import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
-import com.yzgeneration.evc.authentication.service.AuthenticationService;
+import com.yzgeneration.evc.domain.member.authentication.controller.AuthenticationController;
+import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationRequest;
+import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
+import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
 import com.yzgeneration.evc.docs.RestDocsSupport;
-import com.yzgeneration.evc.fixture.AuthenticationFixture;
+import com.yzgeneration.evc.fixture.MemberFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static com.yzgeneration.evc.authentication.dto.AuthenticationRequest.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 public class AuthenticationControllerDocsTest extends RestDocsSupport {
@@ -33,13 +35,13 @@ public class AuthenticationControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("로그인")
     void login() throws Exception {
-        LoginRequest loginRequest = AuthenticationFixture.fixLoginRequest();
+        AuthenticationRequest.LoginRequest loginRequest = MemberFixture.fixLoginRequest();
         given(authenticationService.login(any(), any()))
                 .willReturn(AuthenticationToken.create("accessToken", "refreshToken"));
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth")
                         .content(objectMapper.writeValueAsString(loginRequest))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.authenticationToken.accessToken").value("accessToken"))
                 .andExpect(jsonPath("$.authenticationToken.refreshToken").value("refreshToken"))
                 .andDo(document("authentication-login",
@@ -58,5 +60,20 @@ public class AuthenticationControllerDocsTest extends RestDocsSupport {
                                         .description("리프레쉬 토큰")
                         )
                         ));
+    }
+
+    @Test
+    @DisplayName("토큰 재발급")
+    void refresh() throws Exception {
+        given(authenticationService.refresh(any()))
+                .willReturn(AuthenticationToken.create("accessToken", "refreshToken"));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/refresh")
+                        .queryParam("refreshToken", "refreshToken"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.authenticationToken.accessToken").value("accessToken"))
+                .andExpect(jsonPath("$.authenticationToken.refreshToken").value("refreshToken"))
+                .andDo(document("authentication-refresh",
+                        queryParameters(parameterWithName("refreshToken").description("리프레시 토큰"))));
+
     }
 }

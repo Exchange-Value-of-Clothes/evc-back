@@ -11,7 +11,7 @@ public abstract class Fixture {
 
     public static final FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
             .objectIntrospector(new FailoverIntrospector(
-                    List.of(BuilderArbitraryIntrospector.INSTANCE, FieldReflectionArbitraryIntrospector.INSTANCE)
+                    List.of(FieldReflectionArbitraryIntrospector.INSTANCE, BuilderArbitraryIntrospector.INSTANCE)
             ))
             .defaultNotNull(true)
             .build();

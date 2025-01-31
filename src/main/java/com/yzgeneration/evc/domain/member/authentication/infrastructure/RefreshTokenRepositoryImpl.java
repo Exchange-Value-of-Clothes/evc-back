@@ -1,6 +1,6 @@
-package com.yzgeneration.evc.authentication.infrastructure;
+package com.yzgeneration.evc.domain.member.authentication.infrastructure;
 
-import com.yzgeneration.evc.authentication.service.port.RefreshTokenRepository;
+import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,8 +15,8 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     private static final String REFRESH_TOKEN_PREFIX = "memberId:";
 
     @Override
-    public void save(Long memberId, String token) {
-        redisTemplate.opsForValue().set(REFRESH_TOKEN_PREFIX+memberId, token, Duration.ofDays(1));
+    public void save(Long key, String token) {
+        redisTemplate.opsForValue().set(REFRESH_TOKEN_PREFIX+ key, token, Duration.ofDays(1));
     }
 
     @Override
