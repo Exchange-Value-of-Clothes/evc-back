@@ -1,7 +1,7 @@
-package com.yzgeneration.evc.common.validator;
+package com.yzgeneration.evc.validator;
 
-import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.common.exception.ErrorCode;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 
 import java.util.Arrays;
 

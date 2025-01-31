@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.common.exception;
+package com.yzgeneration.evc.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

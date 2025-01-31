@@ -1,7 +1,7 @@
 package com.yzgeneration.evc.domain.verification.model;
 
 
-import com.yzgeneration.evc.common.service.port.UuidHolder;
+import com.yzgeneration.evc.common.implement.port.UuidHolder;
 import com.yzgeneration.evc.domain.verification.enums.EmailVerificationType;
 import lombok.Builder;
 import lombok.Getter;

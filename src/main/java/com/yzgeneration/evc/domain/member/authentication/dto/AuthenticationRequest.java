@@ -2,9 +2,9 @@ package com.yzgeneration.evc.domain.member.authentication.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yzgeneration.evc.common.validator.EmailValidator;
-import com.yzgeneration.evc.common.validator.PasswordValidator;
-import com.yzgeneration.evc.common.validator.Validatable;
+import com.yzgeneration.evc.validator.EmailValidator;
+import com.yzgeneration.evc.validator.PasswordValidator;
+import com.yzgeneration.evc.validator.Validatable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -1,14 +1,15 @@
 package com.yzgeneration.evc.mock.member;
 
-import com.yzgeneration.evc.common.exception.CustomException;
+import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
-import static com.yzgeneration.evc.common.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.yzgeneration.evc.exception.ErrorCode.MEMBER_NOT_FOUND;
 
 public class FakeMemberRepository implements MemberRepository {
 
@@ -53,6 +54,11 @@ public class FakeMemberRepository implements MemberRepository {
                 .filter(item -> item.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+    }
+
+    @Override
+    public Optional<Member> findSocialMember(String providerType, String providerId) {
+        return Optional.empty();
     }
 
 }
