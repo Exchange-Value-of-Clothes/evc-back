@@ -11,6 +11,8 @@ public enum ErrorCode {
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "001", "잘못된 비밀번호 형식입니다."),
     INVALID_EMAIL(HttpStatus.BAD_REQUEST, "002", "잘못된 이메일 형식입니다."),
     INVALID_ENUM(HttpStatus.BAD_REQUEST, "003", "잘못된 열거형 형식입니다."),
+    INVALID_CSRF(HttpStatus.BAD_REQUEST, "004", "잘못된 csrf 토큰 값입니다."),
+    SOCIAL_LOGIN(HttpStatus.BAD_REQUEST, "004", "소셜로그인에서 제공하지 않는 플랫폼 로그인 입니다."),
 
     //401 Unauthorized
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "011", "이메일 혹은 비밀번호가 다릅니다."),
@@ -31,7 +33,11 @@ public enum ErrorCode {
 
     // 500 Internal Server Error,
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "500", "internal server error."),
-    SMTP_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "501", "SMTP server error.");
+
+    // 503 SERVICE_UNAVAILABLE
+    SMTP_SERVER_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "503", "SMTP server error."),
+    SOCIAL_PLATFORM_SERVER_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "503-01", "소셜 로그인 중 예외가 발생했습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String code;

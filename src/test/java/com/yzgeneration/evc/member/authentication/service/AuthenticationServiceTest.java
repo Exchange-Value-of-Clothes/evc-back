@@ -1,9 +1,10 @@
-package com.yzgeneration.evc.authentication.service;
+package com.yzgeneration.evc.member.authentication.service;
 
-import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
-import com.yzgeneration.evc.authentication.implement.AuthenticationProcessor;
-import com.yzgeneration.evc.authentication.implement.TokenProvider;
-import com.yzgeneration.evc.authentication.service.port.RefreshTokenRepository;
+import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
+import com.yzgeneration.evc.domain.member.authentication.implement.AuthenticationProcessor;
+import com.yzgeneration.evc.domain.member.authentication.implement.TokenProvider;
+import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
+import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
 import com.yzgeneration.evc.common.exception.CustomException;
 import com.yzgeneration.evc.common.exception.ErrorCode;
 import com.yzgeneration.evc.domain.member.model.Member;
@@ -86,5 +87,21 @@ class AuthenticationServiceTest {
         assertThatThrownBy(() -> authenticationService.login("ssar@naver.com", "999"))
                 .isInstanceOf(CustomException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.LOGIN_FAILED);
+    }
+
+    @Test
+    @DisplayName("RefreshToken 으로 AccessToken, RefreshToken을 재발급 받을 수 있다.")
+    void token_refresh_success() {
+        // given
+        Member member = MemberFixture.createdByEmail_ACTIVE();
+        memberRepository.save(member);
+        AuthenticationToken authenticationToken = authenticationService.login("ssar@naver.com", "12345678");
+
+        // when
+        AuthenticationToken refreshAuthenticationToken = authenticationService.refresh(authenticationToken.getRefreshToken());
+
+        // then
+        assertThat(refreshAuthenticationToken).hasFieldOrProperty("accessToken");
+        assertThat(refreshAuthenticationToken).hasFieldOrProperty("refreshToken");
     }
 }

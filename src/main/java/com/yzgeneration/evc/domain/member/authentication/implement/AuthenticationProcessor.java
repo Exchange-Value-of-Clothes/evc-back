@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.authentication.implement;
+package com.yzgeneration.evc.domain.member.authentication.implement;
 
 import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.service.port.MemberRepository;

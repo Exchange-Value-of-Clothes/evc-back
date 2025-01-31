@@ -1,8 +1,10 @@
-package com.yzgeneration.evc.authentication.implement;
+package com.yzgeneration.evc.domain.member.authentication.implement;
 
-import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
-import com.yzgeneration.evc.authentication.service.port.RefreshTokenRepository;
+import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
+import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
 
+import com.yzgeneration.evc.common.exception.CustomException;
+import com.yzgeneration.evc.common.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -32,6 +34,21 @@ public class TokenProvider {
         String accessToken = generateAccessToken(memberId);
         String refreshToken = generateRefreshToken(memberId);
         return new AuthenticationToken(accessToken, refreshToken);
+    }
+
+    public Long getMemberId(String accessToken) {
+        Claims claims = getClaims(accessToken);
+        return claims.get("memberId", Long.class);
+    }
+
+    public AuthenticationToken refresh(String refreshToken) {
+        Claims claims = validRefreshToken(refreshToken);
+        Long memberId = claims.get("memberId", Long.class);
+        String accessToken = generateAccessToken(memberId);
+        if (isNearExpiration(claims.getExpiration())) {
+            return AuthenticationToken.create(accessToken, generateRefreshToken(memberId));
+        }
+        return AuthenticationToken.create(accessToken, refreshToken);
     }
 
     private String generateAccessToken(Long memberId) {
@@ -66,17 +83,32 @@ public class TokenProvider {
         return refreshToken;
     }
 
-    public Long getMemberId(String accessToken) {
-        Claims claims = getClaims(accessToken);
-        return claims.get("memberId", Long.class);
-    }
-
     private Claims getClaims(String token) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    private Claims validRefreshToken(String refreshToken) {
+        Claims claims = getClaims(refreshToken);
+        if (!claims.getSubject().equals("refreshToken")) {
+            throw new CustomException(ErrorCode.TOKEN_UNAUTHORIZED);
+        }
+        Long memberId = claims.get("memberId", Long.class);
+        String storedToken = refreshTokenRepository.getByMemberId(memberId);
+        if (!storedToken.equals(refreshToken)) {
+            throw new CustomException(ErrorCode.TOKEN_UNAUTHORIZED);
+        }
+        return claims;
+    }
+
+    private boolean isNearExpiration(Date expiration) {
+        Date now = new Date();
+        long differenceInMillis = expiration.getTime() - now.getTime();
+        long differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24);
+        return differenceInDays <= 7;
     }
 
 }

@@ -1,8 +1,10 @@
-package com.yzgeneration.evc.authentication.controller;
+package com.yzgeneration.evc.member.authentication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
-import com.yzgeneration.evc.authentication.service.AuthenticationService;
+import com.yzgeneration.evc.domain.member.authentication.controller.AuthenticationController;
+import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
+import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
+import com.yzgeneration.evc.fixture.MemberFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +46,23 @@ class AuthenticationControllerTest {
         given(authenticationService.login(any(), any()))
                 .willReturn(AuthenticationToken.create("accessToken", "refreshToken"));
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth")
-                        .content(objectMapper.writeValueAsString(AuthenticationToken.create("accessToken", "refreshToken")))
+                        .content(objectMapper.writeValueAsString(MemberFixture.fixLoginRequest()))
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.authenticationToken.accessToken").value("accessToken"))
+                .andExpect(jsonPath("$.authenticationToken.refreshToken").value("refreshToken"));
+
+    }
+
+    @Test
+    @DisplayName("토큰 재발급한다.")
+    @WithMockUser
+    void refresh() throws Exception {
+        given(authenticationService.refresh(any()))
+                .willReturn(AuthenticationToken.create("accessToken", "refreshToken"));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/refresh")
+                        .param("refreshToken", "refreshToken")
                         .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.authenticationToken.accessToken").value("accessToken"))
