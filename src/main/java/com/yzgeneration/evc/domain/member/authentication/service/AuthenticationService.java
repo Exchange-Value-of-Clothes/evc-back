@@ -23,7 +23,7 @@ public class AuthenticationService {
         return tokenProvider.refresh(refreshToken);
     }
 
-    public void authorizationCode() {
-
+    public String authorizationCode(String providerType, String state) {
+        return authenticationProcessor.getAuthorizationCode(providerType, state);
     }
 }
