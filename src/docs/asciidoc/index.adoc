@@ -13,3 +13,9 @@ endif::[]
 == Member API
 
 include::member/member.adoc[]
+
+
+[[Authentication-API]]
+== Authentication API
+
+include::authentication/authentication.adoc[]

@@ -1,6 +1,8 @@
 package com.yzgeneration.evc.domain.member.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yzgeneration.evc.common.exception.CustomException;
 import com.yzgeneration.evc.common.exception.ErrorCode;
 import com.yzgeneration.evc.common.validator.EmailValidator;
@@ -9,10 +11,12 @@ import com.yzgeneration.evc.common.validator.Validatable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class MemberRequest {
 
     @Getter
+    @NoArgsConstructor
     public static class EmailSignup implements Validatable {
 
         @Size(min = 2)
@@ -22,6 +26,17 @@ public class MemberRequest {
         private String password;
         @NotBlank
         private String checkPassword;
+
+        @JsonCreator
+        public EmailSignup(@JsonProperty("nickname") String nickname, @JsonProperty("email") String email,
+                           @JsonProperty("password") String password, @JsonProperty("checkPassword") String checkPassword) {
+
+            this.nickname = nickname;
+            this.email = email;
+            this.password = password;
+            this.checkPassword = checkPassword;
+            valid();
+        }
 
         @Override
         public void valid() {
