@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.mock.authentication;
 
-import com.yzgeneration.evc.authentication.service.port.RefreshTokenRepository;
+import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +10,8 @@ public class FakeRefreshTokenRepository implements RefreshTokenRepository {
     private final Map<Long, String> data = new HashMap<>();
 
     @Override
-    public void save(Long memberId, String token) {
-        data.put(memberId, token);
+    public void save(Long key, String token) {
+        data.put(key, token);
     }
 
     @Override

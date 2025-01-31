@@ -1,5 +1,4 @@
-[[member-register]]
-== 멤버 회원가입
+== 회원가입
 
 === HTTP Request
 include::{snippets}/member-register/http-request.adoc[]
@@ -9,7 +8,7 @@ include::{snippets}/member-register/request-fields.adoc[]
 include::{snippets}/member-register/http-response.adoc[]
 include::{snippets}/member-register/response-fields.adoc[]
 
-== 멤버 인증
+== 인증
 
 === HTTP Request
 include::{snippets}/member-verify/http-request.adoc[]
@@ -18,3 +17,13 @@ include::{snippets}/member-verify/query-parameters.adoc[]
 === HTTP Response
 include::{snippets}/member-verify/http-response.adoc[]
 include::{snippets}/member-verify/response-body.adoc[]
+
+== 인증코드 재요청
+
+=== HTTP Request
+include::{snippets}/member-resend/http-request.adoc[]
+include::{snippets}/member-resend/query-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/member-resend/http-response.adoc[]
+include::{snippets}/member-resend/response-body.adoc[]
