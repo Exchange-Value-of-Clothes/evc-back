@@ -5,7 +5,7 @@ import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.domain.member.enums.MemberRole;
 import com.yzgeneration.evc.domain.member.enums.MemberStatus;
 import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
-import com.yzgeneration.evc.external.social.NaverUserProfileResponse;
+import com.yzgeneration.evc.external.social.NaverUserProfile;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -50,10 +50,10 @@ public class Member {
         String nickname = "";
         String phoneNumber = "";
 
-        if(response instanceof NaverUserProfileResponse naverResponse) {
-            providerId = naverResponse.getId();
-            nickname = naverResponse.getResponse().getNickname();
-            phoneNumber = naverResponse.getResponse().getMobile();
+        if(response instanceof NaverUserProfile userProfile) {
+            providerId = userProfile.getId();
+            nickname = userProfile.getResponse().getNickname();
+            phoneNumber = userProfile.getResponse().getMobile();
         }
 
         return Member.builder()

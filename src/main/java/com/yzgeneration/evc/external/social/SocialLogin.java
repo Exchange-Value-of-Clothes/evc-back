@@ -1,12 +1,13 @@
 package com.yzgeneration.evc.external.social;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.http.ResponseEntity;
 
 public interface SocialLogin {
 
-    String getAuthorizationCode(String state);
-    String getAccessToken(String authorizeCode, String state) throws JsonProcessingException;
+    ResponseEntity<Void> getAuthorizationCode(String state);
+    String getAccessToken(String authorizeCode, String state);
     SocialPlatform getSocialPlatform();
+    SocialUserProfile<?> getUserProfile(String accessToken);
 
 }
