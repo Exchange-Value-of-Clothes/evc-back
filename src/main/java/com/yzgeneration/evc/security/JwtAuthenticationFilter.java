@@ -1,7 +1,7 @@
 package com.yzgeneration.evc.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yzgeneration.evc.authentication.implement.TokenProvider;
+import com.yzgeneration.evc.domain.member.authentication.implement.TokenProvider;
 import com.yzgeneration.evc.common.exception.ErrorCode;
 import com.yzgeneration.evc.common.exception.ErrorResponse;
 import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
@@ -44,15 +44,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (ExpiredJwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json;charset=utf-8");
+            response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.from(ErrorCode.TOKEN_EXPIRED)));
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.from(ErrorCode.TOKEN_UNAUTHORIZED)));
         }
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request)  {
-        String[] excludePath = {"/api/auth", "/api/members/register", "/api/members/register/verify"};
+        String[] excludePath = {"/api/auth", "/api/members/register", "/docs"};
         String path = request.getRequestURI();
-        return Arrays.stream(excludePath).anyMatch(path::matches);
+        return Arrays.stream(excludePath).anyMatch(path::startsWith);
     }
 
     private String parseToken(String authorization) {
