@@ -3,12 +3,18 @@ package com.yzgeneration.evc.common.validator;
 import com.yzgeneration.evc.common.exception.CustomException;
 import com.yzgeneration.evc.common.exception.ErrorCode;
 
+import java.util.Arrays;
+
 public abstract class EnumValidator {
 
-    public static void validate(Class<? extends Validatable> targetClass, String targetFieldName, Class<? extends Enum<?>> enumClass, String targetFiledValue) {
+    public static void validate(Class<? extends Enum<?>> enumClass, String targetFieldName, String targetFieldValue) {
         Enum<?>[] enumConstants = enumClass.getEnumConstants();
-        if (enumConstants == null) {
-            throw new CustomException(ErrorCode.INVALID_ENUM, targetClass.getSimpleName()+" dto 에서 " + targetFieldName + " 는 '" + targetFiledValue + "'일 수 없습니다.");
+        boolean isValid = Arrays.stream(enumConstants)
+                .map(Enum::name)
+                .anyMatch(name -> name.equalsIgnoreCase(targetFieldValue));
+
+        if (!isValid) {
+            throw new CustomException(ErrorCode.INVALID_ENUM, targetFieldName + " 는 '" + targetFieldValue + "' 일 수 없습니다.");
         }
     }
 

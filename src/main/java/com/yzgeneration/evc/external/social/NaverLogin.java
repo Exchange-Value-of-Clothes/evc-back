@@ -55,7 +55,6 @@ public class NaverLogin implements SocialLogin {
         private String access_token;
     }
 
-    // 클라이언트에서 서버로 데이터를 보내는 것이 아니라, 사용자가 네이버 로그인 페이지로 리다이렉트되기 때문에 GET 방식이 더 자연스럽습니다.
     @Override
     public String getAuthorizationCode(String state) {
         RestClient restClient = RestClient.create("https://nid.naver.com/oauth2.0/authorize");
@@ -74,7 +73,6 @@ public class NaverLogin implements SocialLogin {
         return response.code;
     }
 
-    // 이 요청은 주로 민감한 정보(예: 클라이언트 시크릿)를 포함하게 되므로, POST 메서드를 사용하는 것이 더 안전하고 적합
     @Override
     public String getAccessToken(String authorizeCode, String state) throws JsonProcessingException {
         RestClient restClient = RestClient.create("https://nid.naver.com/oauth2.0/token");

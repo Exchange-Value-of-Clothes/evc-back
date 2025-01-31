@@ -11,13 +11,13 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class SocialPlatformFactory {
+public class SocialPlatformProvider {
 
     private final List<SocialLogin> socialLogins;
 
-    public String getAuthorizationCode(ProviderType providerType, String state) {
+    public String getAuthorizationCode(String providerType, String state) {
         for (SocialLogin socialLogin : socialLogins) {
-            if (socialLogin.getSocialPlatform().name().equals(providerType.name())) {
+            if (socialLogin.getSocialPlatform().name().equals(providerType)) {
                 return socialLogin.getAuthorizationCode(state);
             }
         }
