@@ -48,6 +48,14 @@ dependencies {
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
+//submodule
+tasks.register('copyGitSubmodule', Copy) {
+	from './evc-back-config'
+	include '*.yml'
+	into './src/main/resources'
+}
+
+//RestDocs
 ext {
 	snippetsDir = file('build/generated-snippets')
 }
