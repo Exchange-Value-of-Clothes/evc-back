@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class SocialPlatformProvider {
+public class SocialLoginProcessor {
 
     private final List<SocialLogin> socialLogins;
 
@@ -27,13 +27,13 @@ public class SocialPlatformProvider {
     public String getAccessToken(String providerType, String authorizationCode, String state) {
         for (SocialLogin socialLogin : socialLogins) {
             if (socialLogin.getSocialPlatform().name().equals(providerType)) {
-                return socialLogin.getAccessToken(authorizationCode, state);
+                return socialLogin.getToken(authorizationCode, state);
             }
         }
         throw new CustomException(ErrorCode.SOCIAL_LOGIN);
     }
 
-    public SocialUserProfile<?> getUserProfile(String providerType, String accessToken) {
+    public SocialUserProfile getUserProfile(String providerType, String accessToken) {
         for (SocialLogin socialLogin : socialLogins) {
             if (socialLogin.getSocialPlatform().name().equals(providerType)) {
                 return socialLogin.getUserProfile(accessToken);

@@ -46,4 +46,10 @@ public class MemberRequest {
             throw new CustomException(ErrorCode.INVALID_PASSWORD, "비밀번호와 비밀번호 확인이 다릅니다.");
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class RefreshRequest {
+        private String refreshToken;
+    }
 }

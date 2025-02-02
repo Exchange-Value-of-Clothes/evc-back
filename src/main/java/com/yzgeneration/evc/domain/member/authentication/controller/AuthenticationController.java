@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationRequest.*;
 import static com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationResponse.*;
+import static com.yzgeneration.evc.domain.member.dto.MemberRequest.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,8 +27,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public RefreshResponse refresh(@RequestParam("refresh-token") String refreshToken) {
-        AuthenticationToken authenticationToken = authenticationService.refresh(refreshToken);
+    public RefreshResponse refresh(@RequestBody RefreshRequest refreshRequest) {
+        AuthenticationToken authenticationToken = authenticationService.refresh(refreshRequest.getRefreshToken());
         return new RefreshResponse(authenticationToken);
     }
 

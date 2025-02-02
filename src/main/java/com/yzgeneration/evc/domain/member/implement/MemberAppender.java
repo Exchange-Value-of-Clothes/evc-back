@@ -23,7 +23,7 @@ public class MemberAppender {
     private final MemberValidator memberValidator;
 
     public Member createByEmail(EmailSignup emailSignup) {
-        MemberPrivateInformation privateInfo = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation privateInfo = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
         MemberAuthenticationInformation authenticationInfo = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
         memberValidator.validate(privateInfo, authenticationInfo);
         Member member = Member.create(privateInfo, authenticationInfo, MemberRole.USER, MemberStatus.PENDING);
