@@ -5,7 +5,7 @@ import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.domain.member.enums.MemberRole;
 import com.yzgeneration.evc.domain.member.enums.MemberStatus;
 import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
-import com.yzgeneration.evc.external.social.NaverUserProfile;
+import com.yzgeneration.evc.external.social.SocialUserProfile;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -45,20 +45,11 @@ public class Member {
         memberStatus.checkStatus();
     }
 
-    public static Member socialLogin(String providerType, Object response) {
-        String providerId = "";
-        String nickname = "";
-        String phoneNumber = "";
-
-        if(response instanceof NaverUserProfile userProfile) {
-            providerId = userProfile.getId();
-            nickname = userProfile.getResponse().getNickname();
-            phoneNumber = userProfile.getResponse().getMobile();
-        }
+    public static Member socialLogin(String providerType, SocialUserProfile socialUserProfile) {
 
         return Member.builder()
-                .memberPrivateInformation(MemberPrivateInformation.createdBySocialLogin(nickname, phoneNumber))
-                .memberAuthenticationInformation(MemberAuthenticationInformation.createdBySocialLogin(providerType, providerId))
+                .memberPrivateInformation(MemberPrivateInformation.createdBySocialLogin(socialUserProfile))
+                .memberAuthenticationInformation(MemberAuthenticationInformation.createdBySocialLogin(providerType, socialUserProfile.getProviderId()))
                 .memberRole(MemberRole.USER)
                 .memberStatus(MemberStatus.ACTIVE)
                 .build();

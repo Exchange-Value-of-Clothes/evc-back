@@ -16,8 +16,8 @@ public enum ErrorCode {
 
     //401 Unauthorized
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "011", "이메일 혹은 비밀번호가 다릅니다."),
-    TOKEN_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "011", "이메일 혹은 비밀번호가 다릅니다."),
-    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "012", "토큰이 만료되었습니다."),
+    TOKEN_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "012-01", "토큰이 유효하지 않습니다."),
+    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "012-02", "토큰이 만료되었습니다."),
 
     //403 Forbidden
     INACTIVE_MEMBER(HttpStatus.FORBIDDEN, "031", "비활성화 된 계정입니다."),

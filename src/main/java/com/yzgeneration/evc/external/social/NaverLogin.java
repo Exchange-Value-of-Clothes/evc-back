@@ -32,18 +32,7 @@ public class NaverLogin implements SocialLogin {
     @Value("${NAVER_REDIRECT_URI}")
     private String NAVER_REDIRECT_URI;
 
-    @Getter
-    @NoArgsConstructor
-    private class NaverAccessTokenRequest {
-        private String grant_type = "authorization_code";
-        private String client_id = NAVER_CLIENT_ID;
-        private String client_secret = NAVER_CLIENT_SECRET;
-        private String code;
-
-        public NaverAccessTokenRequest(String code) {
-            this.code = code;
-        }
-    }
+    private final CsrfRepository csrfRepository;
 
     @Getter
     @NoArgsConstructor
@@ -53,6 +42,7 @@ public class NaverLogin implements SocialLogin {
 
     @Override
     public ResponseEntity<Void> getAuthorizationCode(String state) {
+        csrfRepository.save(state, "NAVER");
         String url = UriComponentsBuilder.fromUriString("https://nid.naver.com/oauth2.0/authorize")
                 .queryParam("response_type", "code")
                 .queryParam("client_id", NAVER_CLIENT_ID)
@@ -64,18 +54,12 @@ public class NaverLogin implements SocialLogin {
     }
 
     @Override
-    public String getAccessToken(String authorizeCode, String state) {
+    public String getToken(String authorizeCode, String state) {
+        csrfRepository.valid(state, "NAVER");
         RestClient restClient = RestClient.create("https://nid.naver.com/oauth2.0/token");
-
-        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add("grant_type", "authorization_code");
-        requestBody.add("client_id", NAVER_CLIENT_ID);
-        requestBody.add("client_secret", NAVER_CLIENT_SECRET);
-        requestBody.add("code", authorizeCode);
-
         NaverAccessTokenResponse response = restClient.post()
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)  // JSON이 아닌 FORM URLENCODED 사용
-                .body(requestBody)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(generateRequestBody(authorizeCode))
                 .retrieve()
                 .toEntity(NaverAccessTokenResponse.class)
                 .getBody();
@@ -86,14 +70,13 @@ public class NaverLogin implements SocialLogin {
         return response.access_token;
     }
 
-
     @Override
     public SocialPlatform getSocialPlatform() {
         return SocialPlatform.NAVER;
     }
 
     @Override
-    public SocialUserProfile<?> getUserProfile(String accessToken) {
+    public SocialUserProfile getUserProfile(String accessToken) {
         RestClient restClient = RestClient.create("https://openapi.naver.com/v1/nid/me");
         return restClient.get()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
@@ -101,5 +84,14 @@ public class NaverLogin implements SocialLogin {
                 .toEntity(NaverUserProfile.class)
                 .getBody();
 
+    }
+
+    private MultiValueMap<String, String> generateRequestBody(String authorizeCode) {
+        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("grant_type", "authorization_code");
+        requestBody.add("client_id", NAVER_CLIENT_ID);
+        requestBody.add("client_secret", NAVER_CLIENT_SECRET);
+        requestBody.add("code", authorizeCode);
+        return requestBody;
     }
 }

@@ -33,6 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String accessToken = parseToken(request.getHeader("Authorization"));
+//            tokenProvider.valid(accessToken);
             Long memberId = tokenProvider.getMemberId(accessToken);
             MemberPrincipal memberPrincipal = new MemberPrincipal(memberRepository.getById(memberId));
             Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -59,6 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
     }
 
+    // TODO : 검증 추가
     private String parseToken(String authorization) {
         if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
             return authorization.substring(7);

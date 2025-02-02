@@ -9,9 +9,14 @@ import com.yzgeneration.evc.fixture.MemberFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -20,6 +25,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -57,7 +63,7 @@ public class AuthenticationControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("authenticationToken.accessToken").type(JsonFieldType.STRING)
                                         .description("액세스 토큰"),
                                 fieldWithPath("authenticationToken.refreshToken").type(JsonFieldType.STRING)
-                                        .description("리프레쉬 토큰")
+                                        .description("리프레시 토큰")
                         )
                         ));
     }
@@ -68,12 +74,45 @@ public class AuthenticationControllerDocsTest extends RestDocsSupport {
         given(authenticationService.refresh(any()))
                 .willReturn(AuthenticationToken.create("accessToken", "refreshToken"));
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/refresh")
-                        .queryParam("refreshToken", "refreshToken"))
+                .content(objectMapper.writeValueAsString(MemberFixture.fixRefreshRequest()))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.authenticationToken.accessToken").value("accessToken"))
                 .andExpect(jsonPath("$.authenticationToken.refreshToken").value("refreshToken"))
                 .andDo(document("authentication-refresh",
-                        queryParameters(parameterWithName("refreshToken").description("리프레시 토큰"))));
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("refreshToken").type(JsonFieldType.STRING)
+                                        .description("리프레시 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("authenticationToken.accessToken").type(JsonFieldType.STRING)
+                                        .description("액세스 토큰"),
+                                fieldWithPath("authenticationToken.refreshToken").type(JsonFieldType.STRING)
+                                        .description("리프레시 토큰")
+                        )
+                        ));
 
     }
+
+    @Test
+    @DisplayName("소셜 로그인한다.")
+    @WithMockUser
+    void socialLogin() throws Exception {
+        given(authenticationService.authorizationCode(any(), any()))
+                .willReturn(ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, "url").build());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/social")
+                        .queryParam("provider_type", "GOOGLE")
+                        .queryParam("state", "1234"))
+                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andDo(document("authentication-socialLogin",
+                        queryParameters(
+                                parameterWithName("provider_type").description("소셜 로그인 플랫폼(대문자) e.g. GOOGLE,KAKAO,NAVER"),
+                                parameterWithName("state").description("csrf 토큰 (랜덤한 문자열)")
+                        )));
+
+    }
+
+
 }

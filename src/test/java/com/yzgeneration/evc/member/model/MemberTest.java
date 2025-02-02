@@ -35,7 +35,7 @@ class MemberTest {
                 .sample();
 
         // when
-        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
 
         // then
         assertThat(memberPrivateInformation.getNickname()).isEqualTo("구코딩#1234");
@@ -111,7 +111,7 @@ class MemberTest {
                 .set("password", "12345678")
                 .set("checkPassword", "12345678")
                 .sample();
-        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
         MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
 
 
@@ -137,7 +137,7 @@ class MemberTest {
                 .set("password", "12345678")
                 .set("checkPassword", "12345678")
                 .sample();
-        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
         MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
         Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.PENDING);
 
@@ -158,7 +158,7 @@ class MemberTest {
                 .set("password", "12345678")
                 .set("checkPassword", "12345678")
                 .sample();
-        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
         MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
         Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.ACTIVE);
 
@@ -177,7 +177,7 @@ class MemberTest {
                 .set("password", "12345678")
                 .set("checkPassword", "12345678")
                 .sample();
-        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
         MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
         Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.PENDING);
 
