@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.common.validator;
+package com.yzgeneration.evc.validator;
 
 public interface Validatable {
     void valid();

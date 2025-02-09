@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.mock.member;
 
-import com.yzgeneration.evc.common.exception.CustomException;
+import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.domain.verification.infrastructure.EmailVerificationRepository;
 import com.yzgeneration.evc.domain.verification.model.EmailVerification;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.yzgeneration.evc.common.exception.ErrorCode.*;
+import static com.yzgeneration.evc.exception.ErrorCode.*;
 
 public class FakeEmailVerificationRepository implements EmailVerificationRepository {
 

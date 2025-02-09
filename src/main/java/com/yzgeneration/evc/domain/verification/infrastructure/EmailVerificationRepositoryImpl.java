@@ -1,11 +1,11 @@
 package com.yzgeneration.evc.domain.verification.infrastructure;
 
-import com.yzgeneration.evc.common.exception.CustomException;
+import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.domain.verification.model.EmailVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import static com.yzgeneration.evc.common.exception.ErrorCode.*;
+import static com.yzgeneration.evc.exception.ErrorCode.*;
 
 @Repository
 @RequiredArgsConstructor

@@ -3,11 +3,11 @@ package com.yzgeneration.evc.domain.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.common.exception.ErrorCode;
-import com.yzgeneration.evc.common.validator.EmailValidator;
-import com.yzgeneration.evc.common.validator.PasswordValidator;
-import com.yzgeneration.evc.common.validator.Validatable;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
+import com.yzgeneration.evc.validator.EmailValidator;
+import com.yzgeneration.evc.validator.PasswordValidator;
+import com.yzgeneration.evc.validator.Validatable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -45,5 +45,11 @@ public class MemberRequest {
             if(password.equals(checkPassword)) return;
             throw new CustomException(ErrorCode.INVALID_PASSWORD, "비밀번호와 비밀번호 확인이 다릅니다.");
         }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class RefreshRequest {
+        private String refreshToken;
     }
 }

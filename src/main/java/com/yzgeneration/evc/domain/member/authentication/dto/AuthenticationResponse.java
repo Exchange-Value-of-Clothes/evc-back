@@ -16,4 +16,10 @@ public class AuthenticationResponse {
     public static class RefreshResponse {
         private AuthenticationToken authenticationToken;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class SocialLoginResponse {
+        private AuthenticationToken authenticationToken;
+    }
 }

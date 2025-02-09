@@ -5,6 +5,7 @@ import com.yzgeneration.evc.domain.member.authentication.implement.Authenticatio
 import com.yzgeneration.evc.domain.member.authentication.implement.TokenProvider;
 import com.yzgeneration.evc.domain.member.model.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +24,12 @@ public class AuthenticationService {
         return tokenProvider.refresh(refreshToken);
     }
 
-    public String authorizationCode(String providerType, String state) {
+    public ResponseEntity<Void> authorizationCode(String providerType, String state) {
         return authenticationProcessor.getAuthorizationCode(providerType, state);
+    }
+
+    public AuthenticationToken socialLogin(String providerType, String authorizationCode, String state) {
+        Member member = authenticationProcessor.socialLogin(providerType, authorizationCode, state);
+        return tokenProvider.create(member.getId());
     }
 }

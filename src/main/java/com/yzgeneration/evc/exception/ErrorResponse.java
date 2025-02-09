@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.common.exception;
+package com.yzgeneration.evc.exception;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,12 +10,12 @@ public class ErrorResponse {
     private final String code;
     private final String msg;
 
-    public static ResponseEntity<ErrorResponse> toResponse(ErrorCode errorCode){
+    public static ResponseEntity<ErrorResponse> toResponse(ErrorCode errorCode, String message) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
                 .body(ErrorResponse.builder()
                         .code(errorCode.getCode())
-                        .msg(errorCode.getDefaultMessage())
+                        .msg(message)
                         .build());
     }
 

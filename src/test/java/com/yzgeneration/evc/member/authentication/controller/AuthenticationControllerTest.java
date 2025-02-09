@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -62,11 +65,26 @@ class AuthenticationControllerTest {
         given(authenticationService.refresh(any()))
                 .willReturn(AuthenticationToken.create("accessToken", "refreshToken"));
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/refresh")
-                        .param("refreshToken", "refreshToken")
+                        .content(objectMapper.writeValueAsString(MemberFixture.fixRefreshRequest()))
+                        .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.authenticationToken.accessToken").value("accessToken"))
                 .andExpect(jsonPath("$.authenticationToken.refreshToken").value("refreshToken"));
+
+    }
+
+    @Test
+    @DisplayName("소셜 로그인한다.")
+    @WithMockUser
+    void socialLogin() throws Exception {
+        given(authenticationService.authorizationCode(any(), any()))
+                .willReturn(ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, "url").build());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/social")
+                        .queryParam("provider_type", "GOOGLE")
+                        .queryParam("state", "1234")
+                        .with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().isFound());
 
     }
 }

@@ -1,7 +1,7 @@
 package com.yzgeneration.evc.member.model;
 
 
-import com.yzgeneration.evc.common.exception.CustomException;
+import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.domain.member.enums.MemberRole;
 import com.yzgeneration.evc.domain.member.enums.MemberStatus;
 import com.yzgeneration.evc.domain.member.enums.ProviderType;
@@ -11,11 +11,11 @@ import com.yzgeneration.evc.domain.member.model.MemberPrivateInformation;
 import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
 import com.yzgeneration.evc.mock.member.SpyPasswordProcessor;
 import com.yzgeneration.evc.mock.StubRandomHolder;
-import com.yzgeneration.evc.common.service.port.RandomHolder;
+import com.yzgeneration.evc.common.implement.port.RandomHolder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.yzgeneration.evc.common.exception.ErrorCode.*;
+import static com.yzgeneration.evc.exception.ErrorCode.*;
 import static com.yzgeneration.evc.domain.member.dto.MemberRequest.*;
 import static com.yzgeneration.evc.fixture.MemberFixture.fixtureMonkey;
 import static org.assertj.core.api.Assertions.*;
@@ -35,7 +35,7 @@ class MemberTest {
                 .sample();
 
         // when
-        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
 
         // then
         assertThat(memberPrivateInformation.getNickname()).isEqualTo("구코딩#1234");
@@ -111,7 +111,7 @@ class MemberTest {
                 .set("password", "12345678")
                 .set("checkPassword", "12345678")
                 .sample();
-        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
         MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
 
 
@@ -137,7 +137,7 @@ class MemberTest {
                 .set("password", "12345678")
                 .set("checkPassword", "12345678")
                 .sample();
-        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
         MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
         Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.PENDING);
 
@@ -158,7 +158,7 @@ class MemberTest {
                 .set("password", "12345678")
                 .set("checkPassword", "12345678")
                 .sample();
-        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
         MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
         Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.ACTIVE);
 
@@ -177,7 +177,7 @@ class MemberTest {
                 .set("password", "12345678")
                 .set("checkPassword", "12345678")
                 .sample();
-        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
         MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
         Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.PENDING);
 

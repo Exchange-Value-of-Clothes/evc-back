@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.member.service;
 
-import com.yzgeneration.evc.common.exception.CustomException;
+import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.domain.member.dto.MemberRequest.EmailSignup;
 import com.yzgeneration.evc.domain.member.enums.MemberRole;
 import com.yzgeneration.evc.domain.member.enums.MemberStatus;
@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.yzgeneration.evc.common.exception.ErrorCode.*;
+import static com.yzgeneration.evc.exception.ErrorCode.*;
 import static com.yzgeneration.evc.fixture.MemberFixture.*;
 import static org.assertj.core.api.Assertions.*;
 

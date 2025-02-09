@@ -2,8 +2,8 @@ package com.yzgeneration.evc.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yzgeneration.evc.domain.member.authentication.implement.TokenProvider;
-import com.yzgeneration.evc.common.exception.ErrorCode;
-import com.yzgeneration.evc.common.exception.ErrorResponse;
+import com.yzgeneration.evc.exception.ErrorCode;
+import com.yzgeneration.evc.exception.ErrorResponse;
 import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -33,6 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String accessToken = parseToken(request.getHeader("Authorization"));
+//            tokenProvider.valid(accessToken);
             Long memberId = tokenProvider.getMemberId(accessToken);
             MemberPrincipal memberPrincipal = new MemberPrincipal(memberRepository.getById(memberId));
             Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -59,6 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
     }
 
+    // TODO : 검증 추가
     private String parseToken(String authorization) {
         if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
             return authorization.substring(7);

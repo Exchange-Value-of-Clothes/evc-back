@@ -1,6 +1,6 @@
-package com.yzgeneration.evc.common.service.infrastructure;
+package com.yzgeneration.evc.common.implement.infrastructure;
 
-import com.yzgeneration.evc.common.service.port.UuidHolder;
+import com.yzgeneration.evc.common.implement.port.UuidHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

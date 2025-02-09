@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.domain.member.implement;
 
-import com.yzgeneration.evc.common.service.port.RandomHolder;
+import com.yzgeneration.evc.common.implement.port.RandomHolder;
 import com.yzgeneration.evc.domain.member.enums.MemberRole;
 import com.yzgeneration.evc.domain.member.enums.MemberStatus;
 import com.yzgeneration.evc.domain.member.model.Member;
@@ -23,7 +23,7 @@ public class MemberAppender {
     private final MemberValidator memberValidator;
 
     public Member createByEmail(EmailSignup emailSignup) {
-        MemberPrivateInformation privateInfo = MemberPrivateInformation.createdByEmail(emailSignup, randomHolder);
+        MemberPrivateInformation privateInfo = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
         MemberAuthenticationInformation authenticationInfo = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
         memberValidator.validate(privateInfo, authenticationInfo);
         Member member = Member.create(privateInfo, authenticationInfo, MemberRole.USER, MemberStatus.PENDING);
