@@ -1,7 +1,7 @@
 package com.yzgeneration.evc.domain.member.enums;
 
-import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.common.exception.ErrorCode;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter

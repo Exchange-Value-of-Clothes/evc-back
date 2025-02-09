@@ -1,11 +1,14 @@
 package com.yzgeneration.evc.domain.member.infrastructure;
 
-import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.common.exception.ErrorCode;
+import com.yzgeneration.evc.domain.member.enums.ProviderType;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
 import com.yzgeneration.evc.domain.member.model.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 
 @Repository
@@ -32,5 +35,10 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Override
     public Member getById(Long id) {
         return memberJpaRepository.findById(id).orElseThrow(()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND)).toModel();
+    }
+
+    @Override
+    public Optional<Member> findSocialMember(String providerType, String providerId) {
+        return memberJpaRepository.findByMemberAuthenticationInformationEntityProviderTypeAndMemberAuthenticationInformationEntityProviderId(ProviderType.valueOf(providerType), providerId).flatMap(memberEntity -> Optional.of(memberEntity.toModel()));
     }
 }

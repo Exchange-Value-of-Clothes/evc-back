@@ -94,7 +94,7 @@ public class RegisterEmailVerificationTemplate extends EmailVerificationTemplate
                         <p>안녕하세요.<br>
                         아래 '메일 인증' 버튼을 클릭하여 회원가입을 완료해 주세요.<br>
                         감사합니다.</p>
-                    <a href="http://localhost:8080/api/members/verify?code=%s" class="button">메일 인증</a>
+                    <a href="http://ec2-15-164-152-88.ap-northeast-2.compute.amazonaws.com:8080/api/members/verify?code=%s" class="button">메일 인증</a>
                     </div>
                    
                 </div>

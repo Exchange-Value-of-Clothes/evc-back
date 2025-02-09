@@ -48,6 +48,12 @@ public abstract class MemberFixture extends Fixture{
                 .sample();
     }
 
+    public static RefreshRequest fixRefreshRequest() {
+        return fixtureMonkey.giveMeBuilder(RefreshRequest.class)
+                .set("refreshToken", "refreshToken")
+                .sample();
+    }
+
     private static ArbitraryBuilder<MemberAuthenticationInformation> fixPassword() {
         return fixtureMonkey.giveMeBuilder(MemberAuthenticationInformation.class)
                 .set("password", "12345678");

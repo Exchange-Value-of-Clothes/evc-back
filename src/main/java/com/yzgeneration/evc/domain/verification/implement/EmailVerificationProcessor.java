@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.domain.verification.implement;
 
-import com.yzgeneration.evc.common.service.port.UuidHolder;
+import com.yzgeneration.evc.common.implement.port.UuidHolder;
 import com.yzgeneration.evc.domain.verification.enums.EmailVerificationType;
 import com.yzgeneration.evc.domain.verification.infrastructure.EmailVerificationRepository;
 import com.yzgeneration.evc.domain.verification.model.Email;

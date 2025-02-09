@@ -5,20 +5,23 @@ import com.yzgeneration.evc.domain.member.authentication.implement.Authenticatio
 import com.yzgeneration.evc.domain.member.authentication.implement.TokenProvider;
 import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
 import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
-import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.common.exception.ErrorCode;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
 import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
-import com.yzgeneration.evc.external.social.SocialPlatformProvider;
+import com.yzgeneration.evc.external.social.SocialLoginProcessor;
 import com.yzgeneration.evc.fixture.MemberFixture;
 import com.yzgeneration.evc.mock.authentication.FakeRefreshTokenRepository;
-import com.yzgeneration.evc.mock.external.FakeSocialLogin;
+import com.yzgeneration.evc.mock.external.SpyGoogleLogin;
 import com.yzgeneration.evc.mock.member.FakeMemberRepository;
 import com.yzgeneration.evc.mock.member.SpyPasswordProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -34,7 +37,7 @@ class AuthenticationServiceTest {
     void init() {
         memberRepository = new FakeMemberRepository();
         PasswordProcessor passwordProcessor = new SpyPasswordProcessor();
-        AuthenticationProcessor authenticationProcessor = new AuthenticationProcessor(memberRepository, passwordProcessor, new SocialPlatformProvider(List.of(new FakeSocialLogin())));
+        AuthenticationProcessor authenticationProcessor = new AuthenticationProcessor(memberRepository, passwordProcessor, new SocialLoginProcessor(List.of(new SpyGoogleLogin())));
         String secret = "2VwKb97VKmrVskmUAedziOSJclcLxTO+xFiWZKh4vuE=";
         RefreshTokenRepository refreshTokenRepository = new FakeRefreshTokenRepository();
         TokenProvider tokenProvider = new TokenProvider(secret, refreshTokenRepository);
@@ -108,4 +111,57 @@ class AuthenticationServiceTest {
         assertThat(refreshAuthenticationToken).hasFieldOrProperty("accessToken");
         assertThat(refreshAuthenticationToken).hasFieldOrProperty("refreshToken");
     }
+
+    @Test
+    @DisplayName("적절한 ProviderType으로 인가코드를 요청할 수 있다.")
+    void getAuthorizationCode() {
+        // given
+        // when
+        ResponseEntity<Void> google = authenticationService.authorizationCode("GOOGLE", "1234");
+
+        // then
+        assertThat(google.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+        assertThat(google.getHeaders().get(HttpHeaders.LOCATION).get(0)).isEqualTo("https://www.google.com");
+
+    }
+
+    @Test
+    @DisplayName("적절하지 못한 ProviderType은 예외를 던진다.")
+    void InvalidProviderType() {
+        // given
+        // when
+        // then
+        assertThatThrownBy(() -> authenticationService.authorizationCode("INVALID", "1234"))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.SOCIAL_LOGIN);
+
+    }
+
+    @Test
+    @DisplayName("적절한 ProviderType, 인가코드, state로 소셜로그인을 성공한다.")
+    void socialLogin() {
+        // given
+        authenticationService.authorizationCode("GOOGLE", "1234");
+        // when
+        AuthenticationToken authenticationToken = authenticationService.socialLogin("GOOGLE", "code", "1234");
+
+        // then
+        assertThat(authenticationToken).hasFieldOrProperty("accessToken");
+
+    }
+
+    @Test
+    @DisplayName("적절하지 못한 state로 소셜로그인이 실패한다.")
+    void socialLogin_failed() {
+        // given
+        authenticationService.authorizationCode("GOOGLE", "1234");
+        // when
+        // then
+        assertThatThrownBy(() -> authenticationService.socialLogin("GOOGLE", "code", "12345"))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_CSRF);
+
+    }
+
+
 }

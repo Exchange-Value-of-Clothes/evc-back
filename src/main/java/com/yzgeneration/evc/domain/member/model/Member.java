@@ -1,10 +1,11 @@
 package com.yzgeneration.evc.domain.member.model;
 
-import com.yzgeneration.evc.common.exception.CustomException;
-import com.yzgeneration.evc.common.exception.ErrorCode;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.domain.member.enums.MemberRole;
 import com.yzgeneration.evc.domain.member.enums.MemberStatus;
 import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
+import com.yzgeneration.evc.external.social.SocialUserProfile;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -42,6 +43,16 @@ public class Member {
 
     public void checkStatus() {
         memberStatus.checkStatus();
+    }
+
+    public static Member socialLogin(String providerType, SocialUserProfile socialUserProfile) {
+
+        return Member.builder()
+                .memberPrivateInformation(MemberPrivateInformation.createdBySocialLogin(socialUserProfile))
+                .memberAuthenticationInformation(MemberAuthenticationInformation.createdBySocialLogin(providerType, socialUserProfile.getProviderId()))
+                .memberRole(MemberRole.USER)
+                .memberStatus(MemberStatus.ACTIVE)
+                .build();
     }
 
 }
