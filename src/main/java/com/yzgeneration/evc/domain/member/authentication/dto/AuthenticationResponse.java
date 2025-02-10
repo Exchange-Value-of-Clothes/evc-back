@@ -8,13 +8,13 @@ public class AuthenticationResponse {
     @Getter
     @AllArgsConstructor
     public static class LoginResponse {
-        private AuthenticationToken authenticationToken;
+        private String accessToken;
     }
 
     @Getter
     @AllArgsConstructor
     public static class RefreshResponse {
-        private AuthenticationToken authenticationToken;
+        private String accessToken;
     }
 
     @Getter

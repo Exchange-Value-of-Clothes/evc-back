@@ -2,25 +2,25 @@ package com.yzgeneration.evc.member.authentication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yzgeneration.evc.domain.member.authentication.controller.AuthenticationController;
+import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationResponse;
 import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
 import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
 import com.yzgeneration.evc.fixture.MemberFixture;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -46,15 +46,26 @@ class AuthenticationControllerTest {
     @DisplayName("로그인한다.")
     @WithMockUser
     void login() throws Exception {
+        AuthenticationToken authenticationToken = AuthenticationToken.create("accessToken", "refreshToken");
+        ResponseCookie cookie = ResponseCookie.from("refresh_token", authenticationToken.getRefreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(30 * 24 * 60 * 60)
+                .sameSite("Strict")
+                .build();
         given(authenticationService.login(any(), any()))
-                .willReturn(AuthenticationToken.create("accessToken", "refreshToken"));
+                .willReturn(
+                        ResponseEntity.ok()
+                                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                                .body(new AuthenticationResponse.LoginResponse(authenticationToken.getAccessToken())));
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth")
                         .content(objectMapper.writeValueAsString(MemberFixture.fixLoginRequest()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$.authenticationToken.accessToken").value("accessToken"))
-                .andExpect(jsonPath("$.authenticationToken.refreshToken").value("refreshToken"));
+                .andExpect(jsonPath("$.accessToken").value("accessToken"))
+                .andExpect(MockMvcResultMatchers.cookie().exists("refresh_token"));
 
     }
 
@@ -62,15 +73,28 @@ class AuthenticationControllerTest {
     @DisplayName("토큰 재발급한다.")
     @WithMockUser
     void refresh() throws Exception {
+        AuthenticationToken authenticationToken = AuthenticationToken.create("accessToken", "refreshToken");
+        ResponseCookie cookie = ResponseCookie.from("refresh_token", authenticationToken.getRefreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(30 * 24 * 60 * 60)
+                .sameSite("Strict")
+                .build();
+        Cookie refreshToken = new Cookie("refresh_token", authenticationToken.getRefreshToken());
         given(authenticationService.refresh(any()))
-                .willReturn(AuthenticationToken.create("accessToken", "refreshToken"));
+                .willReturn(
+                        ResponseEntity.ok()
+                                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                                .body(new AuthenticationResponse.RefreshResponse(authenticationToken.getAccessToken()))
+                );
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/refresh")
-                        .content(objectMapper.writeValueAsString(MemberFixture.fixRefreshRequest()))
                         .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(refreshToken)
                         .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$.authenticationToken.accessToken").value("accessToken"))
-                .andExpect(jsonPath("$.authenticationToken.refreshToken").value("refreshToken"));
+                .andExpect(jsonPath("$.accessToken").value("accessToken"))
+                .andExpect(MockMvcResultMatchers.cookie().exists("refresh_token"));
 
     }
 
