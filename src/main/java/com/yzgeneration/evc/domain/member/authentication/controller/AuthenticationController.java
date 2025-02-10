@@ -6,12 +6,12 @@ import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationS
 import com.yzgeneration.evc.domain.member.enums.ProviderType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationRequest.*;
 import static com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationResponse.*;
-import static com.yzgeneration.evc.domain.member.dto.MemberRequest.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -21,15 +21,13 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping
-    public LoginResponse login(@Valid @RequestBody LoginRequest loginRequest) {
-        AuthenticationToken authenticationToken = authenticationService.login(loginRequest.getEmail(), loginRequest.getPassword());
-        return new LoginResponse(authenticationToken);
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+        return authenticationService.login(loginRequest.getEmail(), loginRequest.getPassword());
     }
 
     @PostMapping("/refresh")
-    public RefreshResponse refresh(@RequestBody RefreshRequest refreshRequest) {
-        AuthenticationToken authenticationToken = authenticationService.refresh(refreshRequest.getRefreshToken());
-        return new RefreshResponse(authenticationToken);
+    public ResponseEntity<RefreshResponse> refresh(@CookieValue(name = "refresh_token") String refreshToken) {
+        return authenticationService.refresh(refreshToken);
     }
 
     @GetMapping("/social")
