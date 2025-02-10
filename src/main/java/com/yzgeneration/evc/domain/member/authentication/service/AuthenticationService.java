@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.domain.member.authentication.service;
 
+import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationResponse;
 import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
 import com.yzgeneration.evc.domain.member.authentication.implement.AuthenticationProcessor;
 import com.yzgeneration.evc.domain.member.authentication.implement.TokenProvider;
@@ -15,13 +16,15 @@ public class AuthenticationService {
     private final AuthenticationProcessor authenticationProcessor;
     private final TokenProvider tokenProvider;
 
-    public AuthenticationToken login(String email, String password) {
+    public ResponseEntity<AuthenticationResponse.LoginResponse> login(String email, String password) {
         Member member = authenticationProcessor.login(email, password);
-        return tokenProvider.create(member.getId());
+        AuthenticationToken authenticationToken = tokenProvider.create(member.getId());
+        return authenticationProcessor.getLoginResponse(authenticationToken);
     }
 
-    public AuthenticationToken refresh(String refreshToken) {
-        return tokenProvider.refresh(refreshToken);
+    public ResponseEntity<AuthenticationResponse.RefreshResponse> refresh(String refreshToken) {
+        AuthenticationToken authenticationToken = tokenProvider.refresh(refreshToken);
+        return authenticationProcessor.getRefreshResponse(authenticationToken);
     }
 
     public ResponseEntity<Void> authorizationCode(String providerType, String state) {

@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.member.authentication.service;
 
+import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationResponse;
 import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
 import com.yzgeneration.evc.domain.member.authentication.implement.AuthenticationProcessor;
 import com.yzgeneration.evc.domain.member.authentication.implement.TokenProvider;
@@ -31,14 +32,14 @@ class AuthenticationServiceTest {
 
     private AuthenticationService authenticationService;
     private MemberRepository memberRepository;
+    private final PasswordProcessor passwordProcessor = new SpyPasswordProcessor();
+    private static final String secret = "2VwKb97VKmrVskmUAedziOSJclcLxTO+xFiWZKh4vuE=";
 
 
     @BeforeEach
     void init() {
         memberRepository = new FakeMemberRepository();
-        PasswordProcessor passwordProcessor = new SpyPasswordProcessor();
         AuthenticationProcessor authenticationProcessor = new AuthenticationProcessor(memberRepository, passwordProcessor, new SocialLoginProcessor(List.of(new SpyGoogleLogin())));
-        String secret = "2VwKb97VKmrVskmUAedziOSJclcLxTO+xFiWZKh4vuE=";
         RefreshTokenRepository refreshTokenRepository = new FakeRefreshTokenRepository();
         TokenProvider tokenProvider = new TokenProvider(secret, refreshTokenRepository);
         authenticationService = new AuthenticationService(authenticationProcessor, tokenProvider);
@@ -51,10 +52,11 @@ class AuthenticationServiceTest {
         Member member = MemberFixture.createdByEmail_ACTIVE();
         memberRepository.save(member);
         // when
-        AuthenticationToken authenticationToken = authenticationService.login("ssar@naver.com", "12345678");
+        ResponseEntity<AuthenticationResponse.LoginResponse> response = authenticationService.login("ssar@naver.com", "12345678");
         // then
-        assertThat(authenticationToken).hasFieldOrProperty("accessToken");
-        assertThat(authenticationToken).hasFieldOrProperty("refreshToken");
+        assertThat(response.getBody()).hasFieldOrProperty("accessToken");
+        assertThat(response.getHeaders().get(HttpHeaders.SET_COOKIE)).hasSize(1);
+        assertThat(response.getHeaders().get(HttpHeaders.SET_COOKIE).get(0)).startsWith("refresh_token=");
     }
 
     @Test
@@ -102,14 +104,23 @@ class AuthenticationServiceTest {
         // given
         Member member = MemberFixture.createdByEmail_ACTIVE();
         memberRepository.save(member);
-        AuthenticationToken authenticationToken = authenticationService.login("ssar@naver.com", "12345678");
-
+        ResponseEntity<AuthenticationResponse.LoginResponse> loginResponse = authenticationService.login("ssar@naver.com", "12345678");
+        String refreshToken="";
+        String setCookieHeader = loginResponse.getHeaders().get(HttpHeaders.SET_COOKIE).get(0);
+        String[] cookies = setCookieHeader.split("; "); // 세미콜론(;) 기준으로 쿠키 분리
+        for (String cookie : cookies) {
+            if (cookie.startsWith("refresh_token=")) { // refresh_token 찾기
+                refreshToken = cookie.substring("refresh_token=".length());
+            }
+        }
         // when
-        AuthenticationToken refreshAuthenticationToken = authenticationService.refresh(authenticationToken.getRefreshToken());
+        ResponseEntity<AuthenticationResponse.RefreshResponse> response = authenticationService.refresh(refreshToken);
 
         // then
-        assertThat(refreshAuthenticationToken).hasFieldOrProperty("accessToken");
-        assertThat(refreshAuthenticationToken).hasFieldOrProperty("refreshToken");
+        assertThat(response.getBody()).hasFieldOrProperty("accessToken");
+        assertThat(response.getHeaders().get(HttpHeaders.SET_COOKIE)).hasSize(1);
+        assertThat(response.getHeaders().get(HttpHeaders.SET_COOKIE).get(0)).startsWith("refresh_token=");
+
     }
 
     @Test
