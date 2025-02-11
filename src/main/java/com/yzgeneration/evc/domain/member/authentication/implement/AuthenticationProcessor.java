@@ -34,10 +34,10 @@ public class AuthenticationProcessor {
     public ResponseEntity<LoginResponse> getLoginResponse(AuthenticationToken authenticationToken) {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", authenticationToken.getRefreshToken())
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(30 * 24 * 60 * 60)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -47,10 +47,10 @@ public class AuthenticationProcessor {
     public ResponseEntity<RefreshResponse> getRefreshResponse(AuthenticationToken authenticationToken) {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", authenticationToken.getRefreshToken())
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(30 * 24 * 60 * 60)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
