@@ -55,7 +55,7 @@ jobs:
       - name: docker-compose.yml Base64 인코딩 후 로컬에 저장
         run: echo "${{ secrets.DOCKER_COMPOSE_YML }}" | base64 -d > docker-compose.yml
 
-      - name: docker-compose.yml 파일을 EC2로 업로드!
+      - name: docker-compose.yml 파일을 EC2로 업로드!!
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_HOST }}
