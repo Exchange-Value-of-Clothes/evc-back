@@ -60,14 +60,16 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            echo "version: '3.8'
+            cat <<EOF > docker-compose.yml
+            version: '3.8'
             services:
               evc-server:
-                image: ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
+                image: 711387115473.dkr.ecr.ap-northeast-2.amazonaws.com/evc-server:latest
                 ports:
                   - 8080:8080
                 networks:
                   - evc-network
+            
               rabbitmq:
                 image: rabbitmq:4.0.5-management
                 restart: always
@@ -77,11 +79,13 @@ jobs:
                 environment:
                   RABBITMQ_DEFAULT_USER: guest
                   RABBITMQ_DEFAULT_PASS: guest
-                netwokrs:
+                networks:
                   - evc-network
-              networks:
-                evc-network:
-                  driver: bridge
+            
+            networks:
+              evc-network:
+                driver: bridge
+            EOF
 
       - name: SSH로 EC2에 접속해서 도커 컴포즈 실행
         uses: appleboy/ssh-action@v1.0.3
