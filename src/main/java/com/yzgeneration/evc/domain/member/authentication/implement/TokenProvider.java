@@ -111,16 +111,4 @@ public class TokenProvider {
         return differenceInDays <= 7;
     }
 
-    public void valid(String accessToken) {
-        String algorithm = Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(accessToken)
-                .getHeader()
-                .getAlgorithm();
-        if (!algorithm.startsWith("HmacSHA")) {}
-
-
-        // parseSigneClaim?
-    }
 }
