@@ -60,8 +60,10 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            printf "%s\n" "${{ secrets.DOCKER_COMPOSE_YML }}" > ~/docker-compose.yml
-            cat ~/docker-compose.yml 
+            cat <<EOF > ~/docker-compose.yml
+            ${{ secrets.DOCKER_COMPOSE_YML }}
+            EOF
+            cat ~/docker-compose.yml
 
       - name: SSH로 EC2에 접속해서 도커 컴포즈 실행
         uses: appleboy/ssh-action@v1.0.3
