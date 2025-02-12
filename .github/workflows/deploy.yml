@@ -38,7 +38,7 @@ jobs:
         run: sed -i 's/\r$//' docker-compose.yml
 
       - name: docker-compose.yml 확인하기
-        run: cat docker-compose.yml
+        run: cat -A docker-compose.yml
 
       # 추가
       - name: gradlew 권한주기
