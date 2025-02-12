@@ -31,4 +31,8 @@ public class MemberPrincipal implements Serializable {
         }
         return authorities;
     }
+
+    public Long getId() {
+        return member.getId();
+    }
 }

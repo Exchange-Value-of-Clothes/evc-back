@@ -2,10 +2,13 @@ package com.yzgeneration.evc.validator;
 
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 
-public abstract class EnumValidator {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class EnumValidator {
 
     public static void validate(Class<? extends Enum<?>> enumClass, String targetFieldName, String targetFieldValue) {
         Enum<?>[] enumConstants = enumClass.getEnumConstants();

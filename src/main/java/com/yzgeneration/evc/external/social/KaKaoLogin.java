@@ -97,12 +97,12 @@ public class KaKaoLogin implements SocialLogin {
     }
 
     private MultiValueMap<String, String> generateRequestBody(String authorizeCode) {
-        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add("grant_type", "authorization_code");
-        requestBody.add("client_id", KAKAO_CLIENT_ID);
-        requestBody.add("client_secret", KAKAO_CLIENT_SECRET);
-        requestBody.add("redirect_uri", KAKAO_REDIRECT_URI);
-        requestBody.add("code", authorizeCode);
-        return requestBody;
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("grant_type", "authorization_code");
+        queryParams.add("client_id", KAKAO_CLIENT_ID);
+        queryParams.add("client_secret", KAKAO_CLIENT_SECRET);
+        queryParams.add("redirect_uri", KAKAO_REDIRECT_URI);
+        queryParams.add("code", authorizeCode);
+        return queryParams;
     }
 }
