@@ -61,7 +61,7 @@ jobs:
           script_stop: true
           script: |
             cat <<EOF > docker-compose.yml
-            version: '3.8'
+            version: 3.8
             services:
               evc-server:
                 build: .
