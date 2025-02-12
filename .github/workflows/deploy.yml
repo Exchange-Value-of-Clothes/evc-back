@@ -32,7 +32,7 @@ jobs:
         run: cat -A docker-compose.yml
 
       - name: application.yml 특수문자 확인
-        run: cat -A application.yml
+        run: cat -A src/main/resources/application.yml
 
       # 추가
       - name: gradlew 권한주기
