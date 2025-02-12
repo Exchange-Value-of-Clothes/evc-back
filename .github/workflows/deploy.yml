@@ -43,8 +43,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Docker 이미지 생성
-        run: docker build -t evc-server .
+      - name: docker-compose.yml Base64 인코딩 후 로컬에 저장
+        run: echo "${{ secrets.DOCKER_COMPOSE_YML }}" | base64 -d > docker-compose.yml
+
+      - name: docker-compose 실행
+        run: docker-compose up -d --build
 
       - name: Docker 이미지에 Tag 붙이기 # ecr 주소값을 태그로
         run: docker tag evc-server ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
@@ -52,19 +55,7 @@ jobs:
       - name: ECR에 Docker 이미지 Push
         run: docker push ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
 
-      - name: docker-compose.yml Base64 인코딩 후 로컬에 저장
-        run: echo "${{ secrets.DOCKER_COMPOSE_YML }}" | base64 -d > docker-compose.yml
-
-      - name: docker-compose.yml 파일을 EC2로 업로드!!
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "docker-compose.yml"
-          target: "~/"
-
-      - name: SSH로 EC2에 접속해서 도커 컴포즈 실행
+      - name: SSH로 EC2에 접속해서 이미지 실행
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -72,11 +63,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            docker-compose down || true
+            docker stop evc-server || true
+            docker rm evc-server || true
             docker pull ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
-            docker-compose up -d --build
-
-#            docker stop evc-server || true
-#            docker rm evc-server || true
-#            docker pull ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
-#            docker run -d --name evc-server -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
+            docker run -d --name evc-server -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
