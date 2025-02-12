@@ -8,6 +8,7 @@ import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Base64;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class GoogleLogin implements SocialLogin {
@@ -59,9 +61,6 @@ public class GoogleLogin implements SocialLogin {
         return ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, url).build();
     }
 
-    /*
-    * openID CONNECT
-    * */
     @Override
     public String getToken(String authorizeCode, String state) {
         csrfRepository.valid(state, "GOOGLE");
@@ -84,20 +83,20 @@ public class GoogleLogin implements SocialLogin {
         return SocialPlatform.GOOGLE;
     }
 
-    // https 통신으로 토큰을 바로 받았기 때문에, 검증없이 바로 base64url 디코딩
     @Override
     public SocialUserProfile getUserProfile(String idToken) {
-        String[] payloadAndSignature = idToken.split("\\.");
-        String payload = new String(Base64.getUrlDecoder().decode(payloadAndSignature[1]));
         try {
+            String[] payloadAndSignature = idToken.split("\\.");
+            String payload = new String(Base64.getUrlDecoder().decode(payloadAndSignature[1]));
             JsonNode jsonNode = objectMapper.readTree(payload);
             String sub = jsonNode.get("sub").asText();
             String email = jsonNode.has("email") ? jsonNode.get("email").asText() : null;
             String name = jsonNode.has("name") ? jsonNode.get("name").asText() : null;
             String picture = jsonNode.has("picture") ? jsonNode.get("picture").asText() : null;
             return new GoogleUserProfile(sub, email, picture, name);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        } catch (JsonProcessingException | IllegalArgumentException e) {
+            log.error("id_token 파싱 실패 {}",e.getMessage());
+            throw new CustomException(ErrorCode.TOKEN_UNAUTHORIZED, "소셜 로그인 중 id_token 파싱 오류");
         }
 
     }
