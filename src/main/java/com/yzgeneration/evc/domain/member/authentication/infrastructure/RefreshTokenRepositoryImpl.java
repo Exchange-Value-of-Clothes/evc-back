@@ -3,6 +3,7 @@ package com.yzgeneration.evc.domain.member.authentication.infrastructure;
 import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
@@ -11,7 +12,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final StringRedisTemplate redisTemplate;
     private static final String REFRESH_TOKEN_PREFIX = "memberId:";
 
     @Override

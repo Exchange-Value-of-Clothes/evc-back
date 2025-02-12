@@ -11,20 +11,20 @@ import static com.yzgeneration.evc.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class EmailVerificationRepositoryImpl implements EmailVerificationRepository {
 
-    private final EmailJpaRepository emailJpaRepository;
+    private final EmailVerificationJpaRepository emailVerificationJpaRepository;
 
     @Override
     public EmailVerification save(EmailVerification emailVerification) {
-        return emailJpaRepository.save(EmailVerificationEntity.from(emailVerification)).toModel();
+        return emailVerificationJpaRepository.save(EmailVerificationEntity.from(emailVerification)).toModel();
     }
 
     @Override
     public EmailVerification getByToken(String code) {
-        return emailJpaRepository.findByVerificationCode(code).orElseThrow(()-> new CustomException(EMAIL_VERIFICATION_NOT_FOUND)).toModel();
+        return emailVerificationJpaRepository.findByVerificationCode(code).orElseThrow(()-> new CustomException(EMAIL_VERIFICATION_NOT_FOUND)).toModel();
     }
 
     @Override
     public EmailVerification getByEmail(String email) {
-        return emailJpaRepository.findByEmailAddress(email).orElseThrow(()-> new CustomException(EMAIL_VERIFICATION_NOT_FOUND)).toModel();
+        return emailVerificationJpaRepository.findByEmailAddress(email).orElseThrow(()-> new CustomException(EMAIL_VERIFICATION_NOT_FOUND)).toModel();
     }
 }
