@@ -34,8 +34,11 @@ jobs:
       - name: docker-compose.yml 특수문자 확인
         run: cat -A docker-compose.yml
 
+      - name: dos2unix 설치
+        run: sudo apt-get install -y dos2unix
+
       - name: 줄바꿈(LF) 변환
-        run: tr -d '\r' < docker-compose.yml > docker-compose.tmp && mv docker-compose.tmp docker-compose.yml
+        run: dos2unix docker-compose.yml
 
       - name: docker-compose.yml 확인하기
         run: cat -A docker-compose.yml
