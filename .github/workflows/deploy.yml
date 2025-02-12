@@ -46,7 +46,7 @@ jobs:
       - name: docker-compose.yml Base64 인코딩 후 로컬에 저장
         run: echo "${{ secrets.DOCKER_COMPOSE_YML }}" | base64 -d > docker-compose.yml
 
-      - name: docker-compose 실행
+      - name: docker-compose 실행!
         run: docker compose up -d --build
 
       - name: Docker 이미지에 Tag 붙이기 # ecr 주소값을 태그로
