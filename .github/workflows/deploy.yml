@@ -26,7 +26,13 @@ jobs:
         run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > src/main/resources/application.yml
 
       - name: docker-compose.yml 파일 만들기
-        run: printf '%s' "${{ secrets.DOCKER_COMPOSE_YML }}" > docker-compose.yml
+        run: echo "${{ secrets.DOCKER_COMPOSE_YML }}" > docker-compose.yml
+
+      - name: yml 검증기 설치
+        run: pip install yamllint
+
+      - name: yml 검증
+        run: yamllint docker-compose.yml
 
       # 추가
       - name: gradlew 권한주기
