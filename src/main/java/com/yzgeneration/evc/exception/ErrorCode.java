@@ -12,7 +12,7 @@ public enum ErrorCode {
     INVALID_EMAIL(HttpStatus.BAD_REQUEST, "002", "잘못된 이메일 형식입니다."),
     INVALID_ENUM(HttpStatus.BAD_REQUEST, "003", "잘못된 열거형 형식입니다."),
     INVALID_CSRF(HttpStatus.BAD_REQUEST, "004", "잘못된 csrf 토큰 값입니다."),
-    SOCIAL_LOGIN(HttpStatus.BAD_REQUEST, "004", "소셜로그인에서 제공하지 않는 플랫폼 로그인 입니다."),
+    SOCIAL_LOGIN(HttpStatus.BAD_REQUEST, "005", "소셜로그인에서 제공하지 않는 플랫폼 로그인 입니다."),
 
     //401 Unauthorized
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "011", "이메일 혹은 비밀번호가 다릅니다."),

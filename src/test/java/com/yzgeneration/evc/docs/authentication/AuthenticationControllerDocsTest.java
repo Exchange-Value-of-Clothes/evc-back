@@ -110,10 +110,6 @@ public class AuthenticationControllerDocsTest extends RestDocsSupport {
                 .andDo(document("authentication-refresh",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestFields(
-                                fieldWithPath("refreshToken").type(JsonFieldType.STRING)
-                                        .description("리프레시 토큰")
-                        ),
                         responseFields(
                                 fieldWithPath("accessToken").type(JsonFieldType.STRING)
                                         .description("액세스 토큰")

@@ -42,7 +42,4 @@ public class AuthenticationController {
         return new SocialLoginResponse(authenticationToken);
     }
 
-
-
-
 }

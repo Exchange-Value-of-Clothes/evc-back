@@ -7,7 +7,6 @@ import com.yzgeneration.evc.exception.ErrorResponse;
 import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +29,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final MemberRepository memberRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
         try {
             String accessToken = parseToken(request.getHeader("Authorization"));
-//            tokenProvider.valid(accessToken);
             Long memberId = tokenProvider.getMemberId(accessToken);
             MemberPrincipal memberPrincipal = new MemberPrincipal(memberRepository.getById(memberId));
             Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -55,12 +53,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request)  {
-        String[] excludePath = {"/api/auth", "/api/members/register", "/docs"};
+        String[] excludePath = {"/api/auth", "/api/members/register", "/docs", "/connection", "/"}; //TODO
         String path = request.getRequestURI();
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
     }
 
-    // TODO : 검증 추가
     private String parseToken(String authorization) {
         if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
             return authorization.substring(7);

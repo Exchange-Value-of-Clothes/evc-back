@@ -12,7 +12,9 @@ import com.yzgeneration.evc.domain.member.model.MemberPrivateInformation;
 import static com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationRequest.*;
 import static com.yzgeneration.evc.domain.member.dto.MemberRequest.*;
 
-public abstract class MemberFixture extends Fixture{
+public final class MemberFixture extends Fixture{
+
+    private MemberFixture() {}
 
     public static EmailSignup fixEmailSignup() {
         return fixtureMonkey.giveMeBuilder(EmailSignup.class)
