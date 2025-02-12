@@ -26,13 +26,7 @@ jobs:
         run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > src/main/resources/application.yml
 
       - name: docker-compose.yml 파일 만들기
-        run: echo "${{ secrets.DOCKER_COMPOSE_YML }}" | base64 --decode > docker-compose.yml
-
-      - name: docker-compose.yml 특수문자 확인
-        run: cat -A docker-compose.yml
-
-      - name: application.yml 특수문자 확인
-        run: cat -A src/main/resources/application.yml
+        run: echo "${{ secrets.DOCKER_COMPOSE_YML }}" docker-compose.yml
 
       # 추가
       - name: gradlew 권한주기
