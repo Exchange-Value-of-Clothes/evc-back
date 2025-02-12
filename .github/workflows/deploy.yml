@@ -28,6 +28,9 @@ jobs:
       - name: docker-compose.yml 파일 만들기
         run: echo "${{ secrets.DOCKER_COMPOSE_YML }}" > docker-compose.yml
 
+      - name: docker compose yml 위치 확인하기
+        run: ls -al
+
       - name: docker-compose.yml 확인하기
         run: cat docker-compose.yml
 
