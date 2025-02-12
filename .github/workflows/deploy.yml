@@ -60,10 +60,11 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
+            set +x
             cat <<EOF > ~/docker-compose.yml
             ${{ secrets.DOCKER_COMPOSE_YML }}
             EOF
-            sed -i '/DRONE_SSH_PREV_COMMAND_EXIT_CODE/d' .env
+            set -x
             cat ~/docker-compose.yml
 
       - name: SSH로 EC2에 접속해서 도커 컴포즈 실행
