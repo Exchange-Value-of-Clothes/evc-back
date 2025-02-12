@@ -64,7 +64,7 @@ jobs:
             version: '3.8'
             services:
               evc-server:
-                image: 711387115473.dkr.ecr.ap-northeast-2.amazonaws.com/evc-server:latest
+                build: .
                 ports:
                   - 8080:8080
                 networks:
