@@ -20,6 +20,7 @@ bin/
 ### IntelliJ IDEA ###
 application.yml
 application-prod.yml
+docker-compose.yml
 .idea
 *.iws
 *.iml
