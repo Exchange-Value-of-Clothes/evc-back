@@ -60,11 +60,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            set +x
-            cat <<EOF | tee ~/docker-compose.yml > /dev/null
-            ${{ secrets.DOCKER_COMPOSE_YML }}
-            EOF
-            set -x
+            echo "${{ secrets.DOCKER_COMPOSE_YML }}" | base64 -d > ~/docker-compose.yml
             cat ~/docker-compose.yml
 
       - name: SSH로 EC2에 접속해서 도커 컴포즈 실행
