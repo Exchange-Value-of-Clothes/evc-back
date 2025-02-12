@@ -25,6 +25,9 @@ jobs:
       - name: application.yml 파일 만들기
         run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > src/main/resources/application.yml
 
+      - name: docker-compose.yml 파일 만들기
+        run: echo "${{ secrets.DOCKER_COMPOSE_YML }}" > docker-compose.yml
+
       # 추가
       - name: gradlew 권한주기
         run: chmod +x ./gradlew
@@ -62,8 +65,7 @@ jobs:
           script: |
             docker-compose down || true
             docker pull ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
-            echo "${{ secrets.DOCKER_COMPOSE_YML }}" > docker-compose.yml
-            docker-compose up -d
+            docker-compose up -d --build
 
 #            docker stop evc-server || true
 #            docker rm evc-server || true
