@@ -34,8 +34,8 @@ jobs:
       - name: docker-compose.yml 특수문자 확인
         run: cat -A docker-compose.yml
 
-      - name: 줄바꿈(LF) 변환!
-        run: sed -i 's/\r$//' docker-compose.yml
+      - name: 줄바꿈(LF) 변환
+        run: tr -d '\r' < docker-compose.yml > docker-compose.tmp && mv docker-compose.tmp docker-compose.yml
 
       - name: docker-compose.yml 확인하기
         run: cat -A docker-compose.yml
