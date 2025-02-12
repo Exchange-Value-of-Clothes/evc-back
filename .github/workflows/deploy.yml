@@ -60,7 +60,12 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            docker stop evc-server || true
-            docker rm evc-server || true
+            docker-compose down || true
             docker pull ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
-            docker run -d --name evc-server -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
+            echo "${{ secrets.DOCKER_COMPOSE_YML }}" > docker-compose.yml
+            docker-compose up -d
+
+#            docker stop evc-server || true
+#            docker rm evc-server || true
+#            docker pull ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
+#            docker run -d --name evc-server -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/evc-server:latest
