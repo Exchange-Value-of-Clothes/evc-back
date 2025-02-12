@@ -61,7 +61,7 @@ jobs:
           script_stop: true
           script: |
             set +x
-            cat <<EOF > ~/docker-compose.yml
+            cat <<EOF | tee ~/docker-compose.yml > /dev/null
             ${{ secrets.DOCKER_COMPOSE_YML }}
             EOF
             set -x
