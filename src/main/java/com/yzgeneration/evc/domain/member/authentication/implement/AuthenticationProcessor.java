@@ -40,7 +40,7 @@ public class AuthenticationProcessor {
                 .path("/")
                 .maxAge(30 * 24 * 60 * 60)
                 .sameSite("Lax") // Strict : 완전한 크로스 사이트 차단, Lax (기본값) → GET 요청 + 리다이렉트 허용, 하지만 POST 요청 차단 None : 교차 도메인 요청에 전송 가능(단, secure=true (https 에만 전송 가능))
-
+                .domain("http://localhost:3000/social-login-success")
                 .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -54,6 +54,7 @@ public class AuthenticationProcessor {
                 .path("/")
                 .maxAge(30 * 24 * 60 * 60)
                 .sameSite("Lax")
+                .domain("http://localhost:3000/social-login-success")
                 .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -78,6 +79,7 @@ public class AuthenticationProcessor {
                 .path("/")
                 .maxAge(30 * 24 * 60 * 60)
                 .sameSite("Lax")
+                .domain("http://localhost:3000/social-login-success")
                 .build();
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())

@@ -96,7 +96,7 @@ public class RegisterEmailVerificationTemplate extends EmailVerificationTemplate
                         감사합니다.</p>
                     <a href="http://ec2-15-164-152-88.ap-northeast-2.compute.amazonaws.com:8080/api/members/register/verify?code=%s" class="button">메일 인증</a>
                     </div>
-                   
+            
                 </div>
             </body>
                 </html>
