@@ -52,7 +52,7 @@ class AuthenticationControllerTest {
                 .secure(true)
                 .path("/")
                 .maxAge(30 * 24 * 60 * 60)
-                .sameSite("Strict")
+                .sameSite("Lax")
                 .build();
         given(authenticationService.login(any(), any()))
                 .willReturn(
@@ -103,12 +103,13 @@ class AuthenticationControllerTest {
     @WithMockUser
     void socialLogin() throws Exception {
         given(authenticationService.authorizationCode(any(), any()))
-                .willReturn(ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, "url").build());
+                .willReturn(ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, "http://localhost:3000/social-login-success").build());
         mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/social")
                         .queryParam("provider_type", "GOOGLE")
                         .queryParam("state", "1234")
                         .with(csrf()))
-                .andExpect(MockMvcResultMatchers.status().isFound());
+                .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost:3000/social-login-success"));
 
     }
 }

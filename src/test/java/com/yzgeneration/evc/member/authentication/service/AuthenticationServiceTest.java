@@ -154,10 +154,10 @@ class AuthenticationServiceTest {
         // given
         authenticationService.authorizationCode("GOOGLE", "1234");
         // when
-        AuthenticationToken authenticationToken = authenticationService.socialLogin("GOOGLE", "code", "1234");
+        ResponseEntity<AuthenticationResponse.LoginResponse> response = authenticationService.socialLogin("GOOGLE", "code", "1234");
 
         // then
-        assertThat(authenticationToken).hasFieldOrProperty("accessToken");
+        assertThat(response.getBody()).hasFieldOrProperty("accessToken");
 
     }
 

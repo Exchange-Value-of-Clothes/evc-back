@@ -126,11 +126,12 @@ public class AuthenticationControllerDocsTest extends RestDocsSupport {
     @WithMockUser
     void socialLogin() throws Exception {
         given(authenticationService.authorizationCode(any(), any()))
-                .willReturn(ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, "url").build());
+                .willReturn(ResponseEntity.status(HttpStatus.FOUND).header(HttpHeaders.LOCATION, "http://localhost:3000/social-login-success").build());
         mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/social")
                         .queryParam("provider_type", "GOOGLE")
                         .queryParam("state", "1234"))
                 .andExpect(MockMvcResultMatchers.status().isFound())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost:3000/social-login-success"))
                 .andDo(document("authentication-socialLogin",
                         queryParameters(
                                 parameterWithName("provider_type").description("소셜 로그인 플랫폼(대문자) e.g. GOOGLE,KAKAO,NAVER"),

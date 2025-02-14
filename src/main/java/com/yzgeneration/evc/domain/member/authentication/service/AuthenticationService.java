@@ -31,8 +31,9 @@ public class AuthenticationService {
         return authenticationProcessor.getAuthorizationCode(providerType, state);
     }
 
-    public AuthenticationToken socialLogin(String providerType, String authorizationCode, String state) {
+    public ResponseEntity<AuthenticationResponse.LoginResponse> socialLogin(String providerType, String authorizationCode, String state) {
         Member member = authenticationProcessor.socialLogin(providerType, authorizationCode, state);
-        return tokenProvider.create(member.getId());
+        AuthenticationToken authenticationToken = tokenProvider.create(member.getId());
+        return authenticationProcessor.getSocialLoginResponse(authenticationToken);
     }
 }
