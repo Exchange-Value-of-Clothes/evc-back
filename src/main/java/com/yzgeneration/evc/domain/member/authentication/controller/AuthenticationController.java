@@ -1,7 +1,6 @@
 package com.yzgeneration.evc.domain.member.authentication.controller;
 
 import com.yzgeneration.evc.validator.EnumValidator;
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
 import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
 import com.yzgeneration.evc.domain.member.enums.ProviderType;
 import jakarta.validation.Valid;
@@ -37,9 +36,8 @@ public class AuthenticationController {
     }
 
     @GetMapping("/access-token")
-    public SocialLoginResponse getUserInformation(@RequestParam("provider_type") String providerType, @RequestParam("code") String authorizationCode, @RequestParam("state") String state) {
-        AuthenticationToken authenticationToken = authenticationService.socialLogin(providerType, authorizationCode, state);
-        return new SocialLoginResponse(authenticationToken);
+    public ResponseEntity<LoginResponse> getUserInformation(@RequestParam("provider_type") String providerType, @RequestParam("code") String authorizationCode, @RequestParam("state") String state) {
+        return authenticationService.socialLogin(providerType, authorizationCode, state);
     }
 
 }

@@ -2,6 +2,7 @@ package com.yzgeneration.evc.config;
 
 import com.yzgeneration.evc.domain.chat.implement.StompInterceptor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -14,6 +15,18 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @RequiredArgsConstructor
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Value("${spring.rabbitmq.host}")
+    private String host;
+
+    @Value("${spring.rabbitmq.username}")
+    private String username;
+
+    @Value("${spring.rabbitmq.password}")
+    private String password;
+
+    @Value("${spring.rabbitmq.virtual-host}")
+    private String virtualHost;
 
     private final StompInterceptor stompInterceptor;
 
@@ -34,12 +47,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setPathMatcher(new AntPathMatcher(".")) // RabbitMQ에서는 기본적으로 queue, exchange의 이름,라우팅 키,패턴 등을 작성할 때 . 을. 구분자로 사용
                 .setPreservePublishOrder(true)
                 .enableStompBrokerRelay("/topic","/exchange","/queue", "/amq/direct")
-                .setRelayHost("localhost") // 다음 아래부터 메시지 브로커를 RabbitMQ와 연결하는 부분
-                .setRelayPort(61613) // RabbitMQ STOMP 기본 포트 TODO 5672, 61613, 15672(이건 모니터링용 포트?)차이점
-                .setClientLogin("guest")
-                .setClientPasscode("guest")
-                .setSystemLogin("guest")
-                .setSystemPasscode("guest");
+                .setRelayHost(host)
+                .setVirtualHost(virtualHost)
+                .setRelayPort(61613) // SSL 사용 시 61614, 일반적으로 61613
+                .setClientLogin(username)
+                .setClientPasscode(password)
+                .setSystemLogin(username)
+                .setSystemPasscode(password);
     }
 
     @Override
