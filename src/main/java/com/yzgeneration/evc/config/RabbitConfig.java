@@ -1,5 +1,7 @@
 package com.yzgeneration.evc.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
@@ -15,7 +17,20 @@ import org.springframework.context.annotation.Configuration;
 
 @EnableRabbit
 @Configuration
-public class RabbitConfig { //TODO 빈 등록 과정 보기 (따로 등록한 om를 가져다 쓰는지)
+public class RabbitConfig {
+
+    @Value("${spring.rabbitmq.host}")
+    private String host;
+
+    @Value("${spring.rabbitmq.username}")
+    private String username;
+
+    @Value("${spring.rabbitmq.password}")
+    private String password;
+
+    @Value("${spring.rabbitmq.virtual-host}")
+    private String virtualHost;
+
 
     @Bean
     public Queue queue() { // TODO 메시지 유실 보장하기
@@ -42,16 +57,20 @@ public class RabbitConfig { //TODO 빈 등록 과정 보기 (따로 등록한 om
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory factory = new CachingConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost(host);
         factory.setPort(5672);
-        factory.setVirtualHost("/");
-        factory.setUsername("guest");
-        factory.setPassword("guest");
+        factory.setVirtualHost(virtualHost);
+        factory.setUsername(username);
+        factory.setPassword(password);
+        factory.setRequestedHeartBeat(30);
+        factory.setConnectionTimeout(30000);
         return factory;
     }
 
     @Bean
-    public MessageConverter messageConverter(Jackson2JsonMessageConverter converter) { // amqp 패키지의 메시지 컨버터임
-        return converter;
+    public MessageConverter jackson2JsonMessageConverter() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        return new Jackson2JsonMessageConverter(objectMapper);
     }
 }
