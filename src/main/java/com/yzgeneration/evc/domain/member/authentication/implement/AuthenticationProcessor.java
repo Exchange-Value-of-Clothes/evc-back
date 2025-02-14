@@ -8,6 +8,7 @@ import com.yzgeneration.evc.external.social.SocialLoginProcessor;
 import com.yzgeneration.evc.external.social.SocialUserProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -35,10 +36,11 @@ public class AuthenticationProcessor {
     public ResponseEntity<LoginResponse> getLoginResponse(AuthenticationToken authenticationToken) {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", authenticationToken.getRefreshToken())
                 .httpOnly(true)
-                .secure(false)
+                .secure(false) // TODO true
                 .path("/")
                 .maxAge(30 * 24 * 60 * 60)
-                .sameSite("None")
+                .sameSite("Lax") // Strict : 완전한 크로스 사이트 차단, Lax (기본값) → GET 요청 + 리다이렉트 허용, 하지만 POST 요청 차단 None : 교차 도메인 요청에 전송 가능(단, secure=true (https 에만 전송 가능))
+
                 .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -51,7 +53,7 @@ public class AuthenticationProcessor {
                 .secure(false)
                 .path("/")
                 .maxAge(30 * 24 * 60 * 60)
-                .sameSite("None")
+                .sameSite("Lax")
                 .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -67,5 +69,19 @@ public class AuthenticationProcessor {
         SocialUserProfile socialUserProfile = socialLoginProcessor.getUserProfile(providerType, accessToken);
         Optional<Member> socialMember = memberRepository.findSocialMember(providerType, socialUserProfile.getProviderId());
         return socialMember.orElseGet(() -> memberRepository.save(Member.socialLogin(providerType, socialUserProfile)));
+    }
+
+    public ResponseEntity<LoginResponse> getSocialLoginResponse(AuthenticationToken authenticationToken) {
+        ResponseCookie cookie = ResponseCookie.from("refresh_token", authenticationToken.getRefreshToken())
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(30 * 24 * 60 * 60)
+                .sameSite("Lax")
+                .build();
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.LOCATION, "http://localhost:3000/social-login-success")
+                .body(new LoginResponse(authenticationToken.getAccessToken()));
     }
 }
