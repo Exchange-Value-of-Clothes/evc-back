@@ -1,10 +1,10 @@
 package com.yzgeneration.evc.member.authentication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yzgeneration.evc.domain.member.authentication.controller.AuthenticationController;
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationResponse;
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
-import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
+import com.yzgeneration.evc.authentication.controller.AuthenticationController;
+import com.yzgeneration.evc.authentication.dto.AuthenticationResponse;
+import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
+import com.yzgeneration.evc.authentication.service.AuthenticationService;
 import com.yzgeneration.evc.fixture.MemberFixture;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;

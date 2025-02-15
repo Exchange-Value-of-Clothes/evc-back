@@ -1,7 +1,7 @@
-package com.yzgeneration.evc.domain.member.authentication.implement;
+package com.yzgeneration.evc.authentication.implement;
 
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
-import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
+import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
+import com.yzgeneration.evc.authentication.service.port.RefreshTokenRepository;
 
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;

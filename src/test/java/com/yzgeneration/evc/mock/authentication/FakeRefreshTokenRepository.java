@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.mock.authentication;
 
-import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
+import com.yzgeneration.evc.authentication.service.port.RefreshTokenRepository;
 
 import java.util.HashMap;
 import java.util.Map;
