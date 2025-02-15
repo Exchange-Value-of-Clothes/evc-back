@@ -1,7 +1,7 @@
-package com.yzgeneration.evc.domain.member.authentication.controller;
+package com.yzgeneration.evc.authentication.controller;
 
 import com.yzgeneration.evc.validator.EnumValidator;
-import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
+import com.yzgeneration.evc.authentication.service.AuthenticationService;
 import com.yzgeneration.evc.domain.member.enums.ProviderType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,13 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationRequest.*;
-import static com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationResponse.*;
+import static com.yzgeneration.evc.authentication.dto.AuthenticationRequest.*;
+import static com.yzgeneration.evc.authentication.dto.AuthenticationResponse.*;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AuthenticationController { // TODO EC2 도커 이미지 삭제 cronjob 구축
 
     private final AuthenticationService authenticationService;
 

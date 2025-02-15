@@ -1,10 +1,10 @@
 package com.yzgeneration.evc.docs.authentication;
 
-import com.yzgeneration.evc.domain.member.authentication.controller.AuthenticationController;
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationRequest;
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationResponse;
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
-import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
+import com.yzgeneration.evc.authentication.controller.AuthenticationController;
+import com.yzgeneration.evc.authentication.dto.AuthenticationRequest;
+import com.yzgeneration.evc.authentication.dto.AuthenticationResponse;
+import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
+import com.yzgeneration.evc.authentication.service.AuthenticationService;
 import com.yzgeneration.evc.docs.RestDocsSupport;
 import com.yzgeneration.evc.fixture.MemberFixture;
 import jakarta.servlet.http.Cookie;

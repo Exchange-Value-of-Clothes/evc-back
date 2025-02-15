@@ -1,6 +1,6 @@
-package com.yzgeneration.evc.domain.member.authentication.implement;
+package com.yzgeneration.evc.authentication.implement;
 
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
+import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
 import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
 import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationResponse.*;
+import static com.yzgeneration.evc.authentication.dto.AuthenticationResponse.*;
 
 @Component
 @RequiredArgsConstructor
@@ -36,11 +36,10 @@ public class AuthenticationProcessor {
     public ResponseEntity<LoginResponse> getLoginResponse(AuthenticationToken authenticationToken) {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", authenticationToken.getRefreshToken())
                 .httpOnly(true)
-                .secure(false) // TODO true
+                .secure(true)
                 .path("/")
                 .maxAge(30 * 24 * 60 * 60)
-                .sameSite("Lax") // Strict : 완전한 크로스 사이트 차단, Lax (기본값) → GET 요청 + 리다이렉트 허용, 하지만 POST 요청 차단 None : 교차 도메인 요청에 전송 가능(단, secure=true (https 에만 전송 가능))
-                .domain("localhost")
+                .sameSite("None") // Strict : 완전한 크로스 사이트 차단, Lax (기본값) → GET 요청 + 리다이렉트 허용, 하지만 POST 요청 차단 None : 교차 도메인 요청에 전송 가능(단, secure=true (https 에만 전송 가능))
                 .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -50,11 +49,10 @@ public class AuthenticationProcessor {
     public ResponseEntity<RefreshResponse> getRefreshResponse(AuthenticationToken authenticationToken) {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", authenticationToken.getRefreshToken())
                 .httpOnly(true)
-                .secure(false)
+                .secure(true)
                 .path("/")
                 .maxAge(30 * 24 * 60 * 60)
-                .sameSite("Lax")
-                .domain("localhost")
+                .sameSite("None")
                 .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -75,11 +73,10 @@ public class AuthenticationProcessor {
     public ResponseEntity<LoginResponse> getSocialLoginResponse(AuthenticationToken authenticationToken) {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", authenticationToken.getRefreshToken())
                 .httpOnly(true)
-                .secure(false)
+                .secure(true)
                 .path("/")
                 .maxAge(30 * 24 * 60 * 60)
-                .sameSite("Lax")
-                .domain("localhost")
+                .sameSite("None")
                 .build();
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())

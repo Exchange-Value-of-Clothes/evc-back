@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.domain.member.authentication.dto;
+package com.yzgeneration.evc.authentication.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

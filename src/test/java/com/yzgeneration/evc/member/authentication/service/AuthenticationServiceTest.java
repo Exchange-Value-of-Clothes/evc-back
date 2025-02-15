@@ -1,11 +1,10 @@
 package com.yzgeneration.evc.member.authentication.service;
 
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationResponse;
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
-import com.yzgeneration.evc.domain.member.authentication.implement.AuthenticationProcessor;
-import com.yzgeneration.evc.domain.member.authentication.implement.TokenProvider;
-import com.yzgeneration.evc.domain.member.authentication.service.AuthenticationService;
-import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
+import com.yzgeneration.evc.authentication.dto.AuthenticationResponse;
+import com.yzgeneration.evc.authentication.implement.AuthenticationProcessor;
+import com.yzgeneration.evc.authentication.implement.TokenProvider;
+import com.yzgeneration.evc.authentication.service.AuthenticationService;
+import com.yzgeneration.evc.authentication.service.port.RefreshTokenRepository;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.domain.member.model.Member;
