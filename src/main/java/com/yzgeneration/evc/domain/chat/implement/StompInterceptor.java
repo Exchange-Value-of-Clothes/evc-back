@@ -1,7 +1,7 @@
 package com.yzgeneration.evc.domain.chat.implement;
 
 
-import com.yzgeneration.evc.domain.member.authentication.implement.TokenProvider;
+import com.yzgeneration.evc.authentication.implement.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;

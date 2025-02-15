@@ -1,9 +1,9 @@
-package com.yzgeneration.evc.domain.member.authentication.service;
+package com.yzgeneration.evc.authentication.service;
 
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationResponse;
-import com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationToken;
-import com.yzgeneration.evc.domain.member.authentication.implement.AuthenticationProcessor;
-import com.yzgeneration.evc.domain.member.authentication.implement.TokenProvider;
+import com.yzgeneration.evc.authentication.dto.AuthenticationResponse;
+import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
+import com.yzgeneration.evc.authentication.implement.AuthenticationProcessor;
+import com.yzgeneration.evc.authentication.implement.TokenProvider;
 import com.yzgeneration.evc.domain.member.model.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

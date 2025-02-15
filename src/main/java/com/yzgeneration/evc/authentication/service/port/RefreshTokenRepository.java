@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.domain.member.authentication.service.port;
+package com.yzgeneration.evc.authentication.service.port;
 
 public interface RefreshTokenRepository {
     void save(Long key, String value);

@@ -1,6 +1,7 @@
 package com.yzgeneration.evc.fixture;
 
 import com.navercorp.fixturemonkey.ArbitraryBuilder;
+import com.yzgeneration.evc.authentication.dto.AuthenticationRequest;
 import com.yzgeneration.evc.domain.member.enums.MemberRole;
 import com.yzgeneration.evc.domain.member.enums.MemberStatus;
 import com.yzgeneration.evc.domain.member.enums.ProviderType;
@@ -9,7 +10,6 @@ import com.yzgeneration.evc.domain.member.model.MemberAuthenticationInformation;
 import com.yzgeneration.evc.domain.member.model.MemberPrivateInformation;
 
 
-import static com.yzgeneration.evc.domain.member.authentication.dto.AuthenticationRequest.*;
 import static com.yzgeneration.evc.domain.member.dto.MemberRequest.*;
 
 public final class MemberFixture extends Fixture{
@@ -43,8 +43,8 @@ public final class MemberFixture extends Fixture{
                 .build();
     }
 
-    public static LoginRequest fixLoginRequest() {
-        return fixtureMonkey.giveMeBuilder(LoginRequest.class)
+    public static AuthenticationRequest.LoginRequest fixLoginRequest() {
+        return fixtureMonkey.giveMeBuilder(AuthenticationRequest.LoginRequest.class)
                 .set("email", "ssar@naver.com")
                 .set("password", "12345678")
                 .sample();

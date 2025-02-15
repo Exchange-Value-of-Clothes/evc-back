@@ -1,8 +1,7 @@
-package com.yzgeneration.evc.domain.member.authentication.infrastructure;
+package com.yzgeneration.evc.authentication.infrastructure;
 
-import com.yzgeneration.evc.domain.member.authentication.service.port.RefreshTokenRepository;
+import com.yzgeneration.evc.authentication.service.port.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
