@@ -1,0 +1,10 @@
+[[usedItem-create]]
+== 중고상품 등록
+
+=== HTTP Request
+include::{snippets}/usedItem-create/http-request.adoc[]
+include::{snippets}/usedItem-create/request-part-createUsedItem-fields.adoc[]
+
+=== HTTP Response
+include::{snippets}/usedItem-create/http-response.adoc[]
+include::{snippets}/usedItem-create/response-fields.adoc[]
