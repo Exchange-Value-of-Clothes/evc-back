@@ -19,7 +19,6 @@ bin/
 
 ### IntelliJ IDEA ###
 application.yml
-application-aws.yml
 application-prod.yml
 .idea
 *.iws
