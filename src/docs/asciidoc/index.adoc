@@ -13,3 +13,9 @@ endif::[]
 == Member API
 
 include::member/member.adoc[]
+
+
+[[UsedItem-API]]
+== UsedItem API
+
+include::usedItem/usedItem.adoc[]
