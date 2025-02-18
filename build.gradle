@@ -39,8 +39,22 @@ dependencies {
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	//Spring Rest Docs
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+	//AWS S3
+	implementation("com.amazonaws:aws-java-sdk-s3:1.12.261")
+
+	//LocalStack (for S3 test)
+	testImplementation("cloud.localstack:localstack-utils:0.2.20")
+}
+
+tasks.register('copyGitSubmodule', Copy) {
+	description = "Copy application-*.yml from config"
+	from './evc-back-config'
+	include '*.yml'
+	into './src/main/resources'
 }
 
 ext {
