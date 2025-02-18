@@ -10,30 +10,26 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class UsedItem {
+
     private Long id;
-    private String title;
-    private String category;
-    private String content;
-    private int price;
+
+    private ItemDetails itemDetails;
+
     private UsedItemTransaction usedItemTransaction;
+
     private UsedItemStatus usedItemStatus;
-    private int viewCount;
-    private int likeCount;
-    private int chattingCount;
+
+    private ItemStats itemStats;
+
     private LocalDateTime createdAt;
 
-    public static UsedItem create(CreateUsedItem createUsedItem) {
+    public static UsedItem create(CreateUsedItem createUsedItem, LocalDateTime createAt) {
         return UsedItem.builder()
-                .title(createUsedItem.getTitle())
-                .category(createUsedItem.getCategory())
-                .content(createUsedItem.getContent())
-                .price(createUsedItem.getPrice())
+                .itemDetails(ItemDetails.create(createUsedItem.getCreateItemDetails()))
                 .usedItemTransaction(UsedItemTransaction.create(createUsedItem.getCreateTransaction()))
                 .usedItemStatus(UsedItemStatus.ACTIVE)
-                .viewCount(0)
-                .likeCount(0)
-                .chattingCount(0)
-                .createdAt(LocalDateTime.now())
+                .itemStats(ItemStats.create())
+                .createdAt(createAt)
                 .build();
     }
 }

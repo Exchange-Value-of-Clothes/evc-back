@@ -19,3 +19,8 @@ include::member/member.adoc[]
 == Authentication API
 
 include::authentication/authentication.adoc[]
+
+[[UsedItem-API]]
+== UsedItem API
+
+include::usedItem/usedItem.adoc[]

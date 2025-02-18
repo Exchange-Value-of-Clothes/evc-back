@@ -1,11 +1,19 @@
 package com.yzgeneration.evc.domain.image.model;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
 
 @Getter
-@SuperBuilder
-public class UsedItemImage extends BaseImage {
+@Builder
+public class UsedItemImage {
     private Long id;
     private Long usedItemId;
+    private String imageURL;
+
+    public static UsedItemImage create(Long usedItemId, String imageURL) {
+        return UsedItemImage.builder()
+                .usedItemId(usedItemId)
+                .imageURL(imageURL)
+                .build();
+    }
 }

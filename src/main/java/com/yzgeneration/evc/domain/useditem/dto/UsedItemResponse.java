@@ -1,41 +1,45 @@
 package com.yzgeneration.evc.domain.useditem.dto;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
+import com.yzgeneration.evc.domain.useditem.model.ItemDetails;
+import com.yzgeneration.evc.domain.useditem.model.ItemStats;
 import com.yzgeneration.evc.domain.useditem.model.UsedItem;
 import com.yzgeneration.evc.domain.useditem.model.UsedItemTransaction;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
 @Builder
 public class UsedItemResponse {
-    private final Long memberId;
-    private final String title;
-    private final String category;
-    private final String content;
-    private final int price;
-    private final UsedItemTransaction usedItemTransaction;
-    private final UsedItemStatus usedItemStatus;
-    private final int viewCount;
-    private final int likeCount;
-    private final int chattingCount;
-    private final List<String> imageURLs;
-    private final LocalDateTime createAt;
+    private Long memberId;
 
-    public static UsedItemResponse from(UsedItem usedItem, List<String> imageURLs) {
+    @JsonUnwrapped
+    private ItemDetails itemDetails;
+
+    @JsonUnwrapped
+    private UsedItemTransaction usedItemTransaction;
+
+    private UsedItemStatus usedItemStatus;
+
+    @JsonUnwrapped
+    private ItemStats itemStats;
+
+    private List<String> imageURLs;
+
+    private LocalDateTime createAt;
+
+    public static UsedItemResponse of(UsedItem usedItem, List<String> usedItemImageURLs) {
         return UsedItemResponse.builder()
                 .memberId(usedItem.getId())
-                .title(usedItem.getTitle())
-                .category(usedItem.getCategory())
-                .content(usedItem.getContent())
-                .price(usedItem.getPrice())
+                .itemDetails(usedItem.getItemDetails())
                 .usedItemTransaction(usedItem.getUsedItemTransaction())
                 .usedItemStatus(usedItem.getUsedItemStatus())
-                .viewCount(usedItem.getViewCount())
-                .likeCount(usedItem.getLikeCount())
-                .chattingCount(usedItem.getChattingCount())
-                .imageURLs(imageURLs)
+                .itemStats(usedItem.getItemStats())
+                .imageURLs(usedItemImageURLs)
                 .createAt(usedItem.getCreatedAt())
                 .build();
     }

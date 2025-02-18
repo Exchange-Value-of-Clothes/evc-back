@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.domain.useditem.infrastructure;
+package com.yzgeneration.evc.domain.useditem.infrastructure.entity;
 
 import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
 import com.yzgeneration.evc.domain.useditem.enums.TransactionStatue;
@@ -12,7 +12,7 @@ import lombok.*;
 @Getter
 @Embeddable
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UsedItemTransactionEntity {
     @Enumerated(EnumType.STRING)

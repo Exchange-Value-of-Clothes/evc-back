@@ -6,13 +6,20 @@ import com.yzgeneration.evc.domain.image.service.port.UsedItemImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class UsedItemImageRepositoryImpl implements UsedItemImageRepository {
-    private final UsedItemImageJPARepository usedItemImageJPARepository;
+    private final UsedItemImageJpaRepository usedItemImageJPARepository;
 
     @Override
     public UsedItemImage save(UsedItemImage usedItemImage) {
         return usedItemImageJPARepository.save(UsedItemImageEntity.from(usedItemImage)).toModel();
+    }
+
+    @Override
+    public List<String> findImageUrlsById(Long usedItemId) {
+        return usedItemImageJPARepository.findAllImageURLById(usedItemId);
     }
 }

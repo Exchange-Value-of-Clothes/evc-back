@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.domain.useditem.infrastructure;
+package com.yzgeneration.evc.domain.useditem.infrastructure.entity;
 
 import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
 import com.yzgeneration.evc.domain.useditem.model.UsedItem;
@@ -18,13 +18,8 @@ public class UsedItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-
-    private String category;
-
-    private String content;
-
-    private int price;
+    @Embedded
+    private ItemDetailsEntity itemDetailsEntity;
 
     @Embedded
     private UsedItemTransactionEntity usedItemTransactionEntity;
@@ -32,40 +27,27 @@ public class UsedItemEntity {
     @Enumerated(EnumType.STRING)
     private UsedItemStatus usedItemStatus;
 
-    private int viewCount;
-
-    private int likeCount;
-
-    private int chattingCount;
+    @Embedded
+    private ItemStatsEntity itemStatsEntity;
 
     private LocalDateTime createdAt;
 
     public static UsedItemEntity from(UsedItem usedItem) {
         return UsedItemEntity.builder()
-                .title(usedItem.getTitle())
-                .category(usedItem.getCategory())
-                .content(usedItem.getContent())
-                .price(usedItem.getPrice())
+                .itemDetailsEntity(ItemDetailsEntity.from(usedItem.getItemDetails()))
                 .usedItemTransactionEntity(UsedItemTransactionEntity.from(usedItem.getUsedItemTransaction()))
                 .usedItemStatus(usedItem.getUsedItemStatus())
-                .viewCount(usedItem.getViewCount())
-                .likeCount(usedItem.getLikeCount())
-                .chattingCount(usedItem.getChattingCount())
+                .itemStatsEntity(ItemStatsEntity.from(usedItem.getItemStats()))
                 .createdAt(usedItem.getCreatedAt()).build();
     }
 
     public UsedItem toModel() {
         return UsedItem.builder()
                 .id(id)
-                .title(title)
-                .category(category)
-                .content(content)
-                .price(price)
+                .itemDetails(itemDetailsEntity.toModel())
                 .usedItemTransaction(usedItemTransactionEntity.toModel())
                 .usedItemStatus(usedItemStatus)
-                .viewCount(viewCount)
-                .likeCount(likeCount)
-                .chattingCount(chattingCount)
+                .itemStats(itemStatsEntity.toModel())
                 .createdAt(createdAt)
                 .build();
     }

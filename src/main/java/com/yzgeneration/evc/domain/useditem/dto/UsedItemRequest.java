@@ -1,7 +1,24 @@
 package com.yzgeneration.evc.domain.useditem.dto;
 
-import com.yzgeneration.evc.domain.useditem.dto.ItemRequest.CreateItem;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 public class UsedItemRequest {
-    public static class CreateUsedItem extends CreateItem { }
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class CreateUsedItem {
+        //나중에 없어질 것
+        private Long memberId;
+
+        @NotNull
+        @JsonUnwrapped
+        private ItemRequest.CreateItemDetails createItemDetails;
+
+        @NotNull
+        @JsonUnwrapped
+        private ItemRequest.CreateTransaction createTransaction;
+    }
 }
