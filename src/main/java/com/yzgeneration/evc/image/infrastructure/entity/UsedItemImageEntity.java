@@ -2,26 +2,27 @@ package com.yzgeneration.evc.image.infrastructure.entity;
 
 import com.yzgeneration.evc.image.model.UsedItemImage;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 @Entity
-@SuperBuilder
+@Getter
+@Builder
 @Table(name = "used_item_images")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class UsedItemImageEntity extends BaseImageEntity {
+public class UsedItemImageEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long usedItemId;
+
+    private String imageURL;
 
     public static UsedItemImageEntity from(UsedItemImage usedItemImage) {
         return UsedItemImageEntity.builder()
                 .usedItemId(usedItemImage.getUsedItemId())
-                .imageName(usedItemImage.getImageName())
                 .imageURL(usedItemImage.getImageURL())
                 .build();
     }
@@ -30,7 +31,6 @@ public class UsedItemImageEntity extends BaseImageEntity {
         return UsedItemImage.builder()
                 .id(id)
                 .usedItemId(usedItemId)
-                .imageName(getImageName())
                 .imageURL(getImageURL())
                 .build();
     }

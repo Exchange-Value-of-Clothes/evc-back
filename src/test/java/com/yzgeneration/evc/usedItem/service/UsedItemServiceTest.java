@@ -5,9 +5,6 @@ import com.yzgeneration.evc.image.service.port.UsedItemImageRepository;
 import com.yzgeneration.evc.mock.usedItem.*;
 import com.yzgeneration.evc.useditem.dto.UsedItemRequest.CreateUsedItem;
 import com.yzgeneration.evc.useditem.dto.UsedItemResponse;
-import com.yzgeneration.evc.useditem.enums.TransactionMode;
-import com.yzgeneration.evc.useditem.enums.TransactionStatue;
-import com.yzgeneration.evc.useditem.enums.TransactionType;
 import com.yzgeneration.evc.useditem.enums.UsedItemStatus;
 import com.yzgeneration.evc.useditem.implement.UsedItemAppender;
 import com.yzgeneration.evc.useditem.service.UsedItemService;
@@ -16,12 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItem;
 import static org.assertj.core.api.Assertions.assertThat;

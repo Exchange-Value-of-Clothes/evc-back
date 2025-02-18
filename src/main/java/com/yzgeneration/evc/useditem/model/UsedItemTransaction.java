@@ -4,14 +4,11 @@ import com.yzgeneration.evc.useditem.dto.ItemRequest.CreateTransaction;
 import com.yzgeneration.evc.useditem.enums.TransactionMode;
 import com.yzgeneration.evc.useditem.enums.TransactionStatue;
 import com.yzgeneration.evc.useditem.enums.TransactionType;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UsedItemTransaction {
     private TransactionType transactionType;
     private TransactionMode transactionMode;

@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.useditem.infrastructure;
+package com.yzgeneration.evc.useditem.infrastructure.entity;
 
 import com.yzgeneration.evc.useditem.model.ItemDetails;
 import jakarta.persistence.Embeddable;
