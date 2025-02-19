@@ -18,7 +18,7 @@ public class S3ImageHandler implements S3FileHandler {
 
     private final AmazonS3 amazonS3;
 
-    @Value("${cloude.aws.s3.bucket}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     @Override
