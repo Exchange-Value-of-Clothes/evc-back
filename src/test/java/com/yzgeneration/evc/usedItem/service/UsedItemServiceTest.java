@@ -4,6 +4,9 @@ import com.yzgeneration.evc.domain.image.implement.UsedItemImageAppender;
 import com.yzgeneration.evc.domain.image.service.port.UsedItemImageRepository;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItem;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionStatue;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
 import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
 import com.yzgeneration.evc.domain.useditem.implement.UsedItemAppender;
 import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
@@ -21,7 +24,7 @@ import java.time.LocalDateTime;
 import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItem;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestPropertySource(properties = {"cloude.aws.s3.bucket=test-bucket"})
+@TestPropertySource(properties = {"cloud.aws.s3.bucket=test-bucket"})
 class UsedItemServiceTest {
     private UsedItemService usedItemService;
 
@@ -52,10 +55,10 @@ class UsedItemServiceTest {
         assertThat(usedItemResponse.getItemDetails().getContent()).isEqualTo(createUsedItem.getCreateItemDetails().getContent());
         assertThat(usedItemResponse.getItemDetails().getPrice()).isEqualTo(createUsedItem.getCreateItemDetails().getPrice());
 
-//        //UsedItemTransaction
-//        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionType()).isEqualTo(TransactionType.DIRECT);
-//        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionMode()).isEqualTo(TransactionMode.BUY);
-//        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionStatue()).isEqualTo(TransactionStatue.ONGOING);
+        //UsedItemTransaction
+        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionType()).isEqualTo(TransactionType.DIRECT);
+        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionMode()).isEqualTo(TransactionMode.BUY);
+        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionStatue()).isEqualTo(TransactionStatue.ONGOING);
 
         //UsedItemStatus & ItemStats
         assertThat(usedItemResponse.getUsedItemStatus()).isEqualTo(UsedItemStatus.ACTIVE);
