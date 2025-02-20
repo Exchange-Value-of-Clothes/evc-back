@@ -18,8 +18,8 @@ public class UsedItemService {
     private final UsedItemAppender usedItemAppender;
     private final UsedItemImageAppender usedItemImageAppender;
 
-    public UsedItemResponse createUsedItem(CreateUsedItem createUsedItem, List<MultipartFile> imageFiles) throws IOException {
-        UsedItem usedItem = usedItemAppender.createUsedItem(createUsedItem);
+    public UsedItemResponse createUsedItem(Long memberId, CreateUsedItem createUsedItem, List<MultipartFile> imageFiles) throws IOException {
+        UsedItem usedItem = usedItemAppender.createUsedItem(memberId, createUsedItem);
         List<String> usedItemImageURLs = usedItemImageAppender.createUsedItemImages(usedItem.getId(), imageFiles);
 
         return UsedItemResponse.of(usedItem, usedItemImageURLs);

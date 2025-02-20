@@ -9,9 +9,9 @@ import lombok.*;
 public class ItemRequest {
 
     @Getter
-    @Builder
     @NoArgsConstructor
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @Builder
+    @AllArgsConstructor
     public static class CreateItemDetails {
         @NotBlank(message = "제목은 필수항목입니다.")
         private String title;
@@ -27,9 +27,9 @@ public class ItemRequest {
     }
 
     @Getter
-    @Builder
     @NoArgsConstructor
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @Builder
+    @AllArgsConstructor
     public static class CreateTransaction {
         @NotNull(message = "거래유형을 선택해주세요.")
         private TransactionType transactionType;

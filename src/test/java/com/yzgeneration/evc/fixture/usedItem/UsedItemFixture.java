@@ -26,7 +26,6 @@ public abstract class UsedItemFixture {
 
     public static CreateUsedItem fixCreateUsedItem() {
         return Fixture.fixtureMonkey.giveMeBuilder(CreateUsedItem.class)
-                .set("memberId", 1L)
                 .set("createItemDetails", fixCreateItemDetails())
                 .set("createTransaction", fixCreateTransaction())
                 .sample();

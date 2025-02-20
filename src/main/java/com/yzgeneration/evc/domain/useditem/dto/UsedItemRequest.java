@@ -10,8 +10,6 @@ public class UsedItemRequest {
     @NoArgsConstructor
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class CreateUsedItem {
-        //나중에 없어질 것
-        private Long memberId;
 
         @NotNull
         @JsonUnwrapped
