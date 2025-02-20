@@ -18,10 +18,9 @@ public class UsedItemTest {
     void createUsedItem() {
         //given
         CreateUsedItem createUsedItem = UsedItemFixture.fixCreateUsedItem();
-        Long memberId = 1L;
 
         //when
-        UsedItem usedItem = UsedItem.create(memberId, createUsedItem, LocalDateTime.now());
+        UsedItem usedItem = UsedItem.create(createUsedItem, LocalDateTime.now());
 
         //then
         assertThat(usedItem.getItemDetails().getTitle()).isEqualTo(createUsedItem.getCreateItemDetails().getTitle());
