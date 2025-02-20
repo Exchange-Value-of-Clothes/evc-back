@@ -4,6 +4,9 @@ import com.yzgeneration.evc.domain.image.implement.UsedItemImageAppender;
 import com.yzgeneration.evc.domain.image.service.port.UsedItemImageRepository;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItem;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionStatue;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
 import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
 import com.yzgeneration.evc.domain.useditem.implement.UsedItemAppender;
 import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
@@ -17,11 +20,12 @@ import org.springframework.test.context.TestPropertySource;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItem;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestPropertySource(properties = {"cloude.aws.s3.bucket=test-bucket"})
+@TestPropertySource(properties = {"cloud.aws.s3.bucket=test-bucket"})
 class UsedItemServiceTest {
     private UsedItemService usedItemService;
 
@@ -41,21 +45,24 @@ class UsedItemServiceTest {
     void createUsedItem() throws IOException {
         //given
         CreateUsedItem createUsedItem = fixCreateUsedItem();
+        Long memberId = 1L;
 
         //when
-        UsedItemResponse usedItemResponse = usedItemService.createUsedItem(createUsedItem, new MockUsedItemImageFile().getImageFiles());
+        UsedItemResponse usedItemResponse = usedItemService.createUsedItem(memberId, createUsedItem, new MockUsedItemImageFile().getImageFiles());
 
         //then
+        assertThat(usedItemResponse.getMemberId().equals(memberId));
+
         //ItemDetails
         assertThat(usedItemResponse.getItemDetails().getTitle()).isEqualTo(createUsedItem.getCreateItemDetails().getTitle());
         assertThat(usedItemResponse.getItemDetails().getCategory()).isEqualTo(createUsedItem.getCreateItemDetails().getCategory());
         assertThat(usedItemResponse.getItemDetails().getContent()).isEqualTo(createUsedItem.getCreateItemDetails().getContent());
         assertThat(usedItemResponse.getItemDetails().getPrice()).isEqualTo(createUsedItem.getCreateItemDetails().getPrice());
 
-//        //UsedItemTransaction
-//        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionType()).isEqualTo(TransactionType.DIRECT);
-//        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionMode()).isEqualTo(TransactionMode.BUY);
-//        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionStatue()).isEqualTo(TransactionStatue.ONGOING);
+        //UsedItemTransaction
+        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionType()).isEqualTo(TransactionType.DIRECT);
+        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionMode()).isEqualTo(TransactionMode.BUY);
+        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionStatue()).isEqualTo(TransactionStatue.ONGOING);
 
         //UsedItemStatus & ItemStats
         assertThat(usedItemResponse.getUsedItemStatus()).isEqualTo(UsedItemStatus.ACTIVE);

@@ -13,7 +13,7 @@ public class UsedItemAppender {
     private final UsedItemRepository usedItemRepository;
     private final TimeProvider timeProvider;
 
-    public UsedItem createUsedItem(CreateUsedItem createUsedItem) {
-        return usedItemRepository.save(UsedItem.create(createUsedItem, timeProvider.now()));
+    public UsedItem createUsedItem(Long memberId, CreateUsedItem createUsedItem) {
+        return usedItemRepository.save(UsedItem.create(memberId, createUsedItem, timeProvider.now()));
     }
 }

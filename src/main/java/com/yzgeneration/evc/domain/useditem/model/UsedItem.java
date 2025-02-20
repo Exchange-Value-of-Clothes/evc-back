@@ -13,6 +13,8 @@ public class UsedItem {
 
     private Long id;
 
+    private Long memberId;
+
     private ItemDetails itemDetails;
 
     private UsedItemTransaction usedItemTransaction;
@@ -23,8 +25,9 @@ public class UsedItem {
 
     private LocalDateTime createdAt;
 
-    public static UsedItem create(CreateUsedItem createUsedItem, LocalDateTime createAt) {
+    public static UsedItem create(Long memberId, CreateUsedItem createUsedItem, LocalDateTime createAt) {
         return UsedItem.builder()
+                .memberId(memberId)
                 .itemDetails(ItemDetails.create(createUsedItem.getCreateItemDetails()))
                 .usedItemTransaction(UsedItemTransaction.create(createUsedItem.getCreateTransaction()))
                 .usedItemStatus(UsedItemStatus.ACTIVE)

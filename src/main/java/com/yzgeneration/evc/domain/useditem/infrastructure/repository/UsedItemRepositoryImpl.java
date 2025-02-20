@@ -15,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsedItemRepositoryImpl implements UsedItemRepository {
     private final UsedItemJpaRepository usedItemJpaRepository;
-
     @Override
     public UsedItem save(UsedItem usedItem) {
         return usedItemJpaRepository.save(UsedItemEntity.from(usedItem)).toModel();
