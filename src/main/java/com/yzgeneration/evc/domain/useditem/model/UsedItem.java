@@ -25,9 +25,19 @@ public class UsedItem {
 
     private LocalDateTime createdAt;
 
-    public static UsedItem create(Long memberId, CreateUsedItem createUsedItem, LocalDateTime createAt) {
+    //    public static UsedItem create(Long memberId, CreateUsedItem createUsedItem, LocalDateTime createAt) {
+//        return UsedItem.builder()
+//                .memberId(memberId)
+//                .itemDetails(ItemDetails.create(createUsedItem.getCreateItemDetails()))
+//                .usedItemTransaction(UsedItemTransaction.create(createUsedItem.getCreateTransaction()))
+//                .usedItemStatus(UsedItemStatus.ACTIVE)
+//                .itemStats(ItemStats.create())
+//                .createdAt(createAt)
+//                .build();
+//    }
+    public static UsedItem create(CreateUsedItem createUsedItem, LocalDateTime createAt) {
         return UsedItem.builder()
-                .memberId(memberId)
+                .memberId(createUsedItem.getMemberId())
                 .itemDetails(ItemDetails.create(createUsedItem.getCreateItemDetails()))
                 .usedItemTransaction(UsedItemTransaction.create(createUsedItem.getCreateTransaction()))
                 .usedItemStatus(UsedItemStatus.ACTIVE)
