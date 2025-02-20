@@ -9,8 +9,8 @@ import lombok.*;
 public class ItemRequest {
 
     @Getter
-    @NoArgsConstructor
     @Builder
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateItemDetails {
         @NotBlank(message = "제목은 필수항목입니다.")
@@ -27,8 +27,8 @@ public class ItemRequest {
     }
 
     @Getter
-    @NoArgsConstructor
     @Builder
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateTransaction {
         @NotNull(message = "거래유형을 선택해주세요.")
