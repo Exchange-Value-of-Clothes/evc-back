@@ -20,7 +20,6 @@ import org.springframework.test.context.TestPropertySource;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItem;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,13 +44,12 @@ class UsedItemServiceTest {
     void createUsedItem() throws IOException {
         //given
         CreateUsedItem createUsedItem = fixCreateUsedItem();
-        Long memberId = 1L;
 
         //when
-        UsedItemResponse usedItemResponse = usedItemService.createUsedItem(memberId, createUsedItem, new MockUsedItemImageFile().getImageFiles());
+        UsedItemResponse usedItemResponse = usedItemService.createUsedItem(createUsedItem, new MockUsedItemImageFile().getImageFiles());
 
         //then
-        assertThat(usedItemResponse.getMemberId().equals(memberId));
+        assertThat(usedItemResponse.getMemberId()).isEqualTo(1L);
 
         //ItemDetails
         assertThat(usedItemResponse.getItemDetails().getTitle()).isEqualTo(createUsedItem.getCreateItemDetails().getTitle());

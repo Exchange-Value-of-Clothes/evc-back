@@ -11,6 +11,8 @@ public class UsedItemRequest {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class CreateUsedItem {
 
+        private Long memberId;
+
         @NotNull
         @JsonUnwrapped
         private ItemRequest.CreateItemDetails createItemDetails;
