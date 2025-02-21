@@ -33,7 +33,7 @@ class UsedItemServiceTest {
         UsedItemRepository usedItemRepository = new FakeUsedItemRepository();
         UsedItemImageRepository usedItemImageRepository = new FakeUsedItemImageRepository();
 
-        UsedItemAppender usedItemAppender = new UsedItemAppender(usedItemRepository, new FixedTimeProvider());
+        UsedItemAppender usedItemAppender = new UsedItemAppender(usedItemRepository);
         UsedItemImageAppender usedItemImageAppender = new UsedItemImageAppender(usedItemImageRepository, new SpyS3ImageHandler());
 
         usedItemService = new UsedItemService(usedItemAppender, usedItemImageAppender);
