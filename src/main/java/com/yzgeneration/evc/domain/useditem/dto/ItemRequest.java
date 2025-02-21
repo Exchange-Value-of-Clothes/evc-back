@@ -32,9 +32,9 @@ public class ItemRequest {
     @AllArgsConstructor
     public static class CreateTransaction {
         @NotNull(message = "거래유형을 선택해주세요.")
-        private TransactionType transactionType;
+        private String transactionType;
 
         @NotNull(message = "거래방법을 선택해주세요.")
-        private TransactionMode transactionMode;
+        private String transactionMode;
     }
 }
