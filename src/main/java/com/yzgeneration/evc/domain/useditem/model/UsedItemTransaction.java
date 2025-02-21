@@ -16,8 +16,8 @@ public class UsedItemTransaction {
 
     public static UsedItemTransaction create(CreateTransaction createTransaction) {
         return UsedItemTransaction.builder()
-                .transactionType(createTransaction.getTransactionType())
-                .transactionMode(createTransaction.getTransactionMode())
+                .transactionType(TransactionType.valueOf(createTransaction.getTransactionType()))
+                .transactionMode(TransactionMode.valueOf(createTransaction.getTransactionMode()))
                 .transactionStatue(TransactionStatue.ONGOING)
                 .build();
     }
