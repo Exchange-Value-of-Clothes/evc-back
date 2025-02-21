@@ -21,4 +21,9 @@ public class UsedItemRequest {
         @JsonUnwrapped
         private ItemRequest.CreateTransaction createTransaction;
     }
+
+    @Getter
+    public static class LoadUsedItem {
+        private int page;
+    }
 }

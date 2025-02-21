@@ -7,6 +7,8 @@ import com.yzgeneration.evc.domain.useditem.service.port.UsedItemRepository;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsedItemRepositoryImpl implements UsedItemRepository {
     private final UsedItemJpaRepository usedItemJpaRepository;
+
     @Override
     public UsedItem save(UsedItem usedItem) {
         return usedItemJpaRepository.save(UsedItemEntity.from(usedItem)).toModel();
@@ -33,5 +36,10 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
         return usedItemJpaRepository.findById(usedItemId).orElseThrow(
                 () -> new CustomException(ErrorCode.USEDITEM_NOT_FOUND)
         ).toModel();
+    }
+
+    @Override
+    public Page<UsedItem> findAllByOrderByCreatedAtDesc(Pageable pageable) {
+        return usedItemJpaRepository.findAllByOrderByCreatedAtDesc(pageable).map(UsedItemEntity::toModel);
     }
 }

@@ -4,6 +4,8 @@ import com.yzgeneration.evc.domain.useditem.model.UsedItem;
 import com.yzgeneration.evc.domain.useditem.service.port.UsedItemRepository;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,5 +43,10 @@ public class FakeUsedItemRepository implements UsedItemRepository {
                 .filter(mockUsedItem -> Objects.equals(mockUsedItem.getId(), usedItemId))
                 .findFirst()
                 .orElseThrow(() -> new CustomException(ErrorCode.USEDITEM_NOT_FOUND));
+    }
+
+    @Override
+    public Page<UsedItem> findAllByOrderByCreatedAtDesc(Pageable pageable) {
+        return null;
     }
 }
