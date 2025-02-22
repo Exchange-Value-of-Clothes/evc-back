@@ -26,7 +26,7 @@ public class FakeUsedItemImageRepository implements UsedItemImageRepository {
     }
 
     @Override
-    public List<String> findImageUrlsById(Long usedItemId) {
+    public List<String> findUsedItemImagesById(Long usedItemId) {
         return mockUsedItemImages.stream()
                 .filter(mockUsedItemImage -> Objects.equals(mockUsedItemImage.getUsedItemId(), usedItemId))
                 .map(UsedItemImage::getImageURL).toList();
