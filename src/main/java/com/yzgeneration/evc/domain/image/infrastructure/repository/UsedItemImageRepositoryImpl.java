@@ -19,7 +19,7 @@ public class UsedItemImageRepositoryImpl implements UsedItemImageRepository {
     }
 
     @Override
-    public List<String> findImageUrlsById(Long usedItemId) {
-        return usedItemImageJPARepository.findAllImageURLById(usedItemId);
+    public List<String> findUsedItemImagesById(Long usedItemId) {
+        return usedItemImageJPARepository.findUsedItemImagesById(usedItemId);
     }
 }

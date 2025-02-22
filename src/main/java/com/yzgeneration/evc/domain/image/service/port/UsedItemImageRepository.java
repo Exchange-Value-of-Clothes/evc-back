@@ -7,5 +7,5 @@ import java.util.List;
 public interface UsedItemImageRepository {
     UsedItemImage save(UsedItemImage usedItemImage);
 
-    List<String> findImageUrlsById(Long usedItemId);
+    List<String> findUsedItemImagesById(Long usedItemId);
 }
