@@ -15,11 +15,9 @@ public class UsedItemImageAppender {
     private final UsedItemImageRepository usedItemImageRepository;
     private final S3FileHandler s3FileHandler;
 
-    public List<String> createUsedItemImages(Long itemId, List<MultipartFile> imageFiles) {
+    public void createUsedItemImages(Long itemId, List<MultipartFile> imageFiles) {
         List<String> imageURLs = imageFiles.stream().map(s3FileHandler::uploadFileToS3).toList();
 
         imageURLs.forEach(imageURL -> usedItemImageRepository.save(UsedItemImage.create(itemId, imageURL)));
-
-        return imageURLs;
     }
 }
