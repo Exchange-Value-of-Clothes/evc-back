@@ -80,7 +80,7 @@ public class AuthenticationProcessor {
                 .build();
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .header(HttpHeaders.LOCATION, "http://localhost:3000/social-login-success")
+                .header(HttpHeaders.LOCATION, "https://localhost:3000/social-login-success")
                 .body(new LoginResponse(authenticationToken.getAccessToken()));
     }
 }
