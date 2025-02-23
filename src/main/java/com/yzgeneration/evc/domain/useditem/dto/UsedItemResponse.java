@@ -46,6 +46,8 @@ public class UsedItemResponse {
 
         private TransactionMode transactionMode;
 
+        private TransactionStatue transactionStatue;
+
         private List<String> imageURLs;
 
         private int likeCount;
