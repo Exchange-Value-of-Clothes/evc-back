@@ -4,10 +4,8 @@ import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRe
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.CreateUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsResponse;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
 import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
-import com.yzgeneration.evc.validator.EnumValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -25,10 +23,8 @@ public class UsedItemController {
     private final UsedItemService usedItemService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public CreateUsedItemResponse createUsedItem(@RequestPart CreateUsedItemRequest createUsedItemRequest, @RequestPart List<MultipartFile> imageFiles) throws IOException {
+    public CreateUsedItemResponse createUsedItem(@RequestPart @Valid CreateUsedItemRequest createUsedItemRequest, @RequestPart List<MultipartFile> imageFiles) throws IOException {
         //토큰으로 하여금 회원 정보 받아오기 추가
-        EnumValidator.validate(TransactionType.class, "trasactionType", createUsedItemRequest.getTransactionType());
-        EnumValidator.validate(TransactionMode.class, "transactionMode", createUsedItemRequest.getTransactionMode());
         return usedItemService.createUsedItem(createUsedItemRequest, imageFiles);
     }
 

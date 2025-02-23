@@ -1,18 +1,18 @@
 package com.yzgeneration.evc.domain.useditem.dto;
 
+import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
+import com.yzgeneration.evc.validator.EnumValidator;
+import com.yzgeneration.evc.validator.Validatable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public class UsedItemRequest {
     @Getter
-    @Builder
     @NoArgsConstructor
-    @AllArgsConstructor
-    public static class CreateUsedItemRequest {
+    public static class CreateUsedItemRequest implements Validatable {
 
         @NotNull
         private Long memberId;
@@ -35,5 +35,10 @@ public class UsedItemRequest {
         @NotNull(message = "거래방법을 선택해주세요.")
         private String transactionMode;
 
+        @Override
+        public void valid() {
+            EnumValidator.validate(TransactionType.class, "trasactionType", transactionType);
+            EnumValidator.validate(TransactionMode.class, "transactionMode", transactionMode);
+        }
     }
 }
