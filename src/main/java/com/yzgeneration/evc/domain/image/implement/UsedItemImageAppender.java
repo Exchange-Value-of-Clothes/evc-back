@@ -17,7 +17,6 @@ public class UsedItemImageAppender {
 
     public void createUsedItemImages(Long itemId, List<MultipartFile> imageFiles) {
         List<String> imageURLs = imageFiles.stream().map(s3FileHandler::uploadFileToS3).toList();
-
-        imageURLs.forEach(imageURL -> usedItemImageRepository.save(UsedItemImage.create(itemId, imageURL)));
+        usedItemImageRepository.saveAll(imageURLs.stream().map(imageURL -> UsedItemImage.create(itemId, imageURL)).toList());
     }
 }
