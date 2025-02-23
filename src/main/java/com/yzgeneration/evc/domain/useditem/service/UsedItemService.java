@@ -15,7 +15,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -26,7 +25,7 @@ public class UsedItemService {
     private final UsedItemLoader usedItemLoader;
     private final UsedItemImageLoader usedItemImageLoader;
 
-    public CreateUsedItemResponse createUsedItem(CreateUsedItemRequest createUsedItemRequest, List<MultipartFile> imageFiles) throws IOException {
+    public CreateUsedItemResponse createUsedItem(CreateUsedItemRequest createUsedItemRequest, List<MultipartFile> imageFiles) {
         UsedItem usedItem = usedItemAppender.createUsedItem(createUsedItemRequest);
         usedItemImageAppender.createUsedItemImages(usedItem.getId(), imageFiles);
 
@@ -43,6 +42,7 @@ public class UsedItemService {
                         .title(usedItem.getItemDetails().getTitle())
                         .price(usedItem.getItemDetails().getPrice())
                         .transactionMode(usedItem.getUsedItemTransaction().getTransactionMode())
+                        .transactionStatue(usedItem.getUsedItemTransaction().getTransactionStatue())
                         .imageURLs(usedItemImageLoader.loadUsedItemImages(usedItem.getId()))
                         .likeCount(usedItem.getItemStats().getLikeCount())
                         .createAt(usedItem.getCreatedAt())

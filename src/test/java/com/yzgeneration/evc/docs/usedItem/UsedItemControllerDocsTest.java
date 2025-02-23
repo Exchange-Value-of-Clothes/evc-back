@@ -140,6 +140,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("중고상품 가격"),
                                 fieldWithPath("loadUsedItemDetails[].transactionMode").type(JsonFieldType.STRING)
                                         .description("중고상품 거래방법 (SELL, BUY, AUCTION)"),
+                                fieldWithPath("loadUsedItemDetails[].transactionStatus").type(JsonFieldType.STRING)
+                                        .description("중고상품 거래방법 (ONGOING, RESERVE, COMPLETE)"),
                                 fieldWithPath("loadUsedItemDetails[].imageURLs").type(JsonFieldType.ARRAY)
                                         .description("중고상품 이미지 리스트"),
                                 fieldWithPath("loadUsedItemDetails[].likeCount").type(JsonFieldType.NUMBER)
