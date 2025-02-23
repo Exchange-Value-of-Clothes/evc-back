@@ -1,46 +1,95 @@
 package com.yzgeneration.evc.domain.useditem.dto;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionStatue;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
 import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
-import com.yzgeneration.evc.domain.useditem.model.ItemDetails;
-import com.yzgeneration.evc.domain.useditem.model.ItemStats;
-import com.yzgeneration.evc.domain.useditem.model.UsedItem;
-import com.yzgeneration.evc.domain.useditem.model.UsedItemTransaction;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Builder
+
 public class UsedItemResponse {
-    private Long memberId;
 
-    @JsonUnwrapped
-    private ItemDetails itemDetails;
+    @Getter
+    @AllArgsConstructor
+    public static class CreateUsedItemResponse {
 
-    @JsonUnwrapped
-    private UsedItemTransaction usedItemTransaction;
+        private Long memberId;
 
-    private UsedItemStatus usedItemStatus;
+        private Long usedItemId;
+    }
 
-    @JsonUnwrapped
-    private ItemStats itemStats;
+    @Getter
+    @Builder
+    public static class LoadUsedItemsResponse {
 
-    private List<String> imageURLs;
+        @JsonUnwrapped
+        private List<LoadUsedItemsDetails> loadUsedItemDetails;
 
-    private LocalDateTime createAt;
+        private Boolean isLast;
+    }
 
-    public static UsedItemResponse of(UsedItem usedItem, List<String> usedItemImageURLs) {
-        return UsedItemResponse.builder()
-                .memberId(usedItem.getId())
-                .itemDetails(usedItem.getItemDetails())
-                .usedItemTransaction(usedItem.getUsedItemTransaction())
-                .usedItemStatus(usedItem.getUsedItemStatus())
-                .itemStats(usedItem.getItemStats())
-                .imageURLs(usedItemImageURLs)
-                .createAt(usedItem.getCreatedAt())
-                .build();
+    @Getter
+    @Builder
+    public static class LoadUsedItemsDetails {
+
+        private Long usedItemId;
+
+        private String title;
+
+        private int price;
+
+        private TransactionMode transactionMode;
+
+        private List<String> imageURLs;
+
+        private int likeCount;
+
+        private LocalDateTime createAt;
+
+        private UsedItemStatus usedItemStatus;
+    }
+
+    @Getter
+    @Builder
+    public static class LoadUsedItemResponse {
+
+        private String title;
+
+        private String category;
+
+        private String content;
+
+        private int price;
+
+        private TransactionType transactionType;
+
+        private TransactionMode transactionMode;
+
+        private TransactionStatue transactionStatue;
+
+        private List<String> imageURLs;
+
+        private int viewCount;
+
+        private int likeCount;
+
+        private int chattingCount;
+
+        // nickName 중북이기에 해당 id값을 이용해서 판매자의 상점 드갈 때 사용
+        private Long memberId;
+
+        private String nickName;
+
+        private Boolean isOwned;
+
+        private LocalDateTime createAt;
+
+        private UsedItemStatus usedItemStatus;
     }
 }

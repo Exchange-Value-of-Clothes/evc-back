@@ -5,7 +5,8 @@ import com.yzgeneration.evc.domain.image.model.UsedItemImage;
 import java.util.List;
 
 public interface UsedItemImageRepository {
-    UsedItemImage save(UsedItemImage usedItemImage);
 
-    List<String> findImageUrlsById(Long usedItemId);
+    void saveAll(List<UsedItemImage> usedItemImages);
+
+    List<String> findUsedItemImagesById(Long usedItemId);
 }
