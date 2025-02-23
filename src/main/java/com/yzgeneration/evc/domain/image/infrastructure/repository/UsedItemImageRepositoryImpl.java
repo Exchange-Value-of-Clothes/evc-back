@@ -14,12 +14,12 @@ public class UsedItemImageRepositoryImpl implements UsedItemImageRepository {
     private final UsedItemImageJpaRepository usedItemImageJPARepository;
 
     @Override
-    public UsedItemImage save(UsedItemImage usedItemImage) {
-        return usedItemImageJPARepository.save(UsedItemImageEntity.from(usedItemImage)).toModel();
+    public void saveAll(List<UsedItemImage> usedItemImages) {
+        usedItemImageJPARepository.saveAll(usedItemImages.stream().map(UsedItemImageEntity::from).toList());
     }
 
     @Override
-    public List<String> findImageUrlsById(Long usedItemId) {
-        return usedItemImageJPARepository.findAllImageURLById(usedItemId);
+    public List<String> findUsedItemImagesById(Long usedItemId) {
+        return usedItemImageJPARepository.findUsedItemImagesById(usedItemId);
     }
 }

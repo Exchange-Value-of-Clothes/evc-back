@@ -7,4 +7,28 @@ include::{snippets}/usedItem-create/request-part-createUsedItemRequest-fields.ad
 
 === HTTP Response
 include::{snippets}/usedItem-create/http-response.adoc[]
-include::{snippets}/usedItem-create/response-fields.adoc[]
+
+
+[[usedItems-get]]
+== 중고상품들 조회 (슬라이드 형태)
+
+=== HTTP Request
+include::{snippets}/usedItems-get/http-request.adoc[]
+include::{snippets}/usedItems-get/query-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/usedItems-get/http-response.adoc[]
+include::{snippets}/usedItems-get/response-fields.adoc[]
+
+[[usedItem-get]]
+== 개별 중고상품 조회
+
+=== HTTP Request
+include::{snippets}/usedItem-get/http-request.adoc[]
+include::{snippets}/usedItem-get/path-parameters.adoc[]
+include::{snippets}/usedItem-get/query-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/usedItem-get/http-response.adoc[]
+include::{snippets}/usedItem-get/response-fields.adoc[]
+
