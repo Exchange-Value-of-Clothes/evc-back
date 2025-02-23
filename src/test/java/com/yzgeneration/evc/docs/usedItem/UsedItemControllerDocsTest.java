@@ -99,6 +99,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                 .title("중고상품이요~")
                 .price(10000)
                 .transactionMode(TransactionMode.BUY)
+                .transactionStatue(TransactionStatue.ONGOING)
                 .imageURLs(List.of("https://domain/asdfasdfasdf"))
                 .likeCount(0)
                 .createAt(LocalDateTime.now())
@@ -109,6 +110,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                 .title("중고상품이요~ 22")
                 .price(20000)
                 .transactionMode(TransactionMode.AUCTION)
+                .transactionStatue(TransactionStatue.ONGOING)
                 .imageURLs(List.of("https://domain/asdfasdfasdf"))
                 .likeCount(0)
                 .createAt(LocalDateTime.now())
@@ -140,8 +142,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("중고상품 가격"),
                                 fieldWithPath("loadUsedItemDetails[].transactionMode").type(JsonFieldType.STRING)
                                         .description("중고상품 거래방법 (SELL, BUY, AUCTION)"),
-                                fieldWithPath("loadUsedItemDetails[].transactionStatus").type(JsonFieldType.STRING)
-                                        .description("중고상품 거래방법 (ONGOING, RESERVE, COMPLETE)"),
+                                fieldWithPath("loadUsedItemDetails[].transactionStatue").type(JsonFieldType.STRING)
+                                        .description("중고상품 거래 상태 (ONGOING, RESERVE, COMPLETE)"),
                                 fieldWithPath("loadUsedItemDetails[].imageURLs").type(JsonFieldType.ARRAY)
                                         .description("중고상품 이미지 리스트"),
                                 fieldWithPath("loadUsedItemDetails[].likeCount").type(JsonFieldType.NUMBER)
