@@ -12,7 +12,7 @@ public interface UsedItemJpaRepository extends JpaRepository<UsedItemEntity, Lon
 
     @Query("""
             SELECT m.memberPrivateInformationEntity.nickname FROM UsedItemEntity u
-            LEFT JOIN FETCH MemberEntity m
+            LEFT JOIN MemberEntity m
             ON u.memberId = m.id
             WHERE u.id = :usedItemId
              """)
