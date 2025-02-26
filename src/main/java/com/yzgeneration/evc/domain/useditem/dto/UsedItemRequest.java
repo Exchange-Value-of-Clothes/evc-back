@@ -1,24 +1,44 @@
 package com.yzgeneration.evc.domain.useditem.dto;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
+import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
+import com.yzgeneration.evc.validator.EnumValidator;
+import com.yzgeneration.evc.validator.Validatable;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class UsedItemRequest {
     @Getter
-    @Builder
     @NoArgsConstructor
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class CreateUsedItem {
-        //나중에 없어질 것
+    public static class CreateUsedItemRequest implements Validatable {
+
+        @NotNull
         private Long memberId;
 
-        @NotNull
-        @JsonUnwrapped
-        private ItemRequest.CreateItemDetails createItemDetails;
+        @NotBlank(message = "제목은 필수항목입니다.")
+        private String title;
 
-        @NotNull
-        @JsonUnwrapped
-        private ItemRequest.CreateTransaction createTransaction;
+        @NotBlank(message = "카테고리는 필수항목입니다.")
+        private String category;
+
+        @NotBlank(message = "내용은 필수항목입니다.")
+        private String content;
+
+        @NotNull(message = "가격은 필수항목입니다.")
+        private int price;
+
+        @NotNull(message = "거래유형을 선택해주세요.")
+        private String transactionType;
+
+        @NotNull(message = "거래방법을 선택해주세요.")
+        private String transactionMode;
+
+        @Override
+        public void valid() {
+            EnumValidator.validate(TransactionType.class, "trasactionType", transactionType);
+            EnumValidator.validate(TransactionMode.class, "transactionMode", transactionMode);
+        }
     }
 }

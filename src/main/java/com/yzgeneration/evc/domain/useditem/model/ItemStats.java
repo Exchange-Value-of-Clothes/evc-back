@@ -6,12 +6,12 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ItemStats {
-    @Builder.Default
-    private int viewCount = 0;
-    @Builder.Default
-    private int likeCount = 0;
-    @Builder.Default
-    private int chattingCount = 0;
+
+    private int viewCount;
+
+    private int likeCount;
+
+    private int chattingCount;
 
     public static ItemStats create() {
         return ItemStats.builder().build();

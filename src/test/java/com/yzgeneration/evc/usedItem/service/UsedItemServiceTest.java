@@ -1,74 +1,57 @@
 package com.yzgeneration.evc.usedItem.service;
 
 import com.yzgeneration.evc.domain.image.implement.UsedItemImageAppender;
+import com.yzgeneration.evc.domain.image.implement.UsedItemImageLoader;
 import com.yzgeneration.evc.domain.image.service.port.UsedItemImageRepository;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItem;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionStatue;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
-import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
+import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
+import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.CreateUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.implement.UsedItemAppender;
+import com.yzgeneration.evc.domain.useditem.implement.UsedItemLoader;
 import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
 import com.yzgeneration.evc.domain.useditem.service.port.UsedItemRepository;
-import com.yzgeneration.evc.mock.usedItem.*;
+import com.yzgeneration.evc.mock.usedItem.FakeUsedItemImageRepository;
+import com.yzgeneration.evc.mock.usedItem.FakeUsedItemRepository;
+import com.yzgeneration.evc.mock.usedItem.MockUsedItemImageFile;
+import com.yzgeneration.evc.mock.usedItem.SpyS3ImageHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.time.LocalDateTime;
 
-import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItem;
+import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItemRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestPropertySource(properties = {"cloude.aws.s3.bucket=test-bucket"})
+@TestPropertySource(properties = {"cloud.aws.s3.bucket=test-bucket"})
 class UsedItemServiceTest {
     private UsedItemService usedItemService;
 
     @BeforeEach
-    void init() throws MalformedURLException {
+    void init() {
         UsedItemRepository usedItemRepository = new FakeUsedItemRepository();
         UsedItemImageRepository usedItemImageRepository = new FakeUsedItemImageRepository();
 
-        UsedItemAppender usedItemAppender = new UsedItemAppender(usedItemRepository, new FixedTimeProvider());
+        UsedItemAppender usedItemAppender = new UsedItemAppender(usedItemRepository);
+        UsedItemLoader usedItemLoader = new UsedItemLoader(usedItemRepository);
         UsedItemImageAppender usedItemImageAppender = new UsedItemImageAppender(usedItemImageRepository, new SpyS3ImageHandler());
+        UsedItemImageLoader usedItemImageLoader = new UsedItemImageLoader(usedItemImageRepository);
 
-        usedItemService = new UsedItemService(usedItemAppender, usedItemImageAppender);
+        usedItemService = new UsedItemService(usedItemAppender, usedItemImageAppender, usedItemLoader, usedItemImageLoader);
     }
 
     @Test
     @DisplayName("중고상품 등록이 정상적으로 되는지 체크한다.")
     void createUsedItem() throws IOException {
         //given
-        CreateUsedItem createUsedItem = fixCreateUsedItem();
+        CreateUsedItemRequest createUsedItemRequest = fixCreateUsedItemRequest();
 
         //when
-        UsedItemResponse usedItemResponse = usedItemService.createUsedItem(createUsedItem, new MockUsedItemImageFile().getImageFiles());
+        CreateUsedItemResponse createUsedItemResponse = usedItemService.createUsedItem(createUsedItemRequest, new MockUsedItemImageFile().getImageFiles());
 
         //then
-        //ItemDetails
-        assertThat(usedItemResponse.getItemDetails().getTitle()).isEqualTo(createUsedItem.getCreateItemDetails().getTitle());
-        assertThat(usedItemResponse.getItemDetails().getCategory()).isEqualTo(createUsedItem.getCreateItemDetails().getCategory());
-        assertThat(usedItemResponse.getItemDetails().getContent()).isEqualTo(createUsedItem.getCreateItemDetails().getContent());
-        assertThat(usedItemResponse.getItemDetails().getPrice()).isEqualTo(createUsedItem.getCreateItemDetails().getPrice());
+        assertThat(createUsedItemResponse.getMemberId()).isEqualTo(1L);
+        assertThat(createUsedItemResponse.getUsedItemId()).isEqualTo(1L);
 
-        //UsedItemTransaction
-        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionType()).isEqualTo(TransactionType.DIRECT);
-        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionMode()).isEqualTo(TransactionMode.BUY);
-        assertThat(usedItemResponse.getUsedItemTransaction().getTransactionStatue()).isEqualTo(TransactionStatue.ONGOING);
-
-        //UsedItemStatus & ItemStats
-        assertThat(usedItemResponse.getUsedItemStatus()).isEqualTo(UsedItemStatus.ACTIVE);
-
-        assertThat(usedItemResponse.getItemStats().getViewCount()).isEqualTo(0);
-        assertThat(usedItemResponse.getItemStats().getLikeCount()).isEqualTo(0);
-        assertThat(usedItemResponse.getItemStats().getChattingCount()).isEqualTo(0);
-
-        //ImageURLs & CreateAt
-        assertThat(usedItemResponse.getImageURLs()).hasSize(2);
-        assertThat(usedItemResponse.getCreateAt()).isEqualTo(LocalDateTime.of(2000, 1, 2, 3, 0, 0, 0));
     }
 }

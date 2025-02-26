@@ -1,20 +1,21 @@
 package com.yzgeneration.evc.domain.useditem.controller;
 
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItem;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse;
+import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
+import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.CreateUsedItemResponse;
+import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemResponse;
+import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsResponse;
 import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/useditems")
 @RequiredArgsConstructor
@@ -22,18 +23,18 @@ public class UsedItemController {
     private final UsedItemService usedItemService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public UsedItemResponse createUsedItem(@Valid @RequestPart CreateUsedItem createUsedItem, @RequestPart List<MultipartFile> imageFiles) throws IOException {
+    public CreateUsedItemResponse createUsedItem(@RequestPart @Valid CreateUsedItemRequest createUsedItemRequest, @RequestPart List<MultipartFile> imageFiles) throws IOException {
         //토큰으로 하여금 회원 정보 받아오기 추가
-        return usedItemService.createUsedItem(createUsedItem, imageFiles);
+        return usedItemService.createUsedItem(createUsedItemRequest, imageFiles);
     }
-//
-//    @GetMapping
-//    public List<UsedItemResponse> getUsedItems(){
-//
-//    }
-//
-//    @GetMapping("/{usedItemId}")
-//    public List<UsedItemResponse> getUsedItems(@PathVariable Long usedItemId){
-//
-//    }
+
+    @GetMapping
+    public LoadUsedItemsResponse getUsedItems(@RequestParam int page) {
+        return usedItemService.loadUsedItems(page);
+    }
+
+    @GetMapping("/{usedItemId}")
+    public LoadUsedItemResponse getUsedItems(@RequestParam Long memberId, @PathVariable Long usedItemId) {
+        return usedItemService.loadUsedItem(memberId, usedItemId);
+    }
 }

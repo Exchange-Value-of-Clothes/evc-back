@@ -18,6 +18,8 @@ public class UsedItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long memberId;
+
     @Embedded
     private ItemDetailsEntity itemDetailsEntity;
 
@@ -34,6 +36,7 @@ public class UsedItemEntity {
 
     public static UsedItemEntity from(UsedItem usedItem) {
         return UsedItemEntity.builder()
+                .memberId(usedItem.getMemberId())
                 .itemDetailsEntity(ItemDetailsEntity.from(usedItem.getItemDetails()))
                 .usedItemTransactionEntity(UsedItemTransactionEntity.from(usedItem.getUsedItemTransaction()))
                 .usedItemStatus(usedItem.getUsedItemStatus())
@@ -44,6 +47,7 @@ public class UsedItemEntity {
     public UsedItem toModel() {
         return UsedItem.builder()
                 .id(id)
+                .memberId(memberId)
                 .itemDetails(itemDetailsEntity.toModel())
                 .usedItemTransaction(usedItemTransactionEntity.toModel())
                 .usedItemStatus(usedItemStatus)

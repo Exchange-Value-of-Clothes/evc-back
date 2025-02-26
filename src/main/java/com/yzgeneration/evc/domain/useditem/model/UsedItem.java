@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.domain.useditem.model;
 
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItem;
+import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
 import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +13,8 @@ public class UsedItem {
 
     private Long id;
 
+    private Long memberId;
+
     private ItemDetails itemDetails;
 
     private UsedItemTransaction usedItemTransaction;
@@ -23,10 +25,11 @@ public class UsedItem {
 
     private LocalDateTime createdAt;
 
-    public static UsedItem create(CreateUsedItem createUsedItem, LocalDateTime createAt) {
+    public static UsedItem create(CreateUsedItemRequest createUsedItemRequest, LocalDateTime createAt) {
         return UsedItem.builder()
-                .itemDetails(ItemDetails.create(createUsedItem.getCreateItemDetails()))
-                .usedItemTransaction(UsedItemTransaction.create(createUsedItem.getCreateTransaction()))
+                .memberId(createUsedItemRequest.getMemberId())
+                .itemDetails(ItemDetails.create(createUsedItemRequest))
+                .usedItemTransaction(UsedItemTransaction.create(createUsedItemRequest))
                 .usedItemStatus(UsedItemStatus.ACTIVE)
                 .itemStats(ItemStats.create())
                 .createdAt(createAt)
