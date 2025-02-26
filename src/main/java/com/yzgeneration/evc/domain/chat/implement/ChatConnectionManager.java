@@ -10,7 +10,7 @@ public class ChatConnectionManager {
 
     private final ChatConnectionRepository chatConnectionRepository;
 
-    public void enterChatRoom(Long chatRoomId, Long memberId) {
+    public void connectToChatRoom(Long chatRoomId, Long memberId) {
         chatConnectionRepository.connect(chatRoomId, memberId);
     }
 
@@ -18,7 +18,7 @@ public class ChatConnectionManager {
         chatConnectionRepository.disconnect(chatRoomId, memberId);
     }
 
-    public boolean doseChatPartnerExist(Long chatRoomId) {
+    public boolean isChatPartnerConnected(Long chatRoomId) {
         return chatConnectionRepository.getOnlineMemberCount(chatRoomId) > 1;
     }
 }

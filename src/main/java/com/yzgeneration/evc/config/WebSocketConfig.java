@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.config;
 
-import com.yzgeneration.evc.domain.chat.implement.StompInterceptor;
+import com.yzgeneration.evc.security.StompInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

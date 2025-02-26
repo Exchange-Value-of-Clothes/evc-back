@@ -27,6 +27,7 @@ public enum ErrorCode {
     USEDITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "042", "해당 중고상품이 존재하지 않습니다."),
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "043", "해당 이미지가 존재하지 않습니다."),
     EMAIL_VERIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "044", "해당 이메일 인증 내역이 존재하지 않습니다."),
+    CHAT_NOT_FOUND(HttpStatus.NOT_FOUND, "045", "해당 채팅이 존재하지 않습니다."),
 
     // 409 Conflict
     EMAIL_DUPLICATION(HttpStatus.CONFLICT, "091", "중복된 이메일이 존재합니다."),

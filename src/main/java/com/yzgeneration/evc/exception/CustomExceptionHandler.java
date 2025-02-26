@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class CustomExceptionHandler {
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
-        return ErrorResponse.toResponse(e.getErrorCode(), e.getCustomMessage());
+        return ErrorResponse.toResponse(e.getErrorCode(), e.getMessage());
     }
 }

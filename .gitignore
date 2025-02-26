@@ -29,6 +29,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 src/main/resources/firebase/*.json
+src/main/generated
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

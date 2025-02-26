@@ -17,16 +17,16 @@ public class ChatRoomEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String usedItemName;
+    private Long usedItemId;
     private Long ownerId;
-    private Long senderId;
+    private Long participationId;
     private LocalDateTime createdAt;
 
-    public static ChatRoomEntity create(ChatRoom chatRoom) {
+    public static ChatRoomEntity from(ChatRoom chatRoom) {
         return ChatRoomEntity.builder()
-                .usedItemName(chatRoom.getUsedItemName())
+                .usedItemId(chatRoom.getUsedItemId())
                 .ownerId(chatRoom.getOwnerId())
-                .senderId(chatRoom.getSenderId())
+                .participationId(chatRoom.getParticipationId())
                 .createdAt(LocalDateTime.now())
                 .build();
     }
@@ -34,9 +34,9 @@ public class ChatRoomEntity {
     public ChatRoom toModel() {
         return ChatRoom.builder()
                 .id(id)
-                .usedItemName(usedItemName)
+                .usedItemId(usedItemId)
                 .ownerId(ownerId)
-                .senderId(senderId)
+                .participationId(participationId)
                 .createdAt(createdAt)
                 .build();
     }

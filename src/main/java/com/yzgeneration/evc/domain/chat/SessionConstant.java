@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.common;
+package com.yzgeneration.evc.domain.chat;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

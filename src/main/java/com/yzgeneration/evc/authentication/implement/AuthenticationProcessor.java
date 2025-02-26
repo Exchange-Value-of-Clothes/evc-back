@@ -32,7 +32,6 @@ public class AuthenticationProcessor {
         return member;
     }
 
-    // TODO 도메인 설정, tsl 인증서
     public ResponseEntity<LoginResponse> getLoginResponse(AuthenticationToken authenticationToken) {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", authenticationToken.getRefreshToken())
                 .httpOnly(true)
