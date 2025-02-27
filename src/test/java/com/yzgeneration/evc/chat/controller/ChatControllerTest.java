@@ -67,7 +67,7 @@ class ChatControllerTest {
                 .andExpect(jsonPath("$[0].chatRoomId").value("1"))
                 .andExpect(jsonPath("$[0].usedItemId").value("1"))
                 .andExpect(jsonPath("$[0].lastMessage").value("lastMessage"))
-                .andExpect(jsonPath("$[0].createdAt").value("-999999999-01-01T00:00:00"));
+                .andExpect(jsonPath("$[0].createdAt").value("+1000000000-01-01T00:00:00"));
     }
 
     @Test
