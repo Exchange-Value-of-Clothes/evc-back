@@ -5,5 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.time.LocalDateTime;
 
 public interface ChatMessageMongoRepository extends MongoRepository<ChatMessageDocument, String> {
-    boolean existsByChatRoomIdAndCreatedAtAfter(Long chatRoomId, LocalDateTime createdAt);
+
 }

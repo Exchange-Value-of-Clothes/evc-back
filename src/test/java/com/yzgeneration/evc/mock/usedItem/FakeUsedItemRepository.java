@@ -24,6 +24,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
                 .itemDetails(usedItem.getItemDetails())
                 .usedItemTransaction(usedItem.getUsedItemTransaction())
                 .usedItemStatus(usedItem.getUsedItemStatus())
+                .usedItemTransaction(usedItem.getUsedItemTransaction())
                 .itemStats(usedItem.getItemStats())
                 .createdAt(usedItem.getCreatedAt())
                 .build();

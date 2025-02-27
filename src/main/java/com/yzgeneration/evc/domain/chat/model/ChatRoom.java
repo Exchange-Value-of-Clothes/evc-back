@@ -10,17 +10,20 @@ import java.time.LocalDateTime;
 public class ChatRoom {
 
     private Long id;
-    private String usedItemName;
+    private Long usedItemId;
     private Long ownerId;
-    private Long senderId;
+    private Long participationId;
     private LocalDateTime createdAt;
 
-    public static ChatRoom create(Long ownerId, Long senderId) {
+    public static ChatRoom create(Long usedItemId, Long ownerId) {
         return ChatRoom.builder()
-                .usedItemName("테스트")
+                .usedItemId(usedItemId)
                 .ownerId(ownerId)
-                .senderId(senderId)
                 .createdAt(LocalDateTime.now())
                 .build();
+    }
+
+    public void enter(Long memberId) {
+        this.participationId = memberId;
     }
 }

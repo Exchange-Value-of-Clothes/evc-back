@@ -4,7 +4,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 
 
-import static com.yzgeneration.evc.common.SessionConstant.*;
+import static com.yzgeneration.evc.domain.chat.SessionConstant.*;
 
 
 @Component

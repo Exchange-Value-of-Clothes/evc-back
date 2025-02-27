@@ -1,7 +1,10 @@
-package com.yzgeneration.evc.domain.chat.implement;
+package com.yzgeneration.evc.security;
 
 
 import com.yzgeneration.evc.authentication.implement.TokenProvider;
+import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
+import com.yzgeneration.evc.domain.chat.implement.SessionAttributeAccessor;
+import com.yzgeneration.evc.domain.chat.implement.StompHeaderReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -11,8 +14,8 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import static com.yzgeneration.evc.common.SessionConstant.CHAT_ROOM_KEY;
-import static com.yzgeneration.evc.common.SessionConstant.MEMBER_KEY;
+import static com.yzgeneration.evc.domain.chat.SessionConstant.CHAT_ROOM_KEY;
+import static com.yzgeneration.evc.domain.chat.SessionConstant.MEMBER_KEY;
 
 @Component
 @RequiredArgsConstructor
@@ -36,7 +39,7 @@ public class StompInterceptor implements ChannelInterceptor { // stomp에서 메
             Long chatRoomId = Long.valueOf(stompHeaderReader.getChatRoomIdAtNativeHeader(accessor));
             System.out.println("Interceptor memberId = " + memberId);
             System.out.println("Interceptor chatRoomId = " + chatRoomId);
-            chatConnectionManager.enterChatRoom(chatRoomId, memberId);
+            chatConnectionManager.connectToChatRoom(chatRoomId, memberId);
             sessionAttributeAccessor.updateSession(accessor, MEMBER_KEY, memberId);
             sessionAttributeAccessor.updateSession(accessor, CHAT_ROOM_KEY, chatRoomId);
         }

@@ -1,7 +1,6 @@
-package com.yzgeneration.evc.member.authentication.controller;
+package com.yzgeneration.evc.authentication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yzgeneration.evc.authentication.controller.AuthenticationController;
 import com.yzgeneration.evc.authentication.dto.AuthenticationResponse;
 import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
 import com.yzgeneration.evc.authentication.service.AuthenticationService;

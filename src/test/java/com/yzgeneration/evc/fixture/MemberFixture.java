@@ -56,6 +56,16 @@ public final class MemberFixture extends Fixture{
                 .sample();
     }
 
+    public static Member withFakeUser() {
+        return Member.builder()
+                .id(1L)
+                .memberAuthenticationInformation(emailMemberAuthenticationInfo())
+                .memberPrivateInformation(fixNicknameAndEmail())
+                .memberStatus(MemberStatus.ACTIVE)
+                .memberRole(MemberRole.USER)
+                .build();
+    }
+
     private static ArbitraryBuilder<MemberAuthenticationInformation> fixPassword() {
         return fixtureMonkey.giveMeBuilder(MemberAuthenticationInformation.class)
                 .set("password", "12345678");
