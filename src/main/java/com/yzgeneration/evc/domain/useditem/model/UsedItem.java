@@ -25,9 +25,9 @@ public class UsedItem {
 
     private LocalDateTime createdAt;
 
-    public static UsedItem create(CreateUsedItemRequest createUsedItemRequest, LocalDateTime createAt) {
+    public static UsedItem create(Long memberId, CreateUsedItemRequest createUsedItemRequest, LocalDateTime createAt) {
         return UsedItem.builder()
-                .memberId(createUsedItemRequest.getMemberId())
+                .memberId(memberId)
                 .itemDetails(ItemDetails.create(createUsedItemRequest))
                 .usedItemTransaction(UsedItemTransaction.create(createUsedItemRequest))
                 .usedItemStatus(UsedItemStatus.ACTIVE)

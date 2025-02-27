@@ -26,7 +26,6 @@ include::{snippets}/usedItems-get/response-fields.adoc[]
 === HTTP Request
 include::{snippets}/usedItem-get/http-request.adoc[]
 include::{snippets}/usedItem-get/path-parameters.adoc[]
-include::{snippets}/usedItem-get/query-parameters.adoc[]
 
 === HTTP Response
 include::{snippets}/usedItem-get/http-response.adoc[]

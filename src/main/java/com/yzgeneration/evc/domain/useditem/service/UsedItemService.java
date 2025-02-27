@@ -25,11 +25,11 @@ public class UsedItemService {
     private final UsedItemLoader usedItemLoader;
     private final UsedItemImageLoader usedItemImageLoader;
 
-    public CreateUsedItemResponse createUsedItem(CreateUsedItemRequest createUsedItemRequest, List<MultipartFile> imageFiles) {
-        UsedItem usedItem = usedItemAppender.createUsedItem(createUsedItemRequest);
+    public CreateUsedItemResponse createUsedItem(Long memberId, CreateUsedItemRequest createUsedItemRequest, List<MultipartFile> imageFiles) {
+        UsedItem usedItem = usedItemAppender.createUsedItem(memberId, createUsedItemRequest);
         usedItemImageAppender.createUsedItemImages(usedItem.getId(), imageFiles);
 
-        return new CreateUsedItemResponse(createUsedItemRequest.getMemberId(), usedItem.getId());
+        return new CreateUsedItemResponse(memberId, usedItem.getId());
     }
 
     public LoadUsedItemsResponse loadUsedItems(int page) {
