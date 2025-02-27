@@ -24,3 +24,8 @@ include::authentication/authentication.adoc[]
 == UsedItem API
 
 include::usedItem/usedItem.adoc[]
+
+[[Chat-API]]
+== Chat API
+
+include::chat/chat.adoc[]
