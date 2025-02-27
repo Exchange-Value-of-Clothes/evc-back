@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class UsedItemAppender {
     private final UsedItemRepository usedItemRepository;
 
-    public UsedItem createUsedItem(CreateUsedItemRequest createUsedItemRequest) {
-        return usedItemRepository.save(UsedItem.create(createUsedItemRequest, LocalDateTime.now()));
+    public UsedItem createUsedItem(Long memberId, CreateUsedItemRequest createUsedItemRequest) {
+        return usedItemRepository.save(UsedItem.create(memberId, createUsedItemRequest, LocalDateTime.now()));
     }
 }
