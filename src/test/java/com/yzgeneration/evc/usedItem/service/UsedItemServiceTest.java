@@ -22,8 +22,6 @@ import com.yzgeneration.evc.mock.usedItem.MockUsedItemImageFile;
 import com.yzgeneration.evc.mock.usedItem.SpyS3ImageHandler;
 import org.junit.jupiter.api.*;
 
-import java.io.IOException;
-
 import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItemRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,7 +46,7 @@ class UsedItemServiceTest {
     @Test
     @Order(1)
     @DisplayName("중고상품 등록이 정상적으로 되는지 체크")
-    void createUsedItem() throws IOException {
+    void createUsedItem() {
         //given
         Long memberId = 1L;
         CreateUsedItemRequest createUsedItemRequest = fixCreateUsedItemRequest();
