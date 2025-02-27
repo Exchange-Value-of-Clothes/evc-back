@@ -6,6 +6,8 @@ import com.yzgeneration.evc.validator.EnumValidator;
 import com.yzgeneration.evc.validator.Validatable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,9 +15,6 @@ public class UsedItemRequest {
     @Getter
     @NoArgsConstructor
     public static class CreateUsedItemRequest implements Validatable {
-
-        @NotNull
-        private Long memberId;
 
         @NotBlank(message = "제목은 필수항목입니다.")
         private String title;

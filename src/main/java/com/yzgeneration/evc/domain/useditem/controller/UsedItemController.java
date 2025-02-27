@@ -13,7 +13,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,7 +22,7 @@ public class UsedItemController {
     private final UsedItemService usedItemService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public CreateUsedItemResponse createUsedItem(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestPart @Valid CreateUsedItemRequest createUsedItemRequest, @RequestPart List<MultipartFile> imageFiles) throws IOException {
+    public CreateUsedItemResponse createUsedItem(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestPart @Valid CreateUsedItemRequest createUsedItemRequest, @RequestPart List<MultipartFile> imageFiles) {
         //토큰으로 하여금 회원 정보 받아오기 추가
         return usedItemService.createUsedItem(memberPrincipal.getId(), createUsedItemRequest, imageFiles);
     }
