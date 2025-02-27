@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.domain.useditem.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
 import com.yzgeneration.evc.domain.useditem.enums.TransactionStatue;
@@ -52,6 +53,7 @@ public class UsedItemResponse {
 
         private int likeCount;
 
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime createAt;
 
         private UsedItemStatus usedItemStatus;
@@ -90,8 +92,11 @@ public class UsedItemResponse {
 
         private Boolean isOwned;
 
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime createAt;
 
         private UsedItemStatus usedItemStatus;
+
+        //TODO 회원의 프로필 사진 response
     }
 }
