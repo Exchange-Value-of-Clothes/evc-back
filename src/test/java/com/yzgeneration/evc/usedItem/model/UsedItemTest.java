@@ -20,7 +20,7 @@ public class UsedItemTest {
         CreateUsedItemRequest createUsedItemRequest = fixCreateUsedItemRequest();
 
         //when
-        UsedItem usedItem = UsedItem.create(createUsedItemRequest, LocalDateTime.now());
+        UsedItem usedItem = UsedItem.create(1L, createUsedItemRequest, LocalDateTime.now());
 
         //then
         assertThat(usedItem.getItemDetails().getTitle()).isEqualTo(createUsedItemRequest.getTitle());

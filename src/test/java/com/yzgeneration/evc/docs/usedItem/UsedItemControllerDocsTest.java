@@ -12,27 +12,31 @@ import com.yzgeneration.evc.domain.useditem.enums.TransactionStatue;
 import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
 import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
 import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
+import com.yzgeneration.evc.fixture.MemberFixture;
 import com.yzgeneration.evc.fixture.usedItem.UsedItemFixture;
 import com.yzgeneration.evc.mock.usedItem.MockUsedItemImageFile;
+import com.yzgeneration.evc.security.MemberPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UsedItemControllerDocsTest extends RestDocsSupport {
@@ -44,31 +48,36 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
     }
 
     @Test
-    @WithMockUser
     @DisplayName("중고상품 등록")
     void createUsedItem() throws Exception {
+        MemberPrincipal memberPrincipal = new MemberPrincipal(MemberFixture.withFakeUser());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                memberPrincipal,
+                memberPrincipal.getMember().getId(),
+                memberPrincipal.getAuthorities());
 
         CreateUsedItemRequest usedItem = UsedItemFixture.fixCreateUsedItemRequest();
         MockMultipartFile usedItemReq = new MockMultipartFile("createUsedItemRequest", "", "application/json", objectMapper.writeValueAsBytes(usedItem));
 
-        CreateUsedItemResponse createUsedItemResponse = new CreateUsedItemResponse(usedItem.getMemberId(), 1L);
+        CreateUsedItemResponse createUsedItemResponse = new CreateUsedItemResponse(memberPrincipal.getId(), 1L);
 
-        when(usedItemService.createUsedItem(any(CreateUsedItemRequest.class), anyList()))
+        when(usedItemService.createUsedItem(anyLong(), any(CreateUsedItemRequest.class), anyList()))
                 .thenReturn(createUsedItemResponse);
 
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/useditems")
+        mockMvc.perform(MockMvcRequestBuilders
+                        .multipart("/api/useditems")
                         .file(usedItemReq)
                         .file("imageFiles", new MockUsedItemImageFile().getImageFiles().get(0).getBytes())
                         .file("imageFiles", new MockUsedItemImageFile().getImageFiles().get(1).getBytes())
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.authentication(authentication))
                         .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
                 .andExpect(status().isOk())
                 .andDo(document("usedItem-create",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestPartFields("createUsedItemRequest",
-                                fieldWithPath("memberId").type(JsonFieldType.NUMBER)
-                                        .description("회원 Id"),
                                 fieldWithPath("title").type(JsonFieldType.STRING)
                                         .description("중고상품 제목"),
                                 fieldWithPath("category").type(JsonFieldType.STRING)
@@ -91,7 +100,6 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
     }
 
     @Test
-    @WithMockUser
     @DisplayName("중고상품들 조회 (메인페이지)")
     void loadUsedItems() throws Exception {
         LoadUsedItemsDetails loadUsedItemsDetails1 = LoadUsedItemsDetails.builder()
@@ -124,7 +132,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
         when(usedItemService.loadUsedItems(0))
                 .thenReturn(loadUsedItemsResponse);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/useditems")
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/useditems")
                         .param("page", "0"))
                 .andExpect(status().isOk())
                 .andDo(document("usedItems-get",
@@ -148,7 +157,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("중고상품 이미지 리스트"),
                                 fieldWithPath("loadUsedItemDetails[].likeCount").type(JsonFieldType.NUMBER)
                                         .description("게시물 좋아요수"),
-                                fieldWithPath("loadUsedItemDetails[].createAt").type(JsonFieldType.ARRAY)
+                                fieldWithPath("loadUsedItemDetails[].createAt").type(JsonFieldType.STRING)
                                         .description("중고상품 게시시간 (createAt과 현재시간과의 차이값을 프론트 화면에 렌더링)"),
                                 fieldWithPath("loadUsedItemDetails[].usedItemStatus").type(JsonFieldType.STRING)
                                         .description("중고상품 상태"),
@@ -158,7 +167,6 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
     }
 
     @Test
-    @WithMockUser
     @DisplayName("개별 중고상품 조회 (상세페이지)")
     void loadUsedItem() throws Exception {
         LoadUsedItemResponse loadUsedItemResponse = LoadUsedItemResponse.builder()
@@ -183,14 +191,13 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
         when(usedItemService.loadUsedItem(any(), any()))
                 .thenReturn(loadUsedItemResponse);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/useditems/{usedItemId}", 1L)
-                        .param("memberId", "0"))
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/useditems/{usedItemId}", 1L))
                 .andExpect(status().isOk())
                 .andDo(document("usedItem-get",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(parameterWithName("usedItemId").description("중고상품의 id")),
-                        queryParameters(parameterWithName("memberId").description("회원의 id")),
                         responseFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING)
                                         .description("중고상품 제목"),
@@ -220,7 +227,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("상점 주인 nickname"),
                                 fieldWithPath("isOwned").type(JsonFieldType.BOOLEAN)
                                         .description("내가 작성한 글인지 유무"),
-                                fieldWithPath("createAt").type(JsonFieldType.ARRAY)
+                                fieldWithPath("createAt").type(JsonFieldType.STRING)
                                         .description("중고상품 게시시간"),
                                 fieldWithPath("usedItemStatus").type(JsonFieldType.STRING)
                                         .description("중고상품 게시상태 (ACTIVE, DELETED, BAN)")
