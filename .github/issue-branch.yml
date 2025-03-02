@@ -3,13 +3,13 @@ openDraftPR: true
 copyIssueLabelsToPR: true
 copyIssueAssigneeToPR: true
 branches:
-  - label: 🚀Chore
+  - label: 🚀chore
     prefix: chore/
-  - label: ✨ Feature
+  - label: ✨feat
     prefix: feat/
-  - label: 🚑Fix
+  - label: 🚑fix
     prefix: fix/
-  - label: 🔨Refactor
+  - label: 🔨refactor
     prefix: refactor/
-  - label: 🎨Style
+  - label: 🎨style
     prefix: style/
