@@ -1,7 +1,7 @@
 ---
 name: "[Chore] 빌드 업무 수정, 패키지 매니저 수정"
 about: "\U0001F680Chore | 빌드 업무 수정, 패키지 매니저 수정"
-title: "[Refactor]"
+title: "[Refactor] "
 labels: "\U0001F680chore"
 assignees: ''
 

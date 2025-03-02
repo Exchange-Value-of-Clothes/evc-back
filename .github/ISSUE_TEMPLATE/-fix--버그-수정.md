@@ -1,7 +1,7 @@
 ---
 name: "[Fix] 버그 수정"
 about: "\U0001F691Fix | 버그 수정"
-title: "[Fix]"
+title: "[Fix] "
 labels: "\U0001F691fix"
 assignees: ''
 

@@ -1,7 +1,7 @@
 ---
 name: "[Refactor] 코드 리펙토링"
 about: "\U0001F528Refactor | 코드 리펙토링"
-title: "[Refactor]"
+title: "[Refactor] "
 labels: "\U0001F528refactor"
 assignees: ''
 
