@@ -45,15 +45,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.from(ErrorCode.TOKEN_EXPIRED)));
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json;charset=utf-8");
-            response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.from(ErrorCode.TOKEN_UNAUTHORIZED)));
+            System.out.println("e.getLocalizedMessage() = " + e.getMessage());
         }
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request)  {
-        String[] excludePath = {"/api/auth", "/api/members/register", "/docs", "/connection", "/health", "/"}; //TODO
+        String[] excludePath = {"/api/auth", "/api/members/register", "/docs", "/connection", "/health"}; //TODO
         String path = request.getRequestURI();
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
     }
