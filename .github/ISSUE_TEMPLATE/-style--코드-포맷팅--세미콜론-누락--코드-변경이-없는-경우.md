@@ -1,7 +1,7 @@
 ---
 name: "[Style] 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우"
 about: "\U0001F3A8Style | 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우"
-title: ''
+title: "[Style]"
 labels: "\U0001F3A8style"
 assignees: ''
 

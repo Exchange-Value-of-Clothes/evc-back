@@ -1,9 +1,9 @@
 ---
 name: "[Feat] 새로운 기능 추가"
-about: "✨ Feature | 새로운 기능 추가"
-title: ''
+about: "✨ Feat | 새로운 기능 추가"
+title: "[Feat]"
 labels: "✨feat"
-assignees: ''
+assignees: jiyunio
 
 ---
 
