@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.docs.chat;
 
+import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.docs.RestDocsSupport;
 import com.yzgeneration.evc.domain.chat.controller.ChatController;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
@@ -12,6 +13,8 @@ import com.yzgeneration.evc.security.MemberPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -71,26 +74,38 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("채팅방을 조회한다.")
     void getChatRooms() throws Exception {
+        SliceResponse<ChatRoomListResponse> response = new SliceResponse<>(
+                new SliceImpl<>(List.of(new ChatRoomListResponse(1L, "hi", LocalDateTime.MIN)), PageRequest.of(0, 10), true),
+                LocalDateTime.MIN
+        );
         given(chatService.getChatRooms(any()))
-                .willReturn(List.of(new ChatRoomListResponse(1L, 1L, "lastMessage", LocalDateTime.MIN)));
+                .willReturn(response);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/chat")
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].chatRoomId").value("1"))
-                .andExpect(jsonPath("$[0].usedItemId").value("1"))
-                .andExpect(jsonPath("$[0].lastMessage").value("lastMessage"))
-                .andExpect(jsonPath("$[0].createdAt").value("+1000000000-01-01T00:00:00"))
+                .andExpect(jsonPath("$.content[0].chatRoomId").value(1))
+                .andExpect(jsonPath("$.content[0].lastMessage").value("hi"))
+                .andExpect(jsonPath("$.content[0].createdAt").value("+1000000000-01-01T00:00:00"))
                 .andDo(document("chat-getChatRooms",
                         preprocessResponse(prettyPrint()),
                         responseFields(
-                                fieldWithPath("[].chatRoomId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("content[].chatRoomId").type(JsonFieldType.NUMBER)
                                         .description("채팅방 아이디"),
-                                fieldWithPath("[].usedItemId").type(JsonFieldType.NUMBER)
-                                        .description("중고상품 아이디"),
-                                fieldWithPath("[].lastMessage").type(JsonFieldType.STRING)
+                                fieldWithPath("content[].usedItemId").type(JsonFieldType.NULL)
+                                        .optional()
+                                        .description("중고상품 아이디 (없을 수도 있음)"),
+                                fieldWithPath("content[].lastMessage").type(JsonFieldType.STRING)
                                         .description("최근 메시지"),
-                                fieldWithPath("[].createdAt").type(JsonFieldType.STRING)
-                                        .description("최근 메시지 전송 시간 (예: yyyy-MM-dd'T'HH:mm:ss)")
+                                fieldWithPath("content[].createdAt").type(JsonFieldType.STRING)
+                                        .description("최근 메시지 전송 시간 (예: yyyy-MM-dd'T'HH:mm:ss)"),
+                                fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재 여부"),
+                                fieldWithPath("size").type(JsonFieldType.NUMBER)
+                                        .description("한 페이지당 요소 개수"),
+                                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
+                                        .description("현재 페이지의 요소 개수"),
+                                fieldWithPath("cursor").type(JsonFieldType.STRING)
+                                        .description("다음 페이지를 위한 커서 값")
                         )));
     }
 

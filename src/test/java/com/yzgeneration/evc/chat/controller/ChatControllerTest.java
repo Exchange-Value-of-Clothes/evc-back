@@ -1,6 +1,7 @@
 package com.yzgeneration.evc.chat.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.chat.controller.ChatController;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -59,15 +62,18 @@ class ChatControllerTest {
     @WithFakeUser
     @DisplayName("채팅방을 조회한다.")
     void getChatRooms() throws Exception {
+        SliceResponse<ChatRoomListResponse> response = new SliceResponse<>(
+                new SliceImpl<>(List.of(new ChatRoomListResponse(1L,  "lastMessage", LocalDateTime.MIN)), PageRequest.of(0, 10), true),
+                LocalDateTime.MIN
+        );
         given(chatService.getChatRooms(any()))
-                .willReturn(List.of(new ChatRoomListResponse(1L, 1L, "lastMessage", LocalDateTime.MIN)));
+                .willReturn(response);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/chat")
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].chatRoomId").value("1"))
-                .andExpect(jsonPath("$[0].usedItemId").value("1"))
-                .andExpect(jsonPath("$[0].lastMessage").value("lastMessage"))
-                .andExpect(jsonPath("$[0].createdAt").value("+1000000000-01-01T00:00:00"));
+                .andExpect(jsonPath("$.content[0].chatRoomId").value("1"))
+                .andExpect(jsonPath("$.content[0].lastMessage").value("lastMessage"))
+                .andExpect(jsonPath("$.content[0].createdAt").value("+1000000000-01-01T00:00:00"));
     }
 
     @Test
