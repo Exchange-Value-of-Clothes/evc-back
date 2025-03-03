@@ -1,6 +1,7 @@
 package com.yzgeneration.evc.domain.chat.controller;
 
 import com.yzgeneration.evc.common.dto.CommonResponse;
+import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.dto.Chatting;
 import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
@@ -9,6 +10,7 @@ import com.yzgeneration.evc.security.MemberPrincipal;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Slice;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,7 +31,7 @@ public class ChatController {
     private final ChatConnectionManager chatConnectionManager;
 
     /*
-     * 1. ws://localhost:8080/connection "websoket과 연결"
+     * 1. wss://localhost:8080/connection "websoket과 연결"
      * 2. /topic/room.{roomId} "채팅방 구독"
      * 3. /pub/chat.message "메시지전송"
      * 4. {"chatRoomId": 1, "content" : "hi"}
@@ -43,15 +45,15 @@ public class ChatController {
         return CommonResponse.success();
     }
 
-    @GetMapping
-    public List<ChatRoomListResponse> getChatRooms(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
-        return chatService.getChatRooms(memberPrincipal.getId());
-    }
-
     @PostMapping("/{chatRoomId}")
     public CommonResponse enterChatRoom(@PathVariable Long chatRoomId, @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
         chatService.enterChatRoom(chatRoomId, memberPrincipal.getId());
         return CommonResponse.success();
+    }
+
+    @GetMapping
+    public SliceResponse<ChatRoomListResponse> getChatRooms(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        return chatService.getChatRooms(memberPrincipal.getId());
     }
 
     @MessageMapping("chat.message") // SimpHeaderAccessor

@@ -23,7 +23,6 @@ public class StompInterceptor implements ChannelInterceptor { // stomp에서 메
 
     private final TokenProvider tokenProvider;
     private final StompHeaderReader stompHeaderReader;
-    private final ChatConnectionManager chatConnectionManager;
     private final SessionAttributeAccessor sessionAttributeAccessor;
 
     // TODO https://shout-to-my-mae.tistory.com/434 예외처리하기
@@ -31,7 +30,7 @@ public class StompInterceptor implements ChannelInterceptor { // stomp에서 메
     // HandShakeInterceptor
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) { // JwtFilter는 스프링 시큐리티 필터체인에서 동작하는 서블릿 필터다. 따라서 http 요청에만 동작함. (요청이 dispatcherServlet에 도달하기 전에 필터체인 통과)
-        System.out.println("message = " + message);
+//        System.out.println("message = " + message);
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             String token = parseToken(stompHeaderReader.getToken(accessor));
@@ -39,7 +38,6 @@ public class StompInterceptor implements ChannelInterceptor { // stomp에서 메
             Long chatRoomId = Long.valueOf(stompHeaderReader.getChatRoomIdAtNativeHeader(accessor));
             System.out.println("Interceptor memberId = " + memberId);
             System.out.println("Interceptor chatRoomId = " + chatRoomId);
-            chatConnectionManager.connectToChatRoom(chatRoomId, memberId);
             sessionAttributeAccessor.updateSession(accessor, MEMBER_KEY, memberId);
             sessionAttributeAccessor.updateSession(accessor, CHAT_ROOM_KEY, chatRoomId);
         }
