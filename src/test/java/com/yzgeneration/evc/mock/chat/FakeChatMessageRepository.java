@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.mock.chat;
 
+import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
@@ -35,7 +36,8 @@ public class FakeChatMessageRepository implements ChatMessageRepository {
     }
 
     @Override
-    public List<ChatRoomListResponse> getLastMessages(Long memberId) {
-        return List.of();
+    public SliceResponse<ChatRoomListResponse> getLastMessages(Long memberId) {
+        return null;
     }
+
 }

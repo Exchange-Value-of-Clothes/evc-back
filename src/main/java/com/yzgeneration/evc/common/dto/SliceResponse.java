@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.common.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class SliceResponse <T>{
     private boolean hasNext;
     private int size;
     private int numberOfElements;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime cursor;
 
     public SliceResponse(Slice<T> slice, LocalDateTime cursor) {

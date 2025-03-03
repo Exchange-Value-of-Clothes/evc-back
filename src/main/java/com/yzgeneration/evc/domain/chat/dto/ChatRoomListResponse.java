@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 public class ChatRoomListResponse {
 
     private Long chatRoomId;
-    private Long usedItemId;
     private String lastMessage;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
