@@ -38,7 +38,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
         registry.addEndpoint("/connection")
                 .setAllowedOriginPatterns("*");
-
     }
 
     @Override
@@ -46,7 +45,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/pub") // 메세지를 보낼(publish) 경로를 설정
                 .setPathMatcher(new AntPathMatcher(".")) // RabbitMQ에서는 기본적으로 queue, exchange의 이름,라우팅 키,패턴 등을 작성할 때 . 을. 구분자로 사용
                 .setPreservePublishOrder(true)
-                .enableStompBrokerRelay("/topic","/exchange","/queue", "/amq/direct")
+                .enableStompBrokerRelay("/topic","/exchange","/queue", "/amq/direct") // STOMP 메시지 브로커가 RabbitMQ의 Exchange를 통해 메시지를 전달함. 클라이언트가 메시지를 구독할 때 /topic, /exchange, /queue, /amq/direct 경로로 구독해야 함.
                 .setRelayHost(host)
                 .setVirtualHost(virtualHost)
                 .setRelayPort(61613) // SSL 사용 시 61614, 일반적으로 61613

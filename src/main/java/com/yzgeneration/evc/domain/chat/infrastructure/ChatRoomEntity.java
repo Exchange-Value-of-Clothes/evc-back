@@ -24,6 +24,7 @@ public class ChatRoomEntity {
 
     public static ChatRoomEntity from(ChatRoom chatRoom) {
         return ChatRoomEntity.builder()
+                .id(chatRoom.getId())
                 .usedItemId(chatRoom.getUsedItemId())
                 .ownerId(chatRoom.getOwnerId())
                 .participationId(chatRoom.getParticipationId())

@@ -1,12 +1,9 @@
 package com.yzgeneration.evc.domain.chat.implement;
 
 import com.yzgeneration.evc.domain.chat.dto.ChattingToListener;
-import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
-import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.external.fcm.NotificationSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +13,6 @@ public class ChatMessageListener {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final NotificationSender notificationSender;
-    private final ChatMessageRepository chatMessageRepository;
-
 
     @RabbitListener(queues = "chat.queue" ) // 비동기적으로 큐에서 메시지 소비해옴 , ackMode = "MANUAL" :  ack를 직접 날릴 수 있음
     public void receiveChatMessage(ChattingToListener chatting) {
@@ -26,8 +21,7 @@ public class ChatMessageListener {
             messagingTemplate.convertAndSend("/topic/room." + chatting.getChatRoomId(), chatting.getContent());
         } else {
             System.out.println("ChatMessageListener.receiveChatMessage ELSE");
-            chatMessageRepository.save(ChatMessage.create(chatting.getChatRoomId(), chatting.getMemberId(), chatting.getContent(), false));
-            notificationSender.send("deviceToken", "memberName", chatting.getContent());
+//            notificationSender.send("deviceToken", "memberName", chatting.getContent());
         }
     }
 
