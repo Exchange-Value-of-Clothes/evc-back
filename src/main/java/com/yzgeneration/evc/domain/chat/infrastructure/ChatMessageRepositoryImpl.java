@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.domain.chat.infrastructure;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
@@ -12,7 +13,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+
+import static com.yzgeneration.evc.domain.chat.infrastructure.QChatMemberEntity.*;
 
 
 @Repository
@@ -21,6 +25,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
 
     private final MongoTemplate mongoTemplate;
     private final ChatMessageMongoRepository chatMessageMongoRepository;
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public ChatMessage save(ChatMessage chatMessage) {
@@ -28,24 +33,29 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
     }
 
     @Override
-    public SliceResponse<ChatRoomListResponse> getLastMessages(Long memberId) {
-        int size=10; // TODO argument
-        LocalDateTime cursor = LocalDateTime.now();
+    public SliceResponse<ChatRoomListResponse> getLastMessages(Long memberId, LocalDateTime cursor) {
+
+        int size=5;
+
+        List<Long> chatRoomIds = jpaQueryFactory.select(chatMemberEntity.chatRoomId)
+                .from(chatMemberEntity)
+                .where(chatMemberEntity.memberId.eq(memberId)
+                        .and(chatMemberEntity.isDeleted.isFalse())) // 탈퇴한 방 제외
+                .fetch();
+
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.match(
-                        Criteria.where("participationId").is(memberId)
+                        Criteria.where("chatRoomId").in(chatRoomIds) // 유저가 속한 모든 방 조회
                                 .andOperator(
-                                        cursor != null
-                                                ? Criteria.where("createdAt").lt(cursor) // Cursor 방식으로 이후 데이터만 조회
-                                                : new Criteria() // 첫 페이지일 경우 조건 없음
-                                ) // Cursor 방식으로 이후 데이터만 조회
-                ),
-                Aggregation.group("chatRoomId")
+                                        cursor != null ? Criteria.where("createdAt").lt(cursor) : new Criteria()
+                                )
+                ), // 유저가 속한 모든 방 조회
+                Aggregation.group("chatRoomId") // 각 채팅방에서 가장 최근 메시지만 가져오기
                         .last("content").as("lastMessage")
                         .last("createdAt").as("createdAt")
                         .last("chatRoomId").as("chatRoomId"),
-                Aggregation.sort(Sort.Direction.DESC, "createdAt"),
-                Aggregation.limit(size+1) // hasNext 확인
+                Aggregation.sort(Sort.Direction.DESC, "createdAt"), // 최신 메시지부터 정렬
+                Aggregation.limit(size + 1) // hasNext 확인을 위해 size+1 만큼 조회
         );
 
         AggregationResults<ChatRoomListResponse> results = mongoTemplate.aggregate(

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import static com.yzgeneration.evc.domain.chat.SessionConstant.*;
 
@@ -29,14 +29,6 @@ public class ChatController {
 
     private final ChatService chatService;
     private final ChatConnectionManager chatConnectionManager;
-
-    /*
-     * 1. wss://localhost:8080/connection "websoket과 연결"
-     * 2. /topic/room.{roomId} "채팅방 구독"
-     * 3. /pub/chat.message "메시지전송"
-     * 4. {"chatRoomId": 1, "content" : "hi"}
-     * 5. {"Authorization" : "1"}
-     * */
 
     // TODO 채팅방 생성은 중고상품 등록할 때
     @PostMapping
@@ -52,8 +44,8 @@ public class ChatController {
     }
 
     @GetMapping
-    public SliceResponse<ChatRoomListResponse> getChatRooms(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
-        return chatService.getChatRooms(memberPrincipal.getId());
+    public SliceResponse<ChatRoomListResponse> getChatRooms(@AuthenticationPrincipal MemberPrincipal memberPrincipal, LocalDateTime cursor) {
+        return chatService.getChatRooms(memberPrincipal.getId(), cursor);
     }
 
     @MessageMapping("chat.message") // SimpHeaderAccessor

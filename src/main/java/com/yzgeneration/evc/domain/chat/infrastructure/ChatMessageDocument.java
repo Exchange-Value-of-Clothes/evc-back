@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @Document(collection = "chat_message")
-@QueryEntity
 public class ChatMessageDocument {
 
     // javax.persistence는 관계형, 이건 Jpa에 지원되지 않는 nosql이나 프레임워크용

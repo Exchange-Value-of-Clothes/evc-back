@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.config;
 
+import com.yzgeneration.evc.exception.StompThrowableHandler;
 import com.yzgeneration.evc.security.StompInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private String virtualHost;
 
     private final StompInterceptor stompInterceptor;
+    private final StompThrowableHandler stompThrowableHandler;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -38,6 +40,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
         registry.addEndpoint("/connection")
                 .setAllowedOriginPatterns("*");
+
+        registry.setErrorHandler(stompThrowableHandler);
     }
 
     @Override
@@ -53,6 +57,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setClientPasscode(password)
                 .setSystemLogin(username)
                 .setSystemPasscode(password);
+
     }
 
     @Override

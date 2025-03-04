@@ -8,6 +8,6 @@ import java.time.LocalDateTime;
 
 public interface ChatMessageRepository {
     ChatMessage save(ChatMessage chatMessage);
-    SliceResponse<ChatRoomListResponse> getLastMessages(Long memberId);
+    SliceResponse<ChatRoomListResponse> getLastMessages(Long memberId, LocalDateTime cursor);
 
 }

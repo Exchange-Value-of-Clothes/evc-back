@@ -66,7 +66,7 @@ class ChatControllerTest {
                 new SliceImpl<>(List.of(new ChatRoomListResponse(1L,  "lastMessage", LocalDateTime.MIN)), PageRequest.of(0, 10), true),
                 LocalDateTime.MIN
         );
-        given(chatService.getChatRooms(any()))
+        given(chatService.getChatRooms(any(), any()))
                 .willReturn(response);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/chat")
                         .with(csrf()))

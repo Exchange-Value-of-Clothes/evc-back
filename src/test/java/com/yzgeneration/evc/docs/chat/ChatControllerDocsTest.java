@@ -57,7 +57,6 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 memberPrincipal.getAuthorities());
         mockMvc.perform(MockMvcRequestBuilders.post("/api/chat")
                         .queryParam("usedItemId", "1")
-                        .with(csrf())
                         .with(SecurityMockMvcRequestPostProcessors.authentication(authentication))
                 )
                 .andExpect(status().isOk())
@@ -78,10 +77,9 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 new SliceImpl<>(List.of(new ChatRoomListResponse(1L, "hi", LocalDateTime.MIN)), PageRequest.of(0, 10), true),
                 LocalDateTime.MIN
         );
-        given(chatService.getChatRooms(any()))
+        given(chatService.getChatRooms(any(), any()))
                 .willReturn(response);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/chat")
-                        .with(csrf()))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/chat"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].chatRoomId").value(1))
                 .andExpect(jsonPath("$.content[0].lastMessage").value("hi"))
@@ -113,8 +111,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     @WithFakeUser
     @DisplayName("채팅방에 입장한다.")
     void enterChatRoom() throws Exception {
-        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/chat/{chatRoomId}", "1")
-                        .with(csrf()))
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/api/chat/{chatRoomId}", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andDo(document("chat-enter",
