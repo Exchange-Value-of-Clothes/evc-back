@@ -5,6 +5,7 @@ import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +37,7 @@ public class FakeChatMessageRepository implements ChatMessageRepository {
     }
 
     @Override
-    public SliceResponse<ChatRoomListResponse> getLastMessages(Long memberId) {
+    public SliceResponse<ChatRoomListResponse> getLastMessages(Long memberId, LocalDateTime cursor) {
         return null;
     }
 

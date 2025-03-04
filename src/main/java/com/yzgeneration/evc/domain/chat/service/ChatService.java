@@ -16,7 +16,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 import static com.yzgeneration.evc.domain.chat.SessionConstant.CHAT_ROOM_KEY;
 import static com.yzgeneration.evc.domain.chat.SessionConstant.MEMBER_KEY;
@@ -38,8 +38,8 @@ public class ChatService {
         chatMemberRepository.save(ChatMember.create(chatRoomId, ownerId));
     }
 
-    public SliceResponse<ChatRoomListResponse> getChatRooms(Long memberId) {
-        return chatMessageRepository.getLastMessages(memberId);
+    public SliceResponse<ChatRoomListResponse> getChatRooms(Long memberId, LocalDateTime cursor) {
+        return chatMessageRepository.getLastMessages(memberId, cursor);
     }
 
     public void enterChatRoom(Long chatRoomId, Long memberId) {
