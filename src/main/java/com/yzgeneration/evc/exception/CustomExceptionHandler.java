@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -8,6 +9,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @RestControllerAdvice
 public class CustomExceptionHandler {
     @ExceptionHandler(CustomException.class)
@@ -15,8 +17,9 @@ public class CustomExceptionHandler {
         return ErrorResponse.toResponse(e.getErrorCode(), e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler // TODO
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {
+        log.error(e.getMessage(), e);
         if (e instanceof MethodArgumentTypeMismatchException) {
             String errorMessage = e.getMessage();
             String parameterName = extractParameterName(errorMessage);

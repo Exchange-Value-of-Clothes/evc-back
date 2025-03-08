@@ -7,6 +7,8 @@ import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 
 @Repository
 @RequiredArgsConstructor
@@ -22,7 +24,8 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
-    public ChatRoom getById(Long id) {
-        return chatRoomJpaRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.CHAT_NOT_FOUND)).toModel();
+    public Optional<ChatRoom> findByUsedItemIdAndParticipantId(Long usedItemId, Long participantId) {
+        return chatRoomJpaRepository.findByUsedItemIdAndParticipantId(usedItemId, participantId)
+                .map(ChatRoomEntity::toModel);
     }
 }
