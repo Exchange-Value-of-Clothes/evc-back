@@ -1,10 +1,11 @@
 package com.yzgeneration.evc.chat.service;
 
-import com.yzgeneration.evc.domain.chat.dto.Chatting;
+import com.yzgeneration.evc.common.dto.SliceResponse;
+import com.yzgeneration.evc.domain.chat.dto.ChatMessageSliceResponse;
+import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
 import com.yzgeneration.evc.domain.chat.implement.SessionAttributeAccessor;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatConnectionRepository;
-import com.yzgeneration.evc.domain.chat.infrastructure.ChatMemberRepository;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
@@ -16,6 +17,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -42,14 +45,20 @@ class ChatServiceTest {
     }
 
     @Test
-    @DisplayName("중고상품 아이디와 소유자 아이디를 통해 채팅방과 채팅멤버를 생성할 수 있다.")
-    void createChatRoomAndChatMember() {
+    @DisplayName("거래하기 요청을 통해 채팅방을 (없다면 생성 후) 조회할 수 있다.")
+    void getChatRoomByTradeRequest() {
         // given
         Long usedItemId = 1L;
         Long ownerId = 1L;
+        Long participantId = 2L;
         // when
+        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
         // then
-        chatService.createChatRoomAndChatMember(usedItemId, ownerId);
+        assertThat(chatMessageSliceResponse.getChatRoomId()).isEqualTo(1L);
+        assertThat(chatMessageSliceResponse.getContent()).isEqualTo(List.of());
+        assertThat(chatMessageSliceResponse.getSize()).isEqualTo(10);
+        assertThat(chatMessageSliceResponse.getNumberOfElements()).isZero();
+        assertThat(chatMessageSliceResponse.isHasNext()).isFalse();
     }
 
     /**
@@ -76,6 +85,21 @@ class ChatServiceTest {
     @DisplayName("채팅방목록들을 최근 메시지와 함께 조회할 수 있다.")
     void getChatRooms() {
         // given
+        Long usedItemId = 1L;
+        Long ownerId = 1L;
+        Long participantId = 2L;
+        chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        ChatMessage chatMessage = ChatMessage.create(1L, 1L, "content", false);
+        ChatMessage chatMessage2 = ChatMessage.create(1L, 1L, "content2", false);
+        chatMessageRepository.save(chatMessage);
+        chatMessageRepository.save(chatMessage2);
+        // when
+        SliceResponse<ChatRoomListResponse> response = chatService.getChatRooms(ownerId, null);
+        // then
+        assertThat(response.getContent().size()).isEqualTo(2);
+        assertThat(response.getNumberOfElements()).isEqualTo(2);
+        assertThat(response.getContent().get(0).getLastMessage()).isEqualTo("content2");
+        assertThat(response.getContent().get(0).getChatRoomId()).isEqualTo(1L);
 
     }
 }
