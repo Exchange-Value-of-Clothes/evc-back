@@ -12,18 +12,16 @@ public class ChatRoom {
     private Long id;
     private Long usedItemId;
     private Long ownerId;
-    private Long participationId;
+    private Long participantId;
     private LocalDateTime createdAt;
 
-    public static ChatRoom create(Long usedItemId, Long ownerId) {
+    public static ChatRoom create(Long usedItemId, Long ownerId, Long participantId) {
         return ChatRoom.builder()
                 .usedItemId(usedItemId)
                 .ownerId(ownerId)
+                .participantId(participantId)
                 .createdAt(LocalDateTime.now())
                 .build();
     }
 
-    public void enter(Long memberId) {
-        this.participationId = memberId;
-    }
 }

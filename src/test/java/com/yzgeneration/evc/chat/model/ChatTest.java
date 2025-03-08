@@ -3,7 +3,6 @@ package com.yzgeneration.evc.chat.model;
 import com.yzgeneration.evc.domain.chat.model.ChatMember;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.domain.chat.model.ChatRoom;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,14 +16,15 @@ class ChatTest {
         // given
         Long usedItemId = 1L;
         Long ownerId = 1L;
+        Long participantId = 2L;
 
         // when
-        ChatRoom chatRoom = ChatRoom.create(usedItemId, ownerId);
+        ChatRoom chatRoom = ChatRoom.create(usedItemId, ownerId, participantId);
 
         // then
         assertThat(chatRoom.getUsedItemId()).isEqualTo(usedItemId);
         assertThat(chatRoom.getOwnerId()).isEqualTo(ownerId);
-        assertThat(chatRoom.getParticipationId()).isNull();
+        assertThat(chatRoom.getParticipantId()).isEqualTo(participantId);
     }
 
     @Test

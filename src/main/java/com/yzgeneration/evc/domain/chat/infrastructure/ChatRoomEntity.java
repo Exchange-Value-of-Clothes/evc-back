@@ -19,7 +19,7 @@ public class ChatRoomEntity {
     private Long id;
     private Long usedItemId;
     private Long ownerId;
-    private Long participationId;
+    private Long participantId;
     private LocalDateTime createdAt;
 
     public static ChatRoomEntity from(ChatRoom chatRoom) {
@@ -27,7 +27,7 @@ public class ChatRoomEntity {
                 .id(chatRoom.getId())
                 .usedItemId(chatRoom.getUsedItemId())
                 .ownerId(chatRoom.getOwnerId())
-                .participationId(chatRoom.getParticipationId())
+                .participantId(chatRoom.getParticipantId())
                 .createdAt(LocalDateTime.now())
                 .build();
     }
@@ -37,7 +37,7 @@ public class ChatRoomEntity {
                 .id(id)
                 .usedItemId(usedItemId)
                 .ownerId(ownerId)
-                .participationId(participationId)
+                .participantId(participantId)
                 .createdAt(createdAt)
                 .build();
     }
