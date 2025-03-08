@@ -64,7 +64,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.size").value(10))
                 .andExpect(jsonPath("$.numberOfElements").value(1))
                 .andExpect(jsonPath("$.cursor").value("+1000000000-01-01T00:00:00"))
-                .andDo(document("chat-create",
+                .andDo(document("chat-enter",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
@@ -151,7 +151,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.size").value(10))
                 .andExpect(jsonPath("$.numberOfElements").value(1))
                 .andExpect(jsonPath("$.cursor").value("+1000000000-01-01T00:00:00"))
-                .andDo(document("chat-enter",
+                .andDo(document("chat-getChatRoom",
                         preprocessResponse(prettyPrint()),
                         pathParameters(
                                 parameterWithName("chatRoomId").description("채팅방 아이디")

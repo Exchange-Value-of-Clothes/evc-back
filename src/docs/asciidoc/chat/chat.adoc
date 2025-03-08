@@ -1,19 +1,9 @@
-[[chat-create]]
-== 채팅방 생성
-
-=== HTTP Request
-include::{snippets}/chat-create/http-request.adoc[]
-include::{snippets}/chat-create/query-parameters.adoc[]
-
-=== HTTP Response
-include::{snippets}/chat-create/http-response.adoc[]
-
 [[chat-enter]]
-== 채팅방 입장
+== 거래하기 요청을 통한 채팅방 생성 혹은 조회
 
 === HTTP Request
 include::{snippets}/chat-enter/http-request.adoc[]
-include::{snippets}/chat-enter/path-parameters.adoc[]
+include::{snippets}/chat-enter/request-body.adoc[]
 
 === HTTP Response
 include::{snippets}/chat-enter/http-response.adoc[]
@@ -26,3 +16,15 @@ include::{snippets}/chat-getChatRooms/http-request.adoc[]
 
 === HTTP Response
 include::{snippets}/chat-getChatRooms/http-response.adoc[]
+
+[[chat-getChatRoom]]
+== 채팅방 조회
+
+=== HTTP Request
+include::{snippets}/chat-getChatRoom/http-request.adoc[]
+include::{snippets}/chat-getChatRoom/path-parameters.adoc[]
+include::{snippets}/chat-getChatRoom/query-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/chat-enter/http-response.adoc[]
+
