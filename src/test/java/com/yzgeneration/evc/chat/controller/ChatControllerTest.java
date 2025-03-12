@@ -6,7 +6,6 @@ import com.yzgeneration.evc.domain.chat.controller.ChatController;
 import com.yzgeneration.evc.domain.chat.dto.ChatMessageResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatMessageSliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
-import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
 import com.yzgeneration.evc.fixture.ChatFixture;
 import com.yzgeneration.evc.mock.WithFakeUser;
@@ -48,9 +47,6 @@ class ChatControllerTest {
 
     @MockitoBean
     private ChatService chatService;
-
-    @MockitoBean
-    private ChatConnectionManager chatConnectionManager;
 
     @Test
     @WithFakeUser
