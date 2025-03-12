@@ -37,11 +37,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ChatControllerDocsTest extends RestDocsSupport {
 
     private final ChatService chatService = mock(ChatService.class);
-    private final ChatConnectionManager chatConnectionManager = mock(ChatConnectionManager.class);
 
     @Override
     protected Object initController() {
-        return new ChatController(chatService, chatConnectionManager);
+        return new ChatController(chatService);
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatMessageSliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
+import com.yzgeneration.evc.domain.chat.implement.ChatRoomManager;
 import com.yzgeneration.evc.domain.chat.implement.SessionAttributeAccessor;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatConnectionRepository;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
@@ -25,18 +26,20 @@ import static org.assertj.core.api.Assertions.*;
 class ChatServiceTest {
 
     private ChatService chatService;
+    private ChatRoomManager chatRoomManager;
     private ChatConnectionRepository connectionRepository;
     private ChatConnectionManager chatConnectionManager;
     private ChatMessageRepository chatMessageRepository;
 
     @BeforeEach
     void init() {
+        chatRoomManager = new ChatRoomManager(new FakeChatRoomRepository(),
+                new FakeChatMemberRepository());
         connectionRepository = new FakeChatConnectionRepository();
         chatConnectionManager = new ChatConnectionManager(connectionRepository);
         chatMessageRepository = new FakeChatMessageRepository();
         chatService = new ChatService(
-                new FakeChatRoomRepository(),
-                new FakeChatMemberRepository(),
+                chatRoomManager,
                 chatMessageRepository,
                 chatConnectionManager,
                 new SessionAttributeAccessor(),

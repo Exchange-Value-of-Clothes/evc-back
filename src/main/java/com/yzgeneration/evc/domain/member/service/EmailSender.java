@@ -22,7 +22,7 @@ public class EmailSender implements MailSender {
     private String from;
 
     @Override
-    public void send(Email email) {
+    public void send(Email email) { // TODO @Async, ThreadPoolTaskExecutor 등록, https://wonit.tistory.com/669
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
         try {
