@@ -3,7 +3,6 @@ package com.yzgeneration.evc.docs.usedItem;
 import com.yzgeneration.evc.docs.RestDocsSupport;
 import com.yzgeneration.evc.domain.useditem.controller.UsedItemController;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.CreateUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsDetails;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsResponse;
@@ -29,7 +28,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -58,12 +57,6 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
 
         CreateUsedItemRequest usedItem = UsedItemFixture.fixCreateUsedItemRequest();
         MockMultipartFile usedItemReq = new MockMultipartFile("createUsedItemRequest", "", "application/json", objectMapper.writeValueAsBytes(usedItem));
-
-        CreateUsedItemResponse createUsedItemResponse = new CreateUsedItemResponse(memberPrincipal.getId(), 1L);
-
-        when(usedItemService.createUsedItem(anyLong(), any(CreateUsedItemRequest.class), anyList()))
-                .thenReturn(createUsedItemResponse);
-
 
         mockMvc.perform(MockMvcRequestBuilders
                         .multipart("/api/useditems")
@@ -181,8 +174,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                 .viewCount(0)
                 .likeCount(0)
                 .chattingCount(0)
-                .memberId(1L)
-                .nickName("highyun")
+                .marketMemberId(1L)
+                .marketNickName("highyun")
                 .isOwned(true)
                 .createAt(LocalDateTime.now())
                 .usedItemStatus(UsedItemStatus.ACTIVE)
