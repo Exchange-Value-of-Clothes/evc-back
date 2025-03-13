@@ -31,7 +31,7 @@ public class UsedItemImageEntity {
         return UsedItemImage.builder()
                 .id(id)
                 .usedItemId(usedItemId)
-                .imageURL(getImageURL())
+                .imageURL(imageURL)
                 .build();
     }
 }
