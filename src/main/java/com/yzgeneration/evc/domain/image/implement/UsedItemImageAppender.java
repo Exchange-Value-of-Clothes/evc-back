@@ -1,11 +1,9 @@
 package com.yzgeneration.evc.domain.image.implement;
 
 import com.yzgeneration.evc.domain.image.model.UsedItemImage;
-import com.yzgeneration.evc.domain.image.service.port.S3FileHandler;
 import com.yzgeneration.evc.domain.image.service.port.UsedItemImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,10 +11,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsedItemImageAppender {
     private final UsedItemImageRepository usedItemImageRepository;
-    private final S3FileHandler s3FileHandler;
+    private final S3ImageHandler s3ImageHandler;
 
-    public void createUsedItemImages(Long itemId, List<MultipartFile> imageFiles) {
-        List<String> imageURLs = imageFiles.stream().map(s3FileHandler::uploadFileToS3).toList();
+    public void createUsedItemImages(Long itemId, List<String> imageNames) {
+        List<String> imageURLs = imageNames.stream().map(s3ImageHandler::getImageUrl).toList();
         usedItemImageRepository.saveAll(imageURLs.stream().map(imageURL -> UsedItemImage.create(itemId, imageURL)).toList());
     }
 }
