@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class UsedItemRequest {
     @Getter
     @NoArgsConstructor
@@ -33,6 +35,8 @@ public class UsedItemRequest {
 
         @NotNull(message = "거래방법을 선택해주세요.")
         private String transactionMode;
+
+        private List<String> imageNames;
 
         @Override
         public void valid() {
