@@ -8,7 +8,6 @@ import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
