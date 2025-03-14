@@ -57,14 +57,14 @@ class UsedItemControllerTest {
     @DisplayName("중고상품을 생성한다.")
     void createUsedItem() throws Exception {
 
-        CreateUsedItemRequest usedItemRequest = fixCreateUsedItemRequest();
+        CreateUsedItemRequest createUsedItemRequest = fixCreateUsedItemRequest();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MemberPrincipal memberPrincipal = (MemberPrincipal) authentication.getPrincipal();
 
-        usedItemService.createUsedItem(memberPrincipal.getId(), usedItemRequest);
+        usedItemService.createUsedItem(memberPrincipal.getId(), createUsedItemRequest);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/useditems")
-                        .content(objectMapper.writeValueAsString(usedItemRequest))
+                        .content(objectMapper.writeValueAsString(createUsedItemRequest))
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))
                 .andExpect(status().isOk())
@@ -82,7 +82,7 @@ class UsedItemControllerTest {
                 .price(10000)
                 .transactionMode(TransactionMode.BUY)
                 .transactionStatue(TransactionStatue.ONGOING)
-                .imageURLs(List.of("http://localhost:8080/test-image/usedItem.jpg"))
+                .imageURLs(List.of("http://localhost:8080/image/1234.jpg"))
                 .likeCount(0)
                 .createAt(LocalDateTime.now())
                 .usedItemStatus(UsedItemStatus.ACTIVE)
@@ -114,7 +114,7 @@ class UsedItemControllerTest {
                 .transactionType(TransactionType.DIRECT)
                 .transactionMode(TransactionMode.BUY)
                 .transactionStatue(TransactionStatue.ONGOING)
-                .imageURLs(List.of("http://localhost:8080/test-image/usedItem.jpg"))
+                .imageURLs(List.of("http://localhost:8080/image/1234.jpg"))
                 .viewCount(0)
                 .likeCount(0)
                 .chattingCount(0)
