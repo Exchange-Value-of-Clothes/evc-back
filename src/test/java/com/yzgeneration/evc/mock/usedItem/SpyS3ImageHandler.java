@@ -1,25 +1,16 @@
 package com.yzgeneration.evc.mock.usedItem;
 
-import com.yzgeneration.evc.domain.image.service.port.S3FileHandler;
-import org.springframework.core.io.UrlResource;
-import org.springframework.web.multipart.MultipartFile;
+import com.yzgeneration.evc.domain.image.implement.S3ImageHandler;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+public class SpyS3ImageHandler implements S3ImageHandler {
 
-public class SpyS3ImageHandler implements S3FileHandler {
     @Override
-    public String uploadFileToS3(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-        return "http://test-s3-bucket/" + fileName;
+    public String getPresignedURLForUpload(String prefix, String fileName) {
+        return String.format("%s/%s", prefix, "1234" + "-" + fileName);
     }
 
     @Override
-    public UrlResource getS3Image(String fileName) throws MalformedURLException {
-        return new UrlResource(new URL("http://test-s3-bucket/" + fileName));
-    }
-
-    @Override
-    public void deleteS3Image(String fileName) {
+    public String getImageUrl(String fileName) {
+        return "http://localhost/images/1234.jpg";
     }
 }

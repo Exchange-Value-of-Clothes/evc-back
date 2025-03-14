@@ -6,10 +6,10 @@ import com.yzgeneration.evc.validator.EnumValidator;
 import com.yzgeneration.evc.validator.Validatable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 public class UsedItemRequest {
     @Getter
@@ -33,6 +33,8 @@ public class UsedItemRequest {
 
         @NotNull(message = "거래방법을 선택해주세요.")
         private String transactionMode;
+
+        private List<String> imageNames;
 
         @Override
         public void valid() {

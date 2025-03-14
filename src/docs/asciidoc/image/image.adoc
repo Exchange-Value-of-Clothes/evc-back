@@ -1,0 +1,14 @@
+[[image-presignedURL-create]]
+== presigned url 발급
+
+=== HTTP Request
+
+include::{snippets}/image-presignedURL-create/http-request.adoc[]
+include::{snippets}/image-presignedURL-create/query-parameters.adoc[]
+include::{snippets}/image-presignedURL-create/request-parts.adoc[]
+
+=== HTTP Response
+
+include::{snippets}/image-presignedURL-create/http-response.adoc[]
+include::{snippets}/image-presignedURL-create/response-fields.adoc[]
+

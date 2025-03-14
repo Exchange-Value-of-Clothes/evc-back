@@ -25,6 +25,11 @@ include::authentication/authentication.adoc[]
 
 include::usedItem/usedItem.adoc[]
 
+[[Image-API]]
+== Image API
+
+include::image/image.adoc[]
+
 [[Chat-API]]
 == Chat API
 

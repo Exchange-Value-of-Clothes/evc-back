@@ -12,6 +12,6 @@ public class UsedItemImageLoader {
     private final UsedItemImageRepository usedItemImageRepository;
 
     public List<String> loadUsedItemImages(Long itemId) {
-        return usedItemImageRepository.findUsedItemImagesById(itemId);
+        return usedItemImageRepository.findImageURLsByUsedItemId(itemId);
     }
 }
