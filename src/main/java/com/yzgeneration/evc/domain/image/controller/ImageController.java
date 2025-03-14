@@ -16,7 +16,7 @@ public class ImageController {
     private final ImageService imageService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<ImageResponse> getPresignedURLs(@RequestParam String prefix, @RequestPart List<MultipartFile> imageFiles) {
+    public List<ImageResponse> createPresignedURL(@RequestParam String prefix, @RequestPart List<MultipartFile> imageFiles) {
         return imageService.generatePresignedURL(prefix, imageFiles);
     }
 }
