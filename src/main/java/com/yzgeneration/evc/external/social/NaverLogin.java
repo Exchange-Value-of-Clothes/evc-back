@@ -3,6 +3,7 @@ package com.yzgeneration.evc.external.social;
 
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
+import com.yzgeneration.evc.exception.SocialLoginException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +66,7 @@ public class NaverLogin implements SocialLogin {
                 .getBody();
 
         if (response == null || response.access_token == null) {
-            throw new CustomException(ErrorCode.SOCIAL_PLATFORM_SERVER_ERROR, "소셜 로그인 중 액세스 토큰 요청에 실패했습니다.");
+            throw new SocialLoginException();
         }
         return response.access_token;
     }
