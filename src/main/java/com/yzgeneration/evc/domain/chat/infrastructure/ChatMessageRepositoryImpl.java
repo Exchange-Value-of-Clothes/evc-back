@@ -91,7 +91,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
                 ),
                 Aggregation.sort(Sort.Direction.DESC, "createdAt"),
                 Aggregation.limit(size + 1),
-                Aggregation.project( "createdAt")
+                Aggregation.project( "createdAt", "senderId")
                         .and("content").as("message")
         );
 
