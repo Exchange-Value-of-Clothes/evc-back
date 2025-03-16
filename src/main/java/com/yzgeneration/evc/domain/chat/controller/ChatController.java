@@ -6,6 +6,8 @@ import com.yzgeneration.evc.domain.chat.service.ChatService;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +33,11 @@ public class ChatController {
     @GetMapping("/{chatRoomId}")
     public ChatMessageSliceResponse getChatRoom(@PathVariable("chatRoomId") Long chatRoomId, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
         return chatService.getChatRoomByListSelection(chatRoomId, cursor);
+    }
+
+    @MessageMapping("chat.message") // SimpHeaderAccessor
+    public void sendMessage(StompHeaderAccessor accessor, Chatting chatting) {
+        chatService.send(accessor, chatting);
     }
 
     // TODO 채팅방 탈퇴, 모든 인원이 다 나가면 채팅방 삭제
