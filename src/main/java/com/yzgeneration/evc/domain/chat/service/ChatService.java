@@ -32,15 +32,15 @@ public class ChatService {
 
     public ChatMessageSliceResponse getChatRoomByTradeRequest(Long usedItemId, Long ownerId, Long participantId) {
         ChatRoom chatRoom = chatRoomManager.getOrCreate(usedItemId, ownerId, participantId);
-        return chatMessageRepository.getLastMessages(chatRoom.getId(), LocalDateTime.now());
+        return chatMessageRepository.getLastMessages(participantId, chatRoom.getId(), LocalDateTime.now());
     }
 
     public SliceResponse<ChatRoomListResponse> getChatRooms(Long memberId, LocalDateTime cursor) {
         return chatMessageRepository.getChatRooms(memberId, cursor);
     }
 
-    public ChatMessageSliceResponse getChatRoomByListSelection(Long chatRoomId, LocalDateTime cursor) {
-        return chatMessageRepository.getLastMessages(chatRoomId, cursor);
+    public ChatMessageSliceResponse getChatRoomByListSelection(Long chatRoomId, LocalDateTime cursor, Long memberId) {
+        return chatMessageRepository.getLastMessages(memberId, chatRoomId, cursor);
     }
 
     public void send(StompHeaderAccessor accessor, Chatting chatting) {

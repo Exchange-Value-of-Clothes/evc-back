@@ -47,7 +47,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     @DisplayName("거래하기 기능을 통해 채팅방을 생성하거나 조회한다.")
     void enter() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
-        response.add(new ChatMessageResponse(1L, "message", LocalDateTime.MIN));
+        response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
         ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
         given(chatService.getChatRoomByTradeRequest(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
@@ -59,6 +59,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.chatRoomId").value("1"))
                 .andExpect(jsonPath("$.content[0].message").value("message"))
                 .andExpect(jsonPath("$.content[0].senderId").value(1L))
+                .andExpect(jsonPath("$.content[0].isMine").value(true))
                 .andExpect(jsonPath("$.content[0].createdAt").value("+1000000000-01-01T00:00:00"))
                 .andExpect(jsonPath("$.hasNext").value(false))
                 .andExpect(jsonPath("$.size").value(10))
@@ -82,6 +83,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                         .description("채팅 메시지"),
                                 fieldWithPath("content[].senderId").type(JsonFieldType.NUMBER)
                                         .description("채팅 보낸 멤버의 id"),
+                                fieldWithPath("content[].isMine").type(JsonFieldType.BOOLEAN)
+                                        .description("본인 소유 채팅 여부"),
                                 fieldWithPath("content[].createdAt").type(JsonFieldType.STRING)
                                         .description("메시지 전송 시간 (예: yyyy-MM-dd'T'HH:mm:ss)"),
                                 fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
@@ -137,9 +140,9 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     @DisplayName("채팅방을 조회한다.")
     void getChatRoom() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
-        response.add(new ChatMessageResponse(1L, "message", LocalDateTime.MIN));
+        response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
         ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
-        given(chatService.getChatRoomByListSelection(any(), any()))
+        given(chatService.getChatRoomByListSelection(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
         mockMvc.perform(RestDocumentationRequestBuilders.get("/api/chat/{chatRoomId}", "1")
@@ -149,6 +152,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.chatRoomId").value("1"))
                 .andExpect(jsonPath("$.content[0].message").value("message"))
                 .andExpect(jsonPath("$.content[0].senderId").value(1L))
+                .andExpect(jsonPath("$.content[0].isMine").value(true))
                 .andExpect(jsonPath("$.content[0].createdAt").value("+1000000000-01-01T00:00:00"))
                 .andExpect(jsonPath("$.hasNext").value(false))
                 .andExpect(jsonPath("$.size").value(10))
@@ -172,6 +176,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("content[].message").type(JsonFieldType.STRING)
                                         .description("채팅 메시지"),
                                 fieldWithPath("content[].senderId").type(JsonFieldType.NUMBER)
+                                        .description("채팅 보낸 멤버의 id"),
+                                fieldWithPath("content[].isMine").type(JsonFieldType.BOOLEAN)
                                         .description("채팅 보낸 멤버의 id"),
                                 fieldWithPath("content[].createdAt").type(JsonFieldType.STRING)
                                         .description("메시지 전송 시간 (예: yyyy-MM-dd'T'HH:mm:ss)"),

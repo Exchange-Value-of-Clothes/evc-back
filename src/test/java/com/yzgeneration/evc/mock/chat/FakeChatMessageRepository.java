@@ -74,7 +74,7 @@ public class FakeChatMessageRepository implements ChatMessageRepository {
 
 
     @Override
-    public ChatMessageSliceResponse getLastMessages(Long chatRoomId, LocalDateTime cursor) {
+    public ChatMessageSliceResponse getLastMessages(Long memberId, Long chatRoomId, LocalDateTime cursor) {
         int size = 10;
 
         // 해당 채팅방의 메시지 필터링
@@ -83,7 +83,7 @@ public class FakeChatMessageRepository implements ChatMessageRepository {
                 .filter(msg -> cursor == null || msg.getCreatedAt().isBefore(cursor)) // 커서 기준 이전 메시지만 조회
                 .sorted(Comparator.comparing(ChatMessage::getCreatedAt).reversed()) // 최신순 정렬
                 .limit(size + 1) // hasNext 확인을 위해 size+1 조회
-                .map(msg -> new ChatMessageResponse(msg.getSenderId(), msg.getContent(), msg.getCreatedAt()))
+                .map(msg -> new ChatMessageResponse(msg.getSenderId(), msg.getSenderId().equals(memberId), msg.getContent(), msg.getCreatedAt()))
                 .toList();
 
         // hasNext 처리

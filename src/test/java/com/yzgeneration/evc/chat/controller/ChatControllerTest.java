@@ -53,7 +53,7 @@ class ChatControllerTest {
     @DisplayName("거래하기 기능을 통해 채팅방을 생성하거나 조회한다.")
     void enter() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
-        response.add(new ChatMessageResponse(1L, "message", LocalDateTime.MIN));
+        response.add(new ChatMessageResponse(1L, true,"message", LocalDateTime.MIN));
         ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
         given(chatService.getChatRoomByTradeRequest(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
@@ -66,6 +66,7 @@ class ChatControllerTest {
                 .andExpect(jsonPath("$.chatRoomId").value("1"))
                 .andExpect(jsonPath("$.content[0].message").value("message"))
                 .andExpect(jsonPath("$.content[0].senderId").value(1L))
+                .andExpect(jsonPath("$.content[0].isMine").value(true))
                 .andExpect(jsonPath("$.content[0].createdAt").value("+1000000000-01-01T00:00:00"))
                 .andExpect(jsonPath("$.hasNext").value(false))
                 .andExpect(jsonPath("$.size").value(10))
@@ -100,9 +101,9 @@ class ChatControllerTest {
     @DisplayName("채팅방을 조회한다.")
     void getChatRoom() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
-        response.add(new ChatMessageResponse(1L, "message", LocalDateTime.MIN));
+        response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
         ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
-        given(chatService.getChatRoomByListSelection(any(), any()))
+        given(chatService.getChatRoomByListSelection(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/chat/{chatRoomId}", "1")
                         .param("cursor", LocalDateTime.MIN.toString())
@@ -110,6 +111,7 @@ class ChatControllerTest {
                 .andExpect(jsonPath("$.chatRoomId").value("1"))
                 .andExpect(jsonPath("$.content[0].message").value("message"))
                 .andExpect(jsonPath("$.content[0].senderId").value(1L))
+                .andExpect(jsonPath("$.content[0].isMine").value(true))
                 .andExpect(jsonPath("$.content[0].createdAt").value("+1000000000-01-01T00:00:00"))
                 .andExpect(jsonPath("$.hasNext").value(false))
                 .andExpect(jsonPath("$.size").value(10))

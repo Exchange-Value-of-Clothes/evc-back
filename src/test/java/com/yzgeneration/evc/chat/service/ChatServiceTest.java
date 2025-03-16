@@ -23,17 +23,17 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
+// TODO 본인 소유 채팅 확인 추가
 class ChatServiceTest {
 
     private ChatService chatService;
-    private ChatRoomManager chatRoomManager;
     private ChatConnectionRepository connectionRepository;
     private ChatConnectionManager chatConnectionManager;
     private ChatMessageRepository chatMessageRepository;
 
     @BeforeEach
     void init() {
-        chatRoomManager = new ChatRoomManager(new FakeChatRoomRepository(),
+        ChatRoomManager chatRoomManager = new ChatRoomManager(new FakeChatRoomRepository(),
                 new FakeChatMemberRepository());
         connectionRepository = new FakeChatConnectionRepository();
         chatConnectionManager = new ChatConnectionManager(connectionRepository);
