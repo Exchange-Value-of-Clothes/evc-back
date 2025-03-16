@@ -1,0 +1,54 @@
+package com.yzgeneration.evc.external.pg;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
+@Component
+@RequiredArgsConstructor
+public class TossPayments implements PaymentGateway{
+
+    @Value("${TOSS_SECRET}")
+    private String secret;
+
+    private final ObjectMapper objectMapper;
+
+    @Override
+    public void confirm(String orderId, String paymentKey, int amount) {
+        String credentials = secret + ":";
+        String secretKey = "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
+        RestClient restClient = RestClient.create("https://api.tosspayments.com/v1/payments/confirm");
+        ResponseEntity<Void> response = restClient.post()
+                .header("Authorization", secretKey)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(createRequestBody(new TossConfirmRequest(orderId, paymentKey, amount)))
+                .retrieve()
+                .toBodilessEntity();
+
+        if (response.getStatusCode().is5xxServerError()) {
+
+        }
+
+
+
+
+    }
+
+    private String createRequestBody(TossConfirmRequest request) {
+        try {
+            return objectMapper.writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            throw new CustomException(ErrorCode.JsonSerializationException, e.getMessage());
+        }
+    }
+}
