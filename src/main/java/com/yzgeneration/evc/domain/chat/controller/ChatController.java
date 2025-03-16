@@ -31,8 +31,9 @@ public class ChatController {
     }
 
     @GetMapping("/{chatRoomId}")
-    public ChatMessageSliceResponse getChatRoom(@PathVariable("chatRoomId") Long chatRoomId, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
-        return chatService.getChatRoomByListSelection(chatRoomId, cursor);
+    public ChatMessageSliceResponse getChatRoom(@PathVariable("chatRoomId") Long chatRoomId, @RequestParam(value = "cursor", required = false) LocalDateTime cursor,
+                                                @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        return chatService.getChatRoomByListSelection(chatRoomId, cursor, memberPrincipal.getId());
     }
 
     @MessageMapping("chat.message") // SimpHeaderAccessor

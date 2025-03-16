@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class ChatMessageResponse {
 
     private Long senderId;
+    private Boolean isMine;
     private String message;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;

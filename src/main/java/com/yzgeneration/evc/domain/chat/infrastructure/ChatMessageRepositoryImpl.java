@@ -80,7 +80,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
     }
 
     @Override
-    public ChatMessageSliceResponse getLastMessages(Long chatRoomId, LocalDateTime cursor) {
+    public ChatMessageSliceResponse getLastMessages(Long memberId, Long chatRoomId, LocalDateTime cursor) {
 
         int size=10;
 
@@ -93,6 +93,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
                 Aggregation.limit(size + 1),
                 Aggregation.project( "createdAt", "senderId")
                         .and("content").as("message")
+                        .andExpression("senderId == " + memberId).as("isMine")
         );
 
         AggregationResults<ChatMessageResponse> results = mongoTemplate.aggregate(

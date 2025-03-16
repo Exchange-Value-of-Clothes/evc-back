@@ -10,5 +10,5 @@ import java.time.LocalDateTime;
 public interface ChatMessageRepository {
     ChatMessage save(ChatMessage chatMessage);
     SliceResponse<ChatRoomListResponse> getChatRooms(Long memberId, LocalDateTime cursor);
-    ChatMessageSliceResponse getLastMessages(Long chatRoomId, LocalDateTime cursor);
+    ChatMessageSliceResponse getLastMessages(Long memberId, Long chatRoomId, LocalDateTime cursor);
 }
