@@ -41,6 +41,8 @@ dependencies {
 	implementation('com.querydsl:querydsl-mongodb:5.0.0') {
 		exclude group: 'org.mongodb', module: 'mongo-java-driver'
 	}
+	implementation 'io.hypersistence:hypersistence-utils-hibernate-60:3.9.4'
+
 
 
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
