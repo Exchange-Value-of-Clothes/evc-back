@@ -9,4 +9,6 @@ public interface UsedItemImageRepository {
     void saveAll(List<UsedItemImage> usedItemImages);
 
     List<String> findImageURLsByUsedItemId(Long usedItemId);
+
+    String findThumbnailByUsedItemId(Long usedItemId);
 }

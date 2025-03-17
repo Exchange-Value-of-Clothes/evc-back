@@ -20,10 +20,13 @@ public class UsedItemImageEntity {
 
     private String imageURL;
 
+    private boolean isThumbnail;
+
     public static UsedItemImageEntity from(UsedItemImage usedItemImage) {
         return UsedItemImageEntity.builder()
                 .usedItemId(usedItemImage.getUsedItemId())
                 .imageURL(usedItemImage.getImageURL())
+                .isThumbnail(usedItemImage.isThumbnail())
                 .build();
     }
 
@@ -32,6 +35,7 @@ public class UsedItemImageEntity {
                 .id(id)
                 .usedItemId(usedItemId)
                 .imageURL(imageURL)
+                .isThumbnail(isThumbnail)
                 .build();
     }
 }

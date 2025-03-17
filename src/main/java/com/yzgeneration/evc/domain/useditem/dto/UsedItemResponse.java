@@ -50,7 +50,7 @@ public class UsedItemResponse {
 
         private TransactionStatue transactionStatue;
 
-        private List<String> imageURLs;
+        private String imageURL;
 
         private int likeCount;
 
@@ -59,14 +59,14 @@ public class UsedItemResponse {
 
         private UsedItemStatus usedItemStatus;
 
-        public static LoadUsedItemsDetails create(UsedItem usedItem, List<String> imageURLs) {
+        public static LoadUsedItemsDetails create(UsedItem usedItem, String imageURL) {
             return LoadUsedItemsDetails.builder()
                     .usedItemId(usedItem.getId())
                     .title(usedItem.getItemDetails().getTitle())
                     .price(usedItem.getItemDetails().getPrice())
                     .transactionMode(usedItem.getUsedItemTransaction().getTransactionMode())
                     .transactionStatue(usedItem.getUsedItemTransaction().getTransactionStatue())
-                    .imageURLs(imageURLs)
+                    .imageURL(imageURL)
                     .likeCount(usedItem.getItemStats().getLikeCount())
                     .createAt(usedItem.getCreatedAt())
                     .usedItemStatus(usedItem.getUsedItemStatus())

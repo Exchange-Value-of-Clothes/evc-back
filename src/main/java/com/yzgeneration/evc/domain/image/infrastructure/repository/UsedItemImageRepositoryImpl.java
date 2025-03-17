@@ -22,4 +22,9 @@ public class UsedItemImageRepositoryImpl implements UsedItemImageRepository {
     public List<String> findImageURLsByUsedItemId(Long usedItemId) {
         return usedItemImageJPARepository.findImageURLsByUsedItemId(usedItemId);
     }
+
+    @Override
+    public String findThumbnailByUsedItemId(Long usedItemId) {
+        return usedItemImageJPARepository.findThumbnailByUsedItemId(usedItemId);
+    }
 }
