@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.domain.useditem.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
 import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
 import com.yzgeneration.evc.validator.EnumValidator;
@@ -35,6 +36,18 @@ public class UsedItemRequest {
         private String transactionMode;
 
         private List<String> imageNames;
+
+        @JsonCreator
+        public CreateUsedItemRequest(String title, String category, String content, int price, String transactionType, String transactionMode, List<String> imageNames) {
+            this.title = title;
+            this.category = category;
+            this.content = content;
+            this.price = price;
+            this.transactionType = transactionType;
+            this.transactionMode = transactionMode;
+            this.imageNames = imageNames;
+            valid();
+        }
 
         @Override
         public void valid() {
