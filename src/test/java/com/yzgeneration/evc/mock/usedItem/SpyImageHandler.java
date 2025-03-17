@@ -1,8 +1,8 @@
 package com.yzgeneration.evc.mock.usedItem;
 
-import com.yzgeneration.evc.domain.image.implement.S3ImageHandler;
+import com.yzgeneration.evc.domain.image.implement.ImageHandler;
 
-public class SpyS3ImageHandler implements S3ImageHandler {
+public class SpyImageHandler implements ImageHandler {
 
     @Override
     public String getPresignedURLForUpload(String prefix, String fileName) {

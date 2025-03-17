@@ -82,7 +82,7 @@ class UsedItemControllerTest {
                 .price(10000)
                 .transactionMode(TransactionMode.BUY)
                 .transactionStatue(TransactionStatue.ONGOING)
-                .imageURLs(List.of("http://localhost:8080/image/1234.jpg"))
+                .imageURL("http://localhost:8080/image/1234.jpg")
                 .likeCount(0)
                 .createAt(LocalDateTime.now())
                 .usedItemStatus(UsedItemStatus.ACTIVE)

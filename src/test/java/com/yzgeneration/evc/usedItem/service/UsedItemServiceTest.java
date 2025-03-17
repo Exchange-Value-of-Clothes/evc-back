@@ -1,7 +1,6 @@
 package com.yzgeneration.evc.usedItem.service;
 
 import com.yzgeneration.evc.domain.image.implement.UsedItemImageAppender;
-import com.yzgeneration.evc.domain.image.implement.UsedItemImageLoader;
 import com.yzgeneration.evc.domain.image.service.port.UsedItemImageRepository;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemResponse;
@@ -17,7 +16,7 @@ import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
 import com.yzgeneration.evc.domain.useditem.service.port.UsedItemRepository;
 import com.yzgeneration.evc.mock.usedItem.FakeUsedItemImageRepository;
 import com.yzgeneration.evc.mock.usedItem.FakeUsedItemRepository;
-import com.yzgeneration.evc.mock.usedItem.SpyS3ImageHandler;
+import com.yzgeneration.evc.mock.usedItem.SpyImageHandler;
 import org.junit.jupiter.api.*;
 
 import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItemRequest;
@@ -35,10 +34,9 @@ class UsedItemServiceTest {
         UsedItemAppender usedItemAppender = new UsedItemAppender(usedItemRepository);
         UsedItemLoader usedItemLoader = new UsedItemLoader(usedItemRepository);
 
-        UsedItemImageAppender usedItemImageAppender = new UsedItemImageAppender(usedItemImageRepository, new SpyS3ImageHandler());
-        UsedItemImageLoader usedItemImageLoader = new UsedItemImageLoader(usedItemImageRepository);
+        UsedItemImageAppender usedItemImageAppender = new UsedItemImageAppender(usedItemImageRepository, new SpyImageHandler());
 
-        usedItemService = new UsedItemService(usedItemAppender, usedItemImageAppender, usedItemLoader, usedItemImageLoader);
+        usedItemService = new UsedItemService(usedItemAppender, usedItemImageAppender, usedItemLoader, usedItemImageRepository);
     }
 
     @Test
