@@ -3,10 +3,11 @@
 
 === HTTP Request
 include::{snippets}/usedItem-create/http-request.adoc[]
-include::{snippets}/usedItem-create/request-part-createUsedItemRequest-fields.adoc[]
+include::{snippets}/usedItem-create/request-fields.adoc[]
 
 === HTTP Response
 include::{snippets}/usedItem-create/http-response.adoc[]
+include::{snippets}/usedItem-create/response-fields.adoc[]
 
 
 [[usedItems-get]]

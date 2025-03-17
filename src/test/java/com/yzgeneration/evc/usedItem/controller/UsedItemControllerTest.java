@@ -3,7 +3,6 @@ package com.yzgeneration.evc.usedItem.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yzgeneration.evc.domain.useditem.controller.UsedItemController;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.CreateUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsDetails;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsResponse;
@@ -13,7 +12,6 @@ import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
 import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
 import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
 import com.yzgeneration.evc.mock.WithFakeUser;
-import com.yzgeneration.evc.mock.usedItem.MockUsedItemImageFile;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +20,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -34,11 +31,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItemRequest;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = UsedItemController.class,
         excludeFilters = {
@@ -59,25 +56,19 @@ class UsedItemControllerTest {
     @WithFakeUser
     @DisplayName("중고상품을 생성한다.")
     void createUsedItem() throws Exception {
-        CreateUsedItemRequest usedItemRequest = fixCreateUsedItemRequest();
 
-        MockMultipartFile usedItemReq = new MockMultipartFile("createUsedItemRequest", "", "application/json", objectMapper.writeValueAsBytes(usedItemRequest));
-
+        CreateUsedItemRequest createUsedItemRequest = fixCreateUsedItemRequest();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MemberPrincipal memberPrincipal = (MemberPrincipal) authentication.getPrincipal();
-        CreateUsedItemResponse createUsedItemResponse = new CreateUsedItemResponse(memberPrincipal.getId(), 1L);
 
-        when(usedItemService.createUsedItem(anyLong(), any(CreateUsedItemRequest.class), anyList()))
-                .thenReturn(createUsedItemResponse);
+        usedItemService.createUsedItem(memberPrincipal.getId(), createUsedItemRequest);
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/useditems")
-                        .file(usedItemReq)
-                        .file("imageFiles", new MockUsedItemImageFile().getImageFiles().get(0).getBytes())
-                        .file("imageFiles", new MockUsedItemImageFile().getImageFiles().get(1).getBytes())
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/useditems")
+                        .content(objectMapper.writeValueAsString(createUsedItemRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(createUsedItemResponse)));
+                .andExpect(jsonPath("$.success").value(true));
     }
 
     @Test
@@ -91,11 +82,12 @@ class UsedItemControllerTest {
                 .price(10000)
                 .transactionMode(TransactionMode.BUY)
                 .transactionStatue(TransactionStatue.ONGOING)
-                .imageURLs(List.of("http://localhost:8080/test-image/usedItem.jpg"))
+                .imageURL("http://localhost:8080/image/1234.jpg")
                 .likeCount(0)
                 .createAt(LocalDateTime.now())
                 .usedItemStatus(UsedItemStatus.ACTIVE)
                 .build();
+
         LoadUsedItemsResponse loadUsedItemsResponse = LoadUsedItemsResponse.builder()
                 .loadUsedItemDetails(List.of(loadUsedItemsDetails))
                 .isLast(true)
@@ -112,7 +104,8 @@ class UsedItemControllerTest {
     @Test
     @WithFakeUser
     @DisplayName("개별 중고상품 조회")
-    void getUsedItem() {
+    void getUsedItem() throws Exception {
+
         LoadUsedItemResponse loadUsedItemResponse = LoadUsedItemResponse.builder()
                 .title("Test UsedItem")
                 .category("top shirt")
@@ -121,19 +114,25 @@ class UsedItemControllerTest {
                 .transactionType(TransactionType.DIRECT)
                 .transactionMode(TransactionMode.BUY)
                 .transactionStatue(TransactionStatue.ONGOING)
-                .imageURLs(List.of("http://localhost:8080/test-image/usedItem.jpg"))
+                .imageURLs(List.of("http://localhost:8080/image/1234.jpg"))
                 .viewCount(0)
                 .likeCount(0)
                 .chattingCount(0)
-                .memberId(1L)
-                .nickName("highyun")
+                .marketMemberId(1L)
+                .marketNickName("highyun")
                 .isOwned(true)
                 .createAt(LocalDateTime.now())
                 .usedItemStatus(UsedItemStatus.ACTIVE)
                 .build();
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MemberPrincipal memberPrincipal = (MemberPrincipal) authentication.getPrincipal();
+
         when(usedItemService.loadUsedItem(anyLong(), anyLong()))
                 .thenReturn(loadUsedItemResponse);
 
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/useditems/{usedItemId}", memberPrincipal.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(loadUsedItemResponse)));
     }
 }

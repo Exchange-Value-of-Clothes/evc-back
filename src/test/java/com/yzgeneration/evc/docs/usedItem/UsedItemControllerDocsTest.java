@@ -3,7 +3,6 @@ package com.yzgeneration.evc.docs.usedItem;
 import com.yzgeneration.evc.docs.RestDocsSupport;
 import com.yzgeneration.evc.domain.useditem.controller.UsedItemController;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.CreateUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsDetails;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsResponse;
@@ -13,13 +12,10 @@ import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
 import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
 import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
 import com.yzgeneration.evc.fixture.MemberFixture;
-import com.yzgeneration.evc.fixture.usedItem.UsedItemFixture;
-import com.yzgeneration.evc.mock.usedItem.MockUsedItemImageFile;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,7 +25,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.*;
+import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItemRequest;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -55,29 +52,18 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                 memberPrincipal,
                 memberPrincipal.getMember().getId(),
                 memberPrincipal.getAuthorities());
+        CreateUsedItemRequest createUsedItemRequest = fixCreateUsedItemRequest();
 
-        CreateUsedItemRequest usedItem = UsedItemFixture.fixCreateUsedItemRequest();
-        MockMultipartFile usedItemReq = new MockMultipartFile("createUsedItemRequest", "", "application/json", objectMapper.writeValueAsBytes(usedItem));
-
-        CreateUsedItemResponse createUsedItemResponse = new CreateUsedItemResponse(memberPrincipal.getId(), 1L);
-
-        when(usedItemService.createUsedItem(anyLong(), any(CreateUsedItemRequest.class), anyList()))
-                .thenReturn(createUsedItemResponse);
-
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .multipart("/api/useditems")
-                        .file(usedItemReq)
-                        .file("imageFiles", new MockUsedItemImageFile().getImageFiles().get(0).getBytes())
-                        .file("imageFiles", new MockUsedItemImageFile().getImageFiles().get(1).getBytes())
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/useditems")
+                        .content(objectMapper.writeValueAsString(createUsedItemRequest))
                         .with(csrf())
                         .with(SecurityMockMvcRequestPostProcessors.authentication(authentication))
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("usedItem-create",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestPartFields("createUsedItemRequest",
+                        requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING)
                                         .description("중고상품 제목"),
                                 fieldWithPath("category").type(JsonFieldType.STRING)
@@ -89,13 +75,13 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("transactionType").type(JsonFieldType.STRING)
                                         .description("중고상품 거래유형 (DIRECT, DELIVERY)"),
                                 fieldWithPath("transactionMode").type(JsonFieldType.STRING)
-                                        .description("중고상품 거래방법 (SELL, BUY, AUCTION)")
+                                        .description("중고상품 거래방법 (SELL, BUY, AUCTION)"),
+                                fieldWithPath("imageNames").type(JsonFieldType.ARRAY)
+                                        .description("중고상품 이미지 이름 (image api의 response값에 있는 imageName")
                         ),
                         responseFields(
-                                fieldWithPath("memberId").type(JsonFieldType.NUMBER)
-                                        .description("회원의 id"),
-                                fieldWithPath("usedItemId").type(JsonFieldType.NUMBER)
-                                        .description("중고상품의 id")
+                                fieldWithPath("success").type(JsonFieldType.BOOLEAN)
+                                        .description("성공여부")
                         )));
     }
 
@@ -108,7 +94,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                 .price(10000)
                 .transactionMode(TransactionMode.BUY)
                 .transactionStatue(TransactionStatue.ONGOING)
-                .imageURLs(List.of("https://domain/asdfasdfasdf"))
+                .imageURL("https://domain/image/1234.jpg")
                 .likeCount(0)
                 .createAt(LocalDateTime.now())
                 .usedItemStatus(UsedItemStatus.ACTIVE)
@@ -119,7 +105,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                 .price(20000)
                 .transactionMode(TransactionMode.AUCTION)
                 .transactionStatue(TransactionStatue.ONGOING)
-                .imageURLs(List.of("https://domain/asdfasdfasdf"))
+                .imageURL("https://domain/image/5678.jpg")
                 .likeCount(0)
                 .createAt(LocalDateTime.now())
                 .usedItemStatus(UsedItemStatus.ACTIVE)
@@ -153,8 +139,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("중고상품 거래방법 (SELL, BUY, AUCTION)"),
                                 fieldWithPath("loadUsedItemDetails[].transactionStatue").type(JsonFieldType.STRING)
                                         .description("중고상품 거래 상태 (ONGOING, RESERVE, COMPLETE)"),
-                                fieldWithPath("loadUsedItemDetails[].imageURLs").type(JsonFieldType.ARRAY)
-                                        .description("중고상품 이미지 리스트"),
+                                fieldWithPath("loadUsedItemDetails[].imageURL").type(JsonFieldType.STRING)
+                                        .description("중고상품 이미지 (썸네일)"),
                                 fieldWithPath("loadUsedItemDetails[].likeCount").type(JsonFieldType.NUMBER)
                                         .description("게시물 좋아요수"),
                                 fieldWithPath("loadUsedItemDetails[].createAt").type(JsonFieldType.STRING)
@@ -181,8 +167,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                 .viewCount(0)
                 .likeCount(0)
                 .chattingCount(0)
-                .memberId(1L)
-                .nickName("highyun")
+                .marketMemberId(1L)
+                .marketNickName("highyun")
                 .isOwned(true)
                 .createAt(LocalDateTime.now())
                 .usedItemStatus(UsedItemStatus.ACTIVE)
@@ -221,9 +207,9 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("게시물 좋아요수"),
                                 fieldWithPath("chattingCount").type(JsonFieldType.NUMBER)
                                         .description("게시물 채팅수"),
-                                fieldWithPath("memberId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("marketMemberId").type(JsonFieldType.NUMBER)
                                         .description("상점 주인의 id (상점 주인 상세페이지 이동에서 사용될 수 있으니 추가함)"),
-                                fieldWithPath("nickName").type(JsonFieldType.STRING)
+                                fieldWithPath("marketNickName").type(JsonFieldType.STRING)
                                         .description("상점 주인 nickname"),
                                 fieldWithPath("isOwned").type(JsonFieldType.BOOLEAN)
                                         .description("내가 작성한 글인지 유무"),

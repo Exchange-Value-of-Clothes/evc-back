@@ -1,15 +1,16 @@
 package com.yzgeneration.evc.domain.useditem.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
 import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
 import com.yzgeneration.evc.validator.EnumValidator;
 import com.yzgeneration.evc.validator.Validatable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 public class UsedItemRequest {
     @Getter
@@ -33,6 +34,20 @@ public class UsedItemRequest {
 
         @NotNull(message = "거래방법을 선택해주세요.")
         private String transactionMode;
+
+        private List<String> imageNames;
+
+        @JsonCreator
+        public CreateUsedItemRequest(String title, String category, String content, int price, String transactionType, String transactionMode, List<String> imageNames) {
+            this.title = title;
+            this.category = category;
+            this.content = content;
+            this.price = price;
+            this.transactionType = transactionType;
+            this.transactionMode = transactionMode;
+            this.imageNames = imageNames;
+            valid();
+        }
 
         @Override
         public void valid() {
