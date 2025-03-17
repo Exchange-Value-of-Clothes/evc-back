@@ -1,7 +1,7 @@
 package com.yzgeneration.evc.domain.useditem.service;
 
 import com.yzgeneration.evc.domain.image.implement.UsedItemImageAppender;
-import com.yzgeneration.evc.domain.image.implement.UsedItemImageLoader;
+import com.yzgeneration.evc.domain.image.service.port.UsedItemImageRepository;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsDetails;
@@ -18,10 +18,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UsedItemService {
+    //TODO implement 계층 -> repository 직접 사용으로 변경하기 (간단한 함수만 사용하기에)
     private final UsedItemAppender usedItemAppender;
     private final UsedItemImageAppender usedItemImageAppender;
     private final UsedItemLoader usedItemLoader;
-    private final UsedItemImageLoader usedItemImageLoader;
+    private final UsedItemImageRepository usedItemImageRepository;
 
     public void createUsedItem(Long memberId, CreateUsedItemRequest createUsedItemRequest) {
         UsedItem usedItem = usedItemAppender.createUsedItem(memberId, createUsedItemRequest);
@@ -33,7 +34,7 @@ public class UsedItemService {
         List<UsedItem> usedItemList = usedItemSlice.getContent();
 
         List<LoadUsedItemsDetails> loadUsedItemDetails = usedItemList.stream().map(
-                usedItem -> LoadUsedItemsDetails.create(usedItem, usedItemImageLoader.loadUsedItemImages(usedItem.getId()))).toList();
+                usedItem -> LoadUsedItemsDetails.create(usedItem, usedItemImageRepository.findThumbnailByUsedItemId(usedItem.getId()))).toList();
 
         return LoadUsedItemsResponse.builder()
                 .loadUsedItemDetails(loadUsedItemDetails)
@@ -43,7 +44,7 @@ public class UsedItemService {
 
     public LoadUsedItemResponse loadUsedItem(Long memberId, Long usedItemId) {
         UsedItem usedItem = usedItemLoader.loadUsedItem(usedItemId);
-        List<String> imageURLs = usedItemImageLoader.loadUsedItemImages(usedItemId);
+        List<String> imageURLs = usedItemImageRepository.findImageURLsByUsedItemId(usedItemId);
         String marketNickName = usedItemLoader.loadNicknameByUsedItemId(usedItemId);
 
         return LoadUsedItemResponse.create(usedItem, imageURLs, marketNickName, memberId);
