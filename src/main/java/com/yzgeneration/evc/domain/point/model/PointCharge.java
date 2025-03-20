@@ -2,6 +2,8 @@ package com.yzgeneration.evc.domain.point.model;
 
 import com.yzgeneration.evc.domain.point.enums.PointChargeStatus;
 import com.yzgeneration.evc.domain.point.enums.PointChargeType;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -25,5 +27,13 @@ public class PointCharge {
                 .pointChargeStatus(PointChargeStatus.ORDERED)
                 .createdAt(LocalDateTime.now())
                 .build();
+    }
+
+    public void validPoint(int amount) {
+        if (pointChargeType.getPrice() != amount) throw new CustomException(ErrorCode.INVALID_POINT);
+    }
+
+    public void confirm() {
+        this.pointChargeStatus = PointChargeStatus.CHARGED;
     }
 }

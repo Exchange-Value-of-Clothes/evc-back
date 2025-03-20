@@ -1,6 +1,8 @@
 package com.yzgeneration.evc.authentication.implement;
 
+import com.yzgeneration.evc.application.event.MemberPointEventListener;
 import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
+import com.yzgeneration.evc.domain.member.MemberCreatedEvent;
 import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
 import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
@@ -24,6 +26,7 @@ public class AuthenticationProcessor {
     private final MemberRepository memberRepository;
     private final PasswordProcessor passwordProcessor;
     private final SocialLoginProcessor socialLoginProcessor;
+    private final MemberPointEventListener eventListener;
 
     public Member login(String email, String password) {
         Member member = memberRepository.getByEmail(email);
@@ -66,7 +69,11 @@ public class AuthenticationProcessor {
         String accessToken = socialLoginProcessor.getAccessToken(providerType, authorizationCode, state);
         SocialUserProfile socialUserProfile = socialLoginProcessor.getUserProfile(providerType, accessToken);
         Optional<Member> socialMember = memberRepository.findSocialMember(providerType, socialUserProfile.getProviderId());
-        return socialMember.orElseGet(() -> memberRepository.save(Member.socialLogin(providerType, socialUserProfile)));
+        return socialMember.orElseGet(() -> {
+            Member member = memberRepository.save(Member.socialLogin(providerType, socialUserProfile));
+            eventListener.init(new MemberCreatedEvent(member.getId()));
+            return member;
+        });
     }
 
     public ResponseEntity<LoginResponse> getSocialLoginResponse(AuthenticationToken authenticationToken) {

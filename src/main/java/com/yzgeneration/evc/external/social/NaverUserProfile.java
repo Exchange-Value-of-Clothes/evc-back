@@ -13,7 +13,7 @@ public class NaverUserProfile implements SocialUserProfile{
 
     @Getter
     @NoArgsConstructor
-    public static class Response {
+    private static class Response {
         private String id;
         private String nickname;
         private String email;

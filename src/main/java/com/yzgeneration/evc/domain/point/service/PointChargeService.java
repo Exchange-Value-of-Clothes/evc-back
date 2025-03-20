@@ -1,11 +1,12 @@
 package com.yzgeneration.evc.domain.point.service;
 
-import com.yzgeneration.evc.domain.point.dto.PointChargeConfirmRequest;
-import com.yzgeneration.evc.domain.point.dto.PointChargeVerifyRequest;
+import com.yzgeneration.evc.domain.point.implement.PointChargeProcessor;
+import com.yzgeneration.evc.domain.point.implement.PointChargeValidator;
 import com.yzgeneration.evc.domain.point.infrastructure.PointChargeRepository;
 import com.yzgeneration.evc.domain.point.model.PointCharge;
-import com.yzgeneration.evc.exception.CustomException;
-import com.yzgeneration.evc.exception.ErrorCode;
+
+import com.yzgeneration.evc.external.pg.Payment;
+import com.yzgeneration.evc.external.pg.PaymentGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +15,18 @@ import org.springframework.stereotype.Service;
 public class PointChargeService {
 
     private final PointChargeRepository pointChargeRepository;
+    private final PointChargeValidator pointChargeValidator;
+    private final PaymentGateway paymentGateway;
+    private final PointChargeProcessor pointChargeProcessor;
 
     public PointCharge createOrder(PointCharge pointCharge) {
         return pointChargeRepository.save(pointCharge);
     }
 
-    public void verify(PointChargeVerifyRequest pointChargeVerifyRequest) {
-        PointCharge pointCharge = pointChargeRepository.findById(pointChargeVerifyRequest.getOrderId());
-        if (pointCharge.getPointChargeType().getPrice() != pointChargeVerifyRequest.getAmount()) throw new CustomException(ErrorCode.INVALID_POINT);
-    }
-
-    public void confirm(PointChargeConfirmRequest pointChargeConfirmRequest) {
-
+    public void confirm(String orderId, String paymentKey, int amount, Long memberId) {
+        pointChargeValidator.validate(orderId, amount);
+        Payment payment = paymentGateway.confirm(orderId, paymentKey, amount);
+        PointCharge pointCharge = pointChargeRepository.getById(orderId);
+        pointChargeProcessor.charge(pointCharge, memberId, payment.getTotalAmount());
     }
 }

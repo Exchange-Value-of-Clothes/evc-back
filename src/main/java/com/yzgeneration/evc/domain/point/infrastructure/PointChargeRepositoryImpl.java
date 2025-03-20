@@ -18,7 +18,7 @@ public class PointChargeRepositoryImpl implements PointChargeRepository {
     }
 
     @Override
-    public PointCharge findById(String orderId) {
+    public PointCharge getById(String orderId) {
         return pointChargeJpaRepository.findById(orderId).orElseThrow(()-> new CustomException(ErrorCode.POINT_NOT_FOUND)).toModel();
     }
 }
