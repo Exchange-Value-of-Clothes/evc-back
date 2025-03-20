@@ -48,7 +48,7 @@ public class ChatService {
         Long memberId = sessionAttributeAccessor.getById(accessor, MEMBER_KEY);
         boolean isChatPartnerConnected = chatConnectionManager.isChatPartnerConnected(chatRoomId);
         chatMessageRepository.save(ChatMessage.create(chatRoomId, memberId, chatting.getContent(), isChatPartnerConnected));
-        rabbitTemplate.convertAndSend("chat.topic", "room."+chatRoomId, ChattingToListener.of(chatRoomId, memberId, chatting.getContent(), isChatPartnerConnected)); // chat.topic이라는 Topic Exchange로 메시지를 보냄. → Routing Key가 room.{chatRoomId}이므로 해당 키를 구독해야 메시지를 받을 수 있음.
+        rabbitTemplate.convertAndSend("chat.topic", "room."+chatRoomId, ChattingToListener.of(chatRoomId, memberId, chatting.getContent(), isChatPartnerConnected));
     }
 
     public void disconnect(StompHeaderAccessor accessor) {
