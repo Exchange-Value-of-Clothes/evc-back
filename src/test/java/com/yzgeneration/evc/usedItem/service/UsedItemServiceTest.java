@@ -1,10 +1,8 @@
 package com.yzgeneration.evc.usedItem.service;
 
 import com.yzgeneration.evc.domain.image.implement.UsedItemImageAppender;
-import com.yzgeneration.evc.domain.image.implement.UsedItemImageLoader;
 import com.yzgeneration.evc.domain.image.service.port.UsedItemImageRepository;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.CreateUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemResponse;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsDetails;
 import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsResponse;
@@ -18,8 +16,7 @@ import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
 import com.yzgeneration.evc.domain.useditem.service.port.UsedItemRepository;
 import com.yzgeneration.evc.mock.usedItem.FakeUsedItemImageRepository;
 import com.yzgeneration.evc.mock.usedItem.FakeUsedItemRepository;
-import com.yzgeneration.evc.mock.usedItem.MockUsedItemImageFile;
-import com.yzgeneration.evc.mock.usedItem.SpyS3ImageHandler;
+import com.yzgeneration.evc.mock.usedItem.SpyImageHandler;
 import org.junit.jupiter.api.*;
 
 import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItemRequest;
@@ -37,10 +34,9 @@ class UsedItemServiceTest {
         UsedItemAppender usedItemAppender = new UsedItemAppender(usedItemRepository);
         UsedItemLoader usedItemLoader = new UsedItemLoader(usedItemRepository);
 
-        UsedItemImageAppender usedItemImageAppender = new UsedItemImageAppender(usedItemImageRepository, new SpyS3ImageHandler());
-        UsedItemImageLoader usedItemImageLoader = new UsedItemImageLoader(usedItemImageRepository);
+        UsedItemImageAppender usedItemImageAppender = new UsedItemImageAppender(usedItemImageRepository, new SpyImageHandler());
 
-        usedItemService = new UsedItemService(usedItemAppender, usedItemImageAppender, usedItemLoader, usedItemImageLoader);
+        usedItemService = new UsedItemService(usedItemAppender, usedItemImageAppender, usedItemLoader, usedItemImageRepository);
     }
 
     @Test
@@ -52,11 +48,8 @@ class UsedItemServiceTest {
         CreateUsedItemRequest createUsedItemRequest = fixCreateUsedItemRequest();
 
         //when
-        CreateUsedItemResponse createUsedItemResponse = usedItemService.createUsedItem(memberId, createUsedItemRequest, new MockUsedItemImageFile().getImageFiles());
-
         //then
-        assertThat(createUsedItemResponse.getMemberId()).isEqualTo(memberId);
-        assertThat(createUsedItemResponse.getUsedItemId()).isEqualTo(1L);
+        usedItemService.createUsedItem(memberId, createUsedItemRequest);
     }
 
     @Test
@@ -103,7 +96,7 @@ class UsedItemServiceTest {
         assertThat(loadUsedItemResponse.getLikeCount()).isEqualTo(0);
         assertThat(loadUsedItemResponse.getChattingCount()).isEqualTo(0);
 
-        assertThat(loadUsedItemResponse.getMemberId()).isEqualTo(1L);
+        assertThat(loadUsedItemResponse.getMarketMemberId()).isEqualTo(1L);
         assertThat(loadUsedItemResponse.getIsOwned()).isEqualTo(true);
         assertThat(loadUsedItemResponse.getUsedItemStatus()).isEqualTo(UsedItemStatus.ACTIVE);
     }
