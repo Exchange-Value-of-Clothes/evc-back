@@ -24,4 +24,10 @@ public class ErrorResponse {
                 .code(errorCode.getCode())
                 .msg(errorCode.getDefaultMessage()).build();
     }
+
+    public static ResponseEntity<String> of(int httpStatus, String msg) {
+        return ResponseEntity
+                .status(httpStatus)
+                .body(msg);
+    }
 }

@@ -8,10 +8,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
-public class SocialLoginExceptionHandler {
+public class ExternalApiExceptionHandler {
+
     @ExceptionHandler(SocialLoginException.class)
     protected ResponseEntity<?> handleSocialLoginException(SocialLoginException e) {
         log.error(e.getMessage());
         return new ResponseEntity<>("소셜 로그인 실패", HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(PaymentGatewayException.class)
+    protected ResponseEntity<?> handlePaymentGatewayException(PaymentGatewayException e) {
+        return ErrorResponse.of(e.getHttpStatus(), e.getMessage());
+    }
+
+
 }
