@@ -198,7 +198,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("채팅방을 나간다.")
     void exitChatRoom() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.patch("/api/chat/{chatRoomId}/exit", "1"))
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/chat/{chatRoomId}/exit", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("chat-exitChatRoom",
                         pathParameters(

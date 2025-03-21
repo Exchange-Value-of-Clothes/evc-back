@@ -28,3 +28,13 @@ include::{snippets}/chat-getChatRoom/query-parameters.adoc[]
 === HTTP Response
 include::{snippets}/chat-enter/http-response.adoc[]
 
+[[chat-exitChatRoom]]
+== 채팅방 퇴장
+
+=== HTTP Request
+include::{snippets}/chat-exitChatRoom/http-request.adoc[]
+include::{snippets}/chat-exitChatRoom/path-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/chat-exitChatRoom/http-response.adoc[]
+
