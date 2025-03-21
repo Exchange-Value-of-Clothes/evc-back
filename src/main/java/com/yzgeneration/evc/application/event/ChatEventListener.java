@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.domain.chat.controller;
+package com.yzgeneration.evc.application.event;
 
 import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
 import com.yzgeneration.evc.domain.chat.implement.SessionAttributeAccessor;

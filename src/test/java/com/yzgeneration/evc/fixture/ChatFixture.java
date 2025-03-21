@@ -1,6 +1,7 @@
 package com.yzgeneration.evc.fixture;
 
 import com.yzgeneration.evc.domain.chat.dto.ChatEnter;
+import com.yzgeneration.evc.domain.chat.model.ChatMember;
 
 public final class ChatFixture extends Fixture {
     private ChatFixture() {}
@@ -9,6 +10,14 @@ public final class ChatFixture extends Fixture {
         return fixtureMonkey.giveMeBuilder(ChatEnter.class)
                 .set("usedItemId", 1L)
                 .set("ownerId", 1L)
+                .sample();
+    }
+
+    public static ChatMember chatMember(Long chatRoomId, Long memberId) {
+        return fixtureMonkey.giveMeBuilder(ChatMember.class)
+                .set("chatRoomId", chatRoomId)
+                .set("memberId", memberId)
+                .set("isDeleted", false)
                 .sample();
     }
 }

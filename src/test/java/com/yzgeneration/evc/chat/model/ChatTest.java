@@ -3,6 +3,7 @@ package com.yzgeneration.evc.chat.model;
 import com.yzgeneration.evc.domain.chat.model.ChatMember;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.domain.chat.model.ChatRoom;
+import com.yzgeneration.evc.fixture.ChatFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -59,5 +60,18 @@ class ChatTest {
         assertThat(chatMessage.getSenderId()).isEqualTo(senderId);
         assertThat(chatMessage.getContent()).isEqualTo(content);
         assertThat(chatMessage.getIsRead()).isFalse();
+    }
+
+    @Test
+    @DisplayName("채팅멤버를 논리적으로 삭제할 수 있다.")
+    void deleteChatMember() {
+        // given
+        ChatMember chatMember = ChatFixture.chatMember(1L, 1L);
+
+        // when
+        chatMember.exit();
+
+        // then
+        assertThat(chatMember.getIsDeleted()).isTrue();
     }
 }
