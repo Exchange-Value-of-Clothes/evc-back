@@ -2,7 +2,7 @@
 
 === HTTP Request
 include::{snippets}/authentication-login/http-request.adoc[]
-include::{snippets}/authentication-login/request-body.adoc[]
+include::{snippets}/authentication-login/request-fields.adoc[]
 
 === HTTP Response
 include::{snippets}/authentication-login/http-response.adoc[]

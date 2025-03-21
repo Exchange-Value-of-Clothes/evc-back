@@ -3,7 +3,7 @@
 
 === HTTP Request
 include::{snippets}/chat-enter/http-request.adoc[]
-include::{snippets}/chat-enter/request-body.adoc[]
+include::{snippets}/chat-enter/request-fields.adoc[]
 
 === HTTP Response
 include::{snippets}/chat-enter/http-response.adoc[]

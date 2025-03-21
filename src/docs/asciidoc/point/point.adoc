@@ -3,7 +3,7 @@
 
 === HTTP Request
 include::{snippets}/point-order/http-request.adoc[]
-include::{snippets}/point-order/request-body.adoc[]
+include::{snippets}/point-order/request-fields.adoc[]
 
 === HTTP Response
 include::{snippets}/point-order/http-response.adoc[]
@@ -13,7 +13,6 @@ include::{snippets}/point-order/http-response.adoc[]
 
 === HTTP Request
 include::{snippets}/point-confirm/http-request.adoc[]
-include::{snippets}/point-confirm/request-body.adoc[]
-
+include::{snippets}/point-confirm/request-fields.adoc[]
 === HTTP Response
 include::{snippets}/point-confirm/http-response.adoc[]
