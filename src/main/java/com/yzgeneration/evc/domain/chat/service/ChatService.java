@@ -51,10 +51,7 @@ public class ChatService {
         rabbitTemplate.convertAndSend("chat.topic", "room."+chatRoomId, ChattingToListener.of(chatRoomId, memberId, chatting.getContent(), isChatPartnerConnected));
     }
 
-    public void disconnect(StompHeaderAccessor accessor) {
-        Long chatRoomId = sessionAttributeAccessor.getById(accessor, CHAT_ROOM_KEY);
-        Long memberId = sessionAttributeAccessor.getById(accessor, MEMBER_KEY);
-        chatConnectionManager.exitChatRoom(chatRoomId, memberId);
+    public void exit(Long chatRoomId, Long memberId) {
+        chatRoomManager.deleteChatMember(chatRoomId, memberId);
     }
-
 }

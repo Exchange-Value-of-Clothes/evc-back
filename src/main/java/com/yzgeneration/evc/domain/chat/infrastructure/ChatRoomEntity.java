@@ -20,6 +20,7 @@ public class ChatRoomEntity {
     private Long usedItemId;
     private Long ownerId;
     private Long participantId;
+    private Boolean isDeleted;
     private LocalDateTime createdAt;
 
     public static ChatRoomEntity from(ChatRoom chatRoom) {
@@ -28,6 +29,7 @@ public class ChatRoomEntity {
                 .usedItemId(chatRoom.getUsedItemId())
                 .ownerId(chatRoom.getOwnerId())
                 .participantId(chatRoom.getParticipantId())
+                .isDeleted(chatRoom.getIsDeleted())
                 .createdAt(LocalDateTime.now())
                 .build();
     }
@@ -38,6 +40,7 @@ public class ChatRoomEntity {
                 .usedItemId(usedItemId)
                 .ownerId(ownerId)
                 .participantId(participantId)
+                .isDeleted(isDeleted)
                 .createdAt(createdAt)
                 .build();
     }

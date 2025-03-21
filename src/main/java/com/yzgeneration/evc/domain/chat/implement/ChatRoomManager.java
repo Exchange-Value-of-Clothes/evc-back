@@ -21,16 +21,42 @@ public class ChatRoomManager {
 
     public ChatRoom getOrCreate(Long usedItemId, Long ownerId, Long participantId) {
         if (Objects.equals(ownerId, participantId)) throw new CustomException(ErrorCode.SELF_CHAT_NOT_ALLOWED);
-        return chatRoomRepository.findByUsedItemIdAndParticipantId(usedItemId, participantId)
+        ChatRoom chatRoom = chatRoomRepository.findByUsedItemIdAndParticipantId(usedItemId, participantId)
                 .orElseGet(() -> {
                     ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.create(usedItemId, ownerId, participantId));
-                    chatMemberRepository.saveAll(List.of(
-                            ChatMember.create(newChatRoom.getId(), ownerId),
-                            ChatMember.create(newChatRoom.getId(), participantId)
-                    ));
+                    saveChatMembers(ownerId, participantId, newChatRoom); // 새로운 채팅방일 때만 멤버 저장
                     return newChatRoom;
                 });
+        restoreDeletedMembers(chatRoom.getId(), ownerId, participantId);
+        return chatRoom;
     }
+
+
+    public void deleteChatMember(Long chatRoomId, Long memberId) {
+        ChatMember chatMember = chatMemberRepository.get(chatRoomId, memberId);
+        chatMember.exit();
+        chatMemberRepository.save(chatMember);
+    }
+
+    private void saveChatMembers(Long ownerId, Long participantId, ChatRoom newChatRoom) {
+        chatMemberRepository.saveAll(List.of(
+                ChatMember.create(newChatRoom.getId(), ownerId),
+                ChatMember.create(newChatRoom.getId(), participantId)
+        ));
+    }
+
+    private void restoreDeletedMembers(Long chatRoomId, Long ownerId, Long participantId) {
+        List<ChatMember> deletedMembers = chatMemberRepository.getDeletedChatMembers(chatRoomId, List.of(ownerId, participantId));
+        if (!deletedMembers.isEmpty()) {
+            for (ChatMember chatMember : deletedMembers) {
+                chatMember.restore();
+            }
+            chatMemberRepository.saveAll(deletedMembers);
+        }
+    }
+
+
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.domain.chat.controller;
 
+import com.yzgeneration.evc.common.dto.CommonResponse;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.*;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
@@ -41,6 +42,13 @@ public class ChatController {
         chatService.send(accessor, chatting);
     }
 
-    // TODO 채팅방 탈퇴, 모든 인원이 다 나가면 채팅방 삭제
+    // TODO 모든 인원이 다 나가면 채팅방 및 채팅멤버 삭제
+    @PatchMapping("/{chatRoomId}/exit")
+    public CommonResponse exit(@PathVariable("chatRoomId") Long chatRoomId , @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        chatService.exit(chatRoomId, memberPrincipal.getId());
+        return CommonResponse.success();
+    }
+
+
 
 }
