@@ -7,9 +7,13 @@ import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
 import com.yzgeneration.evc.domain.chat.implement.ChatRoomManager;
 import com.yzgeneration.evc.domain.chat.implement.SessionAttributeAccessor;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatConnectionRepository;
+import com.yzgeneration.evc.domain.chat.infrastructure.ChatMemberRepository;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
+import com.yzgeneration.evc.domain.chat.model.ChatMember;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.mock.chat.FakeChatConnectionRepository;
 import com.yzgeneration.evc.mock.chat.FakeChatMemberRepository;
 import com.yzgeneration.evc.mock.chat.FakeChatMessageRepository;
@@ -30,11 +34,13 @@ class ChatServiceTest {
     private ChatConnectionRepository connectionRepository;
     private ChatConnectionManager chatConnectionManager;
     private ChatMessageRepository chatMessageRepository;
+    private FakeChatMemberRepository chatMemberRepository;
 
     @BeforeEach
     void init() {
+        chatMemberRepository = new FakeChatMemberRepository();
         ChatRoomManager chatRoomManager = new ChatRoomManager(new FakeChatRoomRepository(),
-                new FakeChatMemberRepository());
+                chatMemberRepository);
         connectionRepository = new FakeChatConnectionRepository();
         chatConnectionManager = new ChatConnectionManager(connectionRepository);
         chatMessageRepository = new FakeChatMessageRepository();
@@ -103,6 +109,98 @@ class ChatServiceTest {
         assertThat(response.getNumberOfElements()).isEqualTo(2);
         assertThat(response.getContent().get(0).getLastMessage()).isEqualTo("content2");
         assertThat(response.getContent().get(0).getChatRoomId()).isEqualTo(1L);
+
+    }
+
+    /**
+     * 채팅방목록 조회는 해당 채팅방 멤버의 isDeleted를 확인하면서 가져와서 상관없음
+     * 채팅방조회는 채팅방목록 조회로부터 메시지를 가져오기 때문에 중복해서 isDeleted를 검증할 필요없음
+     * */
+    @Test
+    @DisplayName("채팅방을 나갈 수 있다.")
+    void exitChatRoom() {
+        // given
+        Long usedItemId = 1L;
+        Long ownerId = 1L;
+        Long participantId = 2L;
+        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        Long chatRoomId = chatMessageSliceResponse.getChatRoomId();
+        // when
+        chatService.exit(chatRoomId, participantId);
+
+        // then
+        ChatMember chatMember = chatMemberRepository.get(chatRoomId, participantId);
+        assertThat(chatMember.getIsDeleted()).isTrue();
+
+    }
+
+    @Test
+    @DisplayName("채팅방을 나가면 채팅방목록이 조회되지 않는다")
+    void exitThenCantGetChatRooms() {
+        // given
+        Long usedItemId = 1L;
+        Long ownerId = 1L;
+        Long participantId = 2L;
+        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        ChatMessage chatMessage = ChatMessage.create(1L, 1L, "content", false);
+        ChatMessage chatMessage2 = ChatMessage.create(1L, 1L, "content2", false);
+        chatMessageRepository.save(chatMessage);
+        chatMessageRepository.save(chatMessage2);
+        Long chatRoomId = chatMessageSliceResponse.getChatRoomId();
+        chatService.exit(chatRoomId, participantId);
+
+        // when
+        SliceResponse<ChatRoomListResponse> chatRooms = chatService.getChatRooms(participantId, null);
+
+        // then
+        assertThat(chatRooms.getContent().size()).isZero();
+        assertThat(chatRooms.getNumberOfElements()).isZero();
+    }
+
+    /**
+     * 채팅방멤버가 방을 나감 (isDeleted=true) 다시 거래하기를 요청할 때
+     * 1. 채팅방이 삭제된 상태라면 채팅방멤버의 isDeleted를 false로 만들어서 주기 때문에 문제없음
+     * 2. 기존 채팅방이 존재하면, 거래하기를 요청할 때 isDeleted=true인 채팅방멤버가 그대로 가져와짐. 여기를 수정해야함.
+     */
+    @Test
+    @DisplayName("채팅방을 나간 후 다시 거래하기를 요청한다.")
+    void exitThenTradeRequest() {
+        // given
+        Long usedItemId = 1L;
+        Long ownerId = 1L;
+        Long participantId = 2L;
+        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        Long chatRoomId = chatMessageSliceResponse.getChatRoomId();
+        chatService.exit(chatRoomId, participantId);
+
+        // when
+        chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+
+        // then
+        assertThat(chatMemberRepository.get(chatRoomId, 1L).getIsDeleted()).isFalse();
+        assertThat(chatMemberRepository.get(chatRoomId, participantId).getIsDeleted()).isFalse();
+        assertThatThrownBy(()->chatMemberRepository.get(chatRoomId, 3L))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.CHAT_MEMBER_NOT_FOUND);
+
+    }
+
+    @Test
+    @DisplayName("거래하기를 여러번 요청해도 채팅방멤버는 중복해서 생성되지 않는다")
+    void notDuplicatedChatRoomMember() {
+        // given
+        Long usedItemId = 1L;
+        Long ownerId = 1L;
+        Long participantId = 2L;
+        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        Long chatRoomId = chatMessageSliceResponse.getChatRoomId();
+
+        // when
+        chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+
+        // then
+       assertThat(chatMemberRepository.getDataSize()).isEqualTo(2);
+
 
     }
 }
