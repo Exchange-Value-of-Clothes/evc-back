@@ -110,13 +110,19 @@ public class ChatControllerDocsTest extends RestDocsSupport {
         );
         given(chatService.getChatRooms(any(), any()))
                 .willReturn(response);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/chat"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/chat")
+                .param("cursor", LocalDateTime.MIN.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].chatRoomId").value(1))
                 .andExpect(jsonPath("$.content[0].lastMessage").value("hi"))
                 .andExpect(jsonPath("$.content[0].createdAt").value("+1000000000-01-01T00:00:00"))
                 .andDo(document("chat-getChatRooms",
                         preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("cursor")
+                                        .optional()
+                                        .description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")
+                        ),
                         responseFields(
                                 fieldWithPath("content[].chatRoomId").type(JsonFieldType.NUMBER)
                                         .description("채팅방 아이디"),
