@@ -27,7 +27,7 @@ public class ChatController {
     }
 
     @GetMapping
-    public SliceResponse<ChatRoomListResponse> getChatRooms(@AuthenticationPrincipal MemberPrincipal memberPrincipal, LocalDateTime cursor) {
+    public SliceResponse<ChatRoomListResponse> getChatRooms(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
         return chatService.getChatRooms(memberPrincipal.getId(), cursor);
     }
 
