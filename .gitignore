@@ -30,6 +30,7 @@ out/
 !**/src/test/**/out/
 src/main/resources/firebase/*.json
 src/main/generated
+src/main/resources/static/
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

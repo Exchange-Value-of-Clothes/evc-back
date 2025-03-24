@@ -21,6 +21,7 @@ public class ChatMemberEntity {
 
     public static ChatMemberEntity from(ChatMember chatMember) {
         return ChatMemberEntity.builder()
+                .id(chatMember.getId())
                 .chatRoomId(chatMember.getChatRoomId())
                 .memberId(chatMember.getMemberId())
                 .isDeleted(chatMember.getIsDeleted())

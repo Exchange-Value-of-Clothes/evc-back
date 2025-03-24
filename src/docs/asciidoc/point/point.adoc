@@ -1,0 +1,18 @@
+[[point-order]]
+== 포인트 결제 생성
+
+=== HTTP Request
+include::{snippets}/point-order/http-request.adoc[]
+include::{snippets}/point-order/request-fields.adoc[]
+
+=== HTTP Response
+include::{snippets}/point-order/http-response.adoc[]
+
+[[point-confirm]]
+== 포인트 결제 승인
+
+=== HTTP Request
+include::{snippets}/point-confirm/http-request.adoc[]
+include::{snippets}/point-confirm/request-fields.adoc[]
+=== HTTP Response
+include::{snippets}/point-confirm/http-response.adoc[]

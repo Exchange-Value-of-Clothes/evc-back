@@ -119,4 +119,13 @@ class ChatControllerTest {
                 .andExpect(jsonPath("$.cursor").value("+1000000000-01-01T00:00:00"));
 
     }
+
+    @Test
+    @WithFakeUser
+    @DisplayName("채팅방을 나간다.")
+    void exitChatRoom() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/chat/{chatRoomId}/exit", "1")
+        .with(csrf()))
+                .andExpect(status().isOk());
+    }
 }

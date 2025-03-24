@@ -20,4 +20,12 @@ public class ChatMember {
                 .isDeleted(false)
                 .build();
     }
+
+    public void exit() {
+        isDeleted = true;
+    }
+
+    public void restore() {
+        isDeleted = false;
+    }
 }

@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.domain.member.service;
 
+import com.yzgeneration.evc.domain.member.MemberCreatedEvent;
 import com.yzgeneration.evc.domain.member.dto.MemberRequest.EmailSignup;
 
 import com.yzgeneration.evc.domain.member.implement.MemberAppender;
@@ -11,6 +12,7 @@ import com.yzgeneration.evc.domain.verification.enums.EmailVerificationType;
 import com.yzgeneration.evc.domain.verification.model.EmailVerification;
 import com.yzgeneration.evc.domain.verification.implement.EmailVerificationProcessor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,9 +22,12 @@ public class MemberRegisterService {
     private final MemberAppender memberAppender;
     private final MemberUpdater memberUpdater;
     private final EmailVerificationProcessor emailVerificationProcessor;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Member createMemberByEmail(EmailSignup emailSignup) {
-        return memberAppender.createByEmail(emailSignup);
+        Member member = memberAppender.createByEmail(emailSignup);
+        eventPublisher.publishEvent(new MemberCreatedEvent(member.getId()));
+        return member;
     }
 
     public EmailVerification sendEmailForRequestVerification(Member member) {

@@ -10,6 +10,7 @@ import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
 import com.yzgeneration.evc.fixture.ChatFixture;
 
+import com.yzgeneration.evc.mock.WithFakeUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +32,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -191,5 +193,18 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                         .description("다음 페이지 커서")
 
                         )));
+    }
+
+    @Test
+    @DisplayName("채팅방을 나간다.")
+    void exitChatRoom() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/chat/{chatRoomId}/exit", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("chat-exitChatRoom",
+                        pathParameters(
+                                parameterWithName("chatRoomId").description("채팅방 아이디")
+                        )
+                ));
     }
 }

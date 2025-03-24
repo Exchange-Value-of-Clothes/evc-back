@@ -24,6 +24,7 @@ import com.yzgeneration.evc.domain.verification.model.EmailVerification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import static com.yzgeneration.evc.exception.ErrorCode.*;
 import static com.yzgeneration.evc.fixture.MemberFixture.*;
@@ -52,7 +53,12 @@ class MemberRegisterServiceTest {
 
         MemberUpdater memberUpdater = new MemberUpdater(memberRepository);
 
-        memberRegisterService = new MemberRegisterService(memberAppender, memberUpdater,emailVerificationProcessor);
+        memberRegisterService = new MemberRegisterService(memberAppender, memberUpdater, emailVerificationProcessor, new ApplicationEventPublisher() {
+            @Override
+            public void publishEvent(Object event) {
+
+            }
+        });
     }
 
     @Test

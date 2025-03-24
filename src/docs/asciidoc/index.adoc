@@ -39,3 +39,8 @@ include::image/image.adoc[]
 == Chat API
 
 include::chat/chat.adoc[]
+
+[[Point-API]]
+== Point API
+
+include::point/point.adoc[]

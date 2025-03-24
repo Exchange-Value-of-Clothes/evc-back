@@ -47,16 +47,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.from(ErrorCode.TOKEN_EXPIRED)));
         } catch (Exception e) {
-            System.out.println("e.getCause() = " + e.getCause());
             log.error(e.getMessage(), e);
         }
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request)  {
-        String[] excludePath = {"/api/auth", "/api/members/register", "/docs", "/connection", "/health"}; //TODO
+        String[] excludePath = {"/api/auth", "/api/members/register", "/docs", "/connection", "/health"};
         String path = request.getRequestURI();
-        return Arrays.stream(excludePath).anyMatch(path::startsWith);
+        return Arrays.stream(excludePath).anyMatch(path::startsWith) ||
+                path.endsWith(".html") || path.endsWith(".css") || path.endsWith(".js");
     }
 
     private String parseToken(String authorization) {

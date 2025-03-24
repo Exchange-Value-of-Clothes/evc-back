@@ -13,6 +13,7 @@ public class ChatRoom {
     private Long usedItemId;
     private Long ownerId;
     private Long participantId;
+    private Boolean isDeleted;
     private LocalDateTime createdAt;
 
     public static ChatRoom create(Long usedItemId, Long ownerId, Long participantId) {
@@ -20,6 +21,7 @@ public class ChatRoom {
                 .usedItemId(usedItemId)
                 .ownerId(ownerId)
                 .participantId(participantId)
+                .isDeleted(false)
                 .createdAt(LocalDateTime.now())
                 .build();
     }

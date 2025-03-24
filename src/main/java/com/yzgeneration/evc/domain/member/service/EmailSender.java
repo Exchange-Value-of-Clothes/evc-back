@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import static com.yzgeneration.evc.exception.ErrorCode.*;
@@ -21,8 +22,9 @@ public class EmailSender implements MailSender {
     @Value("${spring.mail.username}")
     private String from;
 
+    @Async
     @Override
-    public void send(Email email) { // TODO @Async, ThreadPoolTaskExecutor 등록, https://wonit.tistory.com/669
+    public void send(Email email) { // TODO 쓰레드 풀 설정
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
         try {

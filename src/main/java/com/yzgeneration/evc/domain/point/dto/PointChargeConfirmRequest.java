@@ -8,15 +8,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PointChargeConfirmRequest {
-    private String paymentType;
     private String orderId;
     private String paymentKey;
     private int amount;
 
     @JsonCreator
-    public PointChargeConfirmRequest(@JsonProperty("paymentType") String paymentType, @JsonProperty("orderId") String orderId,
+    public PointChargeConfirmRequest(@JsonProperty("orderId") String orderId,
                                      @JsonProperty("paymentKey") String paymentKey, @JsonProperty("amount") int amount) {
-        this.paymentType = paymentType;
         this.orderId = orderId;
         this.paymentKey = paymentKey;
         this.amount = amount;

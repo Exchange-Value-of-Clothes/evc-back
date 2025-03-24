@@ -9,8 +9,5 @@ import java.util.Optional;
 
 public interface ChatRoomJpaRepository extends JpaRepository<ChatRoomEntity, Long> {
 
-    @Query("SELECT c FROM ChatRoomEntity c WHERE c.ownerId = :memberId OR c.participantId = :memberId")
-    List<ChatRoomEntity> findByOwnerIdOrSenderId(@Param("memberId") Long memberId);
-
     Optional<ChatRoomEntity> findByUsedItemIdAndParticipantId(Long itemId, Long participantId);
 }

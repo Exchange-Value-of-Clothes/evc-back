@@ -3,7 +3,7 @@ name: "[Feat] 새로운 기능 추가"
 about: "✨ Feat | 새로운 기능 추가"
 title: "[Feat] "
 labels: "✨feat"
-assignees: jiyunio
+assignees: ''
 
 ---
 
