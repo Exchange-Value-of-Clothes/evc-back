@@ -32,6 +32,7 @@ public enum ErrorCode {
     EMAIL_VERIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "044", "해당 이메일 인증 내역이 존재하지 않습니다."),
     CHAT_NOT_FOUND(HttpStatus.NOT_FOUND, "045", "해당 채팅이 존재하지 않습니다."),
     POINT_NOT_FOUND(HttpStatus.NOT_FOUND, "046", "해당 orderId의 결제 정보가 존재하지 않습니다."),
+    AUCTIONITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "047", "해당 경매상품은 존재하지 않습니다."),
 
     // 409 Conflict
     EMAIL_DUPLICATION(HttpStatus.CONFLICT, "091", "중복된 이메일이 존재합니다."),
