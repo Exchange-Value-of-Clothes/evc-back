@@ -6,11 +6,11 @@ import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.yzgeneration.evc.common.implement.port.UuidHolder;
+import com.yzgeneration.evc.domain.image.dto.ImageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.net.URL;
 import java.util.Date;
 
 @Component
@@ -26,20 +26,16 @@ public class S3ImageHandler implements ImageHandler {
 
 
     @Override
-    public String getPresignedURLForUpload(String prefix, String fileName) {
+    public ImageResponse getPresignedURLForUpload(String prefix, String fileName) {
         if (!prefix.isBlank()) {
             fileName = createPath(prefix, fileName);
         }
-
         GeneratePresignedUrlRequest generatePresignedUrlRequest = generatePresignedURLForUpload(fileName);
-        URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
 
-        return url.toString();
-    }
-
-    @Override
-    public String getImageUrl(String fileName) {
-        return amazonS3.getUrl(bucket, fileName).toString();
+        return ImageResponse.builder()
+                .presignedURL(amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString())
+                .imageName(fileName)
+                .build();
     }
 
     private GeneratePresignedUrlRequest generatePresignedURLForUpload(String fileName) {
@@ -49,8 +45,8 @@ public class S3ImageHandler implements ImageHandler {
 
         generatePresignedUrlRequest.addRequestParameter(
                 Headers.S3_CANNED_ACL,
-                CannedAccessControlList.PublicRead.toString()
-        );
+                CannedAccessControlList.PublicRead.toString());
+
         return generatePresignedUrlRequest;
     }
 
