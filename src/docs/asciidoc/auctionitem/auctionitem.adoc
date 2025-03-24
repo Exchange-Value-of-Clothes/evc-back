@@ -1,0 +1,34 @@
+[[auctionitem-create]]
+== 경매상품 등록
+
+=== HTTP Request
+include::{snippets}/auctionitem-create/http-request.adoc[]
+include::{snippets}/auctionitem-create/request-fields.adoc[]
+
+=== HTTP Response
+include::{snippets}/auctionitem-create/http-response.adoc[]
+include::{snippets}/auctionitem-create/response-fields.adoc[]
+
+
+[[auctionitems-get]]
+== 경매상품 조회 (슬라이드 형태)
+
+=== HTTP Request
+include::{snippets}/auctionitems-get/http-request.adoc[]
+include::{snippets}/auctionitems-get/query-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/auctionitems-get/http-response.adoc[]
+include::{snippets}/auctionitems-get/response-fields.adoc[]
+
+[[auctionitem-get]]
+== 개별 경매상품 조회
+
+=== HTTP Request
+include::{snippets}/auctionitem-get/http-request.adoc[]
+include::{snippets}/auctionitem-get/path-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/auctionitem-get/http-response.adoc[]
+include::{snippets}/auctionitem-get/response-fields.adoc[]
+

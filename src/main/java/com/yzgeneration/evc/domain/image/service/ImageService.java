@@ -15,10 +15,7 @@ public class ImageService {
 
     public List<ImageResponse> generatePresignedURL(String prefix, List<MultipartFile> imageFiles) {
         return imageFiles.stream().map(imageFile ->
-                ImageResponse.builder()
-                        .presignedURL(imageHandler.getPresignedURLForUpload(prefix, imageFile.getOriginalFilename()))
-                        .imageName(imageFile.getOriginalFilename())
-                        .build()
+                imageHandler.getPresignedURLForUpload(prefix, imageFile.getOriginalFilename())
         ).toList();
     }
 }
