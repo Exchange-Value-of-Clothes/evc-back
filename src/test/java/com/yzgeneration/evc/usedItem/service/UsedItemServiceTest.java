@@ -1,25 +1,24 @@
 package com.yzgeneration.evc.usedItem.service;
 
-import com.yzgeneration.evc.domain.image.implement.UsedItemImageAppender;
-import com.yzgeneration.evc.domain.image.service.port.UsedItemImageRepository;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemResponse;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsDetails;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsResponse;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionStatue;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
-import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
-import com.yzgeneration.evc.domain.useditem.implement.UsedItemAppender;
-import com.yzgeneration.evc.domain.useditem.implement.UsedItemLoader;
-import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
-import com.yzgeneration.evc.domain.useditem.service.port.UsedItemRepository;
-import com.yzgeneration.evc.mock.usedItem.FakeUsedItemImageRepository;
+import com.yzgeneration.evc.domain.image.implement.ItemImageAppender;
+import com.yzgeneration.evc.domain.image.service.port.ImageRepository;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemsDetails;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemsResponse;
+import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
+import com.yzgeneration.evc.domain.item.enums.TransactionMode;
+import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
+import com.yzgeneration.evc.domain.item.enums.TransactionType;
+import com.yzgeneration.evc.domain.item.useditem.implement.UsedItemAppender;
+import com.yzgeneration.evc.domain.item.useditem.implement.UsedItemLoader;
+import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
+import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
+import com.yzgeneration.evc.mock.usedItem.FakeImageRepository;
 import com.yzgeneration.evc.mock.usedItem.FakeUsedItemRepository;
-import com.yzgeneration.evc.mock.usedItem.SpyImageHandler;
 import org.junit.jupiter.api.*;
 
-import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItemRequest;
+import static com.yzgeneration.evc.fixture.UsedItemFixture.fixCreateUsedItemRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -29,14 +28,14 @@ class UsedItemServiceTest {
     @BeforeEach
     void init() {
         UsedItemRepository usedItemRepository = new FakeUsedItemRepository();
-        UsedItemImageRepository usedItemImageRepository = new FakeUsedItemImageRepository();
+        ImageRepository imageRepository = new FakeImageRepository();
 
         UsedItemAppender usedItemAppender = new UsedItemAppender(usedItemRepository);
         UsedItemLoader usedItemLoader = new UsedItemLoader(usedItemRepository);
 
-        UsedItemImageAppender usedItemImageAppender = new UsedItemImageAppender(usedItemImageRepository, new SpyImageHandler());
+        ItemImageAppender itemImageAppender = new ItemImageAppender(imageRepository);
 
-        usedItemService = new UsedItemService(usedItemAppender, usedItemImageAppender, usedItemLoader, usedItemImageRepository);
+        usedItemService = new UsedItemService(usedItemAppender, itemImageAppender, usedItemLoader, imageRepository);
     }
 
     @Test
@@ -59,17 +58,17 @@ class UsedItemServiceTest {
         int page = 0;
 
         //when
-        LoadUsedItemsResponse loadUsedItemsResponse = usedItemService.loadUsedItems(page);
-        LoadUsedItemsDetails loadUsedItemsDetails = loadUsedItemsResponse.getLoadUsedItemDetails().get(0);
+        GetUsedItemsResponse getUsedItemsResponse = usedItemService.loadUsedItems(page);
+        GetUsedItemsDetails getUsedItemsDetails = getUsedItemsResponse.getLoadUsedItemDetails().get(0);
 
         //then
-        assertThat(loadUsedItemsDetails.getUsedItemId()).isEqualTo(1L);
-        assertThat(loadUsedItemsDetails.getTitle()).isEqualTo("Test UsedItem");
-        assertThat(loadUsedItemsDetails.getPrice()).isEqualTo(10000);
-        assertThat(loadUsedItemsDetails.getTransactionMode()).isEqualTo(TransactionMode.BUY);
-        assertThat(loadUsedItemsDetails.getTransactionStatue()).isEqualTo(TransactionStatue.ONGOING);
-        assertThat(loadUsedItemsDetails.getLikeCount()).isEqualTo(0);
-        assertThat(loadUsedItemsDetails.getUsedItemStatus()).isEqualTo(UsedItemStatus.ACTIVE);
+        assertThat(getUsedItemsDetails.getUsedItemId()).isEqualTo(1L);
+        assertThat(getUsedItemsDetails.getTitle()).isEqualTo("Test UsedItem");
+        assertThat(getUsedItemsDetails.getPrice()).isEqualTo(10000);
+        assertThat(getUsedItemsDetails.getTransactionMode()).isEqualTo(TransactionMode.BUY);
+        assertThat(getUsedItemsDetails.getTransactionStatus()).isEqualTo(TransactionStatus.ONGOING);
+        assertThat(getUsedItemsDetails.getLikeCount()).isEqualTo(0);
+        assertThat(getUsedItemsDetails.getItemStatus()).isEqualTo(ItemStatus.ACTIVE);
     }
 
     @Test
@@ -80,24 +79,24 @@ class UsedItemServiceTest {
         Long usedItemId = 1L;
 
         //when
-        LoadUsedItemResponse loadUsedItemResponse = usedItemService.loadUsedItem(memberId, usedItemId);
+        GetUsedItemResponse getUsedItemResponse = usedItemService.loadUsedItem(memberId, usedItemId);
 
         //then
-        assertThat(loadUsedItemResponse.getTitle()).isEqualTo("Test UsedItem");
-        assertThat(loadUsedItemResponse.getCategory()).isEqualTo("top shirt");
-        assertThat(loadUsedItemResponse.getContent()).isEqualTo("buy right now");
-        assertThat(loadUsedItemResponse.getPrice()).isEqualTo(10000);
+        assertThat(getUsedItemResponse.getTitle()).isEqualTo("Test UsedItem");
+        assertThat(getUsedItemResponse.getCategory()).isEqualTo("top shirt");
+        assertThat(getUsedItemResponse.getContent()).isEqualTo("buy right now");
+        assertThat(getUsedItemResponse.getPrice()).isEqualTo(10000);
 
-        assertThat(loadUsedItemResponse.getTransactionType()).isEqualTo(TransactionType.DIRECT);
-        assertThat(loadUsedItemResponse.getTransactionMode()).isEqualTo(TransactionMode.BUY);
-        assertThat(loadUsedItemResponse.getTransactionStatue()).isEqualTo(TransactionStatue.ONGOING);
+        assertThat(getUsedItemResponse.getTransactionType()).isEqualTo(TransactionType.DIRECT);
+        assertThat(getUsedItemResponse.getTransactionMode()).isEqualTo(TransactionMode.BUY);
+        assertThat(getUsedItemResponse.getTransactionStatus()).isEqualTo(TransactionStatus.ONGOING);
 
-        assertThat(loadUsedItemResponse.getViewCount()).isEqualTo(0);
-        assertThat(loadUsedItemResponse.getLikeCount()).isEqualTo(0);
-        assertThat(loadUsedItemResponse.getChattingCount()).isEqualTo(0);
+        assertThat(getUsedItemResponse.getViewCount()).isEqualTo(0);
+        assertThat(getUsedItemResponse.getLikeCount()).isEqualTo(0);
+        assertThat(getUsedItemResponse.getChattingCount()).isEqualTo(0);
 
-        assertThat(loadUsedItemResponse.getMarketMemberId()).isEqualTo(1L);
-        assertThat(loadUsedItemResponse.getIsOwned()).isEqualTo(true);
-        assertThat(loadUsedItemResponse.getUsedItemStatus()).isEqualTo(UsedItemStatus.ACTIVE);
+        assertThat(getUsedItemResponse.getMarketMemberId()).isEqualTo(1L);
+        assertThat(getUsedItemResponse.getIsOwned()).isEqualTo(true);
+        assertThat(getUsedItemResponse.getItemStatus()).isEqualTo(ItemStatus.ACTIVE);
     }
 }

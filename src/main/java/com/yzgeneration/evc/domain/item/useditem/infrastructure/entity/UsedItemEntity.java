@@ -1,7 +1,7 @@
-package com.yzgeneration.evc.domain.useditem.infrastructure.entity;
+package com.yzgeneration.evc.domain.item.useditem.infrastructure.entity;
 
-import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
-import com.yzgeneration.evc.domain.useditem.model.UsedItem;
+import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
+import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,7 +27,7 @@ public class UsedItemEntity {
     private UsedItemTransactionEntity usedItemTransactionEntity;
 
     @Enumerated(EnumType.STRING)
-    private UsedItemStatus usedItemStatus;
+    private ItemStatus itemStatus;
 
     @Embedded
     private ItemStatsEntity itemStatsEntity;
@@ -39,7 +39,7 @@ public class UsedItemEntity {
                 .memberId(usedItem.getMemberId())
                 .itemDetailsEntity(ItemDetailsEntity.from(usedItem.getItemDetails()))
                 .usedItemTransactionEntity(UsedItemTransactionEntity.from(usedItem.getUsedItemTransaction()))
-                .usedItemStatus(usedItem.getUsedItemStatus())
+                .itemStatus(usedItem.getItemStatus())
                 .itemStatsEntity(ItemStatsEntity.from(usedItem.getItemStats()))
                 .createdAt(usedItem.getCreatedAt()).build();
     }
@@ -50,7 +50,7 @@ public class UsedItemEntity {
                 .memberId(memberId)
                 .itemDetails(itemDetailsEntity.toModel())
                 .usedItemTransaction(usedItemTransactionEntity.toModel())
-                .usedItemStatus(usedItemStatus)
+                .itemStatus(itemStatus)
                 .itemStats(itemStatsEntity.toModel())
                 .createdAt(createdAt)
                 .build();
