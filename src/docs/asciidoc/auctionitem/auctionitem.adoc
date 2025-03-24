@@ -1,5 +1,5 @@
 [[auctionitem-create]]
-== 중고상품 등록
+== 경매상품 등록
 
 === HTTP Request
 include::{snippets}/auctionitem-create/http-request.adoc[]
@@ -11,7 +11,7 @@ include::{snippets}/auctionitem-create/response-fields.adoc[]
 
 
 [[auctionitems-get]]
-== 중고상품들 조회 (슬라이드 형태)
+== 경매상품 조회 (슬라이드 형태)
 
 === HTTP Request
 include::{snippets}/auctionitems-get/http-request.adoc[]
@@ -22,7 +22,7 @@ include::{snippets}/auctionitems-get/http-response.adoc[]
 include::{snippets}/auctionitems-get/response-fields.adoc[]
 
 [[auctionitem-get]]
-== 개별 중고상품 조회
+== 개별 경매상품 조회
 
 === HTTP Request
 include::{snippets}/auctionitem-get/http-request.adoc[]
