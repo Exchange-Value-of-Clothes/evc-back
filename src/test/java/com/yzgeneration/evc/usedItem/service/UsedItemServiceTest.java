@@ -63,8 +63,8 @@ class UsedItemServiceTest {
 
         //then
         assertThat(getUsedItemsDetails.getUsedItemId()).isEqualTo(1L);
-        assertThat(getUsedItemsDetails.getTitle()).isEqualTo("Test UsedItem");
-        assertThat(getUsedItemsDetails.getPrice()).isEqualTo(10000);
+        assertThat(getUsedItemsDetails.getTitle()).isEqualTo("title");
+        assertThat(getUsedItemsDetails.getPrice()).isEqualTo(5000);
         assertThat(getUsedItemsDetails.getTransactionMode()).isEqualTo(TransactionMode.BUY);
         assertThat(getUsedItemsDetails.getTransactionStatus()).isEqualTo(TransactionStatus.ONGOING);
         assertThat(getUsedItemsDetails.getLikeCount()).isEqualTo(0);
@@ -82,10 +82,10 @@ class UsedItemServiceTest {
         GetUsedItemResponse getUsedItemResponse = usedItemService.loadUsedItem(memberId, usedItemId);
 
         //then
-        assertThat(getUsedItemResponse.getTitle()).isEqualTo("Test UsedItem");
-        assertThat(getUsedItemResponse.getCategory()).isEqualTo("top shirt");
-        assertThat(getUsedItemResponse.getContent()).isEqualTo("buy right now");
-        assertThat(getUsedItemResponse.getPrice()).isEqualTo(10000);
+        assertThat(getUsedItemResponse.getTitle()).isEqualTo("title");
+        assertThat(getUsedItemResponse.getCategory()).isEqualTo("category");
+        assertThat(getUsedItemResponse.getContent()).isEqualTo("content");
+        assertThat(getUsedItemResponse.getPrice()).isEqualTo(5000);
 
         assertThat(getUsedItemResponse.getTransactionType()).isEqualTo(TransactionType.DIRECT);
         assertThat(getUsedItemResponse.getTransactionMode()).isEqualTo(TransactionMode.BUY);
