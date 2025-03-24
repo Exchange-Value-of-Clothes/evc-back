@@ -1,9 +1,9 @@
-package com.yzgeneration.evc.domain.useditem.infrastructure.entity;
+package com.yzgeneration.evc.domain.item.useditem.infrastructure.entity;
 
-import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionStatue;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
-import com.yzgeneration.evc.domain.useditem.model.UsedItemTransaction;
+import com.yzgeneration.evc.domain.item.enums.TransactionMode;
+import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
+import com.yzgeneration.evc.domain.item.enums.TransactionType;
+import com.yzgeneration.evc.domain.item.useditem.model.UsedItemTransaction;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,6 +15,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UsedItemTransactionEntity {
+
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
@@ -22,20 +23,20 @@ public class UsedItemTransactionEntity {
     private TransactionMode transactionMode;
 
     @Enumerated(EnumType.STRING)
-    private TransactionStatue transactionStatue;
+    private TransactionStatus transactionStatus;
 
     public static UsedItemTransactionEntity from(UsedItemTransaction usedItemTransaction) {
         return UsedItemTransactionEntity.builder()
                 .transactionType(usedItemTransaction.getTransactionType())
                 .transactionMode(usedItemTransaction.getTransactionMode())
-                .transactionStatue(usedItemTransaction.getTransactionStatue()).build();
+                .transactionStatus(usedItemTransaction.getTransactionStatus()).build();
     }
 
     public UsedItemTransaction toModel() {
         return UsedItemTransaction.builder()
                 .transactionType(transactionType)
                 .transactionMode(transactionMode)
-                .transactionStatue(transactionStatue)
+                .transactionStatus(transactionStatus)
                 .build();
     }
 }
