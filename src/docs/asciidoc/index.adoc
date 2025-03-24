@@ -25,6 +25,11 @@ include::authentication/authentication.adoc[]
 
 include::usedItem/usedItem.adoc[]
 
+[[AuctionItem-API]]
+== AuctionItem API
+
+include::auctionitem/auctionitem.adoc[]
+
 [[Image-API]]
 == Image API
 
