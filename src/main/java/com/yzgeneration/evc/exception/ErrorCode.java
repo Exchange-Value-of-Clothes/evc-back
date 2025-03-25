@@ -33,6 +33,7 @@ public enum ErrorCode {
     CHAT_NOT_FOUND(HttpStatus.NOT_FOUND, "045", "해당 채팅이 존재하지 않습니다."),
     POINT_NOT_FOUND(HttpStatus.NOT_FOUND, "046", "해당 orderId의 결제 정보가 존재하지 않습니다."),
     CHAT_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "047", "해당 채팅방에 속하는 채팅 멤버가 존재하지 않습니다."),
+    AUCTIONITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "047", "해당 경매상품은 존재하지 않습니다."),
 
     // 409 Conflict
     EMAIL_DUPLICATION(HttpStatus.CONFLICT, "091", "중복된 이메일이 존재합니다."),

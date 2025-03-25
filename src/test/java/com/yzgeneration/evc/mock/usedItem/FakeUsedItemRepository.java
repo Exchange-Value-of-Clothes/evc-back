@@ -1,7 +1,7 @@
 package com.yzgeneration.evc.mock.usedItem;
 
-import com.yzgeneration.evc.domain.useditem.model.UsedItem;
-import com.yzgeneration.evc.domain.useditem.service.port.UsedItemRepository;
+import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
+import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +25,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
                 .memberId(usedItem.getMemberId())
                 .itemDetails(usedItem.getItemDetails())
                 .usedItemTransaction(usedItem.getUsedItemTransaction())
-                .usedItemStatus(usedItem.getUsedItemStatus())
+                .itemStatus(usedItem.getItemStatus())
                 .usedItemTransaction(usedItem.getUsedItemTransaction())
                 .itemStats(usedItem.getItemStats())
                 .createdAt(usedItem.getCreatedAt())

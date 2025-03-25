@@ -1,16 +1,16 @@
 package com.yzgeneration.evc.usedItem.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yzgeneration.evc.domain.useditem.controller.UsedItemController;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemResponse;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsDetails;
-import com.yzgeneration.evc.domain.useditem.dto.UsedItemResponse.LoadUsedItemsResponse;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionMode;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionStatue;
-import com.yzgeneration.evc.domain.useditem.enums.TransactionType;
-import com.yzgeneration.evc.domain.useditem.enums.UsedItemStatus;
-import com.yzgeneration.evc.domain.useditem.service.UsedItemService;
+import com.yzgeneration.evc.domain.item.useditem.controller.UsedItemController;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemsDetails;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemsResponse;
+import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
+import com.yzgeneration.evc.domain.item.enums.TransactionMode;
+import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
+import com.yzgeneration.evc.domain.item.enums.TransactionType;
+import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
 import com.yzgeneration.evc.mock.WithFakeUser;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.yzgeneration.evc.fixture.usedItem.UsedItemFixture.fixCreateUsedItemRequest;
+import static com.yzgeneration.evc.fixture.UsedItemFixture.fixCreateUsedItemRequest;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -76,29 +76,29 @@ class UsedItemControllerTest {
     @DisplayName("중고상품 리스트 조회")
     void getUsedItems() throws Exception {
 
-        LoadUsedItemsDetails loadUsedItemsDetails = LoadUsedItemsDetails.builder()
+        GetUsedItemsDetails getUsedItemsDetails = GetUsedItemsDetails.builder()
                 .usedItemId(1L)
-                .title("Test UsedItem")
-                .price(10000)
+                .title("title")
+                .price(5000)
                 .transactionMode(TransactionMode.BUY)
-                .transactionStatue(TransactionStatue.ONGOING)
-                .imageURL("http://localhost:8080/image/1234.jpg")
+                .transactionStatus(TransactionStatus.ONGOING)
+                .imageName("imageName.jpg")
                 .likeCount(0)
                 .createAt(LocalDateTime.now())
-                .usedItemStatus(UsedItemStatus.ACTIVE)
+                .itemStatus(ItemStatus.ACTIVE)
                 .build();
 
-        LoadUsedItemsResponse loadUsedItemsResponse = LoadUsedItemsResponse.builder()
-                .loadUsedItemDetails(List.of(loadUsedItemsDetails))
+        GetUsedItemsResponse getUsedItemsResponse = GetUsedItemsResponse.builder()
+                .loadUsedItemDetails(List.of(getUsedItemsDetails))
                 .isLast(true)
                 .build();
 
         when(usedItemService.loadUsedItems(anyInt()))
-                .thenReturn(loadUsedItemsResponse);
+                .thenReturn(getUsedItemsResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/useditems").param("page", "0"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(loadUsedItemsResponse)));
+                .andExpect(content().json(objectMapper.writeValueAsString(getUsedItemsResponse)));
     }
 
     @Test
@@ -106,33 +106,33 @@ class UsedItemControllerTest {
     @DisplayName("개별 중고상품 조회")
     void getUsedItem() throws Exception {
 
-        LoadUsedItemResponse loadUsedItemResponse = LoadUsedItemResponse.builder()
-                .title("Test UsedItem")
-                .category("top shirt")
-                .content("buy right now")
-                .price(10000)
+        GetUsedItemResponse getUsedItemResponse = GetUsedItemResponse.builder()
+                .title("title")
+                .category("category")
+                .content("content")
+                .price(5000)
                 .transactionType(TransactionType.DIRECT)
                 .transactionMode(TransactionMode.BUY)
-                .transactionStatue(TransactionStatue.ONGOING)
-                .imageURLs(List.of("http://localhost:8080/image/1234.jpg"))
+                .transactionStatus(TransactionStatus.ONGOING)
+                .imageNames(List.of("imageName.jpg"))
                 .viewCount(0)
                 .likeCount(0)
                 .chattingCount(0)
                 .marketMemberId(1L)
-                .marketNickName("highyun")
+                .marketNickname("marketNickname")
                 .isOwned(true)
                 .createAt(LocalDateTime.now())
-                .usedItemStatus(UsedItemStatus.ACTIVE)
+                .itemStatus(ItemStatus.ACTIVE)
                 .build();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         MemberPrincipal memberPrincipal = (MemberPrincipal) authentication.getPrincipal();
 
         when(usedItemService.loadUsedItem(anyLong(), anyLong()))
-                .thenReturn(loadUsedItemResponse);
+                .thenReturn(getUsedItemResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/useditems/{usedItemId}", memberPrincipal.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(loadUsedItemResponse)));
+                .andExpect(content().json(objectMapper.writeValueAsString(getUsedItemResponse)));
     }
 }

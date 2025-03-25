@@ -1,6 +1,7 @@
 package com.yzgeneration.evc.domain.image.implement;
 
+import com.yzgeneration.evc.domain.image.dto.ImageResponse;
+
 public interface ImageHandler {
-    String getPresignedURLForUpload(String prefix, String fileName);
-    String getImageUrl(String fileName);
+    ImageResponse getPresignedURLForUpload(String prefix, String fileName);
 }
