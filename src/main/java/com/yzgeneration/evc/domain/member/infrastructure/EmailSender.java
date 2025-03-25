@@ -1,7 +1,6 @@
-package com.yzgeneration.evc.domain.member.service;
+package com.yzgeneration.evc.domain.member.infrastructure;
 
 import com.yzgeneration.evc.exception.CustomException;
-import com.yzgeneration.evc.domain.member.service.port.MailSender;
 import com.yzgeneration.evc.domain.verification.model.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

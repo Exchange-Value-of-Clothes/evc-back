@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.domain.member.service.port;
+package com.yzgeneration.evc.domain.member.infrastructure;
 
 import com.yzgeneration.evc.domain.member.model.Member;
 

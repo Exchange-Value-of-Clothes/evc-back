@@ -6,8 +6,8 @@ import com.yzgeneration.evc.domain.member.enums.MemberStatus;
 import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.model.MemberAuthenticationInformation;
 import com.yzgeneration.evc.domain.member.model.MemberPrivateInformation;
-import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
-import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
+import com.yzgeneration.evc.domain.member.infrastructure.MemberRepository;
+import com.yzgeneration.evc.domain.member.infrastructure.PasswordProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

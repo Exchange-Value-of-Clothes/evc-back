@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yzgeneration.evc.authentication.implement.TokenProvider;
 import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.exception.ErrorResponse;
-import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
+import com.yzgeneration.evc.domain.member.infrastructure.MemberRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;

@@ -10,7 +10,7 @@ import com.yzgeneration.evc.domain.member.implement.MemberUpdater;
 import com.yzgeneration.evc.domain.member.implement.MemberValidator;
 import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.service.MemberRegisterService;
-import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
+import com.yzgeneration.evc.domain.member.infrastructure.MemberRepository;
 import com.yzgeneration.evc.fixture.MemberFixture;
 import com.yzgeneration.evc.mock.StubUuidHolder;
 import com.yzgeneration.evc.mock.member.DummyEmailSender;

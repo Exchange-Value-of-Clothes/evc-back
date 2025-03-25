@@ -4,7 +4,7 @@ import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.domain.member.enums.MemberRole;
 import com.yzgeneration.evc.domain.member.enums.MemberStatus;
-import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
+import com.yzgeneration.evc.domain.member.infrastructure.PasswordProcessor;
 import com.yzgeneration.evc.external.social.SocialUserProfile;
 import lombok.Builder;
 import lombok.Getter;

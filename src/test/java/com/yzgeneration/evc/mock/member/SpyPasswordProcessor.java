@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.mock.member;
 
-import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
+import com.yzgeneration.evc.domain.member.infrastructure.PasswordProcessor;
 
 public class SpyPasswordProcessor implements PasswordProcessor {
     @Override

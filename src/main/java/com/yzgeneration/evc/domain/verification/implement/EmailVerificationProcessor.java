@@ -5,7 +5,7 @@ import com.yzgeneration.evc.domain.verification.enums.EmailVerificationType;
 import com.yzgeneration.evc.domain.verification.infrastructure.EmailVerificationRepository;
 import com.yzgeneration.evc.domain.verification.model.Email;
 import com.yzgeneration.evc.domain.verification.model.EmailVerification;
-import com.yzgeneration.evc.domain.member.service.port.MailSender;
+import com.yzgeneration.evc.domain.member.infrastructure.MailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
