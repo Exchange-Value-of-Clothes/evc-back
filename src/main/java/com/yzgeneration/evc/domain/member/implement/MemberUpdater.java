@@ -1,7 +1,7 @@
 package com.yzgeneration.evc.domain.member.implement;
 
 import com.yzgeneration.evc.domain.member.model.Member;
-import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
+import com.yzgeneration.evc.domain.member.infrastructure.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

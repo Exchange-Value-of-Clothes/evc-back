@@ -2,10 +2,8 @@ package com.yzgeneration.evc.docs.point;
 
 import com.yzgeneration.evc.docs.RestDocsSupport;
 import com.yzgeneration.evc.domain.point.controller.PointChargeController;
-import com.yzgeneration.evc.domain.point.enums.PointChargeType;
 import com.yzgeneration.evc.domain.point.service.PointChargeService;
 import com.yzgeneration.evc.fixture.PointChargeFixture;
-import com.yzgeneration.evc.mock.WithFakeUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -18,7 +16,6 @@ import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,23 +33,23 @@ public class PointChargeControllerDocsTest extends RestDocsSupport {
     void createOrder() throws Exception {
 
         given(pointChargeService.createOrder(any()))
-                .willReturn(PointChargeFixture.createPointCharge("orderId", 1L, PointChargeType.PACKAGE_5K));
+                .willReturn(PointChargeFixture.createPointCharge("orderId", 1L, 5000));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/point")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(PointChargeFixture.pointChargeOrderRequest())))
                 .andExpect(jsonPath("$.orderId").value("orderId"))
-                .andExpect(jsonPath("$.amount").value(5000))
+                .andExpect(jsonPath("$.price").value(5000))
                 .andDo(document("point-order",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
-                                fieldWithPath("pointChargeType").type(JsonFieldType.STRING)
-                                        .description("포인트 충전 타입 e.g. PACKAGE_5K, PACKAGE_10K, PACKAGE_50K")
+                                fieldWithPath("price").type(JsonFieldType.NUMBER)
+                                        .description("포인트 충전 금액")
                         ),
                         responseFields(
                                 fieldWithPath("orderId").type(JsonFieldType.STRING).description("주문 아이디"),
-                                fieldWithPath("amount").type(JsonFieldType.NUMBER).description("주문 수량 (포인트 값)")
+                                fieldWithPath("price").type(JsonFieldType.NUMBER).description("주문 금액")
                         )
 
                 ));

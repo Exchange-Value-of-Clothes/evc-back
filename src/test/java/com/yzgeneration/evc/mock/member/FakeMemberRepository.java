@@ -2,7 +2,7 @@ package com.yzgeneration.evc.mock.member;
 
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.domain.member.model.Member;
-import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
+import com.yzgeneration.evc.domain.member.infrastructure.MemberRepository;
 
 import java.util.ArrayList;
 import java.util.List;

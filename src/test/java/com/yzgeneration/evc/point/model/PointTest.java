@@ -1,7 +1,6 @@
 package com.yzgeneration.evc.point.model;
 
 import com.yzgeneration.evc.domain.point.enums.PointChargeStatus;
-import com.yzgeneration.evc.domain.point.enums.PointChargeType;
 import com.yzgeneration.evc.domain.point.model.PointCharge;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
@@ -15,7 +14,7 @@ class PointTest {
     @DisplayName("기존 수량값과 동일한지 검증할 수 있다.")
     void validPoint() {
         // given
-        PointCharge pointCharge = PointCharge.create(1L, PointChargeType.PACKAGE_5K);
+        PointCharge pointCharge = PointCharge.create(1L, 5000);
 
         // when
         // then
@@ -28,7 +27,7 @@ class PointTest {
     @DisplayName("포인트 충전 상태를 충전됨으로 변경할 수 있다.")
     void confirm() {
         // given
-        PointCharge pointCharge = PointCharge.create(1L, PointChargeType.PACKAGE_5K);
+        PointCharge pointCharge = PointCharge.create(1L, 5000);
 
         // when
         pointCharge.confirm();

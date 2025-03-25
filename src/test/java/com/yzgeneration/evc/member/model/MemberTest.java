@@ -8,7 +8,7 @@ import com.yzgeneration.evc.domain.member.enums.ProviderType;
 import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.model.MemberAuthenticationInformation;
 import com.yzgeneration.evc.domain.member.model.MemberPrivateInformation;
-import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
+import com.yzgeneration.evc.domain.member.infrastructure.PasswordProcessor;
 import com.yzgeneration.evc.mock.member.SpyPasswordProcessor;
 import com.yzgeneration.evc.mock.StubRandomHolder;
 import com.yzgeneration.evc.common.implement.port.RandomHolder;

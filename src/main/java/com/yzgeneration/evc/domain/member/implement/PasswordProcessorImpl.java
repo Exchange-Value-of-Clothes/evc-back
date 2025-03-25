@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.domain.member.implement;
 
-import com.yzgeneration.evc.domain.member.service.port.PasswordProcessor;
+import com.yzgeneration.evc.domain.member.infrastructure.PasswordProcessor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

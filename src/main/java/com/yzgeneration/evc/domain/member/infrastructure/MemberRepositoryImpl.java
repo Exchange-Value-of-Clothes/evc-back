@@ -3,7 +3,6 @@ package com.yzgeneration.evc.domain.member.infrastructure;
 import com.yzgeneration.evc.domain.member.enums.ProviderType;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
-import com.yzgeneration.evc.domain.member.service.port.MemberRepository;
 import com.yzgeneration.evc.domain.member.model.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

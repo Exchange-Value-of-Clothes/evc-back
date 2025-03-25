@@ -5,7 +5,6 @@ import com.yzgeneration.evc.domain.point.dto.PointChargeConfirmRequest;
 import com.yzgeneration.evc.domain.point.dto.PointChargeOrderRequest;
 import com.yzgeneration.evc.domain.point.dto.PointChargeOrderResponse;
 import com.yzgeneration.evc.domain.point.service.PointChargeService;
-import com.yzgeneration.evc.domain.point.enums.PointChargeType;
 import com.yzgeneration.evc.domain.point.model.PointCharge;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +21,8 @@ public class PointChargeController {
     // 결제 주문 생성
     @PostMapping
     public PointChargeOrderResponse createOrder(@RequestBody PointChargeOrderRequest pointChargeOrderRequest, @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
-        PointCharge pointCharge = pointChargeService.createOrder(PointCharge.create(memberPrincipal.getId(), PointChargeType.valueOf(pointChargeOrderRequest.getPointChargeType())));
-        return new PointChargeOrderResponse(pointCharge.getOrderId(), pointCharge.getPointChargeType().getPrice());
+        PointCharge pointCharge = pointChargeService.createOrder(PointCharge.create(memberPrincipal.getId(), pointChargeOrderRequest.getPrice()));
+        return new PointChargeOrderResponse(pointCharge.getOrderId(), pointCharge.getPrice());
     }
 
     // 결제 승인
