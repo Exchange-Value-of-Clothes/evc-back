@@ -1,7 +1,6 @@
 package com.yzgeneration.evc.point.service;
 
 import com.yzgeneration.evc.domain.point.enums.PointChargeStatus;
-import com.yzgeneration.evc.domain.point.enums.PointChargeType;
 import com.yzgeneration.evc.domain.point.implement.PointChargeProcessor;
 import com.yzgeneration.evc.domain.point.implement.PointChargeValidator;
 import com.yzgeneration.evc.domain.point.infrastructure.PointChargeRepository;
@@ -39,14 +38,14 @@ public class PointChargeServiceTest {
     @DisplayName("포인트 충전 주문을 생성할 수 있다.")
     void createPointCharge() {
         // given
-        PointCharge pointCharge = PointCharge.create(1L, PointChargeType.PACKAGE_5K);
+        PointCharge pointCharge = PointCharge.create(1L, 5000);
 
         // when
         PointCharge newPointCharge = pointChargeService.createOrder(pointCharge);
 
         // then
         assertThat(newPointCharge.getPointChargeStatus()).isEqualTo(PointChargeStatus.ORDERED);
-        assertThat(newPointCharge.getPointChargeType()).isEqualTo(PointChargeType.PACKAGE_5K);
+        assertThat(newPointCharge.getPrice()).isEqualTo(5000);
         assertThat(newPointCharge.getMemberId()).isEqualTo(1L);
     }
 
@@ -58,7 +57,7 @@ public class PointChargeServiceTest {
         String paymentKey = "paymentKey";
         int amount = 5000;
         Long memberId = 1L;
-        PointCharge pointCharge = PointChargeFixture.createPointCharge(orderId, memberId, PointChargeType.PACKAGE_5K);
+        PointCharge pointCharge = PointChargeFixture.createPointCharge(orderId, memberId, amount);
         pointChargeService.createOrder(pointCharge);
 
         // when
@@ -67,7 +66,7 @@ public class PointChargeServiceTest {
         // then
         PointCharge savedPointCharge = pointChargeRepository.getById(orderId);
         assertThat(savedPointCharge.getMemberId()).isEqualTo(1L);
-        assertThat(savedPointCharge.getPointChargeType()).isEqualTo(PointChargeType.PACKAGE_5K);
+        assertThat(savedPointCharge.getPrice()).isEqualTo(amount);
         assertThat(savedPointCharge.getPointChargeStatus()).isEqualTo(PointChargeStatus.CHARGED);
         assertThat(savedPointCharge.getPointChargeStatus()).isEqualTo(PointChargeStatus.CHARGED);
 

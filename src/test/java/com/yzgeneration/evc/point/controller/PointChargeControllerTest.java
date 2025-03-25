@@ -2,8 +2,6 @@ package com.yzgeneration.evc.point.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yzgeneration.evc.domain.point.controller.PointChargeController;
-import com.yzgeneration.evc.domain.point.enums.PointChargeType;
-import com.yzgeneration.evc.domain.point.model.PointCharge;
 import com.yzgeneration.evc.domain.point.service.PointChargeService;
 import com.yzgeneration.evc.fixture.PointChargeFixture;
 import com.yzgeneration.evc.mock.WithFakeUser;
@@ -46,14 +44,14 @@ class PointChargeControllerTest {
     void createOrder() throws Exception {
 
         given(pointChargeService.createOrder(any()))
-                .willReturn(PointChargeFixture.createPointCharge("orderId", 1L, PointChargeType.PACKAGE_5K));
+                .willReturn(PointChargeFixture.createPointCharge("orderId", 1L, 5000));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/point")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(PointChargeFixture.pointChargeOrderRequest()))
                         .with(csrf()))
                 .andExpect(jsonPath("$.orderId").value("orderId"))
-                .andExpect(jsonPath("$.amount").value(5000));
+                .andExpect(jsonPath("$.price").value(5000));
     }
 
     @Test

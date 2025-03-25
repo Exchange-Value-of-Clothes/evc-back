@@ -7,5 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PointChargeOrderResponse {
     private String orderId;
-    private int amount;
+    private int price;
 }
