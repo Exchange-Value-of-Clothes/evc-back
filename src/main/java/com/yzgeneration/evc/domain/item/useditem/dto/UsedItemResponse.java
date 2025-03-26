@@ -1,16 +1,18 @@
 package com.yzgeneration.evc.domain.item.useditem.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
+import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,54 +20,7 @@ public class UsedItemResponse {
 
     @Getter
     @Builder
-    public static class GetUsedItemsResponse {
-
-        @JsonUnwrapped
-        private List<GetUsedItemsDetails> loadUsedItemDetails;
-
-        private Boolean isLast;
-    }
-
-    @Getter
-    @Builder
-    public static class GetUsedItemsDetails {
-
-        private Long usedItemId;
-
-        private String title;
-
-        private int price;
-
-        private TransactionMode transactionMode;
-
-        private TransactionStatus transactionStatus;
-
-        private String imageName;
-
-        private int likeCount;
-
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        private LocalDateTime createAt;
-
-        private ItemStatus itemStatus;
-
-        public static GetUsedItemsDetails create(UsedItem usedItem, String imageName) {
-            return GetUsedItemsDetails.builder()
-                    .usedItemId(usedItem.getId())
-                    .title(usedItem.getItemDetails().getTitle())
-                    .price(usedItem.getItemDetails().getPrice())
-                    .transactionMode(usedItem.getUsedItemTransaction().getTransactionMode())
-                    .transactionStatus(usedItem.getUsedItemTransaction().getTransactionStatus())
-                    .imageName(imageName)
-                    .likeCount(usedItem.getItemStats().getLikeCount())
-                    .createAt(usedItem.getCreatedAt())
-                    .itemStatus(usedItem.getItemStatus())
-                    .build();
-        }
-    }
-
-    @Getter
-    @Builder
+    @AllArgsConstructor
     public static class GetUsedItemResponse {
 
         private String title;
@@ -82,7 +37,8 @@ public class UsedItemResponse {
 
         private TransactionStatus transactionStatus;
 
-        private List<String> imageNames;
+        @Setter
+        private List<String> imageNames = new ArrayList<>();
 
         private int viewCount;
 

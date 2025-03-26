@@ -1,20 +1,33 @@
 package com.yzgeneration.evc.domain.item.useditem.infrastructure.repository;
 
 
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.yzgeneration.evc.common.dto.SliceResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.UsedItemEntity;
 import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
-import com.yzgeneration.evc.exception.CustomException;
-import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static com.querydsl.core.types.dsl.Expressions.list;
+import static com.yzgeneration.evc.domain.image.infrastructure.entity.QImageEntity.imageEntity;
+import static com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.QUsedItemEntity.usedItemEntity;
+import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
 
 @Repository
 @RequiredArgsConstructor
 public class UsedItemRepositoryImpl implements UsedItemRepository {
     private final UsedItemJpaRepository usedItemJpaRepository;
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public UsedItem save(UsedItem usedItem) {
@@ -22,21 +35,72 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     }
 
     @Override
-    public Slice<UsedItem> findAll(Pageable pageable) {
-        return usedItemJpaRepository.findAllByOrderByCreatedAtDesc(pageable).map(UsedItemEntity::toModel);
-    }
+    public SliceResponse<GetUsedItemListResponse> getUsedItemList(LocalDateTime cursor) {
 
-    @Override
-    public UsedItem findById(Long usedItemId) {
-        return usedItemJpaRepository.findById(usedItemId).orElseThrow(
-                () -> new CustomException(ErrorCode.USEDITEM_NOT_FOUND)
-        ).toModel();
-    }
+        int size = 10;
 
-    @Override
-    public String findNicknameByUsedItemId(Long usedItemId) {
-        return usedItemJpaRepository.findNicknameByUsedItemId(usedItemId).orElseThrow(
-                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        List<GetUsedItemListResponse> usedItemListResponses = jpaQueryFactory
+                .select(Projections.constructor(GetUsedItemListResponse.class,
+                        usedItemEntity.id,
+                        usedItemEntity.itemDetailsEntity.title,
+                        usedItemEntity.itemDetailsEntity.price,
+                        usedItemEntity.usedItemTransactionEntity.transactionMode,
+                        usedItemEntity.usedItemTransactionEntity.transactionStatus,
+                        imageEntity.imageName,
+                        //TODO like 테이블 생기면 join해서 해당 값 채우기
+                        usedItemEntity.itemStatsEntity.likeCount,
+                        usedItemEntity.itemStatus)
+                )
+                .from(usedItemEntity)
+                .join(imageEntity)
+                .on(imageEntity.itemId.eq(usedItemEntity.id))
+                .where(imageEntity.isThumbnail
+                        .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null))
+                .orderBy(usedItemEntity.createdAt.desc())
+                .limit(size + 1)
+                .fetch();
+
+        boolean hasNext = usedItemListResponses.size() > size; //true: 조회할 상품이 더 남은 상태 (조회 결과 : 11개)
+        if (hasNext) {
+            usedItemListResponses.remove(size);
+        }
+
+        LocalDateTime localCreateTime = !usedItemListResponses.isEmpty() ? usedItemListResponses.get(usedItemListResponses.size() - 1).getCreateAt() : null;
+
+        return new SliceResponse<>(
+                new SliceImpl<>(usedItemListResponses, PageRequest.of(0, size), hasNext), localCreateTime
         );
+    }
+
+    @Override
+    public Optional<GetUsedItemResponse> findByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
+
+        GetUsedItemResponse usedItemResponse = jpaQueryFactory
+                .select(Projections.constructor(GetUsedItemResponse.class,
+                        usedItemEntity.itemDetailsEntity.title,
+                        usedItemEntity.itemDetailsEntity.category,
+                        usedItemEntity.itemDetailsEntity.content,
+                        usedItemEntity.itemDetailsEntity.price,
+                        usedItemEntity.usedItemTransactionEntity.transactionType,
+                        usedItemEntity.usedItemTransactionEntity.transactionMode,
+                        usedItemEntity.usedItemTransactionEntity.transactionStatus,
+                        list(),
+                        usedItemEntity.itemStatsEntity.viewCount,
+                        usedItemEntity.itemStatsEntity.likeCount,
+                        usedItemEntity.itemStatsEntity.chattingCount,
+                        usedItemEntity.memberId,
+                        memberEntity.memberPrivateInformationEntity.nickname,
+                        //조회한 중고상품의 게시자와 조회자의 일치 체크
+                        usedItemEntity.memberId.eq(memberId),
+                        usedItemEntity.createdAt,
+                        usedItemEntity.itemStatus
+                ))
+                .from(usedItemEntity)
+                .join(memberEntity)
+                .on(memberEntity.id.eq(usedItemEntity.memberId))
+                .where(usedItemEntity.id.eq(usedItemId))
+                .fetchFirst();
+
+        return Optional.ofNullable(usedItemResponse);
     }
 }
