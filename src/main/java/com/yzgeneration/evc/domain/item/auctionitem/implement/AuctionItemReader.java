@@ -21,7 +21,7 @@ public class AuctionItemReader {
     public GetAuctionItemResponse getAuctionItemResponse(Long memberId, Long itemId) {
 
         List<String> imageNameList = imageRepository.findImageNamesByItemIdAndItemType(itemId, itemType);
-        GetAuctionItemResponse auctionItemResponse = auctionItemRepository.findByAuctionItemByItemId(memberId, itemId).orElseThrow(
+        GetAuctionItemResponse auctionItemResponse = auctionItemRepository.findByMemberIdAndAuctionItemId(memberId, itemId).orElseThrow(
                 () -> new CustomException(ErrorCode.AUCTIONITEM_NOT_FOUND)
         );
         auctionItemResponse.setImageNameList(imageNameList);

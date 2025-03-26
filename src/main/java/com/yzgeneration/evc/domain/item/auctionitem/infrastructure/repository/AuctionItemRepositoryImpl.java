@@ -81,7 +81,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
     }
 
     @Override
-    public Optional<GetAuctionItemResponse> findByAuctionItemByItemId(Long memberId, Long itemId) {
+    public Optional<GetAuctionItemResponse> findByMemberIdAndAuctionItemId(Long memberId, Long itemId) {
         GetAuctionItemResponse auctionItemResponse = jpaQueryFactory
                 .select(Projections.constructor(GetAuctionItemResponse.class,
                         Projections.constructor(AuctionItemDetailsResponse.class,
