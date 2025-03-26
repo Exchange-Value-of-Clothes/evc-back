@@ -27,7 +27,7 @@ public class UsedItemController {
     }
 
     @GetMapping
-    public SliceResponse<GetUsedItemListResponse> getUsedItems(@RequestParam LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemListResponse> getUsedItems(@RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
         return usedItemService.getUsedItems(cursor);
     }
 
