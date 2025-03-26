@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.yzgeneration.evc.fixture.AuctionItemFixture.fixCreateAuctionItemRequest;
 import static org.assertj.core.api.Assertions.assertThat;
+
 public class AuctionItemTest {
 
     @Test

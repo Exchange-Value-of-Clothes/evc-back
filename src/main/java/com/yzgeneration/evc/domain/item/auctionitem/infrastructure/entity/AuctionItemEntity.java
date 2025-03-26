@@ -1,6 +1,7 @@
 package com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity;
 
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
+import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import jakarta.persistence.*;
@@ -24,6 +25,9 @@ public class AuctionItemEntity {
     @Embedded
     private AuctionItemDetailsEntity auctionItemDetailsEntity;
 
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
+
     @Embedded
     private AuctionItemStatsEntity auctionItemStatsEntity;
 
@@ -45,6 +49,7 @@ public class AuctionItemEntity {
         return AuctionItemEntity.builder()
                 .memberId(auctionItem.getMemberId())
                 .auctionItemDetailsEntity(AuctionItemDetailsEntity.from(auctionItem.getAuctionItemDetails()))
+                .transactionType(auctionItem.getTransactionType())
                 .auctionItemStatsEntity(AuctionItemStatsEntity.from(auctionItem.getAuctionItemStats()))
                 .auctionItemDetailsEntity(AuctionItemDetailsEntity.from(auctionItem.getAuctionItemDetails()))
                 .transactionStatus(auctionItem.getTransactionStatus())
@@ -59,6 +64,7 @@ public class AuctionItemEntity {
                 .id(id)
                 .memberId(memberId)
                 .auctionItemDetails(auctionItemDetailsEntity.toModel())
+                .transactionStatus(transactionStatus)
                 .auctionItemStats(auctionItemStatsEntity.toModel())
                 .auctionItemPriceDetails(auctionItemPriceDetailsEntity.toModel())
                 .transactionStatus((transactionStatus))

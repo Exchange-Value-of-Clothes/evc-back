@@ -10,6 +10,7 @@ import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.Auct
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemStatsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.service.AuctionItemService;
+import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.mock.WithFakeUser;
 import org.junit.jupiter.api.DisplayName;
@@ -105,7 +106,7 @@ public class AuctionItemControllerTest {
         AuctionItemDetailsResponse auctionItemDetailsResponse = new AuctionItemDetailsResponse("title", "category", "content");
         AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1, 1, 1);
         List<String> imageNameList = List.of("imageName.jpg");
-        GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 1L, "marketNickname", false, ItemStatus.ACTIVE);
+        GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 1L, "marketNickname", false, ItemStatus.ACTIVE);
 
         when(auctionItemService.getAuctionItem(any(), any()))
                 .thenReturn(getAuctionItemResponse);
@@ -120,6 +121,7 @@ public class AuctionItemControllerTest {
                 .andExpect(jsonPath("$.likeCount").value(1))
                 .andExpect(jsonPath("$.participantCount").value(1))
                 .andExpect(jsonPath("$.imageNameList[0]").value("imageName.jpg"))
+                .andExpect(jsonPath("$.transactionType").value("DIRECT"))
                 .andExpect(jsonPath("$.startTime").value("+1000000000-01-01T00:00:00"))
                 .andExpect(jsonPath("$.endTime").value("+1000000000-01-02T00:00:00"))
                 .andExpect(jsonPath("$.currentPrice").value(5000))

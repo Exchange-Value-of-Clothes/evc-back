@@ -1,8 +1,9 @@
 package com.yzgeneration.evc.domain.item.auctionitem.model;
 
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemRequest.CreateAuctionItemRequest;
-import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
+import com.yzgeneration.evc.domain.item.enums.TransactionType;
+import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,6 +17,8 @@ public class AuctionItem {
     private Long memberId;
 
     private AuctionItemDetails auctionItemDetails;
+
+    private TransactionType transactionType;
 
     private AuctionItemStats auctionItemStats;
 
@@ -35,6 +38,7 @@ public class AuctionItem {
         return AuctionItem.builder()
                 .memberId(memberId)
                 .auctionItemDetails(AuctionItemDetails.create(createAuctionItemRequest))
+                .transactionType(TransactionType.valueOf(createAuctionItemRequest.getTransactionType()))
                 .auctionItemStats(AuctionItemStats.create())
                 .auctionItemPriceDetails(AuctionItemPriceDetails.create(createAuctionItemRequest))
                 .transactionStatus(TransactionStatus.ONGOING)
