@@ -51,7 +51,7 @@ public class AuctionItemEntity {
                 .auctionItemDetailsEntity(AuctionItemDetailsEntity.from(auctionItem.getAuctionItemDetails()))
                 .transactionType(auctionItem.getTransactionType())
                 .auctionItemStatsEntity(AuctionItemStatsEntity.from(auctionItem.getAuctionItemStats()))
-                .auctionItemDetailsEntity(AuctionItemDetailsEntity.from(auctionItem.getAuctionItemDetails()))
+                .auctionItemPriceDetailsEntity(AuctionItemPriceDetailsEntity.from(auctionItem.getAuctionItemPriceDetails()))
                 .transactionStatus(auctionItem.getTransactionStatus())
                 .itemStatus(auctionItem.getItemStatus())
                 .startTime(auctionItem.getStartTime())
