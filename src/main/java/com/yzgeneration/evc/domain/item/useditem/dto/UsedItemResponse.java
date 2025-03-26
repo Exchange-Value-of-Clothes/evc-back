@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,7 +37,7 @@ public class UsedItemResponse {
         private TransactionStatus transactionStatus;
 
         @Setter
-        private List<String> imageNames = new ArrayList<>();
+        private List<String> imageNames;
 
         private int viewCount;
 

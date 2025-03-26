@@ -1,6 +1,7 @@
 package com.yzgeneration.evc.domain.item.auctionitem.infrastructure.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.AuctionItemPriceDetailsResponse;
@@ -19,10 +20,10 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.querydsl.core.types.dsl.Expressions.list;
 import static com.yzgeneration.evc.domain.image.infrastructure.entity.QItemImageEntity.itemImageEntity;
 import static com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.QAuctionItemEntity.auctionItemEntity;
 import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
@@ -57,11 +58,10 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         memberEntity.memberPrivateInformationEntity.point))
                 .from(auctionItemEntity)
                 .join(itemImageEntity) //썸네일 조회를 위해 join
-                .on(itemImageEntity.itemId.eq(auctionItemEntity.id))
+                .on(itemImageEntity.itemId.eq(auctionItemEntity.id), itemImageEntity.isThumbnail)
                 .join(memberEntity) //포인트 조회를 위해 join
                 .on(memberEntity.id.eq(memberId))
-                .where(itemImageEntity.isThumbnail
-                        .and(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE)) //게시 중인 경매상품
+                .where(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE) //게시 중인 경매상품
                         .and(auctionItemEntity.transactionStatus.eq(TransactionStatus.ONGOING)) //현재 거래중 상태인 경매상품
                         .and(cursor != null ? auctionItemEntity.startTime.lt(cursor) : null))
                 .orderBy(auctionItemEntity.startTime.desc())
@@ -93,7 +93,8 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                                 //TODO likeCount로 이후에 변경하기 (좋아요 기능 만들면)
                                 auctionItemEntity.auctionItemStatsEntity.viewCount,
                                 auctionItemEntity.auctionItemStatsEntity.participantCount),
-                        list(), //이후 setter를 이용해 값 설정
+                        Expressions.constant(new ArrayList<>()), //이후 setter를 이용해 값 설정
+                        auctionItemEntity.transactionType,
                         auctionItemEntity.startTime,
                         auctionItemEntity.endTime,
                         auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,

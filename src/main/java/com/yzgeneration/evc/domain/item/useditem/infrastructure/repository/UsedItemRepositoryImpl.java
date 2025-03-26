@@ -2,10 +2,12 @@ package com.yzgeneration.evc.domain.item.useditem.infrastructure.repository;
 
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
+import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.UsedItemEntity;
 import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
@@ -15,10 +17,10 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.querydsl.core.types.dsl.Expressions.list;
 import static com.yzgeneration.evc.domain.image.infrastructure.entity.QItemImageEntity.itemImageEntity;
 import static com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.QUsedItemEntity.usedItemEntity;
 import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
@@ -49,12 +51,14 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         itemImageEntity.imageName,
                         //TODO like 테이블 생기면 join해서 해당 값 채우기
                         usedItemEntity.itemStatsEntity.likeCount,
+                        usedItemEntity.createdAt,
                         usedItemEntity.itemStatus)
                 )
                 .from(usedItemEntity)
                 .join(itemImageEntity)
-                .on(itemImageEntity.itemId.eq(usedItemEntity.id))
-                .where(itemImageEntity.isThumbnail
+                .on(itemImageEntity.itemId.eq(usedItemEntity.id), itemImageEntity.isThumbnail)
+                .where(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)
+                        //TODO(판매완료된 거는 빼고 줄까?)
                         .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null))
                 .orderBy(usedItemEntity.createdAt.desc())
                 .limit(size + 1)
@@ -84,7 +88,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         usedItemEntity.usedItemTransactionEntity.transactionType,
                         usedItemEntity.usedItemTransactionEntity.transactionMode,
                         usedItemEntity.usedItemTransactionEntity.transactionStatus,
-                        list(),
+                        Expressions.constant(new ArrayList<>()),
                         usedItemEntity.itemStatsEntity.viewCount,
                         usedItemEntity.itemStatsEntity.likeCount,
                         usedItemEntity.itemStatsEntity.chattingCount,

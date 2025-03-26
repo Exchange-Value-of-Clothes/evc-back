@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AuctionItemResponse {
@@ -25,7 +24,7 @@ public class AuctionItemResponse {
         private AuctionItemStatsResponse auctionItemStatsResponse;
 
         @Setter
-        private List<String> imageNameList = new ArrayList<>();
+        private List<String> imageNameList;
 
         private TransactionType transactionType;
 
