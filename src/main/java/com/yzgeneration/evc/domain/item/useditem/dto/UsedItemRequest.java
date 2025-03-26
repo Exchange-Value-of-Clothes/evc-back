@@ -5,6 +5,7 @@ import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.validator.EnumValidator;
 import com.yzgeneration.evc.validator.Validatable;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,12 +17,16 @@ public class UsedItemRequest {
     @NoArgsConstructor
     public static class CreateUsedItemRequest implements Validatable {
 
+        @NotBlank
         private String title;
 
+        @NotBlank
         private String category;
 
+        @NotBlank
         private String content;
 
+        @NotBlank
         private int price;
 
         private String transactionType;
