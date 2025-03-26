@@ -79,7 +79,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
 
     @Test
     @DisplayName("중고상품들 조회 (메인페이지)")
-    void loadUsedItems() throws Exception {
+    void getUsedItems() throws Exception {
         GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1, LocalDateTime.MIN, ItemStatus.ACTIVE);
         SliceResponse<GetUsedItemListResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
@@ -128,7 +128,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
 
     @Test
     @DisplayName("개별 중고상품 조회 (상세페이지)")
-    void loadUsedItem() throws Exception {
+    void getUsedItem() throws Exception {
         GetUsedItemResponse getUsedItemResponse = GetUsedItemResponse.builder()
                 .title("title")
                 .category("category")

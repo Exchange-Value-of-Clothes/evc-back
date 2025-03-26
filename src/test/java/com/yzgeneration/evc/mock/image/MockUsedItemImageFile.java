@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.mock.usedItem;
+package com.yzgeneration.evc.mock.image;
 
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -11,8 +11,8 @@ public class MockUsedItemImageFile {
 
     public List<MultipartFile> getImageFiles() {
         List<MultipartFile> imageFiles = new ArrayList<>();
-        imageFiles.add(new MockMultipartFile("usedItem1", "usedItem1.png", MediaType.MULTIPART_FORM_DATA_VALUE, "usedItem1".getBytes()));
-        imageFiles.add(new MockMultipartFile("usedItem2", "usedItem2.png", MediaType.MULTIPART_FORM_DATA_VALUE, "usedItem2".getBytes()));
+        imageFiles.add(new MockMultipartFile("imageName1", "imageName1.jpg", MediaType.MULTIPART_FORM_DATA_VALUE, "imageName1".getBytes()));
+        imageFiles.add(new MockMultipartFile("imageName2", "imageName2.jpg", MediaType.MULTIPART_FORM_DATA_VALUE, "imageName2".getBytes()));
         return imageFiles;
     }
 }

@@ -6,6 +6,7 @@ import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.validator.EnumValidator;
 import com.yzgeneration.evc.validator.Validatable;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,7 +27,7 @@ public class UsedItemRequest {
         @NotBlank
         private String content;
 
-        @NotBlank
+        @NotNull
         private int price;
 
         private String transactionType;

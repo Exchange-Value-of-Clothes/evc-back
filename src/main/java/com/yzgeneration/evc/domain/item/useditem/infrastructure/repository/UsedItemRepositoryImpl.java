@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.querydsl.core.types.dsl.Expressions.list;
-import static com.yzgeneration.evc.domain.image.infrastructure.entity.QImageEntity.imageEntity;
+import static com.yzgeneration.evc.domain.image.infrastructure.entity.QItemImageEntity.itemImageEntity;
 import static com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.QUsedItemEntity.usedItemEntity;
 import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
 
@@ -46,15 +46,15 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         usedItemEntity.itemDetailsEntity.price,
                         usedItemEntity.usedItemTransactionEntity.transactionMode,
                         usedItemEntity.usedItemTransactionEntity.transactionStatus,
-                        imageEntity.imageName,
+                        itemImageEntity.imageName,
                         //TODO like 테이블 생기면 join해서 해당 값 채우기
                         usedItemEntity.itemStatsEntity.likeCount,
                         usedItemEntity.itemStatus)
                 )
                 .from(usedItemEntity)
-                .join(imageEntity)
-                .on(imageEntity.itemId.eq(usedItemEntity.id))
-                .where(imageEntity.isThumbnail
+                .join(itemImageEntity)
+                .on(itemImageEntity.itemId.eq(usedItemEntity.id))
+                .where(itemImageEntity.isThumbnail
                         .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null))
                 .orderBy(usedItemEntity.createdAt.desc())
                 .limit(size + 1)

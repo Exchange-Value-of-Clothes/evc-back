@@ -2,7 +2,7 @@ package com.yzgeneration.evc.auctionitem.service;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.image.implement.ItemImageAppender;
-import com.yzgeneration.evc.domain.image.service.port.ImageRepository;
+import com.yzgeneration.evc.domain.image.service.port.ItemImageRepository;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.GetAuctionItemListResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemRequest.CreateAuctionItemRequest;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
@@ -10,7 +10,7 @@ import com.yzgeneration.evc.domain.item.auctionitem.implement.AuctionItemReader;
 import com.yzgeneration.evc.domain.item.auctionitem.service.AuctionItemService;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
 import com.yzgeneration.evc.mock.auctionitem.FakeAuctionItemRepository;
-import com.yzgeneration.evc.mock.usedItem.FakeImageRepository;
+import com.yzgeneration.evc.mock.image.FakeItemImageRepository;
 import org.junit.jupiter.api.*;
 
 import static com.yzgeneration.evc.fixture.AuctionItemFixture.fixCreateAuctionItemRequest;
@@ -24,10 +24,10 @@ public class AuctionItemServiceTest {
     @BeforeEach
     void init() {
         AuctionItemRepository auctionItemRepository = new FakeAuctionItemRepository();
-        ImageRepository imageRepository = new FakeImageRepository();
-        ItemImageAppender itemImageAppender = new ItemImageAppender(imageRepository);
+        ItemImageRepository itemImageRepository = new FakeItemImageRepository();
+        ItemImageAppender itemImageAppender = new ItemImageAppender(itemImageRepository);
 
-        AuctionItemReader auctionItemReader = new AuctionItemReader(auctionItemRepository, imageRepository);
+        AuctionItemReader auctionItemReader = new AuctionItemReader(auctionItemRepository, itemImageRepository);
 
         auctionItemService = new AuctionItemService(auctionItemRepository, auctionItemReader, itemImageAppender);
     }

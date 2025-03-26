@@ -2,7 +2,7 @@ package com.yzgeneration.evc.usedItem.service;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.image.implement.ItemImageAppender;
-import com.yzgeneration.evc.domain.image.service.port.ImageRepository;
+import com.yzgeneration.evc.domain.image.service.port.ItemImageRepository;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
@@ -13,7 +13,7 @@ import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.useditem.implement.UsedItemReader;
 import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
-import com.yzgeneration.evc.mock.usedItem.FakeImageRepository;
+import com.yzgeneration.evc.mock.image.FakeItemImageRepository;
 import com.yzgeneration.evc.mock.usedItem.FakeUsedItemRepository;
 import org.junit.jupiter.api.*;
 
@@ -27,9 +27,9 @@ class UsedItemServiceTest {
     @BeforeEach
     void init() {
         UsedItemRepository usedItemRepository = new FakeUsedItemRepository();
-        ImageRepository imageRepository = new FakeImageRepository();
-        UsedItemReader usedItemReader = new UsedItemReader(usedItemRepository, imageRepository);
-        ItemImageAppender itemImageAppender = new ItemImageAppender(imageRepository);
+        ItemImageRepository itemImageRepository = new FakeItemImageRepository();
+        UsedItemReader usedItemReader = new UsedItemReader(usedItemRepository, itemImageRepository);
+        ItemImageAppender itemImageAppender = new ItemImageAppender(itemImageRepository);
 
         usedItemService = new UsedItemService(usedItemRepository, itemImageAppender, usedItemReader);
     }
