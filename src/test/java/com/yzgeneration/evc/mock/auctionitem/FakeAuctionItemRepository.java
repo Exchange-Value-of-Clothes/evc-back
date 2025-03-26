@@ -71,7 +71,7 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
     }
 
     @Override
-    public Optional<GetAuctionItemResponse> findByAuctionItemByItemId(Long memberId, Long itemId) {
+    public Optional<GetAuctionItemResponse> findByMemberIdAndAuctionItemId(Long memberId, Long itemId) {
         return mockAuctionItem.stream()
                 .filter(auction -> auction.getId().equals(itemId))
                 .findFirst()

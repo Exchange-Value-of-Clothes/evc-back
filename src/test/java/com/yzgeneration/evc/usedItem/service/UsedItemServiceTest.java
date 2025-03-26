@@ -1,17 +1,16 @@
 package com.yzgeneration.evc.usedItem.service;
 
+import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.image.implement.ItemImageAppender;
 import com.yzgeneration.evc.domain.image.service.port.ImageRepository;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemsDetails;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemsResponse;
-import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
-import com.yzgeneration.evc.domain.item.useditem.implement.UsedItemAppender;
-import com.yzgeneration.evc.domain.item.useditem.implement.UsedItemLoader;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
+import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
+import com.yzgeneration.evc.domain.item.useditem.implement.UsedItemReader;
 import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
 import com.yzgeneration.evc.mock.usedItem.FakeImageRepository;
@@ -29,13 +28,10 @@ class UsedItemServiceTest {
     void init() {
         UsedItemRepository usedItemRepository = new FakeUsedItemRepository();
         ImageRepository imageRepository = new FakeImageRepository();
-
-        UsedItemAppender usedItemAppender = new UsedItemAppender(usedItemRepository);
-        UsedItemLoader usedItemLoader = new UsedItemLoader(usedItemRepository);
-
+        UsedItemReader usedItemReader = new UsedItemReader(usedItemRepository, imageRepository);
         ItemImageAppender itemImageAppender = new ItemImageAppender(imageRepository);
 
-        usedItemService = new UsedItemService(usedItemAppender, itemImageAppender, usedItemLoader, imageRepository);
+        usedItemService = new UsedItemService(usedItemRepository, itemImageAppender, usedItemReader);
     }
 
     @Test
@@ -55,20 +51,15 @@ class UsedItemServiceTest {
     @DisplayName("등록한 중고상품 리스트가 정상적으로 조회되는지 체크")
     void getUsedItems() {
         //given
-        int page = 0;
-
         //when
-        GetUsedItemsResponse getUsedItemsResponse = usedItemService.loadUsedItems(page);
-        GetUsedItemsDetails getUsedItemsDetails = getUsedItemsResponse.getLoadUsedItemDetails().get(0);
+        SliceResponse<GetUsedItemListResponse> usedItemListResponse = usedItemService.getUsedItems(null);
 
         //then
-        assertThat(getUsedItemsDetails.getUsedItemId()).isEqualTo(1L);
-        assertThat(getUsedItemsDetails.getTitle()).isEqualTo("title");
-        assertThat(getUsedItemsDetails.getPrice()).isEqualTo(5000);
-        assertThat(getUsedItemsDetails.getTransactionMode()).isEqualTo(TransactionMode.BUY);
-        assertThat(getUsedItemsDetails.getTransactionStatus()).isEqualTo(TransactionStatus.ONGOING);
-        assertThat(getUsedItemsDetails.getLikeCount()).isEqualTo(0);
-        assertThat(getUsedItemsDetails.getItemStatus()).isEqualTo(ItemStatus.ACTIVE);
+        assertThat(usedItemListResponse.getContent().get(0).getUsedItemId()).isEqualTo(1L);
+        assertThat(usedItemListResponse.getContent().get(0).getTitle()).isEqualTo("title");
+        assertThat(usedItemListResponse.getContent().get(0).getPrice()).isEqualTo(5000);
+        assertThat(usedItemListResponse.getContent().get(0).getImageName()).isEqualTo("imageName.jpg");
+
     }
 
     @Test
@@ -79,7 +70,7 @@ class UsedItemServiceTest {
         Long usedItemId = 1L;
 
         //when
-        GetUsedItemResponse getUsedItemResponse = usedItemService.loadUsedItem(memberId, usedItemId);
+        GetUsedItemResponse getUsedItemResponse = usedItemService.getUsedItem(memberId, usedItemId);
 
         //then
         assertThat(getUsedItemResponse.getTitle()).isEqualTo("title");
