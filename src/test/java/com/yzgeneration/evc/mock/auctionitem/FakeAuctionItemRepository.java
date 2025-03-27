@@ -71,7 +71,7 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
     }
 
     @Override
-    public Optional<GetAuctionItemResponse> findByAuctionItemByItemId(Long memberId, Long itemId) {
+    public Optional<GetAuctionItemResponse> findByMemberIdAndAuctionItemId(Long memberId, Long itemId) {
         return mockAuctionItem.stream()
                 .filter(auction -> auction.getId().equals(itemId))
                 .findFirst()
@@ -80,7 +80,7 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
                     AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1, 1, 1);
                     List<String> imageNameList = List.of("imageName.jpg");
 
-                    return new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, auctionItem.getStartTime(), auctionItem.getEndTime(), auctionItem.getAuctionItemPriceDetails().getCurrentPrice(), auctionItem.getMemberId(), "marketNickname", auctionItem.getMemberId().equals(memberId), auctionItem.getItemStatus());
+                    return new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, auctionItem.getTransactionType(), auctionItem.getStartTime(), auctionItem.getEndTime(), auctionItem.getAuctionItemPriceDetails().getCurrentPrice(), auctionItem.getMemberId(), "marketNickname", auctionItem.getMemberId().equals(memberId), auctionItem.getItemStatus());
                 });
     }
 }

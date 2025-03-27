@@ -26,7 +26,7 @@ public class AuctionItemController {
     }
 
     @GetMapping
-    public SliceResponse<GetAuctionItemListResponse> getAuctionItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam LocalDateTime cursor) {
+    public SliceResponse<GetAuctionItemListResponse> getAuctionItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
         return auctionItemService.getAuctionItems(memberPrincipal.getId(), cursor);
     }
 

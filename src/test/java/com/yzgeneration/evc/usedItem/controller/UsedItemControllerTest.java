@@ -1,27 +1,26 @@
 package com.yzgeneration.evc.usedItem.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yzgeneration.evc.domain.item.useditem.controller.UsedItemController;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemsDetails;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemsResponse;
-import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
+import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
+import com.yzgeneration.evc.domain.item.useditem.controller.UsedItemController;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
+import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
 import com.yzgeneration.evc.mock.WithFakeUser;
-import com.yzgeneration.evc.security.MemberPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -31,11 +30,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.yzgeneration.evc.fixture.UsedItemFixture.fixCreateUsedItemRequest;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UsedItemController.class,
         excludeFilters = {
@@ -58,11 +57,6 @@ class UsedItemControllerTest {
     void createUsedItem() throws Exception {
 
         CreateUsedItemRequest createUsedItemRequest = fixCreateUsedItemRequest();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MemberPrincipal memberPrincipal = (MemberPrincipal) authentication.getPrincipal();
-
-        usedItemService.createUsedItem(memberPrincipal.getId(), createUsedItemRequest);
-
         mockMvc.perform(MockMvcRequestBuilders.post("/api/useditems")
                         .content(objectMapper.writeValueAsString(createUsedItemRequest))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -76,29 +70,29 @@ class UsedItemControllerTest {
     @DisplayName("중고상품 리스트 조회")
     void getUsedItems() throws Exception {
 
-        GetUsedItemsDetails getUsedItemsDetails = GetUsedItemsDetails.builder()
-                .usedItemId(1L)
-                .title("title")
-                .price(5000)
-                .transactionMode(TransactionMode.BUY)
-                .transactionStatus(TransactionStatus.ONGOING)
-                .imageName("imageName.jpg")
-                .likeCount(0)
-                .createAt(LocalDateTime.now())
-                .itemStatus(ItemStatus.ACTIVE)
-                .build();
+        GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName.jpg", 1, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        SliceResponse<GetUsedItemListResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
-        GetUsedItemsResponse getUsedItemsResponse = GetUsedItemsResponse.builder()
-                .loadUsedItemDetails(List.of(getUsedItemsDetails))
-                .isLast(true)
-                .build();
+        when(usedItemService.getUsedItems(any()))
+                .thenReturn(getUsedItemSliceResponse);
 
-        when(usedItemService.loadUsedItems(anyInt()))
-                .thenReturn(getUsedItemsResponse);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/useditems").param("page", "0"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/useditems")
+                        .queryParam("cursor", LocalDateTime.MIN.toString())
+                        .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(getUsedItemsResponse)));
+                .andExpect(jsonPath("$.content[0].usedItemId").value(1L))
+                .andExpect(jsonPath("$.content[0].title").value("title"))
+                .andExpect(jsonPath("$.content[0].price").value(5000))
+                .andExpect(jsonPath("$.content[0].transactionMode").value("BUY"))
+                .andExpect(jsonPath("$.content[0].transactionStatus").value("ONGOING"))
+                .andExpect(jsonPath("$.content[0].imageName").value("imageName.jpg"))
+                .andExpect(jsonPath("$.content[0].likeCount").value(1))
+                .andExpect(jsonPath("$.content[0].createAt").value("+1000000000-01-01T00:00:00"))
+                .andExpect(jsonPath("$.content[0].itemStatus").value("ACTIVE"))
+                .andExpect(jsonPath("$.hasNext").value(true))
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.numberOfElements").value(1))
+                .andExpect(jsonPath("$.cursor").value("+1000000000-01-01T00:00:00"));
     }
 
     @Test
@@ -121,18 +115,32 @@ class UsedItemControllerTest {
                 .marketMemberId(1L)
                 .marketNickname("marketNickname")
                 .isOwned(true)
-                .createAt(LocalDateTime.now())
+                .createAt(LocalDateTime.MIN)
                 .itemStatus(ItemStatus.ACTIVE)
                 .build();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MemberPrincipal memberPrincipal = (MemberPrincipal) authentication.getPrincipal();
-
-        when(usedItemService.loadUsedItem(anyLong(), anyLong()))
+        when(usedItemService.getUsedItem(any(), any()))
                 .thenReturn(getUsedItemResponse);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/useditems/{usedItemId}", memberPrincipal.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/useditems/{usedItemId}", 1L)
+                        .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(getUsedItemResponse)));
+                .andExpect(jsonPath("$.title").value("title"))
+                .andExpect(jsonPath("$.category").value("category"))
+                .andExpect(jsonPath("$.content").value("content"))
+                .andExpect(jsonPath("$.price").value(5000))
+                .andExpect(jsonPath("$.transactionType").value("DIRECT"))
+                .andExpect(jsonPath("$.transactionMode").value("BUY"))
+                .andExpect(jsonPath("$.transactionStatus").value("ONGOING"))
+                .andExpect(jsonPath("$.imageNames[0]").value("imageName.jpg"))
+                .andExpect(jsonPath("$.viewCount").value(0))
+                .andExpect(jsonPath("$.likeCount").value(0))
+                .andExpect(jsonPath("$.chattingCount").value(0))
+                .andExpect(jsonPath("$.marketMemberId").value(1L))
+                .andExpect(jsonPath("$.marketNickname").value("marketNickname"))
+                .andExpect(jsonPath("$.isOwned").value(true))
+                .andExpect(jsonPath("$.createAt").value("+1000000000-01-01T00:00:00"))
+                .andExpect(jsonPath("$.itemStatus").value("ACTIVE"));
+
     }
 }

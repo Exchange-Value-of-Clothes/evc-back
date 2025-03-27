@@ -1,15 +1,18 @@
 package com.yzgeneration.evc.domain.item.useditem.controller;
 
 import com.yzgeneration.evc.common.dto.CommonResponse;
+import com.yzgeneration.evc.common.dto.SliceResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest;
-import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemsResponse;
+import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/useditems")
@@ -24,13 +27,13 @@ public class UsedItemController {
     }
 
     @GetMapping
-    public GetUsedItemsResponse getUsedItems(@RequestParam int page) {
-        return usedItemService.loadUsedItems(page);
+    public SliceResponse<GetUsedItemListResponse> getUsedItems(@RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
+        return usedItemService.getUsedItems(cursor);
     }
 
     @GetMapping("/{usedItemId}")
     public GetUsedItemResponse getUsedItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @PathVariable Long usedItemId) {
-        return usedItemService.loadUsedItem(memberPrincipal.getId(), usedItemId);
+        return usedItemService.getUsedItem(memberPrincipal.getId(), usedItemId);
     }
 
 }

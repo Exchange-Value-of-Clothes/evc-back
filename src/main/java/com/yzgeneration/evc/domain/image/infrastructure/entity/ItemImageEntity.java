@@ -1,17 +1,17 @@
 package com.yzgeneration.evc.domain.image.infrastructure.entity;
 
 import com.yzgeneration.evc.domain.image.enums.ItemType;
-import com.yzgeneration.evc.domain.image.model.Image;
+import com.yzgeneration.evc.domain.image.model.ItemImage;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Getter
 @Builder
-@Table(name = "images")
+@Table(name = "item_images")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ImageEntity {
+public class ItemImageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,17 +25,17 @@ public class ImageEntity {
 
     private boolean isThumbnail;
 
-    public static ImageEntity from(Image image) {
-        return ImageEntity.builder()
-                .itemId(image.getItemId())
-                .itemType(image.getItemType())
-                .imageName(image.getImageName())
-                .isThumbnail(image.isThumbnail())
+    public static ItemImageEntity from(ItemImage itemImage) {
+        return ItemImageEntity.builder()
+                .itemId(itemImage.getItemId())
+                .itemType(itemImage.getItemType())
+                .imageName(itemImage.getImageName())
+                .isThumbnail(itemImage.isThumbnail())
                 .build();
     }
 
-    public Image toModel() {
-        return Image.builder()
+    public ItemImage toModel() {
+        return ItemImage.builder()
                 .id(id)
                 .itemId(itemId)
                 .itemType(itemType)

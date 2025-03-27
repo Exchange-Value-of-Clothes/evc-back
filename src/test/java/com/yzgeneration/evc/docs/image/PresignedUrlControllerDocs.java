@@ -4,7 +4,8 @@ import com.yzgeneration.evc.docs.RestDocsSupport;
 import com.yzgeneration.evc.domain.image.controller.PresignedUrlController;
 import com.yzgeneration.evc.domain.image.dto.ImageResponse;
 import com.yzgeneration.evc.domain.image.service.PresignedUrlProvider;
-import com.yzgeneration.evc.mock.usedItem.MockUsedItemImageFile;
+
+import com.yzgeneration.evc.mock.image.MockUsedItemImageFile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class PresignedUrlControllerDocs extends RestDocsSupport {
     private final PresignedUrlProvider presignedUrlProvider = mock(PresignedUrlProvider.class);
+
 
     @Override
     protected Object initController() {
