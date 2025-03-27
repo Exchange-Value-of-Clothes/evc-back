@@ -13,5 +13,5 @@ public interface AuctionItemRepository {
 
     SliceResponse<GetAuctionItemListResponse> getAuctionItemList(Long memberId, LocalDateTime cursor);
 
-    Optional<GetAuctionItemResponse> findByAuctionItemByItemId(Long memberId, Long itemId);
+    Optional<GetAuctionItemResponse> findByMemberIdAndAuctionItemId(Long memberId, Long itemId);
 }

@@ -4,7 +4,7 @@ import com.yzgeneration.evc.docs.RestDocsSupport;
 import com.yzgeneration.evc.domain.image.controller.ImageController;
 import com.yzgeneration.evc.domain.image.dto.ImageResponse;
 import com.yzgeneration.evc.domain.image.service.ImageService;
-import com.yzgeneration.evc.mock.usedItem.MockUsedItemImageFile;
+import com.yzgeneration.evc.mock.image.MockUsedItemImageFile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -26,7 +26,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class ImageControllerDocs extends RestDocsSupport {
+public class ImageControllerDocsTest extends RestDocsSupport {
     private final ImageService imageService = mock(ImageService.class);
 
     @Override

@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class Image {
+public class ItemImage {
 
     private Long id;
 
@@ -18,8 +18,8 @@ public class Image {
 
     private boolean isThumbnail;
 
-    public static Image create(Long itemId, ItemType itemType, String imageName, boolean isThumbnail) {
-        return Image.builder()
+    public static ItemImage create(Long itemId, ItemType itemType, String imageName, boolean isThumbnail) {
+        return ItemImage.builder()
                 .itemId(itemId)
                 .itemType(itemType)
                 .imageName(imageName)

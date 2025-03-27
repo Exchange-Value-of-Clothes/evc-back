@@ -1,4 +1,4 @@
-[[image-presignedURL-create]]
+[[itemImage-presignedURL-create]]
 == presigned url 발급
 
 === HTTP Request

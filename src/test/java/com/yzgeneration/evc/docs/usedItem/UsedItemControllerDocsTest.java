@@ -1,25 +1,22 @@
 package com.yzgeneration.evc.docs.usedItem;
 
+import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.docs.RestDocsSupport;
-import com.yzgeneration.evc.domain.item.useditem.controller.UsedItemController;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemsDetails;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemsResponse;
-import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
+import com.yzgeneration.evc.domain.item.useditem.controller.UsedItemController;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
+import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
-import com.yzgeneration.evc.fixture.MemberFixture;
-import com.yzgeneration.evc.security.MemberPrincipal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
@@ -47,17 +44,12 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("중고상품 등록")
     void createUsedItem() throws Exception {
-        MemberPrincipal memberPrincipal = new MemberPrincipal(MemberFixture.withFakeUser());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                memberPrincipal,
-                memberPrincipal.getMember().getId(),
-                memberPrincipal.getAuthorities());
+
         CreateUsedItemRequest createUsedItemRequest = fixCreateUsedItemRequest();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/useditems")
                         .content(objectMapper.writeValueAsString(createUsedItemRequest))
                         .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.authentication(authentication))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("usedItem-create",
@@ -87,94 +79,76 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
 
     @Test
     @DisplayName("중고상품들 조회 (메인페이지)")
-    void loadUsedItems() throws Exception {
-        GetUsedItemsDetails getUsedItemsDetails1 = GetUsedItemsDetails.builder()
-                .usedItemId(1L)
-                .title("중고상품이요~")
-                .price(10000)
-                .transactionMode(TransactionMode.BUY)
-                .transactionStatus(TransactionStatus.ONGOING)
-                .imageName("https://domain/image/1234.jpg")
-                .likeCount(0)
-                .createAt(LocalDateTime.now())
-                .itemStatus(ItemStatus.ACTIVE)
-                .build();
-        GetUsedItemsDetails getUsedItemsDetails2 = GetUsedItemsDetails.builder()
-                .usedItemId(2L)
-                .title("중고상품이요~ 22")
-                .price(20000)
-                .transactionMode(TransactionMode.SELL)
-                .transactionStatus(TransactionStatus.ONGOING)
-                .imageName("https://domain/image/5678.jpg")
-                .likeCount(0)
-                .createAt(LocalDateTime.now())
-                .itemStatus(ItemStatus.ACTIVE)
-                .build();
-        GetUsedItemsResponse getUsedItemsResponse = GetUsedItemsResponse.builder()
-                .loadUsedItemDetails(List.of(getUsedItemsDetails1, getUsedItemsDetails2))
-                .isLast(false)
-                .build();
+    void getUsedItems() throws Exception {
+        GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        SliceResponse<GetUsedItemListResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
-        when(usedItemService.loadUsedItems(0))
-                .thenReturn(getUsedItemsResponse);
+        when(usedItemService.getUsedItems(any()))
+                .thenReturn(getUsedItemSliceResponse);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/useditems")
-                        .param("page", "0"))
+                        .param("cursor", LocalDateTime.MIN.toString()))
                 .andExpect(status().isOk())
                 .andDo(document("usedItems-get",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        queryParameters(parameterWithName("page").description("출력 페이지 번호 / 0부터 시작 / 10개씩 뽑아줌")),
+                        queryParameters(parameterWithName("cursor").description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
                         responseFields(
-                                fieldWithPath("loadUsedItemDetails").type(JsonFieldType.ARRAY)
-                                        .description("중고상품 리스트"),
-                                fieldWithPath("loadUsedItemDetails[].usedItemId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("content").type(JsonFieldType.ARRAY)
+                                        .description("중고상품 정보 리스트"),
+                                fieldWithPath("content[].usedItemId").type(JsonFieldType.NUMBER)
                                         .description("중고상품 id"),
-                                fieldWithPath("loadUsedItemDetails[].title").type(JsonFieldType.STRING)
+                                fieldWithPath("content[].title").type(JsonFieldType.STRING)
                                         .description("중고상품 제목"),
-                                fieldWithPath("loadUsedItemDetails[].price").type(JsonFieldType.NUMBER)
+                                fieldWithPath("content[].price").type(JsonFieldType.NUMBER)
                                         .description("중고상품 가격"),
-                                fieldWithPath("loadUsedItemDetails[].transactionMode").type(JsonFieldType.STRING)
+                                fieldWithPath("content[].transactionMode").type(JsonFieldType.STRING)
                                         .description("중고상품 거래방법 (SELL, BUY, AUCTION)"),
-                                fieldWithPath("loadUsedItemDetails[].transactionStatus").type(JsonFieldType.STRING)
+                                fieldWithPath("content[].transactionStatus").type(JsonFieldType.STRING)
                                         .description("중고상품 거래 상태 (ONGOING, RESERVE, COMPLETE)"),
-                                fieldWithPath("loadUsedItemDetails[].imageName").type(JsonFieldType.STRING)
+                                fieldWithPath("content[].imageName").type(JsonFieldType.STRING)
                                         .description("중고상품 이미지 (썸네일)"),
-                                fieldWithPath("loadUsedItemDetails[].likeCount").type(JsonFieldType.NUMBER)
+                                fieldWithPath("content[].likeCount").type(JsonFieldType.NUMBER)
                                         .description("게시물 좋아요수"),
-                                fieldWithPath("loadUsedItemDetails[].createAt").type(JsonFieldType.STRING)
+                                fieldWithPath("content[].createAt").type(JsonFieldType.STRING)
                                         .description("중고상품 게시시간 (createAt과 현재시간과의 차이값을 프론트 화면에 렌더링)"),
-                                fieldWithPath("loadUsedItemDetails[].itemStatus").type(JsonFieldType.STRING)
+                                fieldWithPath("content[].itemStatus").type(JsonFieldType.STRING)
                                         .description("중고상품 상태"),
-                                fieldWithPath("isLast").type(JsonFieldType.BOOLEAN)
-                                        .description("페이지 마지막 유무 (false == 상품 더 있음 / true == 상품 없음")
+                                fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재여부"),
+                                fieldWithPath("size").type(JsonFieldType.NUMBER)
+                                        .description("페이지 요청 사이즈"),
+                                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
+                                        .description("조회된 데이터 개수"),
+                                fieldWithPath("cursor").type(JsonFieldType.STRING)
+                                        .description("다음 페이지 커서")
                         )));
     }
 
     @Test
     @DisplayName("개별 중고상품 조회 (상세페이지)")
-    void loadUsedItem() throws Exception {
+    void getUsedItem() throws Exception {
         GetUsedItemResponse getUsedItemResponse = GetUsedItemResponse.builder()
-                .title("중고상품이요")
-                .category("윗도리")
-                .content("강매는 아닌데 사십쇼.")
-                .price(10000)
+                .title("title")
+                .category("category")
+                .content("content")
+                .price(5000)
                 .transactionType(TransactionType.DIRECT)
                 .transactionMode(TransactionMode.BUY)
                 .transactionStatus(TransactionStatus.ONGOING)
-                .imageNames(List.of("https://domain/asdfasdfasdf"))
-                .viewCount(0)
-                .likeCount(0)
-                .chattingCount(0)
+                .imageNames(List.of("imageName.jpg"))
+                .viewCount(1)
+                .likeCount(1)
+                .chattingCount(1)
                 .marketMemberId(1L)
-                .marketNickname("highyun")
+                .marketNickname("marketNickname")
                 .isOwned(true)
-                .createAt(LocalDateTime.now())
+                .createAt(LocalDateTime.MIN)
                 .itemStatus(ItemStatus.ACTIVE)
                 .build();
 
-        when(usedItemService.loadUsedItem(any(), any()))
+        when(usedItemService.getUsedItem(any(), any()))
                 .thenReturn(getUsedItemResponse);
 
         mockMvc.perform(MockMvcRequestBuilders
