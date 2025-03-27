@@ -16,7 +16,6 @@ public class MemberPrivateInformation {
     private String accountName;
     private String phoneNumber;
     private String profileImage;
-    private int point;
 
     public static MemberPrivateInformation createdByEmail(String nickname, String email, RandomHolder randomHolder) {
         return MemberPrivateInformation.builder()
