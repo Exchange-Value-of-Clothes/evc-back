@@ -16,4 +16,11 @@ public class MemberUpdater {
         member.active();
         memberRepository.save(member);
     }
+
+    public Member changeNickname(Long memberId, String nickname) {
+        Member member = memberRepository.getById(memberId);
+        member.getMemberPrivateInformation().changeNickname(nickname);
+        memberRepository.save(member);
+        return member;
+    }
 }

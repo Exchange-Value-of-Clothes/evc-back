@@ -17,13 +17,13 @@ public class MemberProfileController {
 
     private final MemberProfileService memberProfileService;
 
-    @PatchMapping
-    public CommonResponse update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest, @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
-        return CommonResponse.success();
-    }
-
     @GetMapping("/me")
     public ProfileResponse getMyProfile(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
         return memberProfileService.get(memberPrincipal.getId());
+    }
+
+    @PatchMapping
+    public ProfileResponse update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest, @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        return memberProfileService.update(updateProfileRequest, memberPrincipal.getId());
     }
 }
