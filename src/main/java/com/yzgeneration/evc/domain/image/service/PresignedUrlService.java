@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PresignedUrlProvider {
+public class PresignedUrlService {
     private final ImageHandler imageHandler;
 
     public List<ImageResponse> generatePresignedURL(String prefix, List<MultipartFile> imageFiles) {
