@@ -27,6 +27,7 @@ import java.util.Optional;
 import static com.yzgeneration.evc.domain.image.infrastructure.entity.QItemImageEntity.itemImageEntity;
 import static com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.QAuctionItemEntity.auctionItemEntity;
 import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
+import static com.yzgeneration.evc.domain.point.infrastructure.QMemberPointEntity.memberPointEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -55,12 +56,12 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         itemImageEntity.imageName,
                         auctionItemEntity.startTime,
                         auctionItemEntity.endTime,
-                        memberEntity.memberPrivateInformationEntity.point))
+                        memberPointEntity.point))
                 .from(auctionItemEntity)
                 .join(itemImageEntity) //썸네일 조회를 위해 join
                 .on(itemImageEntity.itemId.eq(auctionItemEntity.id), itemImageEntity.isThumbnail)
-                .join(memberEntity) //포인트 조회를 위해 join
-                .on(memberEntity.id.eq(memberId))
+                .join(memberPointEntity) //포인트 조회를 위해 join
+                .on(memberPointEntity.memberId.eq(memberId))
                 .where(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE) //게시 중인 경매상품
                         .and(auctionItemEntity.transactionStatus.eq(TransactionStatus.ONGOING)) //현재 거래중 상태인 경매상품
                         .and(cursor != null ? auctionItemEntity.startTime.lt(cursor) : null))
