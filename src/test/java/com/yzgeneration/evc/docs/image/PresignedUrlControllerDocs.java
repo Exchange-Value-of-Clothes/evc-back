@@ -1,9 +1,9 @@
 package com.yzgeneration.evc.docs.image;
 
 import com.yzgeneration.evc.docs.RestDocsSupport;
-import com.yzgeneration.evc.domain.image.controller.ImageController;
+import com.yzgeneration.evc.domain.image.controller.PresignedUrlController;
 import com.yzgeneration.evc.domain.image.dto.ImageResponse;
-import com.yzgeneration.evc.domain.image.service.ImageService;
+import com.yzgeneration.evc.domain.image.service.PresignedUrlProvider;
 import com.yzgeneration.evc.mock.usedItem.MockUsedItemImageFile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,12 +26,12 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class ImageControllerDocs extends RestDocsSupport {
-    private final ImageService imageService = mock(ImageService.class);
+public class PresignedUrlControllerDocs extends RestDocsSupport {
+    private final PresignedUrlProvider presignedUrlProvider = mock(PresignedUrlProvider.class);
 
     @Override
     protected Object initController() {
-        return new ImageController(imageService);
+        return new PresignedUrlController(presignedUrlProvider);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class ImageControllerDocs extends RestDocsSupport {
                 .imageName("5678.jpg")
                 .build();
 
-        when(imageService.generatePresignedURL(anyString(), anyList())).thenReturn(List.of(imageResponse1, imageResponse2));
+        when(presignedUrlProvider.generatePresignedURL(anyString(), anyList())).thenReturn(List.of(imageResponse1, imageResponse2));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .multipart("/api/images")

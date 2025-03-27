@@ -10,12 +10,16 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ImageService {
+public class PresignedUrlProvider {
     private final ImageHandler imageHandler;
 
     public List<ImageResponse> generatePresignedURL(String prefix, List<MultipartFile> imageFiles) {
         return imageFiles.stream().map(imageFile ->
                 imageHandler.getPresignedURLForUpload(prefix, imageFile.getOriginalFilename())
         ).toList();
+    }
+
+    public ImageResponse generateForProfile(String fileName) {
+        return imageHandler.getPresignedURLForUpload("profile",fileName);
     }
 }
