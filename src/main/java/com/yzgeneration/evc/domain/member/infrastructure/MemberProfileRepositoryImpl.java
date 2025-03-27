@@ -14,17 +14,19 @@ import static com.yzgeneration.evc.domain.point.infrastructure.QMemberPointEntit
 public class MemberProfileRepositoryImpl implements MemberProfileRepository {
 
     private final JPAQueryFactory queryFactory;
+
     @Override
-    public ProfileResponse get(Long memberId) {
-//        return queryFactory.select(Projections.constructor(ProfileResponse.class),
-//                        memberEntity.memberPrivateInformationEntity.nickname,
-//                        )
+    public ProfileResponse getMyProfile(Long memberId) {
+        return null;
+//        return queryFactory.select(Projections.constructor(ProfileResponse.class,
+//                        profileImageEntity.name,
+//                        profileImageEntity.
+//                        memberEntity.memberPrivateInformationEntity.nickname))
 //                .from(memberEntity)
 //                .where(memberEntity.id.eq(memberId))
-//                .leftJoin(memberPointEntity)
-//                .on(memberEntity.id.eq(memberPointEntity.memberId))
-//                .leftJoin()
+//                .leftJoin(memberPointEntity).on(memberEntity.id.eq(memberPointEntity.memberId))
+//                .leftJoin(profileImageEntity).on(memberEntity.id.eq(profileImageEntity.memberId))
 //                .fetchFirst();
-        return null;
+
     }
 }
