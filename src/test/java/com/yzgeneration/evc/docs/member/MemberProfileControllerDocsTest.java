@@ -73,7 +73,7 @@ public class MemberProfileControllerDocsTest extends RestDocsSupport {
                                 preprocessResponse(prettyPrint()),
                         requestFields(
                                 fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-                                fieldWithPath("imageName").type(JsonFieldType.STRING).description("이미지 이름")
+                                fieldWithPath("imageName").type(JsonFieldType.STRING).description("이미지 이름").optional()
                                 ),
                         responseFields(
                                 fieldWithPath("imageName").type(JsonFieldType.STRING).description("이미지 이름"),

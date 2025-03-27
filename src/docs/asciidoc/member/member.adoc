@@ -27,3 +27,22 @@ include::{snippets}/member-resend/query-parameters.adoc[]
 === HTTP Response
 include::{snippets}/member-resend/http-response.adoc[]
 include::{snippets}/member-resend/response-body.adoc[]
+
+== 프로필 조회
+
+=== HTTP Request
+include::{snippets}/profile-get/http-request.adoc[]
+
+=== HTTP Response
+include::{snippets}/profile-get/http-response.adoc[]
+include::{snippets}/profile-get/response-fields.adoc[]
+
+== 프로필 수정
+
+=== HTTP Request
+include::{snippets}/profile-update/http-request.adoc[]
+include::{snippets}/profile-update/request-fields.adoc[]
+
+=== HTTP Response
+include::{snippets}/profile-update/http-response.adoc[]
+include::{snippets}/profile-update/response-fields.adoc[]
