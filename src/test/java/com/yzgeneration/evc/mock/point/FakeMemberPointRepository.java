@@ -2,6 +2,8 @@ package com.yzgeneration.evc.mock.point;
 
 import com.yzgeneration.evc.domain.point.infrastructure.MemberPointRepository;
 import com.yzgeneration.evc.domain.point.model.MemberPoint;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,5 +30,13 @@ public class FakeMemberPointRepository implements MemberPointRepository {
                 return;
             }
         }
+    }
+
+    @Override
+    public MemberPoint getById(Long memberId) {
+        for (MemberPoint datum : data) {
+            if (Objects.equals(datum.getMemberId(), memberId)) return datum;
+        }
+        throw new CustomException(ErrorCode.POINT_NOT_FOUND, "멤버의 포인트가 존재하지 않습니다.");
     }
 }

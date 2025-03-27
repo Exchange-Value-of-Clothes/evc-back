@@ -5,6 +5,8 @@ import com.yzgeneration.evc.external.social.SocialUserProfile;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Random;
+
 
 @Getter
 @Builder
@@ -16,7 +18,8 @@ public class MemberPrivateInformation {
     private String accountName;
     private String phoneNumber;
     private String profileImage;
-    private int point;
+
+    private static final Random RANDOM = new Random();
 
     public static MemberPrivateInformation createdByEmail(String nickname, String email, RandomHolder randomHolder) {
         return MemberPrivateInformation.builder()
@@ -32,6 +35,10 @@ public class MemberPrivateInformation {
                 .phoneNumber(socialUserProfile.getPhoneNumber())
                 .profileImage(socialUserProfile.getProfileImage())
                 .build();
+    }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname + "#"+ String.format("%04d", RANDOM.nextInt(10000));
     }
 
 }

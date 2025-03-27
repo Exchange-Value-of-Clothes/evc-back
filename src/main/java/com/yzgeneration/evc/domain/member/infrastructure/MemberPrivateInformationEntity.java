@@ -19,7 +19,6 @@ public class MemberPrivateInformationEntity {
     private String accountNumber;
     private String accountName;
     private String phoneNumber;
-    private int point;
 
     public static MemberPrivateInformationEntity from(MemberPrivateInformation memberPrivateInformation) {
         return MemberPrivateInformationEntity.builder()
@@ -28,7 +27,6 @@ public class MemberPrivateInformationEntity {
                 .accountNumber(memberPrivateInformation.getAccountNumber())
                 .accountName(memberPrivateInformation.getAccountName())
                 .phoneNumber(memberPrivateInformation.getPhoneNumber())
-                .point(memberPrivateInformation.getPoint())
                 .build();
     }
 
@@ -39,7 +37,6 @@ public class MemberPrivateInformationEntity {
                 .accountNumber(accountNumber)
                 .accountName(accountName)
                 .phoneNumber(phoneNumber)
-                .point(point)
                 .build();
     }
 }

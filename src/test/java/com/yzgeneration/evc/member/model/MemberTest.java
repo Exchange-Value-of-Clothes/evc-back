@@ -9,6 +9,7 @@ import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.model.MemberAuthenticationInformation;
 import com.yzgeneration.evc.domain.member.model.MemberPrivateInformation;
 import com.yzgeneration.evc.domain.member.infrastructure.PasswordProcessor;
+import com.yzgeneration.evc.fixture.MemberFixture;
 import com.yzgeneration.evc.mock.member.SpyPasswordProcessor;
 import com.yzgeneration.evc.mock.StubRandomHolder;
 import com.yzgeneration.evc.common.implement.port.RandomHolder;
@@ -40,7 +41,6 @@ class MemberTest {
         // then
         assertThat(memberPrivateInformation.getNickname()).isEqualTo("구코딩#1234");
         assertThat(memberPrivateInformation.getEmail()).isEqualTo("ssar@naver.com");
-        assertThat(memberPrivateInformation.getPoint()).isZero();
         assertThat(memberPrivateInformation.getAccountName()).isNull();
         assertThat(memberPrivateInformation.getAccountNumber()).isNull();
         assertThat(memberPrivateInformation.getPhoneNumber()).isNull();
@@ -186,5 +186,20 @@ class MemberTest {
         assertThatThrownBy(member::checkStatus).
                 isInstanceOf(CustomException.class)
                 .hasFieldOrPropertyWithValue("ErrorCode", INACTIVE_MEMBER);
+    }
+
+    @Test
+    @DisplayName("Member의 닉네임을 변경할 수 있다.")
+    void changeNickname() {
+        // given
+        String nickName = "nickname";
+        Member member = Member.builder().memberPrivateInformation(MemberPrivateInformation.builder().nickname(nickName).build()).build();
+
+        // when
+        member.getMemberPrivateInformation().changeNickname("changeNickname");
+
+        // then
+        assertThat(member.getMemberPrivateInformation().getNickname()).startsWith("changeNickname");
+
     }
 }
