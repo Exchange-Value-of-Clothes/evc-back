@@ -2,6 +2,7 @@ package com.yzgeneration.evc.fixture;
 
 import com.navercorp.fixturemonkey.ArbitraryBuilder;
 import com.yzgeneration.evc.authentication.dto.AuthenticationRequest;
+import com.yzgeneration.evc.domain.member.dto.UpdateProfileRequest;
 import com.yzgeneration.evc.domain.member.enums.MemberRole;
 import com.yzgeneration.evc.domain.member.enums.MemberStatus;
 import com.yzgeneration.evc.domain.member.enums.ProviderType;
@@ -64,6 +65,13 @@ public final class MemberFixture extends Fixture{
                 .memberStatus(MemberStatus.ACTIVE)
                 .memberRole(MemberRole.USER)
                 .build();
+    }
+
+    public static UpdateProfileRequest fixtureUpdateProfileRequest(String nickname, String imageName) {
+        return fixtureMonkey.giveMeBuilder(UpdateProfileRequest.class)
+                .set("nickname", nickname)
+                .set("imageName", imageName)
+                .sample();
     }
 
     private static ArbitraryBuilder<MemberAuthenticationInformation> fixPassword() {

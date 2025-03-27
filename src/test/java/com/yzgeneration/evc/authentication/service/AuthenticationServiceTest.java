@@ -18,6 +18,7 @@ import com.yzgeneration.evc.mock.authentication.FakeRefreshTokenRepository;
 import com.yzgeneration.evc.mock.external.SpyGoogleLogin;
 import com.yzgeneration.evc.mock.member.FakeMemberRepository;
 import com.yzgeneration.evc.mock.member.SpyPasswordProcessor;
+import com.yzgeneration.evc.mock.point.FakeMemberPointRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,8 @@ class AuthenticationServiceTest {
     @BeforeEach
     void init() {
         memberRepository = new FakeMemberRepository();
-        AuthenticationProcessor authenticationProcessor = new AuthenticationProcessor(memberRepository, passwordProcessor, new SocialLoginProcessor(List.of(new SpyGoogleLogin())), new MemberPointEventListener(new MemberPointRepository() {
+        AuthenticationProcessor authenticationProcessor = new AuthenticationProcessor(memberRepository, passwordProcessor, new SocialLoginProcessor(List.of(new SpyGoogleLogin())),
+                new MemberPointEventListener(new FakeMemberPointRepository() {
             @Override
             public MemberPoint save(MemberPoint memberPoint) {
                 return null;

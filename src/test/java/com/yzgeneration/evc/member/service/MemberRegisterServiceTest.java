@@ -80,7 +80,6 @@ class MemberRegisterServiceTest {
         assertThat(member.getMemberPrivateInformation().getAccountNumber()).isNull();
         assertThat(member.getMemberPrivateInformation().getPhoneNumber()).isNull();
         assertThat(member.getMemberPrivateInformation().getAccountName()).isNull();
-        assertThat(member.getMemberPrivateInformation().getPoint()).isZero();
     }
 
     @Test
