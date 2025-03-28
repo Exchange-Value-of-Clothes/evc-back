@@ -15,9 +15,9 @@ import java.util.List;
 public class PresignedUrlController {
     private final PresignedUrlService presignedUrlService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<ImageResponse> createPresignedURL(@RequestParam String prefix, @RequestPart List<MultipartFile> imageFiles) {
-        return presignedUrlService.generatePresignedURL(prefix, imageFiles);
+    @PostMapping
+    public List<ImageResponse> createPresignedURL(@RequestParam String prefix, @RequestPart List<String> imageNames) {
+        return presignedUrlService.generatePresignedURL(prefix, imageNames);
     }
 
     @PostMapping("/profile")

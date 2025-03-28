@@ -4,7 +4,6 @@ import com.yzgeneration.evc.domain.image.dto.ImageResponse;
 import com.yzgeneration.evc.domain.image.implement.ImageHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,13 +12,13 @@ import java.util.List;
 public class PresignedUrlService {
     private final ImageHandler imageHandler;
 
-    public List<ImageResponse> generatePresignedURL(String prefix, List<MultipartFile> imageFiles) {
-        return imageFiles.stream().map(imageFile ->
-                imageHandler.getPresignedURLForUpload(prefix, imageFile.getOriginalFilename())
+    public List<ImageResponse> generatePresignedURL(String prefix, List<String> imageNames) {
+        return imageNames.stream().map(imageName ->
+                imageHandler.getPresignedURLForUpload(prefix, imageName)
         ).toList();
     }
 
     public ImageResponse generateForProfile(String fileName) {
-        return imageHandler.getPresignedURLForUpload("profile",fileName);
+        return imageHandler.getPresignedURLForUpload("profile", fileName);
     }
 }
