@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.domain.image.service;
 
+import com.yzgeneration.evc.domain.image.dto.ImageRequest;
 import com.yzgeneration.evc.domain.image.dto.ImageResponse;
 import com.yzgeneration.evc.domain.image.implement.ImageHandler;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +13,9 @@ import java.util.List;
 public class PresignedUrlService {
     private final ImageHandler imageHandler;
 
-    public List<ImageResponse> generatePresignedURL(String prefix, List<String> imageNames) {
-        return imageNames.stream().map(imageName ->
+    public List<ImageResponse> generatePresignedURL(ImageRequest imageRequest) {
+        String prefix = imageRequest.getPrefix();
+        return imageRequest.getImageNames().stream().map(imageName ->
                 imageHandler.getPresignedURLForUpload(prefix, imageName)
         ).toList();
     }

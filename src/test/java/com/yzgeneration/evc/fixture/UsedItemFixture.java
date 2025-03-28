@@ -6,7 +6,7 @@ import java.util.List;
 
 import static com.yzgeneration.evc.fixture.Fixture.fixtureMonkey;
 
-public abstract class UsedItemFixture {
+public class UsedItemFixture {
 
     public static CreateUsedItemRequest fixCreateUsedItemRequest() {
         return fixtureMonkey.giveMeBuilder(CreateUsedItemRequest.class)

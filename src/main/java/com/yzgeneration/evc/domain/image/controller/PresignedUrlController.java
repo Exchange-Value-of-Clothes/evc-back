@@ -1,11 +1,10 @@
 package com.yzgeneration.evc.domain.image.controller;
 
+import com.yzgeneration.evc.domain.image.dto.ImageRequest;
 import com.yzgeneration.evc.domain.image.dto.ImageResponse;
 import com.yzgeneration.evc.domain.image.service.PresignedUrlService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,8 +15,8 @@ public class PresignedUrlController {
     private final PresignedUrlService presignedUrlService;
 
     @PostMapping
-    public List<ImageResponse> createPresignedURL(@RequestParam String prefix, @RequestPart List<String> imageNames) {
-        return presignedUrlService.generatePresignedURL(prefix, imageNames);
+    public List<ImageResponse> createPresignedURL(@RequestBody ImageRequest imageRequest) {
+        return presignedUrlService.generatePresignedURL(imageRequest);
     }
 
     @PostMapping("/profile")
