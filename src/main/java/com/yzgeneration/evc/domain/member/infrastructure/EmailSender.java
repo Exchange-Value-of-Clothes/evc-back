@@ -23,7 +23,7 @@ public class EmailSender implements MailSender {
 
     @Async
     @Override
-    public void send(Email email) { // TODO 쓰레드 풀 설정
+    public void send(Email email) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
         try {

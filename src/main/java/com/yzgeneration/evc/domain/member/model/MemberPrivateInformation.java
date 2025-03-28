@@ -17,7 +17,6 @@ public class MemberPrivateInformation {
     private String accountNumber;
     private String accountName;
     private String phoneNumber;
-    private String profileImage;
 
     private static final Random RANDOM = new Random();
 
@@ -33,7 +32,6 @@ public class MemberPrivateInformation {
                 .nickname(socialUserProfile.getNickname())
                 .email(socialUserProfile.getEmail())
                 .phoneNumber(socialUserProfile.getPhoneNumber())
-                .profileImage(socialUserProfile.getProfileImage())
                 .build();
     }
 

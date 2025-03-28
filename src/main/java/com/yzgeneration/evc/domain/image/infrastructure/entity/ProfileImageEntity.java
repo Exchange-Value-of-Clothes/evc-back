@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name = "profile_images")
-public class ProfileImageEntity { // TODO 소셜로그인시 프로필가져오기
+public class ProfileImageEntity {
 
     protected ProfileImageEntity() {}
 
@@ -28,8 +28,11 @@ public class ProfileImageEntity { // TODO 소셜로그인시 프로필가져오�
         return new ProfileImageEntity(profileImage.getMemberId(), profileImage.getName(), profileImage.getImageUrl());
     }
 
-
     public ProfileImage toModel() {
-        return ProfileImage.of(memberId, name, imageUrl);
+        return ProfileImage.builder()
+                .memberId(memberId)
+                .name(name)
+                .imageUrl(imageUrl)
+                .build();
     }
 }

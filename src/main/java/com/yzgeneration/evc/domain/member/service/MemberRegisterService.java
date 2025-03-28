@@ -26,7 +26,7 @@ public class MemberRegisterService {
 
     public Member createMemberByEmail(EmailSignup emailSignup) {
         Member member = memberAppender.createByEmail(emailSignup);
-        eventPublisher.publishEvent(new MemberCreatedEvent(member.getId()));
+        eventPublisher.publishEvent(new MemberCreatedEvent(member.getId(), null));
         return member;
     }
 
