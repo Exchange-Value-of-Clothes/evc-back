@@ -1,6 +1,5 @@
 package com.yzgeneration.evc.authentication.implement;
 
-import com.yzgeneration.evc.application.event.MemberPointEventListener;
 import com.yzgeneration.evc.authentication.dto.AuthenticationToken;
 import com.yzgeneration.evc.domain.member.MemberCreatedEvent;
 import com.yzgeneration.evc.domain.member.model.Member;
@@ -9,6 +8,7 @@ import com.yzgeneration.evc.domain.member.infrastructure.PasswordProcessor;
 import com.yzgeneration.evc.external.social.SocialLoginProcessor;
 import com.yzgeneration.evc.external.social.SocialUserProfile;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -26,7 +26,7 @@ public class AuthenticationProcessor {
     private final MemberRepository memberRepository;
     private final PasswordProcessor passwordProcessor;
     private final SocialLoginProcessor socialLoginProcessor;
-    private final MemberPointEventListener eventListener;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Member login(String email, String password) {
         Member member = memberRepository.getByEmail(email);
@@ -71,7 +71,7 @@ public class AuthenticationProcessor {
         Optional<Member> socialMember = memberRepository.findSocialMember(providerType, socialUserProfile.getProviderId());
         return socialMember.orElseGet(() -> {
             Member member = memberRepository.save(Member.socialLogin(providerType, socialUserProfile));
-            eventListener.init(new MemberCreatedEvent(member.getId()));
+            eventPublisher.publishEvent(new MemberCreatedEvent(member.getId(), socialUserProfile.getProfileImage()));
             return member;
         });
     }
