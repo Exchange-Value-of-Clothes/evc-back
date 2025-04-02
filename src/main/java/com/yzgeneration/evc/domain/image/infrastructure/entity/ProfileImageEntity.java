@@ -18,14 +18,17 @@ public class ProfileImageEntity {
 
     private String imageUrl;
 
-    private ProfileImageEntity(Long memberId, String name, String imageUrl) {
+    private Boolean isSocialProfileVisible;
+
+    private ProfileImageEntity(Long memberId, String name, String imageUrl, Boolean isSocialProfileVisible) {
         this.memberId = memberId;
         this.name = name;
         this.imageUrl = imageUrl;
+        this.isSocialProfileVisible = isSocialProfileVisible;
     }
 
     public static ProfileImageEntity from(ProfileImage profileImage) {
-        return new ProfileImageEntity(profileImage.getMemberId(), profileImage.getName(), profileImage.getImageUrl());
+        return new ProfileImageEntity(profileImage.getMemberId(), profileImage.getName(), profileImage.getImageUrl(), profileImage.getIsSocialProfileVisible());
     }
 
     public ProfileImage toModel() {
@@ -33,6 +36,7 @@ public class ProfileImageEntity {
                 .memberId(memberId)
                 .name(name)
                 .imageUrl(imageUrl)
+                .isSocialProfileVisible(isSocialProfileVisible)
                 .build();
     }
 }

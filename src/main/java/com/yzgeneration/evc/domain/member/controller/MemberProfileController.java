@@ -3,9 +3,9 @@ package com.yzgeneration.evc.domain.member.controller;
 import com.yzgeneration.evc.common.dto.CommonResponse;
 import com.yzgeneration.evc.domain.member.dto.ProfileResponse;
 import com.yzgeneration.evc.domain.member.dto.UpdateProfileRequest;
+import com.yzgeneration.evc.domain.member.dto.UpdateProfileResponse;
 import com.yzgeneration.evc.domain.member.service.MemberProfileService;
 import com.yzgeneration.evc.security.MemberPrincipal;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,8 @@ public class MemberProfileController {
     }
 
     @PatchMapping
-    public ProfileResponse update(@RequestBody @Valid UpdateProfileRequest updateProfileRequest, @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+    public UpdateProfileResponse update(@RequestBody UpdateProfileRequest updateProfileRequest, @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
         return memberProfileService.update(updateProfileRequest, memberPrincipal.getId());
     }
+
 }

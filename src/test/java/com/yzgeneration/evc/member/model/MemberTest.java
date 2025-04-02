@@ -202,4 +202,20 @@ class MemberTest {
         assertThat(member.getMemberPrivateInformation().getNickname()).startsWith("changeNickname");
 
     }
+
+    @Test
+    @DisplayName("닉네임을 클라이언트에 노출할 때 태그값을 지워서 보여준다.")
+    void returnNickname() {
+        // given
+        String nickName = "nickname";
+        String changeNickname = "changeNickname";
+        Member member = Member.builder().memberPrivateInformation(MemberPrivateInformation.builder().nickname(nickName).build()).build();
+
+        // when
+        member.getMemberPrivateInformation().changeNickname(changeNickname);
+        
+        // then
+        assertThat(member.getMemberPrivateInformation().getNickname()).isNotEqualTo(changeNickname);
+        assertThat(member.getMemberPrivateInformation().getRawNickname()).isEqualTo(changeNickname);
+    }
 }

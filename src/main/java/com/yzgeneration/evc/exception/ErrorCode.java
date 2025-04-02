@@ -16,6 +16,7 @@ public enum ErrorCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "006", "잘못된 요청"),
     SELF_CHAT_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "007", "물품 소유자 본인은 본인에게 채팅룸을 개설할 수 없습니다."),
     JsonSerializationException(HttpStatus.BAD_REQUEST, "008", "Json 직렬화 예외"),
+    INVALID_NICKNAME(HttpStatus.BAD_REQUEST, "009", "잘못된 닉네임 형식입니다."),
 
     //401 Unauthorized
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "011", "이메일 혹은 비밀번호가 다릅니다."),

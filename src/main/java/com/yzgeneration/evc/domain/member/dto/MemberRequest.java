@@ -3,13 +3,12 @@ package com.yzgeneration.evc.domain.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.yzgeneration.evc.domain.member.implement.MemberValidator;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.validator.EmailValidator;
 import com.yzgeneration.evc.validator.PasswordValidator;
 import com.yzgeneration.evc.validator.Validatable;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,12 +18,9 @@ public class MemberRequest {
     @NoArgsConstructor
     public static class EmailSignup implements Validatable {
 
-        @Size(min = 2)
-        @NotBlank
         private String nickname;
         private String email;
         private String password;
-        @NotBlank
         private String checkPassword;
 
         @JsonCreator
@@ -42,6 +38,7 @@ public class MemberRequest {
         public void valid() {
             EmailValidator.validate(email);
             PasswordValidator.validate(password);
+            MemberValidator.nickname(nickname);
             if(password.equals(checkPassword)) return;
             throw new CustomException(ErrorCode.INVALID_PASSWORD, "비밀번호와 비밀번호 확인이 다릅니다.");
         }
