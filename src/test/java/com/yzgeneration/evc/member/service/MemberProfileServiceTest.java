@@ -1,9 +1,10 @@
 package com.yzgeneration.evc.member.service;
 
+import com.yzgeneration.evc.domain.image.implement.ProfileImageUpdater;
 import com.yzgeneration.evc.domain.member.dto.ProfileResponse;
 import com.yzgeneration.evc.domain.member.dto.UpdateProfileRequest;
+import com.yzgeneration.evc.domain.member.dto.UpdateProfileResponse;
 import com.yzgeneration.evc.domain.member.implement.MemberUpdater;
-import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.service.MemberProfileService;
 import com.yzgeneration.evc.domain.point.model.MemberPoint;
 import com.yzgeneration.evc.fixture.MemberFixture;
@@ -11,7 +12,6 @@ import com.yzgeneration.evc.mock.image.FakeProfileImageRepository;
 import com.yzgeneration.evc.mock.member.FakeMemberRepository;
 import com.yzgeneration.evc.mock.member.StubMemberProfileRepository;
 import com.yzgeneration.evc.mock.point.FakeMemberPointRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class MemberProfileServiceTest {
         memberProfileService = new MemberProfileService(
                 new StubMemberProfileRepository(),
                 new MemberUpdater(memberRepository),
-                new FakeProfileImageRepository(),
+                new ProfileImageUpdater(new FakeProfileImageRepository()),
                 memberPointRepository
         );
     }
@@ -58,7 +58,7 @@ public class MemberProfileServiceTest {
         memberRepository.save(MemberFixture.withFakeUser());
         memberPointRepository.save(MemberPoint.create(memberId, 1000));
         // when
-        ProfileResponse response = memberProfileService.update(updateProfileRequest, memberId);
+        UpdateProfileResponse response = memberProfileService.update(updateProfileRequest, memberId);
         assertThat(response.getImageName()).isEqualTo(imageName);
         assertThat(response.getNickname()).startsWith(nickname);
     }

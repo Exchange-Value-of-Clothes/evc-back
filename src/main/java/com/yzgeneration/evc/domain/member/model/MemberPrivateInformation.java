@@ -39,4 +39,9 @@ public class MemberPrivateInformation {
         this.nickname = nickname + "#"+ String.format("%04d", RANDOM.nextInt(10000));
     }
 
+    public String getRawNickname() {
+        int i = nickname.indexOf("#");
+        return nickname.substring(0,i);
+    }
+
 }

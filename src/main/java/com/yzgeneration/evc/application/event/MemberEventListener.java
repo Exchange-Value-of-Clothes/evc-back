@@ -28,6 +28,6 @@ public class MemberEventListener {
     @EventListener
     public void initProfileImage(MemberCreatedEvent event) {
         Long memberId = event.getMemberId();
-        profileImageRepository.save(ProfileImage.of(memberId, null, event.getImageUrl()));
+        profileImageRepository.save(ProfileImage.create(memberId, null, event.getImageUrl()));
     }
 }
