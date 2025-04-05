@@ -44,4 +44,8 @@ public class MemberPrivateInformation {
         return nickname.substring(0,i);
     }
 
+    public void changeEmail(String email) {
+        this.email = email;
+    }
+
 }

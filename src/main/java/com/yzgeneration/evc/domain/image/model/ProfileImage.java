@@ -20,7 +20,4 @@ public class ProfileImage {
         this.name = name;
     }
 
-    public boolean isEmpty() {
-        return this.imageUrl.isEmpty() && this.name.isEmpty();
-    }
 }

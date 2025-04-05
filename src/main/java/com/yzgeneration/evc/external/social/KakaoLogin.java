@@ -3,8 +3,6 @@ package com.yzgeneration.evc.external.social;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yzgeneration.evc.exception.CustomException;
-import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.exception.SocialLoginException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +22,7 @@ import java.util.Base64;
 
 @Component
 @RequiredArgsConstructor
-public class KaKaoLogin implements SocialLogin {
+public class KakaoLogin implements SocialLogin {
 
     @Value("${KAKAO_CLIENT_ID}")
     private String KAKAO_CLIENT_ID;

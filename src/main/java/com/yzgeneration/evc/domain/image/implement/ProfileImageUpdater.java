@@ -13,8 +13,13 @@ public class ProfileImageUpdater {
 
     public ProfileImage update(String imageName, Long memberId) {
         ProfileImage profileImage = profileImageRepository.findById(memberId).orElseGet(() -> profileImageRepository.save(ProfileImage.create(memberId, imageName, null)));
-        if (imageName.isBlank() && profileImage.isEmpty()) return profileImage;
+        if (canSkipUpdate(imageName, profileImage)) return profileImage;
         profileImage.update(imageName);
         return profileImageRepository.save(profileImage);
+    }
+
+    private static boolean canSkipUpdate(String imageName, ProfileImage profileImage) {
+        return imageName == null && profileImage.getName() == null||
+                ( imageName != null && imageName.equals(profileImage.getName()) );
     }
 }
