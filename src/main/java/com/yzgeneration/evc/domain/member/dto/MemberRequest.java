@@ -39,8 +39,7 @@ public class MemberRequest {
             EmailValidator.validate(email);
             PasswordValidator.validate(password);
             MemberValidator.nickname(nickname);
-            if(password.equals(checkPassword)) return;
-            throw new CustomException(ErrorCode.INVALID_PASSWORD, "비밀번호와 비밀번호 확인이 다릅니다.");
+            if(!password.equals(checkPassword)) throw new CustomException(ErrorCode.INVALID_PASSWORD, "비밀번호와 비밀번호 확인이 다릅니다.");
         }
     }
 

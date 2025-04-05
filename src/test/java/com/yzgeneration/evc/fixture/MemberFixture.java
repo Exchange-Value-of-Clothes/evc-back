@@ -2,6 +2,8 @@ package com.yzgeneration.evc.fixture;
 
 import com.navercorp.fixturemonkey.ArbitraryBuilder;
 import com.yzgeneration.evc.authentication.dto.AuthenticationRequest;
+import com.yzgeneration.evc.domain.member.dto.ChangeEmail;
+import com.yzgeneration.evc.domain.member.dto.ChangePassword;
 import com.yzgeneration.evc.domain.member.dto.UpdateProfileRequest;
 import com.yzgeneration.evc.domain.member.enums.MemberRole;
 import com.yzgeneration.evc.domain.member.enums.MemberStatus;
@@ -71,6 +73,20 @@ public final class MemberFixture extends Fixture{
         return fixtureMonkey.giveMeBuilder(UpdateProfileRequest.class)
                 .set("nickname", nickname)
                 .set("imageName", imageName)
+                .sample();
+    }
+
+    public static ChangeEmail fixtureChangeEmail() {
+        return fixtureMonkey.giveMeBuilder(ChangeEmail.class)
+                .set("email", "ssar@naver.com")
+                .sample();
+    }
+
+    public static ChangePassword fixtureChangePassword() {
+        return fixtureMonkey.giveMeBuilder(ChangePassword.class)
+                .set("oldPassword", "12345678")
+                .set("newPassword", "00000000")
+                .set("checkPassword", "00000000")
                 .sample();
     }
 
