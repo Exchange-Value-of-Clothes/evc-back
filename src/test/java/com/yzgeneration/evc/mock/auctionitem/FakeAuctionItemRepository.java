@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 public class FakeAuctionItemRepository implements AuctionItemRepository {
 
@@ -71,9 +70,9 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
     }
 
     @Override
-    public Optional<GetAuctionItemResponse> findByMemberIdAndAuctionItemId(Long memberId, Long itemId) {
+    public GetAuctionItemResponse findByIdAndMemberId(Long memberId, Long id) {
         return mockAuctionItem.stream()
-                .filter(auction -> auction.getId().equals(itemId))
+                .filter(auction -> auction.getId().equals(id))
                 .findFirst()
                 .map(auctionItem -> {
                     AuctionItemDetailsResponse auctionItemDetailsResponse = new AuctionItemDetailsResponse(auctionItem.getAuctionItemDetails().getTitle(), auctionItem.getAuctionItemDetails().getCategory(), auctionItem.getAuctionItemDetails().getContent());
@@ -81,6 +80,26 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
                     List<String> imageNameList = List.of("imageName.jpg");
 
                     return new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, auctionItem.getTransactionType(), auctionItem.getStartTime(), auctionItem.getEndTime(), auctionItem.getAuctionItemPriceDetails().getCurrentPrice(), auctionItem.getMemberId(), "marketNickname", auctionItem.getMemberId().equals(memberId), auctionItem.getItemStatus());
-                });
+                }).get();
+    }
+
+    @Override
+    public void updateCurrentPrice(Long id, int point) {
+
+    }
+
+    @Override
+    public boolean checkMemberPointById(Long memberId, Long id, int point) {
+        return false;
+    }
+
+    @Override
+    public boolean canMemberBidByIdAndMemberId(Long id, Long memberId) {
+        return false;
+    }
+
+    @Override
+    public int getCurrentPriceById(Long auctionId) {
+        return 0;
     }
 }

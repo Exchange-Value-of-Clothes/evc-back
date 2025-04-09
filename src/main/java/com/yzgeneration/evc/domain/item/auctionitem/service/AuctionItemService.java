@@ -25,7 +25,6 @@ public class AuctionItemService {
     public void createAuctionItem(Long memberId, CreateAuctionItemRequest createAuctionItemRequest) {
         AuctionItem auctionItem = auctionItemRepository.save(AuctionItem.create(memberId, createAuctionItemRequest));
         itemImageAppender.createItemImages(auctionItem.getId(), itemType, createAuctionItemRequest.getImageNames());
-
     }
 
     public SliceResponse<GetAuctionItemListResponse> getAuctionItems(Long memberId, LocalDateTime cursor) {

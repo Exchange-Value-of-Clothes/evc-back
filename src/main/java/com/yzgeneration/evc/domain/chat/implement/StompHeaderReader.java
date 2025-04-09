@@ -3,7 +3,6 @@ package com.yzgeneration.evc.domain.chat.implement;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 
-
 import static com.yzgeneration.evc.domain.chat.SessionConstant.*;
 
 
@@ -18,6 +17,14 @@ public class StompHeaderReader {
         return chatRoomId;
     }
 
+    public String getAuctionRoomIdAtNativeHeader(StompHeaderAccessor accessor) {
+        String auctionRoomId = accessor.getFirstNativeHeader(AUCTION_ROOM_KEY);
+        if (auctionRoomId == null) {
+            throw new RuntimeException("AuctionRoom ID not found in header");
+        }
+        return auctionRoomId;
+    }
+
     public String getToken(StompHeaderAccessor accessor) {
         String token = accessor.getFirstNativeHeader(AUTHORIZATION);
         if (token == null) {
@@ -25,6 +32,5 @@ public class StompHeaderReader {
         }
         return token;
     }
-
 
 }
