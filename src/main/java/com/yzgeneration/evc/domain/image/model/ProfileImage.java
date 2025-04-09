@@ -10,8 +10,14 @@ public class ProfileImage {
     private Long memberId;
     private String name;
     private String imageUrl;
+    private Boolean isSocialProfileVisible;
 
-    public static ProfileImage of(Long memberId, String name, String imageUrl) {
-        return ProfileImage.builder().memberId(memberId).name(name).imageUrl(imageUrl).build();
+    public static ProfileImage create(Long memberId, String name, String imageUrl) {
+        return ProfileImage.builder().memberId(memberId).name(name).imageUrl(imageUrl).isSocialProfileVisible(true).build();
     }
+
+    public void update(String name) {
+        this.name = name;
+    }
+
 }

@@ -114,7 +114,6 @@ class MemberTest {
         MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
         MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
 
-
         // when
         Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.PENDING);
 
@@ -200,6 +199,69 @@ class MemberTest {
 
         // then
         assertThat(member.getMemberPrivateInformation().getNickname()).startsWith("changeNickname");
+
+    }
+
+    @Test
+    @DisplayName("닉네임을 클라이언트에 노출할 때 태그값을 지워서 보여준다.")
+    void returnNickname() {
+        // given
+        String nickName = "nickname";
+        String changeNickname = "changeNickname";
+        Member member = Member.builder().memberPrivateInformation(MemberPrivateInformation.builder().nickname(nickName).build()).build();
+
+        // when
+        member.getMemberPrivateInformation().changeNickname(changeNickname);
+        
+        // then
+        assertThat(member.getMemberPrivateInformation().getNickname()).isNotEqualTo(changeNickname);
+        assertThat(member.getMemberPrivateInformation().getRawNickname()).isEqualTo(changeNickname);
+    }
+
+    @Test
+    @DisplayName("비밀번호를 변경할 수 있다.")
+    void changePassword() {
+        // given
+        String password = "12345678";
+        String changePassword = "12340000";
+        EmailSignup emailSignup = fixtureMonkey.giveMeBuilder(EmailSignup.class)
+                .set("email", "ssar@naver.com")
+                .set("nickname", "구코딩")
+                .set("password", password)
+                .set("checkPassword", password)
+                .sample();
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
+        MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
+        Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.PENDING);
+
+        // when
+        member.getMemberAuthenticationInformation().changePassword(password, changePassword, passwordProcessor);
+
+        // then
+        assertThat(member.getMemberAuthenticationInformation().getPassword()).isEqualTo(changePassword);
+    }
+
+    @Test
+    @DisplayName("기존 비밀번호가 틀리면 비밀번호를 변경할 수 없다.")
+    void changePasswordButWrong() {
+        // given
+        String password = "12345678";
+        String changePassword = "12340000";
+        EmailSignup emailSignup = fixtureMonkey.giveMeBuilder(EmailSignup.class)
+                .set("email", "ssar@naver.com")
+                .set("nickname", "구코딩")
+                .set("password", password)
+                .set("checkPassword", password)
+                .sample();
+        MemberPrivateInformation memberPrivateInformation = MemberPrivateInformation.createdByEmail(emailSignup.getNickname(), emailSignup.getEmail(), randomHolder);
+        MemberAuthenticationInformation memberAuthenticationInformation = MemberAuthenticationInformation.createdByEmail(emailSignup.getPassword(), passwordProcessor);
+        Member member = Member.create(memberPrivateInformation, memberAuthenticationInformation, MemberRole.USER, MemberStatus.PENDING);
+
+        // when
+        // then
+        assertThatThrownBy(() -> member.getMemberAuthenticationInformation().changePassword("00000000", changePassword, passwordProcessor))
+        .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("ErrorCode", INVALID_PASSWORD);
 
     }
 }

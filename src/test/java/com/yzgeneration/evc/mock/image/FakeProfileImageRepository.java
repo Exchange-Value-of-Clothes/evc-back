@@ -10,6 +10,7 @@ import java.util.Optional;
 public class FakeProfileImageRepository implements ProfileImageRepository {
 
     private final List<ProfileImage> data = new ArrayList<>();
+    private int saveCnt = 0;
 
     @Override
     public Optional<ProfileImage> findById(Long memberId) {
@@ -21,6 +22,7 @@ public class FakeProfileImageRepository implements ProfileImageRepository {
 
     @Override
     public ProfileImage save(ProfileImage profileImage) {
+        saveCnt++;
         for (ProfileImage datum : data) {
             if (datum.getMemberId().equals(profileImage.getMemberId())) {
                 data.remove(datum);
@@ -29,5 +31,9 @@ public class FakeProfileImageRepository implements ProfileImageRepository {
         }
         data.add(profileImage);
         return profileImage;
+    }
+
+    public int getSaveCnt() {
+        return saveCnt;
     }
 }
