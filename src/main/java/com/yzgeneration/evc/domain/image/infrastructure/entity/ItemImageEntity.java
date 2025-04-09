@@ -19,6 +19,7 @@ public class ItemImageEntity {
 
     private Long itemId;
 
+    @Enumerated(EnumType.STRING)
     private ItemType itemType;
 
     private String imageName;
