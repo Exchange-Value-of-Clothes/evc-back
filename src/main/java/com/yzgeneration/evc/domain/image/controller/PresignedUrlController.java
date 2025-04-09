@@ -15,8 +15,8 @@ public class PresignedUrlController {
     private final PresignedUrlService presignedUrlService;
 
     @PostMapping
-    public List<ImageResponse> createPresignedURL(@RequestBody ImageRequest imageRequest) {
-        return presignedUrlService.generatePresignedURL(imageRequest);
+    public List<ImageResponse> createForItem(@RequestBody ImageRequest imageRequest) {
+        return presignedUrlService.generateForItem(imageRequest);
     }
 
     @PostMapping("/profile")
