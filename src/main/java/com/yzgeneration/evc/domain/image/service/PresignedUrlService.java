@@ -13,7 +13,7 @@ import java.util.List;
 public class PresignedUrlService {
     private final ImageHandler imageHandler;
 
-    public List<ImageResponse> generatePresignedURL(ImageRequest imageRequest) {
+    public List<ImageResponse> generateForItem(ImageRequest imageRequest) {
         String prefix = imageRequest.getPrefix();
         return imageRequest.getImageNames().stream().map(imageName ->
                 imageHandler.getPresignedURLForUpload(prefix, imageName)
