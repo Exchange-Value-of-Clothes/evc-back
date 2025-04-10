@@ -4,8 +4,6 @@ import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionRoom;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Table(name = "auction_rooms")
@@ -19,8 +17,6 @@ public class AuctionRoomEntity {
     private Long id;
 
     private Long auctionItemId;
-
-    private LocalDateTime createdAt;
 
     private Boolean isDeleted;
 
