@@ -51,7 +51,7 @@ class PresignedUrlControllerTest {
 
         ImageRequest imageRequest = fixImageRequest();
 
-        when(presignedUrlService.generatePresignedURL(any()))
+        when(presignedUrlService.generateForItem(any()))
                 .thenReturn(List.of(ImageResponse.builder().presignedURL("https://www.abc.com").imageName("imageName.jpg").build()));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/images")

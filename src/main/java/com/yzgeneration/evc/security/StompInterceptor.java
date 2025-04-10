@@ -2,7 +2,6 @@ package com.yzgeneration.evc.security;
 
 
 import com.yzgeneration.evc.authentication.implement.TokenProvider;
-import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
 import com.yzgeneration.evc.domain.chat.implement.SessionAttributeAccessor;
 import com.yzgeneration.evc.domain.chat.implement.StompHeaderReader;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +13,7 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import static com.yzgeneration.evc.domain.chat.SessionConstant.CHAT_ROOM_KEY;
-import static com.yzgeneration.evc.domain.chat.SessionConstant.MEMBER_KEY;
+import static com.yzgeneration.evc.domain.chat.SessionConstant.*;
 
 @Component
 @RequiredArgsConstructor
@@ -35,11 +33,20 @@ public class StompInterceptor implements ChannelInterceptor { // stomp에서 메
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             String token = parseToken(stompHeaderReader.getToken(accessor));
             Long memberId = tokenProvider.getMemberId(token);
-            Long chatRoomId = Long.valueOf(stompHeaderReader.getChatRoomIdAtNativeHeader(accessor));
-            System.out.println("Interceptor memberId = " + memberId);
-            System.out.println("Interceptor chatRoomId = " + chatRoomId);
-            sessionAttributeAccessor.updateSession(accessor, MEMBER_KEY, memberId);
-            sessionAttributeAccessor.updateSession(accessor, CHAT_ROOM_KEY, chatRoomId);
+
+            if (accessor.getFirstNativeHeader(CHAT_ROOM_KEY) != null) {
+                Long chatRoomId = Long.valueOf(stompHeaderReader.getChatRoomIdAtNativeHeader(accessor));
+                System.out.println("Interceptor memberId = " + memberId);
+                System.out.println("Interceptor chatRoomId = " + chatRoomId);
+                sessionAttributeAccessor.updateSession(accessor, MEMBER_KEY, memberId);
+                sessionAttributeAccessor.updateSession(accessor, CHAT_ROOM_KEY, chatRoomId);
+            } else if (accessor.getFirstNativeHeader(AUCTION_ROOM_KEY) != null) {
+                Long auctionRoomId = Long.valueOf(stompHeaderReader.getAuctionRoomIdAtNativeHeader(accessor));
+                System.out.println("Interceptor memberId = " + memberId);
+                System.out.println("Interceptor auctionRoomId = " + auctionRoomId);
+                sessionAttributeAccessor.updateSession(accessor, MEMBER_KEY, memberId);
+                sessionAttributeAccessor.updateSession(accessor, AUCTION_ROOM_KEY, auctionRoomId);
+            }
         }
 
         return message;

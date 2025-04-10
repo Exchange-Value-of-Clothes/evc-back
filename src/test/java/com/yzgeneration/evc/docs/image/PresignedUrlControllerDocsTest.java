@@ -47,7 +47,7 @@ public class PresignedUrlControllerDocsTest extends RestDocsSupport {
                 .imageName("imageName.jpg")
                 .build();
 
-        when(presignedUrlService.generatePresignedURL(any()))
+        when(presignedUrlService.generateForItem(any()))
                 .thenReturn(List.of(imageResponse));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/images")
