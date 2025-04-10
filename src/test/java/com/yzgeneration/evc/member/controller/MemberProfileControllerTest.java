@@ -3,6 +3,7 @@ package com.yzgeneration.evc.member.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yzgeneration.evc.domain.member.controller.MemberProfileController;
 import com.yzgeneration.evc.domain.member.dto.ProfileResponse;
+import com.yzgeneration.evc.domain.member.dto.UpdateProfileResponse;
 import com.yzgeneration.evc.domain.member.service.MemberProfileService;
 
 import com.yzgeneration.evc.fixture.MemberFixture;
@@ -46,14 +47,15 @@ class MemberProfileControllerTest {
     @DisplayName("프로필을 조회한다.")
     void get() throws Exception {
         given(memberProfileService.get(any()))
-                .willReturn(new ProfileResponse("imageName", "imageUrl", "nickname", 1000));
+                .willReturn(new ProfileResponse("imageName", "imageUrl", "nickname", 1000, true));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/members/profile/me")
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.imageName").value("imageName"))
                 .andExpect(jsonPath("$.imageUrl").value("imageUrl"))
                 .andExpect(jsonPath("$.nickname").value("nickname"))
-                .andExpect(jsonPath("$.point").value(1000));
+                .andExpect(jsonPath("$.point").value(1000))
+                .andExpect(jsonPath("$.isSocialProfileVisible").value(true));
 
     }
 
@@ -62,7 +64,7 @@ class MemberProfileControllerTest {
     @DisplayName("프로필을 업데이트한다..")
     void update() throws Exception {
         given(memberProfileService.update(any(), any()))
-                .willReturn(new ProfileResponse("imageName", "imageUrl", "nickname", 1000));
+                .willReturn(new UpdateProfileResponse("imageName", "imageUrl", "nickname", 1000, true));
         mockMvc.perform(MockMvcRequestBuilders.patch("/api/members/profile")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(MemberFixture.fixtureUpdateProfileRequest("imageName", "imageUrl")))
@@ -71,7 +73,8 @@ class MemberProfileControllerTest {
                 .andExpect(jsonPath("$.imageName").value("imageName"))
                 .andExpect(jsonPath("$.imageUrl").value("imageUrl"))
                 .andExpect(jsonPath("$.nickname").value("nickname"))
-                .andExpect(jsonPath("$.point").value(1000));
+                .andExpect(jsonPath("$.point").value(1000))
+                .andExpect(jsonPath("$.isSocialProfileVisible").value(true));
 
     }
 
