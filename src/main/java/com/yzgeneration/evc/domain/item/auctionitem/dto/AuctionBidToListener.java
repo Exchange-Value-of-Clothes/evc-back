@@ -11,5 +11,7 @@ public class AuctionBidToListener {
 
     private Long auctionRoomId;
 
+    private Long bidderId;
+
     private int currentPrice;
 }

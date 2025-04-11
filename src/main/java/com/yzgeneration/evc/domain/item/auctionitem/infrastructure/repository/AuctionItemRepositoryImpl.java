@@ -132,7 +132,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                 .on(memberPointEntity.memberId.eq(memberId))
                 .where(auctionItemEntity.id.eq(id)
                         .and(memberPointEntity.point.goe(auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice.add(point))) // 입찰 후 포인트를 회원이 갖고 있어야 함
-                        .and(auctionItemEntity.auctionItemPriceDetailsEntity.bidPrice.loe(point))) // 입찰포인트 >= 호가단위
+                        .and(auctionItemEntity.auctionItemPriceDetailsEntity.bidPrice.loe(point))) // 호가단위 <= 입찰포인트
                 .fetchFirst();
 
         return fetchOne != null;
