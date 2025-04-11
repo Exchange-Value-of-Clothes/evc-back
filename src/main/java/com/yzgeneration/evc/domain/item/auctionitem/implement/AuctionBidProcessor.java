@@ -24,10 +24,10 @@ public class AuctionBidProcessor {
     }
 
     @Transactional
-    public void bidAuctionItem(Long memberId, Long auctionItemId, int price) {
-        if (!auctionItemRepository.checkMemberPointById(auctionItemId, memberId, price)) {
+    public void bidAuctionItem(Long memberId, Long auctionItemId, int point) {
+        if (!auctionItemRepository.checkMemberPointById(auctionItemId, memberId, point)) {
             throw new CustomException(ErrorCode.NOT_ENOUGH_POINT);
         }
-        auctionItemRepository.updateCurrentPrice(auctionItemId, price);
+        auctionItemRepository.updateCurrentPrice(auctionItemId, point);
     }
 }

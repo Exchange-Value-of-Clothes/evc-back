@@ -1,13 +1,15 @@
 package com.yzgeneration.evc.domain.item.auctionitem.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class AuctionBidRequest {
+@AllArgsConstructor
+public class AuctionBidResponse {
 
-    private Long auctionId;
+    private Long bidderId;
 
-    private int point;
+    private int currentPrice;
 }

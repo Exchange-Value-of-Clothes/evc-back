@@ -37,6 +37,6 @@ public class AuctionBidService {
         auctionBidProcessor.bidAuctionItem(memberId, auctionBidRequest.getAuctionId(), auctionBidRequest.getPoint());
         auctionBidRepository.save(auctionRoomId, memberId, auctionBidRequest.getPoint());
         int currentPrice = auctionItemRepository.getCurrentPriceById(auctionBidRequest.getAuctionId());
-        rabbitTemplate.convertAndSend("auction.topic", "room-auction." + auctionRoomId, new AuctionBidToListener(auctionRoomId, currentPrice));
+        rabbitTemplate.convertAndSend("auction.topic", "auction-room." + auctionRoomId, new AuctionBidToListener(auctionRoomId, memberId, currentPrice));
     }
 }
