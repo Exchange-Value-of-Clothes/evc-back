@@ -23,6 +23,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -79,7 +80,7 @@ class ChatServiceTest {
         // given
         connectionRepository.connect(1L, 1L);
         connectionRepository.connect(1L, 2L);
-        ChatMessage chatMessage = ChatMessage.create(1L, 1L, "content", false);
+        ChatMessage chatMessage = ChatMessage.create(1L, 1L, "content", false, LocalDateTime.MIN);
         // when
         boolean isChatPartnerConnected = chatConnectionManager.isChatPartnerConnected(1L);
         ChatMessage newChatMessage = chatMessageRepository.save(chatMessage);
@@ -98,8 +99,8 @@ class ChatServiceTest {
         Long ownerId = 1L;
         Long participantId = 2L;
         chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
-        ChatMessage chatMessage = ChatMessage.create(1L, 1L, "content", false);
-        ChatMessage chatMessage2 = ChatMessage.create(1L, 1L, "content2", false);
+        ChatMessage chatMessage = ChatMessage.create(1L, 1L, "content", false, LocalDateTime.MIN);
+        ChatMessage chatMessage2 = ChatMessage.create(1L, 1L, "content2", false, LocalDateTime.now());
         chatMessageRepository.save(chatMessage);
         chatMessageRepository.save(chatMessage2);
         // when
@@ -142,8 +143,8 @@ class ChatServiceTest {
         Long ownerId = 1L;
         Long participantId = 2L;
         ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
-        ChatMessage chatMessage = ChatMessage.create(1L, 1L, "content", false);
-        ChatMessage chatMessage2 = ChatMessage.create(1L, 1L, "content2", false);
+        ChatMessage chatMessage = ChatMessage.create(1L, 1L, "content", false, LocalDateTime.MIN);
+        ChatMessage chatMessage2 = ChatMessage.create(1L, 1L, "content2", false, LocalDateTime.MIN);
         chatMessageRepository.save(chatMessage);
         chatMessageRepository.save(chatMessage2);
         Long chatRoomId = chatMessageSliceResponse.getChatRoomId();

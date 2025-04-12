@@ -7,6 +7,8 @@ import com.yzgeneration.evc.fixture.ChatFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.*;
 
 class ChatTest {
@@ -53,7 +55,7 @@ class ChatTest {
         String content = "내용";
 
         // when
-        ChatMessage chatMessage = ChatMessage.create(chatRoomId, senderId, content, false);
+        ChatMessage chatMessage = ChatMessage.create(chatRoomId, senderId, content, false, LocalDateTime.MIN);
 
         // then
         assertThat(chatMessage.getChatRoomId()).isEqualTo(chatRoomId);
