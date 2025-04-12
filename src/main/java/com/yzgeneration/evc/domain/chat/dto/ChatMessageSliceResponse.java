@@ -10,9 +10,11 @@ import java.time.LocalDateTime;
 public class ChatMessageSliceResponse extends SliceResponse<ChatMessageResponse> {
 
     private Long chatRoomId;
+    private Long yourId;
 
-    public ChatMessageSliceResponse(Long chatRoomId, Slice<ChatMessageResponse> slice, LocalDateTime cursor) {
+    public ChatMessageSliceResponse(Long chatRoomId, Long yourId, Slice<ChatMessageResponse> slice, LocalDateTime cursor) {
         super(slice, cursor);
         this.chatRoomId = chatRoomId;
+        this.yourId = yourId;
     }
 }

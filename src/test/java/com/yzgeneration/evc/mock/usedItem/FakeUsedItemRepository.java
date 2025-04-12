@@ -73,4 +73,9 @@ public class FakeUsedItemRepository implements UsedItemRepository {
                             usedItem.getItemStats().getViewCount(), usedItem.getItemStats().getLikeCount(), usedItem.getItemStats().getChattingCount(), usedItem.getMemberId(), "marketNickname", usedItem.getMemberId().equals(memberId), usedItem.getCreatedAt(), usedItem.getItemStatus());
                 });
     }
+
+    @Override
+    public UsedItem getById(Long id) {
+        return null;
+    }
 }

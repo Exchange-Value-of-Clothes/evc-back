@@ -102,4 +102,9 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
     public int getCurrentPriceById(Long auctionId) {
         return 0;
     }
+
+    @Override
+    public AuctionItem getById(Long id) {
+        return null;
+    }
 }

@@ -11,6 +11,8 @@ import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.UsedItemEntity;
 import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
@@ -106,5 +108,10 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                 .fetchFirst();
 
         return Optional.ofNullable(usedItemResponse);
+    }
+
+    @Override
+    public UsedItem getById(Long id) {
+        return usedItemJpaRepository.findById(id).orElseThrow(()-> new CustomException(ErrorCode.USEDITEM_NOT_FOUND)).toModel();
     }
 }

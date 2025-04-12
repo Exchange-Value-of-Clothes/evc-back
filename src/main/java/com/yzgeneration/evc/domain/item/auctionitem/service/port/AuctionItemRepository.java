@@ -21,4 +21,6 @@ public interface AuctionItemRepository {
     boolean canMemberBidByIdAndMemberId(Long id, Long memberId);
 
     int getCurrentPriceById(Long auctionId);
+
+    AuctionItem getById(Long id);
 }

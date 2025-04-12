@@ -155,4 +155,9 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                 .where(auctionItemEntity.id.eq(auctionId))
                 .fetchOne().getAuctionItemPriceDetailsEntity().getCurrentPrice();
     }
+
+    @Override
+    public AuctionItem getById(Long id) {
+        return auctionItemJpaRepository.findById(id).orElseThrow(()-> new CustomException(ErrorCode.AUCTIONITEM_NOT_FOUND)).toModel();
+    }
 }

@@ -43,7 +43,7 @@ public class ChatService {
         return chatMessageRepository.getLastMessages(memberId, chatRoomId, cursor);
     }
 
-    public void send(StompHeaderAccessor accessor, Chatting chatting) {
+    public void send(StompHeaderAccessor accessor, Chatting chatting) { // todo
         Long chatRoomId = sessionAttributeAccessor.getById(accessor, CHAT_ROOM_KEY);
         Long memberId = sessionAttributeAccessor.getById(accessor, MEMBER_KEY);
         boolean isChatPartnerConnected = chatConnectionManager.isChatPartnerConnected(chatRoomId);

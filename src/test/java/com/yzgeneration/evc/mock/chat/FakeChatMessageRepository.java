@@ -94,7 +94,7 @@ public class FakeChatMessageRepository implements ChatMessageRepository {
 
         LocalDateTime lastCreatedAt = messages.isEmpty() ? null : messages.get(messages.size() - 1).getCreatedAt();
 
-        return new ChatMessageSliceResponse(chatRoomId, new SliceImpl<>(messages, PageRequest.of(0, size), hasNext), lastCreatedAt);
+        return new ChatMessageSliceResponse(chatRoomId, memberId, new SliceImpl<>(messages, PageRequest.of(0, size), hasNext), lastCreatedAt);
     }
 
 
