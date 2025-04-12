@@ -1,4 +1,4 @@
-package com.yzgeneration.evc.domain.delivery;
+package com.yzgeneration.evc.domain.delivery.model;
 
 import lombok.Builder;
 import lombok.Getter;
