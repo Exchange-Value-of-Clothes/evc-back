@@ -111,7 +111,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
                 : null;
 
         return new ChatMessageSliceResponse(
-                chatRoomId,new SliceImpl<>(response, PageRequest.of(0, size), hasNext), lastCreatedAt
+                chatRoomId, memberId,new SliceImpl<>(response, PageRequest.of(0, size), hasNext), lastCreatedAt
         );
     }
 

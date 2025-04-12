@@ -50,7 +50,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     void enter() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
         given(chatService.getChatRoomByTradeRequest(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -59,6 +59,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .content(objectMapper.writeValueAsString(ChatFixture.chatEnter())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.chatRoomId").value("1"))
+                .andExpect(jsonPath("$.yourId").value("1"))
                 .andExpect(jsonPath("$.content[0].message").value("message"))
                 .andExpect(jsonPath("$.content[0].senderId").value(1L))
                 .andExpect(jsonPath("$.content[0].isMine").value(true))
@@ -79,6 +80,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                         responseFields(
                                 fieldWithPath("chatRoomId").type(JsonFieldType.NUMBER)
                                         .description("채팅방 아이디"),
+                                fieldWithPath("yourId").type(JsonFieldType.NUMBER)
+                                        .description("본인 아이디"),
                                 fieldWithPath("content").type(JsonFieldType.ARRAY)
                                         .description("채팅 정보 리스트"),
                                 fieldWithPath("content[].message").type(JsonFieldType.STRING)
@@ -149,7 +152,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     void getChatRoom() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
         given(chatService.getChatRoomByListSelection(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -158,6 +161,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.chatRoomId").value("1"))
+                .andExpect(jsonPath("$.yourId").value("1"))
                 .andExpect(jsonPath("$.content[0].message").value("message"))
                 .andExpect(jsonPath("$.content[0].senderId").value(1L))
                 .andExpect(jsonPath("$.content[0].isMine").value(true))
@@ -179,6 +183,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                         responseFields(
                                 fieldWithPath("chatRoomId").type(JsonFieldType.NUMBER)
                                         .description("채팅방 아이디"),
+                                fieldWithPath("yourId").type(JsonFieldType.NUMBER)
+                                        .description("본인 아이디"),
                                 fieldWithPath("content").type(JsonFieldType.ARRAY)
                                         .description("채팅 정보 리스트"),
                                 fieldWithPath("content[].message").type(JsonFieldType.STRING)

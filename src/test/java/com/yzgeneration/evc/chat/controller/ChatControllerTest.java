@@ -54,7 +54,7 @@ class ChatControllerTest {
     void enter() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true,"message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
         given(chatService.getChatRoomByTradeRequest(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -102,7 +102,7 @@ class ChatControllerTest {
     void getChatRoom() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
         given(chatService.getChatRoomByListSelection(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/chat/{chatRoomId}", "1")
