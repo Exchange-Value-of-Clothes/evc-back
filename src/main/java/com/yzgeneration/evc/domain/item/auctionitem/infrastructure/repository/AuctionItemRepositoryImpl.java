@@ -14,6 +14,8 @@ import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
@@ -82,33 +84,75 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
     }
 
     @Override
-    public Optional<GetAuctionItemResponse> findByMemberIdAndAuctionItemId(Long memberId, Long itemId) {
-        GetAuctionItemResponse auctionItemResponse = jpaQueryFactory
-                .select(Projections.constructor(GetAuctionItemResponse.class,
-                        Projections.constructor(AuctionItemDetailsResponse.class,
-                                auctionItemEntity.auctionItemDetailsEntity.title,
-                                auctionItemEntity.auctionItemDetailsEntity.category,
-                                auctionItemEntity.auctionItemDetailsEntity.content),
-                        Projections.constructor(AuctionItemStatsResponse.class,
-                                auctionItemEntity.auctionItemStatsEntity.viewCount,
-                                //TODO likeCount로 이후에 변경하기 (좋아요 기능 만들면)
-                                auctionItemEntity.auctionItemStatsEntity.viewCount,
-                                auctionItemEntity.auctionItemStatsEntity.participantCount),
-                        Expressions.constant(new ArrayList<>()), //이후 setter를 이용해 값 설정
-                        auctionItemEntity.transactionType,
-                        auctionItemEntity.startTime,
-                        auctionItemEntity.endTime,
-                        auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
-                        auctionItemEntity.memberId, //상품 주인 id
-                        memberEntity.memberPrivateInformationEntity.nickname, //상품 주인 닉네임
-                        auctionItemEntity.memberId.eq(memberId), //상품 주인과 조회한 회원의 일치 여부
-                        auctionItemEntity.itemStatus))
-                .from(auctionItemEntity)
-                .join(memberEntity) //마켓 주인 닉네임 조회를 위해
-                .on(memberEntity.id.eq(auctionItemEntity.memberId))
-                .where(auctionItemEntity.id.eq(itemId))
-                .fetchOne();
+    public GetAuctionItemResponse findByIdAndMemberId(Long memberId, Long id) {
+        return Optional.ofNullable(jpaQueryFactory
+                        .select(Projections.constructor(GetAuctionItemResponse.class,
+                                Projections.constructor(AuctionItemDetailsResponse.class,
+                                        auctionItemEntity.auctionItemDetailsEntity.title,
+                                        auctionItemEntity.auctionItemDetailsEntity.category,
+                                        auctionItemEntity.auctionItemDetailsEntity.content),
+                                Projections.constructor(AuctionItemStatsResponse.class,
+                                        auctionItemEntity.auctionItemStatsEntity.viewCount,
+                                        //TODO likeCount로 이후에 변경하기 (좋아요 기능 만들면)
+                                        auctionItemEntity.auctionItemStatsEntity.viewCount,
+                                        auctionItemEntity.auctionItemStatsEntity.participantCount),
+                                Expressions.constant(new ArrayList<>()), //이후 setter를 이용해 값 설정
+                                auctionItemEntity.transactionType,
+                                auctionItemEntity.startTime,
+                                auctionItemEntity.endTime,
+                                auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
+                                auctionItemEntity.memberId, //상품 주인 id
+                                memberEntity.memberPrivateInformationEntity.nickname, //상품 주인 닉네임
+                                auctionItemEntity.memberId.eq(memberId), //상품 주인과 조회한 회원의 일치 여부
+                                auctionItemEntity.itemStatus))
+                        .from(auctionItemEntity)
+                        .join(memberEntity) //마켓 주인 닉네임 조회를 위해
+                        .on(memberEntity.id.eq(auctionItemEntity.memberId))
+                        .where(auctionItemEntity.id.eq(id))
+                        .fetchOne())
+                .orElseThrow(
+                        () -> new CustomException(ErrorCode.AUCTIONITEM_NOT_FOUND)
+                );
+    }
 
-        return Optional.ofNullable(auctionItemResponse);
+    @Override
+    public void updateCurrentPrice(Long id, int point) {
+        jpaQueryFactory.update(auctionItemEntity)
+                .set(auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice, auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice.add(point))
+                .where(auctionItemEntity.id.eq(id))
+                .execute();
+    }
+
+    @Override
+    public boolean checkMemberPointById(Long id, Long memberId, int point) {
+        // 개별조회된 상태에서 경매를 진행하기에 경매상품 존재유무 체크 안함
+        Integer fetchOne = jpaQueryFactory.selectOne()
+                .from(auctionItemEntity)
+                .join(memberPointEntity)
+                .on(memberPointEntity.memberId.eq(memberId))
+                .where(auctionItemEntity.id.eq(id)
+                        .and(memberPointEntity.point.goe(auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice.add(point))) // 입찰 후 포인트를 회원이 갖고 있어야 함
+                        .and(auctionItemEntity.auctionItemPriceDetailsEntity.bidPrice.loe(point))) // 호가단위 <= 입찰포인트
+                .fetchFirst();
+
+        return fetchOne != null;
+    }
+
+    @Override
+    public boolean canMemberBidByIdAndMemberId(Long id, Long memberId) {
+        Integer fetchOne = jpaQueryFactory.selectOne()
+                .from(auctionItemEntity)
+                .where(auctionItemEntity.id.eq(id)
+                        .and(auctionItemEntity.memberId.ne(memberId)))
+                .fetchFirst();
+
+        return fetchOne != null;
+    }
+
+    @Override
+    public int getCurrentPriceById(Long auctionId) {
+        return jpaQueryFactory.selectFrom(auctionItemEntity)
+                .where(auctionItemEntity.id.eq(auctionId))
+                .fetchOne().getAuctionItemPriceDetailsEntity().getCurrentPrice();
     }
 }

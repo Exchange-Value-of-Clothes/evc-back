@@ -2,10 +2,9 @@ package com.yzgeneration.evc.docs.image;
 
 import com.yzgeneration.evc.docs.RestDocsSupport;
 import com.yzgeneration.evc.domain.image.controller.PresignedUrlController;
+import com.yzgeneration.evc.domain.image.dto.ImageRequest;
 import com.yzgeneration.evc.domain.image.dto.ImageResponse;
 import com.yzgeneration.evc.domain.image.service.PresignedUrlService;
-
-import com.yzgeneration.evc.mock.image.MockUsedItemImageFile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -14,15 +13,16 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.*;
+import static com.yzgeneration.evc.fixture.ImageFixture.fixImageRequest;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,32 +38,30 @@ public class PresignedUrlControllerDocsTest extends RestDocsSupport {
     }
 
     @Test
-    @DisplayName("이미지 저장을 위한 presigned url 생성")
-    void createPresignedURL() throws Exception {
-        ImageResponse imageResponse1 = ImageResponse.builder()
-                .presignedURL("http://localhost:8080/image/1234.jpg")
-                .imageName("1234.jpg")
-                .build();
-        ImageResponse imageResponse2 = ImageResponse.builder()
-                .presignedURL("http://localhost:8080/image/5678.jpg")
-                .imageName("5678.jpg")
+    @DisplayName("아이템 이미지 저장을 위한 presigned url 생성")
+    void createForItem() throws Exception {
+
+        ImageRequest imageRequest = fixImageRequest();
+        ImageResponse imageResponse = ImageResponse.builder()
+                .presignedURL("http://localhost:8080/presignedURL")
+                .imageName("imageName.jpg")
                 .build();
 
-        when(presignedUrlService.generatePresignedURL(anyString(), anyList())).thenReturn(List.of(imageResponse1, imageResponse2));
+        when(presignedUrlService.generateForItem(any()))
+                .thenReturn(List.of(imageResponse));
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .multipart("/api/images")
-                        .file("imageFiles", new MockUsedItemImageFile().getImageFiles().get(0).getBytes())
-                        .file("imageFiles", new MockUsedItemImageFile().getImageFiles().get(1).getBytes())
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/images")
                         .with(csrf())
-                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                        .queryParam("prefix", "prefix-name"))
+                        .content(objectMapper.writeValueAsString(imageRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("image-presignedURL-create",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
-                                queryParameters(parameterWithName("prefix").description("이미지 경로 (useditem, auction, chat)")),
-                                requestParts(partWithName("imageFiles").description("업로드할 이미지 list")),
+                                requestFields(
+                                        fieldWithPath("prefix").type(JsonFieldType.STRING).description("이미지 경로 (useditem, auction, chat)"),
+                                        fieldWithPath("imageNames").type(JsonFieldType.ARRAY).description("업로드할 이미지 이름 list")
+                                ),
                                 responseFields(
                                         fieldWithPath("[]").type(JsonFieldType.ARRAY)
                                                 .description("생성된 presigned url 리스트"),

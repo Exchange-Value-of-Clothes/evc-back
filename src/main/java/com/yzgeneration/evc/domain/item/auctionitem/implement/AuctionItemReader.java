@@ -1,11 +1,9 @@
 package com.yzgeneration.evc.domain.item.auctionitem.implement;
 
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
 import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.domain.image.service.port.ItemImageRepository;
-import com.yzgeneration.evc.exception.CustomException;
-import com.yzgeneration.evc.exception.ErrorCode;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,9 +19,7 @@ public class AuctionItemReader {
     public GetAuctionItemResponse getAuctionItemResponse(Long memberId, Long itemId) {
 
         List<String> imageNameList = itemImageRepository.findImageNamesByItemIdAndItemType(itemId, itemType);
-        GetAuctionItemResponse auctionItemResponse = auctionItemRepository.findByMemberIdAndAuctionItemId(memberId, itemId).orElseThrow(
-                () -> new CustomException(ErrorCode.AUCTIONITEM_NOT_FOUND)
-        );
+        GetAuctionItemResponse auctionItemResponse = auctionItemRepository.findByIdAndMemberId(memberId, itemId);
         auctionItemResponse.setImageNameList(imageNameList);
         return auctionItemResponse;
     }

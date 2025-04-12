@@ -1,0 +1,10 @@
+[[auctionBid-createRoom]]
+== 경매방 생성 및 조회
+
+=== HTTP Request
+include::{snippets}/auctionBid-createRoom/http-request.adoc[]
+include::{snippets}/auctionBid-createRoom/path-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/auctionBid-createRoom/http-response.adoc[]
+include::{snippets}/auctionBid-createRoom/response-fields.adoc[]

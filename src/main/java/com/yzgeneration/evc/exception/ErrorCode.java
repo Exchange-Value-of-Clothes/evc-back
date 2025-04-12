@@ -17,7 +17,9 @@ public enum ErrorCode {
     SELF_CHAT_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "007", "물품 소유자 본인은 본인에게 채팅룸을 개설할 수 없습니다."),
     JsonSerializationException(HttpStatus.BAD_REQUEST, "008", "Json 직렬화 예외"),
     INVALID_NICKNAME(HttpStatus.BAD_REQUEST, "009", "잘못된 닉네임 형식입니다."),
-    INVALID_PROVIDER_TYPE(HttpStatus.BAD_REQUEST, "010", "소셜 로그인은 비밀번호를 변경할 수 없습니다."),
+    INVALID_PROVIDER_TYPE(HttpStatus.BAD_REQUEST, "0010", "소셜 로그인은 비밀번호를 변경할 수 없습니다."),
+    NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "0011", "포인트가 부족합니다."),
+    SELF_BID_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "0012", "물품 소유자 본인은 본인에게 경매할 수 없습니다."),
 
     //401 Unauthorized
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "011", "이메일 혹은 비밀번호가 다릅니다."),

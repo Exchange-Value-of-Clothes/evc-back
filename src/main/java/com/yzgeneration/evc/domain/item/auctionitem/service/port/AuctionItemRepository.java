@@ -6,12 +6,19 @@ import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetA
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 public interface AuctionItemRepository {
     AuctionItem save(AuctionItem auctionItem);
 
     SliceResponse<GetAuctionItemListResponse> getAuctionItemList(Long memberId, LocalDateTime cursor);
 
-    Optional<GetAuctionItemResponse> findByMemberIdAndAuctionItemId(Long memberId, Long itemId);
+    GetAuctionItemResponse findByIdAndMemberId(Long memberId, Long id);
+
+    void updateCurrentPrice(Long id, int point);
+
+    boolean checkMemberPointById(Long id, Long memberId, int point);
+
+    boolean canMemberBidByIdAndMemberId(Long id, Long memberId);
+
+    int getCurrentPriceById(Long auctionId);
 }

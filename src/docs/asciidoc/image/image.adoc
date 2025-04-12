@@ -3,8 +3,7 @@
 === HTTP Request
 
 include::{snippets}/image-presignedURL-create/http-request.adoc[]
-include::{snippets}/image-presignedURL-create/query-parameters.adoc[]
-include::{snippets}/image-presignedURL-create/request-parts.adoc[]
+include::{snippets}/image-presignedURL-create/request-fields.adoc[]
 
 === HTTP Response
 
