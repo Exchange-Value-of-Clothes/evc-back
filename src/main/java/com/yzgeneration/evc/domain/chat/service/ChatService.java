@@ -48,7 +48,7 @@ public class ChatService {
         Long memberId = sessionAttributeAccessor.getById(accessor, MEMBER_KEY);
         boolean isChatPartnerConnected = chatConnectionManager.isChatPartnerConnected(chatRoomId);
         chatMessageRepository.save(ChatMessage.create(chatRoomId, memberId, chatting.getMsg(), isChatPartnerConnected, chatting.getCreatedAt()));
-        rabbitTemplate.convertAndSend("chat.topic", "room."+chatRoomId, ChattingToListener.of(chatRoomId, memberId, chatting.getMsg(), isChatPartnerConnected));
+        rabbitTemplate.convertAndSend("chat.topic", "room." + chatRoomId, ChattingToListener.of(chatRoomId, memberId, chatting.getMsg(), isChatPartnerConnected));
     }
 
     public void exit(Long chatRoomId, Long memberId) {
