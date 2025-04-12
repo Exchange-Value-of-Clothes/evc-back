@@ -16,9 +16,9 @@ public class ExternalApiExceptionHandler {
         return new ResponseEntity<>("소셜 로그인 실패", HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(PaymentGatewayException.class)
-    protected ResponseEntity<?> handlePaymentGatewayException(PaymentGatewayException e) {
-        return ErrorResponse.of(e.getHttpStatus(), e.getMessage());
+    @ExceptionHandler(ExternalApiException.class)
+    protected ResponseEntity<?> handleExternalException(ExternalApiException e) {
+        return ErrorResponse.of(e.getCode(), e.getMessage());
     }
 
 

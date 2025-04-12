@@ -15,13 +15,13 @@ public class ChatMessage {
     private Boolean isRead;
     private LocalDateTime createdAt;
 
-    public static ChatMessage create(Long chatRoomId, Long senderId, String content, Boolean isRead) {
+    public static ChatMessage create(Long chatRoomId, Long senderId, String content, Boolean isRead, LocalDateTime createdAt) {
         return ChatMessage.builder()
                 .chatRoomId(chatRoomId)
                 .senderId(senderId)
                 .content(content)
                 .isRead(isRead)
-                .createdAt(LocalDateTime.now())
+                .createdAt(createdAt)
                 .build();
     }
 }
