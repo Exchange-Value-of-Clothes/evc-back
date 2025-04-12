@@ -5,7 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PaymentGatewayException extends RuntimeException {
+public class ExternalApiException extends RuntimeException {
+    private String where;
     private String message;
-    private int httpStatus;
+    private int code;
+
 }

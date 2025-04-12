@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
-import com.yzgeneration.evc.exception.PaymentGatewayException;
+import com.yzgeneration.evc.exception.ExternalApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
@@ -36,7 +36,7 @@ public class TossPayments implements PaymentGateway {
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, (request, res) -> {
                     TossErrorV2Response errorResponse = objectMapper.readValue(res.getBody(), TossErrorV2Response.class);
-                    throw new PaymentGatewayException(errorResponse.getMessage(), res.getStatusCode().value()); // 에러 객체 확인하려면 응답을 받아야되나?
+                    throw new ExternalApiException("토스 결제 승인 api 중 예외 발생", errorResponse.getMessage(), Integer.parseInt(errorResponse.getError().getCode()));
                 })
                 .toEntity(Payment.class).getBody();
     }
