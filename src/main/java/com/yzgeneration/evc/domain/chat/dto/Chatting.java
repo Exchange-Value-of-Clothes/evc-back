@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Chatting  {
     private Long memberId;
-    private String content;
+    private String msg;
     private LocalDateTime createdAt;
 }
