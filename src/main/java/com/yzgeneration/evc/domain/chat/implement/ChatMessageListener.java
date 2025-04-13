@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.domain.chat.implement;
 
+import com.yzgeneration.evc.domain.chat.dto.Chatting;
 import com.yzgeneration.evc.domain.chat.dto.ChattingToListener;
 import com.yzgeneration.evc.external.fcm.NotificationSender;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class ChatMessageListener {
         try {
             boolean chatPartnerExist = chatting.isChatPartnerExist();
             if(chatPartnerExist) {
-                messagingTemplate.convertAndSend("/topic/room." + chatting.getChatRoomId(), chatting.getContent());
+                messagingTemplate.convertAndSend("/topic/room." + chatting.getChatRoomId(), new Chatting(chatting.getMemberId(), chatting.getContent(), chatting.getCreatedAt()));
             } else {
                 System.out.println("ChatMessageListener.receiveChatMessage ELSE");
 //            notificationSender.send("deviceToken", "memberName", chatting.getContent());
