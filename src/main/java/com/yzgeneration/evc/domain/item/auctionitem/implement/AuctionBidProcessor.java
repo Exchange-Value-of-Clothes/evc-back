@@ -15,16 +15,16 @@ public class AuctionBidProcessor {
     private final AuctionItemRepository auctionItemRepository;
     private final AuctionRoomRepository auctionRoomRepository;
 
-    public Long createOrGetAuctionRoom(Long memberId, Long auctionItemId) {
-        if (!auctionItemRepository.canMemberBidByIdAndMemberId(auctionItemId, memberId)) {
-            throw new CustomException(ErrorCode.SELF_BID_NOT_ALLOWED);
-        }
+    public Long createOrGetAuctionRoom(Long auctionItemId) {
         return auctionRoomRepository.findByAuctionItemId(auctionItemId)
                 .orElseGet(() -> auctionRoomRepository.save(AuctionRoom.create(auctionItemId)));
     }
 
     @Transactional
     public void bidAuctionItem(Long memberId, Long auctionItemId, int point) {
+        if (!auctionItemRepository.canMemberBidByIdAndMemberId(auctionItemId, memberId)) {
+            throw new CustomException(ErrorCode.SELF_BID_NOT_ALLOWED);
+        }
         if (!auctionItemRepository.checkMemberPointById(auctionItemId, memberId, point)) {
             throw new CustomException(ErrorCode.NOT_ENOUGH_POINT);
         }

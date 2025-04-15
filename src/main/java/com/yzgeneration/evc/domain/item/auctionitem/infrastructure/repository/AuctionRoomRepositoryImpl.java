@@ -25,7 +25,7 @@ public class AuctionRoomRepositoryImpl implements AuctionRoomRepository {
     @Override
     public Optional<Long> findByAuctionItemId(Long auctionItemId) {
         return Optional.ofNullable(jpaQueryFactory.selectFrom(auctionRoomEntity)
-                .where(auctionRoomEntity.id.eq(auctionItemId))
+                .where(auctionRoomEntity.auctionItemId.eq(auctionItemId))
                 .fetchFirst()).map(AuctionRoomEntity::getId);
     }
 }
