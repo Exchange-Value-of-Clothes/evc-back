@@ -20,8 +20,8 @@ public class AuctionBidController {
     private final AuctionBidService auctionBidService;
 
     @PostMapping("/{auctionItemId}")
-    public AuctionRoomResponse createOrGetAuctionRoom(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @PathVariable Long auctionItemId) {
-        return auctionBidService.createOrGetAuctionRoom(memberPrincipal.getId(), auctionItemId);
+    public AuctionRoomResponse createOrGetAuctionRoom(@PathVariable Long auctionItemId) {
+        return auctionBidService.createOrGetAuctionRoom(auctionItemId);
     }
 
     @MessageMapping("auction.message")

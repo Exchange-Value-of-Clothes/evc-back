@@ -32,7 +32,7 @@ public class AuctionBidControllerDocsTest extends RestDocsSupport {
     @DisplayName("경매방 등록 또는 조회")
     void createAuctionRoom() throws Exception {
         AuctionRoomResponse auctionRoomResponse = new AuctionRoomResponse(1L);
-        when(auctionBidService.createOrGetAuctionRoom(any(), any()))
+        when(auctionBidService.createOrGetAuctionRoom(any()))
                 .thenReturn(auctionRoomResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/bid/{auctionItemId}", 1L))
