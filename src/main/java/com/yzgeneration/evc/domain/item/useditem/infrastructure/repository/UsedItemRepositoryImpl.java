@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.yzgeneration.evc.domain.image.infrastructure.entity.QItemImageEntity.itemImageEntity;
-import static com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.QAuctionItemEntity.auctionItemEntity;
 import static com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.QUsedItemEntity.usedItemEntity;
 import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
 
