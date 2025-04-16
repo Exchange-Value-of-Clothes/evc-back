@@ -179,6 +179,58 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("itemStatus").type(JsonFieldType.STRING)
                                         .description("중고상품 게시상태 (ACTIVE, DELETED, BAN)")
                         )));
+    }
 
+    @Test
+    @DisplayName("경매상품 검색 (Slice)")
+    void searchAuctionItems() throws Exception {
+
+        AuctionItemPriceDetailsResponse auctionItemPriceDetailsResponse = new AuctionItemPriceDetailsResponse(5000, 5000, 1000);
+        GetAuctionItemListResponse getAuctionItemListResponse = new GetAuctionItemListResponse(1L, "title", auctionItemPriceDetailsResponse, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        SliceResponse<GetAuctionItemListResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
+
+        when(auctionItemService.searchAuctionItems(any(), any(), any()))
+                .thenReturn(getAuctionItemSliceResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/auctionitems/search")
+                        .param("q", "query")
+                        .param("cursor", LocalDateTime.MIN.toString()))
+                .andExpect(status().isOk())
+                .andDo(document("auctionitems-search",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("q").description("검색어"),
+                                parameterWithName("cursor").description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
+                        responseFields(
+                                fieldWithPath("content").type(JsonFieldType.ARRAY)
+                                        .description("경매상품 정보 리스트 (제목 또는 내용에 검색어가 포함된 모든 항목 조회 / 대소문자 구분 없음)"),
+                                fieldWithPath("content[].auctionItemId").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 id"),
+                                fieldWithPath("content[].title").type(JsonFieldType.STRING)
+                                        .description("경매상품 제목"),
+                                fieldWithPath("content[].startPrice").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 시가"),
+                                fieldWithPath("content[].currentPrice").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 현재 가격"),
+                                fieldWithPath("content[].bidPrice").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 호가"),
+                                fieldWithPath("content[].imageName").type(JsonFieldType.STRING)
+                                        .description("경매상품 이미지 (썸네일)"),
+                                fieldWithPath("content[].startTime").type(JsonFieldType.STRING)
+                                        .description("경매 시작 시간"),
+                                fieldWithPath("content[].endTime").type(JsonFieldType.STRING)
+                                        .description("경매 종료 시간 (시작 시간 + 24시간 / 남은 시간 : end - start)"),
+                                fieldWithPath("content[].point").type(JsonFieldType.NUMBER)
+                                        .description("회원의 포인트"),
+                                fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재여부"),
+                                fieldWithPath("size").type(JsonFieldType.NUMBER)
+                                        .description("페이지 요청 사이즈"),
+                                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
+                                        .description("조회된 데이터 개수"),
+                                fieldWithPath("cursor").type(JsonFieldType.STRING)
+                                        .description("다음 페이지 커서")
+                        )));
     }
 }

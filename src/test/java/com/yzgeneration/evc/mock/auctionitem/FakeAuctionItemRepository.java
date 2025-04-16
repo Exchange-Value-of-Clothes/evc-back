@@ -107,4 +107,9 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
     public AuctionItem getById(Long id) {
         return null;
     }
+
+    @Override
+    public SliceResponse<GetAuctionItemListResponse> searchAuctionItemList(String q, Long memberId, LocalDateTime cursor) {
+        return null;
+    }
 }
