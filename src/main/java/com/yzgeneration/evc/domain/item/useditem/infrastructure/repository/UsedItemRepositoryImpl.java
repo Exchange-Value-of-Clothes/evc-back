@@ -5,6 +5,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
+import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.yzgeneration.evc.domain.image.infrastructure.entity.QItemImageEntity.itemImageEntity;
+import static com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.QAuctionItemEntity.auctionItemEntity;
 import static com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.QUsedItemEntity.usedItemEntity;
 import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
 
@@ -33,6 +35,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     private final UsedItemJpaRepository usedItemJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
     private static final int SIZE = 10;
+    private static final ItemType ITEM_TYPE = ItemType.USEDITEM;
 
     @Override
     public UsedItem save(UsedItem usedItem) {
@@ -57,7 +60,10 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                 )
                 .from(usedItemEntity)
                 .join(itemImageEntity)
-                .on(itemImageEntity.itemId.eq(usedItemEntity.id), itemImageEntity.isThumbnail)
+                .on(itemImageEntity.itemId.eq(usedItemEntity.id)
+                        .and(itemImageEntity.isThumbnail.isTrue())
+                        .and(itemImageEntity.itemType.eq(ITEM_TYPE))
+                )
                 .where(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)
                         //TODO(판매완료된 거는 빼고 줄까?)
                         .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null))
@@ -132,7 +138,10 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                 )
                 .from(usedItemEntity)
                 .join(itemImageEntity)
-                .on(itemImageEntity.itemId.eq(usedItemEntity.id), itemImageEntity.isThumbnail)
+                .on(itemImageEntity.itemId.eq(usedItemEntity.id)
+                        .and(itemImageEntity.isThumbnail.isTrue())
+                        .and(itemImageEntity.itemType.eq(ITEM_TYPE))
+                )
                 .where(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)
                         //TODO(판매완료된 거는 빼고 줄까?)
                         .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null)
