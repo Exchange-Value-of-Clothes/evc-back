@@ -24,5 +24,5 @@ public interface AuctionItemRepository {
 
     AuctionItem getById(Long id);
 
-    SliceResponse<GetAuctionItemListResponse> searchAuctionItemList(String keyword, Long memberId, LocalDateTime cursor);
+    SliceResponse<GetAuctionItemListResponse> searchAuctionItemList(String q, Long memberId, LocalDateTime cursor);
 }

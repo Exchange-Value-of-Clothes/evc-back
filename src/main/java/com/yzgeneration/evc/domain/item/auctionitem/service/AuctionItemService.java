@@ -35,7 +35,7 @@ public class AuctionItemService {
         return auctionItemReader.getAuctionItemResponse(memberId, itemId);
     }
 
-    public SliceResponse<GetAuctionItemListResponse> searchAuctionItems(String keyword, Long memberId, LocalDateTime cursor) {
-        return auctionItemRepository.searchAuctionItemList(keyword, memberId, cursor);
+    public SliceResponse<GetAuctionItemListResponse> searchAuctionItems(String q, Long memberId, LocalDateTime cursor) {
+        return auctionItemRepository.searchAuctionItemList(q, memberId, cursor);
     }
 }

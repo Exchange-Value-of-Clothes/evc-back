@@ -166,7 +166,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
     }
 
     @Override
-    public SliceResponse<GetAuctionItemListResponse> searchAuctionItemList(String keyword, Long memberId, LocalDateTime cursor) {
+    public SliceResponse<GetAuctionItemListResponse> searchAuctionItemList(String q, Long memberId, LocalDateTime cursor) {
 
         List<GetAuctionItemListResponse> auctionItemListResponses = jpaQueryFactory
                 .select(Projections.constructor(GetAuctionItemListResponse.class,
@@ -191,8 +191,8 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                 .where(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE) //게시 중인 경매상품
                         .and(auctionItemEntity.transactionStatus.eq(TransactionStatus.ONGOING)) //현재 거래중 상태인 경매상품
                         .and(cursor != null ? auctionItemEntity.startTime.lt(cursor) : null)
-                        .and(auctionItemEntity.auctionItemDetailsEntity.title.containsIgnoreCase(keyword))
-                        .or(auctionItemEntity.auctionItemDetailsEntity.content.containsIgnoreCase(keyword)))
+                        .and(auctionItemEntity.auctionItemDetailsEntity.title.containsIgnoreCase(q))
+                        .or(auctionItemEntity.auctionItemDetailsEntity.content.containsIgnoreCase(q)))
                 .orderBy(auctionItemEntity.startTime.desc())
                 .limit(SIZE + 1)
                 .fetch();

@@ -36,7 +36,7 @@ public class AuctionItemController {
     }
 
     @GetMapping("/search")
-    public SliceResponse<GetAuctionItemListResponse> searchAuctionItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam String keyword, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
-        return auctionItemService.searchAuctionItems(keyword, memberPrincipal.getId(), cursor);
+    public SliceResponse<GetAuctionItemListResponse> searchAuctionItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam String q, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
+        return auctionItemService.searchAuctionItems(q, memberPrincipal.getId(), cursor);
     }
 }
