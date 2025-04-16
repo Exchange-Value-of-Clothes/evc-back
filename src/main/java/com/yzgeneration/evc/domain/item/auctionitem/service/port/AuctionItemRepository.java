@@ -23,4 +23,6 @@ public interface AuctionItemRepository {
     int getCurrentPriceById(Long auctionId);
 
     AuctionItem getById(Long id);
+
+    SliceResponse<GetAuctionItemListResponse> searchAuctionItemList(String keyword, Long memberId, LocalDateTime cursor);
 }

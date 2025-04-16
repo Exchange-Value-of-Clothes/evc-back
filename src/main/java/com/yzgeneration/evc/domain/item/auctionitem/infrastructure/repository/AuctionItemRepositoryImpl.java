@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
+import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.AuctionItemPriceDetailsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.GetAuctionItemListResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemDetailsResponse;
@@ -36,6 +37,8 @@ import static com.yzgeneration.evc.domain.point.infrastructure.QMemberPointEntit
 public class AuctionItemRepositoryImpl implements AuctionItemRepository {
     private final AuctionItemJpaRepository auctionItemJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
+    private static final int SIZE = 10;
+    private static final ItemType ITEM_TYPE = ItemType.AUCTIONITEM;
 
     @Override
     public AuctionItem save(AuctionItem auctionItem) {
@@ -44,8 +47,6 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
 
     @Override
     public SliceResponse<GetAuctionItemListResponse> getAuctionItemList(Long memberId, LocalDateTime cursor) {
-
-        int size = 10;
 
         List<GetAuctionItemListResponse> auctionItemListResponses = jpaQueryFactory
                 .select(Projections.constructor(GetAuctionItemListResponse.class,
@@ -61,25 +62,28 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         memberPointEntity.point))
                 .from(auctionItemEntity)
                 .join(itemImageEntity) //썸네일 조회를 위해 join
-                .on(itemImageEntity.itemId.eq(auctionItemEntity.id), itemImageEntity.isThumbnail)
+                .on(itemImageEntity.itemId.eq(auctionItemEntity.id)
+                        .and(itemImageEntity.isThumbnail.isTrue())
+                        .and(itemImageEntity.itemType.eq(ITEM_TYPE))
+                )
                 .join(memberPointEntity) //포인트 조회를 위해 join
                 .on(memberPointEntity.memberId.eq(memberId))
                 .where(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE) //게시 중인 경매상품
                         .and(auctionItemEntity.transactionStatus.eq(TransactionStatus.ONGOING)) //현재 거래중 상태인 경매상품
                         .and(cursor != null ? auctionItemEntity.startTime.lt(cursor) : null))
                 .orderBy(auctionItemEntity.startTime.desc())
-                .limit(size + 1)
+                .limit(SIZE + 1)
                 .fetch();
 
-        boolean hasNext = auctionItemListResponses.size() > size; //true: 조회할 상품이 더 남은 상태 (조회 결과 : 11개)
+        boolean hasNext = auctionItemListResponses.size() > SIZE; //true: 조회할 상품이 더 남은 상태 (조회 결과 : 11개)
         if (hasNext) {
-            auctionItemListResponses.remove(size);
+            auctionItemListResponses.remove(SIZE);
         }
 
         LocalDateTime localStartTime = !auctionItemListResponses.isEmpty() ? auctionItemListResponses.get(auctionItemListResponses.size() - 1).getStartTime() : null;
 
         return new SliceResponse<>(
-                new SliceImpl<>(auctionItemListResponses, PageRequest.of(0, size), hasNext), localStartTime
+                new SliceImpl<>(auctionItemListResponses, PageRequest.of(0, SIZE), hasNext), localStartTime
         );
     }
 
@@ -158,6 +162,50 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
 
     @Override
     public AuctionItem getById(Long id) {
-        return auctionItemJpaRepository.findById(id).orElseThrow(()-> new CustomException(ErrorCode.AUCTIONITEM_NOT_FOUND)).toModel();
+        return auctionItemJpaRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.AUCTIONITEM_NOT_FOUND)).toModel();
+    }
+
+    @Override
+    public SliceResponse<GetAuctionItemListResponse> searchAuctionItemList(String keyword, Long memberId, LocalDateTime cursor) {
+
+        List<GetAuctionItemListResponse> auctionItemListResponses = jpaQueryFactory
+                .select(Projections.constructor(GetAuctionItemListResponse.class,
+                        auctionItemEntity.id,
+                        auctionItemEntity.auctionItemDetailsEntity.title,
+                        Projections.constructor(AuctionItemPriceDetailsResponse.class,
+                                auctionItemEntity.auctionItemPriceDetailsEntity.startPrice,
+                                auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
+                                auctionItemEntity.auctionItemPriceDetailsEntity.bidPrice),
+                        itemImageEntity.imageName,
+                        auctionItemEntity.startTime,
+                        auctionItemEntity.endTime,
+                        memberPointEntity.point))
+                .from(auctionItemEntity)
+                .join(itemImageEntity) //썸네일 조회를 위해 join
+                .on(itemImageEntity.itemId.eq(auctionItemEntity.id)
+                        .and(itemImageEntity.isThumbnail.isTrue())
+                        .and(itemImageEntity.itemType.eq(ITEM_TYPE))
+                )
+                .join(memberPointEntity) //포인트 조회를 위해 join
+                .on(memberPointEntity.memberId.eq(memberId))
+                .where(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE) //게시 중인 경매상품
+                        .and(auctionItemEntity.transactionStatus.eq(TransactionStatus.ONGOING)) //현재 거래중 상태인 경매상품
+                        .and(cursor != null ? auctionItemEntity.startTime.lt(cursor) : null)
+                        .and(auctionItemEntity.auctionItemDetailsEntity.title.containsIgnoreCase(keyword))
+                        .or(auctionItemEntity.auctionItemDetailsEntity.content.containsIgnoreCase(keyword)))
+                .orderBy(auctionItemEntity.startTime.desc())
+                .limit(SIZE + 1)
+                .fetch();
+
+        boolean hasNext = auctionItemListResponses.size() > SIZE; //true: 조회할 상품이 더 남은 상태 (조회 결과 : 11개)
+        if (hasNext) {
+            auctionItemListResponses.remove(SIZE);
+        }
+
+        LocalDateTime localStartTime = !auctionItemListResponses.isEmpty() ? auctionItemListResponses.get(auctionItemListResponses.size() - 1).getStartTime() : null;
+
+        return new SliceResponse<>(
+                new SliceImpl<>(auctionItemListResponses, PageRequest.of(0, SIZE), hasNext), localStartTime
+        );
     }
 }
