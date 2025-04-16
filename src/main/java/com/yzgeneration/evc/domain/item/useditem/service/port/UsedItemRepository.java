@@ -17,5 +17,5 @@ public interface UsedItemRepository {
 
     UsedItem getById(Long id);
 
-    SliceResponse<GetUsedItemListResponse> searchUsedItemList(String keyword, LocalDateTime cursor);
+    SliceResponse<GetUsedItemListResponse> searchUsedItemList(String q, LocalDateTime cursor);
 }

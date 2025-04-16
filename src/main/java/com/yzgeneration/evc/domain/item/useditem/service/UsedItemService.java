@@ -37,7 +37,7 @@ public class UsedItemService {
         return usedItemReader.getUsedItemResponse(memberId, usedItemId);
     }
 
-    public SliceResponse<GetUsedItemListResponse> searchUsedItems(String keyword, LocalDateTime cursor){
-        return usedItemRepository.searchUsedItemList(keyword, cursor);
+    public SliceResponse<GetUsedItemListResponse> searchUsedItems(String q, LocalDateTime cursor){
+        return usedItemRepository.searchUsedItemList(q, cursor);
     }
 }

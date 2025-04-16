@@ -120,7 +120,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemListResponse> searchUsedItemList(String keyword, LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemListResponse> searchUsedItemList(String q, LocalDateTime cursor) {
 
         List<GetUsedItemListResponse> usedItemListResponses = jpaQueryFactory
                 .select(Projections.constructor(GetUsedItemListResponse.class,
@@ -144,8 +144,8 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                 .where(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)
                         //TODO(판매완료된 거는 빼고 줄까?)
                         .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null)
-                        .and(usedItemEntity.itemDetailsEntity.title.containsIgnoreCase(keyword))
-                        .or(usedItemEntity.itemDetailsEntity.content.containsIgnoreCase(keyword)))
+                        .and(usedItemEntity.itemDetailsEntity.title.containsIgnoreCase(q))
+                        .or(usedItemEntity.itemDetailsEntity.content.containsIgnoreCase(q)))
                 .orderBy(usedItemEntity.createdAt.desc())
                 .limit(SIZE + 1)
                 .fetch();
