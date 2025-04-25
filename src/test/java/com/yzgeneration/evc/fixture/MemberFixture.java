@@ -2,9 +2,7 @@ package com.yzgeneration.evc.fixture;
 
 import com.navercorp.fixturemonkey.ArbitraryBuilder;
 import com.yzgeneration.evc.authentication.dto.AuthenticationRequest;
-import com.yzgeneration.evc.domain.member.dto.ChangeEmail;
-import com.yzgeneration.evc.domain.member.dto.ChangePassword;
-import com.yzgeneration.evc.domain.member.dto.UpdateProfileRequest;
+import com.yzgeneration.evc.domain.member.dto.*;
 import com.yzgeneration.evc.domain.member.enums.MemberRole;
 import com.yzgeneration.evc.domain.member.enums.MemberStatus;
 import com.yzgeneration.evc.domain.member.enums.ProviderType;
@@ -87,6 +85,27 @@ public final class MemberFixture extends Fixture{
                 .set("oldPassword", "12345678")
                 .set("newPassword", "00000000")
                 .set("checkPassword", "00000000")
+                .sample();
+    }
+
+    public static MemberPrivateInfoResponse fixtureMemberPrivateInformation(String accountName, String accountNumber,
+                                                                           String phoneNumber) {
+        return fixtureMonkey.giveMeBuilder(MemberPrivateInfoResponse.class)
+                .set("accountName", accountName)
+                .set("accountNumber", accountNumber)
+                .set("phoneNumber", phoneNumber)
+                .set("basicAddress", "basicAddress")
+                .set("detailAddress", "detailAddress")
+                .set("latitude", 0.0)
+                .set("longitude", 0.0)
+                .sample();
+    }
+
+    public static MemberPrivateInfoUpdate fixtureMemberPrivateInformationUpdate(String accountName, String accountNumber, String phoneNumber) {
+        return fixtureMonkey.giveMeBuilder(MemberPrivateInfoUpdate.class)
+                .set("accountName", accountName)
+                .set("accountNumber", accountNumber)
+                .set("phoneNumber", phoneNumber)
                 .sample();
     }
 

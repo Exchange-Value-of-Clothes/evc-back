@@ -1,10 +1,11 @@
 package com.yzgeneration.evc.member.service;
 
+import com.yzgeneration.evc.domain.member.dto.MemberPrivateInfoResponse;
+import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.service.MemberAccountService;
 import com.yzgeneration.evc.fixture.MemberFixture;
 import com.yzgeneration.evc.mock.member.FakeMemberRepository;
 import com.yzgeneration.evc.mock.member.SpyPasswordProcessor;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,41 @@ public class MemberAccountServiceTest {
         // then
         assertThat(memberRepository.getById(1L).getMemberAuthenticationInformation().getPassword()).isEqualTo("00000000");
     }
+
+    @Test
+    @DisplayName("개인정보를 조회할 수 있다.")
+    void getPrivateInformation() {
+        // given
+        Member member = memberRepository.save(MemberFixture.createdByEmail_ACTIVE());
+
+        // when
+        MemberPrivateInfoResponse privateInfo = memberAccountService.getPrivateInfo(member.getId());
+
+        // then
+        assertThat(privateInfo).isNotNull();
+
+    }
+
+    @Test
+    @DisplayName("개인정보를 수정할 수 있다.")
+    void updatePrivateInformation() {
+        // given
+        Member member = memberRepository.save(MemberFixture.createdByEmail_ACTIVE());
+        String accountName = "a";
+        String accountNumber = "12345678";
+        String phoneNumber = "123456789";
+        // when
+        memberAccountService.updatePrivateInfo(accountName, accountNumber, phoneNumber, member.getId());
+
+        // then
+        MemberPrivateInfoResponse privateInfo = memberAccountService.getPrivateInfo(member.getId());
+        assertThat(privateInfo.getAccountName()).isEqualTo(accountName);
+        assertThat(privateInfo.getAccountNumber()).isEqualTo(accountNumber);
+        assertThat(privateInfo.getPhoneNumber()).isEqualTo(phoneNumber);
+
+    }
+
+
 
 
 }

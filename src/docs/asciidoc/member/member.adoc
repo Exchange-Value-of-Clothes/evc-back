@@ -61,3 +61,21 @@ include::{snippets}/password-change/http-request.adoc[]
 include::{snippets}/password-change/request-fields.adoc[]
 
 include::{snippets}/password-change/http-response.adoc[]
+
+== 계정 조회
+
+=== HTTP Request
+include::{snippets}/get-privateInfo/http-request.adoc[]
+
+=== HTTP Response
+include::{snippets}/get-privateInfo/http-response.adoc[]
+include::{snippets}/get-privateInfo/response-fields.adoc[]
+
+== 계정 수정
+
+=== HTTP Request
+include::{snippets}/change-privateInfo/http-request.adoc[]
+include::{snippets}/change-privateInfo/request-fields.adoc[]
+
+=== HTTP Response
+include::{snippets}/change-privateInfo/http-response.adoc[]

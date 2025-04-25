@@ -14,8 +14,8 @@ public class MemberPrivateInformation {
 
     private String nickname;
     private String email;
-    private String accountNumber;
     private String accountName;
+    private String accountNumber;
     private String phoneNumber;
 
     private static final Random RANDOM = new Random();
@@ -46,6 +46,12 @@ public class MemberPrivateInformation {
 
     public void changeEmail(String email) {
         this.email = email;
+    }
+
+    public void changePrivateInfo(String accountName, String accountNumber, String phoneNumber) {
+        this.accountName = accountName;
+        this.accountNumber = accountNumber;
+        this.phoneNumber = phoneNumber;
     }
 
 }

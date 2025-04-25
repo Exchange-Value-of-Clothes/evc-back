@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.domain.member.service;
 
+import com.yzgeneration.evc.domain.member.dto.MemberPrivateInfoResponse;
 import com.yzgeneration.evc.domain.member.infrastructure.MemberRepository;
 import com.yzgeneration.evc.domain.member.infrastructure.PasswordProcessor;
 import com.yzgeneration.evc.domain.member.model.Member;
@@ -22,6 +23,16 @@ public class MemberAccountService {
     public void changePassword(String oldPassword, String newPassword, Long memberId) {
         Member member = memberRepository.getById(memberId);
         member.getMemberAuthenticationInformation().changePassword(oldPassword, newPassword, passwordProcessor);
+        memberRepository.save(member);
+    }
+
+    public MemberPrivateInfoResponse getPrivateInfo(Long memberId) {
+        return memberRepository.getPrivateInfo(memberId);
+    }
+
+    public void updatePrivateInfo(String accountName, String accountNumber, String phoneNumber, Long memberId) {
+        Member member = memberRepository.getById(memberId);
+        member.getMemberPrivateInformation().changePrivateInfo(accountName, accountNumber, phoneNumber);
         memberRepository.save(member);
     }
 }
