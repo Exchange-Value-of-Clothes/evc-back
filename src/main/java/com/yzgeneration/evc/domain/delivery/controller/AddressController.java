@@ -27,7 +27,7 @@ public class AddressController {
 
     @PostMapping
     public CommonResponse create(@RequestBody AddressCreate request, @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
-        addressService.create(request, memberPrincipal.getId());
+        addressService.create(request.getBasicAddress(), request.getDetailAddress(), request.getLatitude(), request.getLongitude(), memberPrincipal.getId());
         return CommonResponse.success();
     }
 }

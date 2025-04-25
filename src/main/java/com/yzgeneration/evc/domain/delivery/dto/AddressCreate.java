@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class AddressCreate {
+public class AddressCreate { // todo 위도 경도 범위 제한, 위도 y
     @NotBlank
     private String basicAddress;
     private String detailAddress;

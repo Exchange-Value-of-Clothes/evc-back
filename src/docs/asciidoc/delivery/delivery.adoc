@@ -1,0 +1,17 @@
+== 주소 검색
+
+=== HTTP Request
+include::{snippets}/address-coordinate/http-request.adoc[]
+include::{snippets}/address-coordinate/request-fields.adoc[]
+
+=== HTTP Response
+include::{snippets}/address-coordinate/http-response.adoc[]
+include::{snippets}/address-coordinate/response-fields.adoc[]
+
+== 주소 생성
+=== HTTP Request
+include::{snippets}/address-create/http-request.adoc[]
+include::{snippets}/address-create/request-fields.adoc[]
+
+=== HTTP Response
+include::{snippets}/address-create/http-response.adoc[]
