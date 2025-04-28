@@ -2,30 +2,32 @@ package com.yzgeneration.evc.domain.delivery.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.validator.EnumValidator;
 import com.yzgeneration.evc.validator.Validatable;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class DeliveryCreateRequest implements Validatable {
-
+public class DeliveryPrepare implements Validatable {
 
     private String itemType;
-    private Long itemId; // name, price
-    private String size;  // xs, s, m, l
-    private Long receiverId;
+    @NotNull
+    private Long itemId;
+    @NotNull
+    private Long buyerId;
+    @NotNull
+    private Long sellerId;
 
     @JsonCreator
-    public DeliveryCreateRequest(@JsonProperty("itemType") String itemType, @JsonProperty("itemId") Long itemId,
-                                 @JsonProperty("size") String size, @JsonProperty("receiverId") Long receiverId) {
+    public DeliveryPrepare(@JsonProperty("itemType") String itemType, @JsonProperty("itemId") Long itemId,
+                           @JsonProperty("buyerId") Long buyerId, @JsonProperty("sellerId") Long sellerId) {
         this.itemType = itemType;
         this.itemId = itemId;
-        this.size = size;
-        this.receiverId = receiverId;
+        this.buyerId = buyerId;
+        this.sellerId = sellerId;
         valid();
     }
 

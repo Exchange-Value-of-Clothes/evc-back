@@ -15,3 +15,22 @@ include::{snippets}/address-create/request-fields.adoc[]
 
 === HTTP Response
 include::{snippets}/address-create/http-response.adoc[]
+
+
+== 배송 주문 생성
+=== HTTP Request
+include::{snippets}/delivery-order/http-request.adoc[]
+include::{snippets}/delivery-order/request-fields.adoc[]
+
+=== HTTP Response
+include::{snippets}/delivery-order/http-response.adoc[]
+include::{snippets}/delivery-order/response-fields.adoc[]
+
+
+== 배송 주문 조회
+=== HTTP Request
+include::{snippets}/get-delivery-order/path-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/get-delivery-order/http-response.adoc[]
+include::{snippets}/get-delivery-order/response-fields.adoc[]

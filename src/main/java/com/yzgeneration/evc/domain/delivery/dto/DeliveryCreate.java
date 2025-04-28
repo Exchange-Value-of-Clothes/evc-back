@@ -1,0 +1,25 @@
+package com.yzgeneration.evc.domain.delivery.dto;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+public class DeliveryCreate {
+    private String orderId;
+    private int price;
+    private String itemName;
+    private String senderName;
+    private String senderPhone;
+    private String senderAddress;
+    private String senderAddressDetail;
+    private double senderLatitude;
+    private double senderLongitude;
+    private String receiverName;
+    private String receiverPhone;
+    private String receiverAddress;
+    private String receiverAddressDetail;
+    private double receiverLatitude;
+    private double receiverLongitude;
+
+}

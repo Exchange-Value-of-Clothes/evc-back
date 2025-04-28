@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yzgeneration.evc.domain.delivery.controller.AddressController;
 import com.yzgeneration.evc.domain.delivery.service.AddressService;
 import com.yzgeneration.evc.fixture.DeliveryFixture;
-import com.yzgeneration.evc.fixture.MemberFixture;
 import com.yzgeneration.evc.mock.WithFakeUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
