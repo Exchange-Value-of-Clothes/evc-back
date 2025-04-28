@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class UsedItemService {
-    //TODO implement 계층 -> repository 직접 사용으로 변경하기 (간단한 함수만 사용하기에)
     private final UsedItemRepository usedItemRepository;
     private final ItemImageAppender itemImageAppender;
     private final UsedItemReader usedItemReader;
@@ -36,5 +35,9 @@ public class UsedItemService {
 
     public GetUsedItemResponse getUsedItem(Long memberId, Long usedItemId) {
         return usedItemReader.getUsedItemResponse(memberId, usedItemId);
+    }
+
+    public SliceResponse<GetUsedItemListResponse> searchUsedItems(String q, LocalDateTime cursor){
+        return usedItemRepository.searchUsedItemList(q, cursor);
     }
 }

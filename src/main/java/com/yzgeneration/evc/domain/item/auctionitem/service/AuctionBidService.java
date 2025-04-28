@@ -26,8 +26,8 @@ public class AuctionBidService {
     private final SessionAttributeAccessor sessionAttributeAccessor;
     private final RabbitTemplate rabbitTemplate;
 
-    public AuctionRoomResponse createOrGetAuctionRoom(Long memberId, Long auctionItemId) {
-        return new AuctionRoomResponse(auctionBidProcessor.createOrGetAuctionRoom(memberId, auctionItemId));
+    public AuctionRoomResponse createOrGetAuctionRoom(Long auctionItemId) {
+        return new AuctionRoomResponse(auctionBidProcessor.createOrGetAuctionRoom(auctionItemId));
     }
 
     public void bidAuctionItem(StompHeaderAccessor accessor, AuctionBidRequest auctionBidRequest) {

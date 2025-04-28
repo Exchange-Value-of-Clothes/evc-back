@@ -34,4 +34,9 @@ public class AuctionItemController {
     public GetAuctionItemResponse getAuctionItem(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @PathVariable Long auctionItemId) {
         return auctionItemService.getAuctionItem(memberPrincipal.getId(), auctionItemId);
     }
+
+    @GetMapping("/search")
+    public SliceResponse<GetAuctionItemListResponse> searchAuctionItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam String q, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
+        return auctionItemService.searchAuctionItems(q, memberPrincipal.getId(), cursor);
+    }
 }

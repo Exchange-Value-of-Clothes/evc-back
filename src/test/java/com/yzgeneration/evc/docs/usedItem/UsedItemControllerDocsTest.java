@@ -78,7 +78,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
     }
 
     @Test
-    @DisplayName("중고상품들 조회 (메인페이지)")
+    @DisplayName("중고상품들 조회 (slice)")
     void getUsedItems() throws Exception {
         GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1, LocalDateTime.MIN, ItemStatus.ACTIVE);
         SliceResponse<GetUsedItemListResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
@@ -191,6 +191,58 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("중고상품 게시시간"),
                                 fieldWithPath("itemStatus").type(JsonFieldType.STRING)
                                         .description("중고상품 게시상태 (ACTIVE, DELETED, BAN)")
+                        )));
+    }
+
+    @Test
+    @DisplayName("중고상품 검색 (slice)")
+    void searchUsedItems() throws Exception {
+        GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        SliceResponse<GetUsedItemListResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
+
+        when(usedItemService.searchUsedItems(any(), any()))
+                .thenReturn(getUsedItemSliceResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/useditems/search")
+                        .param("q", "query")
+                        .param("cursor", LocalDateTime.MIN.toString()))
+                .andExpect(status().isOk())
+                .andDo(document("usedItems-search",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("q").description("검색어"),
+                                parameterWithName("cursor").description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
+                        responseFields(
+                                fieldWithPath("content").type(JsonFieldType.ARRAY)
+                                        .description("중고상품 정보 리스트 (제목 또는 내용에 검색어가 포함된 모든 항목 조회 / 대소문자 구분 없음)"),
+                                fieldWithPath("content[].usedItemId").type(JsonFieldType.NUMBER)
+                                        .description("중고상품 id"),
+                                fieldWithPath("content[].title").type(JsonFieldType.STRING)
+                                        .description("중고상품 제목"),
+                                fieldWithPath("content[].price").type(JsonFieldType.NUMBER)
+                                        .description("중고상품 가격"),
+                                fieldWithPath("content[].transactionMode").type(JsonFieldType.STRING)
+                                        .description("중고상품 거래방법 (SELL, BUY, AUCTION)"),
+                                fieldWithPath("content[].transactionStatus").type(JsonFieldType.STRING)
+                                        .description("중고상품 거래 상태 (ONGOING, RESERVE, COMPLETE)"),
+                                fieldWithPath("content[].imageName").type(JsonFieldType.STRING)
+                                        .description("중고상품 이미지 (썸네일)"),
+                                fieldWithPath("content[].likeCount").type(JsonFieldType.NUMBER)
+                                        .description("게시물 좋아요수"),
+                                fieldWithPath("content[].createAt").type(JsonFieldType.STRING)
+                                        .description("중고상품 게시시간 (createAt과 현재시간과의 차이값을 프론트 화면에 렌더링)"),
+                                fieldWithPath("content[].itemStatus").type(JsonFieldType.STRING)
+                                        .description("중고상품 상태"),
+                                fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재여부"),
+                                fieldWithPath("size").type(JsonFieldType.NUMBER)
+                                        .description("페이지 요청 사이즈"),
+                                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
+                                        .description("조회된 데이터 개수"),
+                                fieldWithPath("cursor").type(JsonFieldType.STRING)
+                                        .description("다음 페이지 커서")
                         )));
     }
 }

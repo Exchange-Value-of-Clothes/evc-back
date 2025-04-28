@@ -78,4 +78,9 @@ public class FakeUsedItemRepository implements UsedItemRepository {
     public UsedItem getById(Long id) {
         return null;
     }
+
+    @Override
+    public SliceResponse<GetUsedItemListResponse> searchUsedItemList(String q, LocalDateTime cursor) {
+        return null;
+    }
 }

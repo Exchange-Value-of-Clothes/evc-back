@@ -32,3 +32,13 @@ include::{snippets}/usedItem-get/path-parameters.adoc[]
 include::{snippets}/usedItem-get/http-response.adoc[]
 include::{snippets}/usedItem-get/response-fields.adoc[]
 
+[[usedItems-search]]
+== 중고상품 검색 (슬라이드 형태)
+
+=== HTTP Request
+include::{snippets}/usedItems-search/http-request.adoc[]
+include::{snippets}/usedItems-search/query-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/usedItems-search/http-response.adoc[]
+include::{snippets}/usedItems-search/response-fields.adoc[]
