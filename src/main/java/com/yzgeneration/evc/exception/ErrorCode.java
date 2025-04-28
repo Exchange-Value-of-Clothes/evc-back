@@ -20,6 +20,7 @@ public enum ErrorCode {
     INVALID_PROVIDER_TYPE(HttpStatus.BAD_REQUEST, "0010", "소셜 로그인은 비밀번호를 변경할 수 없습니다."),
     NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "0011", "포인트가 부족합니다."),
     SELF_BID_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "0012", "물품 소유자 본인은 본인에게 경매할 수 없습니다."),
+    DELIVERY_ONLY_SELLER_REQUEST(HttpStatus.BAD_REQUEST,"0013", "배송은 판매자만 요청할 수 있습니다."),
 
     //401 Unauthorized
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "011", "이메일 혹은 비밀번호가 다릅니다."),
@@ -38,6 +39,8 @@ public enum ErrorCode {
     POINT_NOT_FOUND(HttpStatus.NOT_FOUND, "046", "해당 orderId의 결제 정보가 존재하지 않습니다."),
     CHAT_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "047", "해당 채팅방에 속하는 채팅 멤버가 존재하지 않습니다."),
     AUCTIONITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "047", "해당 경매상품은 존재하지 않습니다."),
+    ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "048", "해당 회원의 주소는 존재하지 않습니다."),
+    DELIVERY_NOT_FOUND(HttpStatus.NOT_FOUND, "049", "요청하신 주문이 존재하지 않거나 접근 권한이 없습니다."),
 
     // 409 Conflict
     EMAIL_DUPLICATION(HttpStatus.CONFLICT, "091", "중복된 이메일이 존재합니다."),

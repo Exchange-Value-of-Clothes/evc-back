@@ -1,13 +1,17 @@
 package com.yzgeneration.evc.external.delivery;
 
-import com.yzgeneration.evc.domain.delivery.dto.DeliveryCreateRequest;
+import com.yzgeneration.evc.domain.delivery.dto.DeliveryCreate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
+@ToString
 @Getter
 @NoArgsConstructor
 public class KakaoMobilityOrder {
@@ -15,44 +19,47 @@ public class KakaoMobilityOrder {
     private String partnerOrderId; // 연동사 주문 아이디, 유니크
     private String orderType; // QUICK, QUICK_ECONOMY, QUICK_EXPRESS, DOBO
     private ProductInfo productInfo;
-    private List<Product> products; // op
     private Pickup pickup;
-    private DropOff dropOff;
+    private DropOff dropoff;
 
     @Builder
-    public KakaoMobilityOrder(String partnerOrderId, String orderType, ProductInfo productInfo, List<Product> products, Pickup pickup, DropOff dropOff) {
+    private KakaoMobilityOrder(String partnerOrderId, String orderType, ProductInfo productInfo, Pickup pickup, DropOff dropOff) {
         this.partnerOrderId = partnerOrderId;
         this.orderType = orderType;
         this.productInfo = productInfo;
-        this.products = products;
         this.pickup = pickup;
-        this.dropOff = dropOff;
+        this.dropoff = dropOff;
     }
 
-    public static KakaoMobilityOrder from(DeliveryCreateRequest request, String orderId) {
+    public static KakaoMobilityOrder from(DeliveryCreate request, String orderId) {
         return KakaoMobilityOrder.builder()
                 .partnerOrderId(orderId)
                 .orderType("QUICK")
-//                .productInfo(new ProductInfo(request.getPrice(), request.getSize()))
-//                .pickup(new Pickup(request.getPickupLocation(), request.getPickupLocationDetail(), request.getPickupLatitude(), request.getPickupLongitude()))
+                .productInfo(new ProductInfo(request.getPrice(), request.getItemName()))
+                .pickup(new Pickup(request.getSenderAddress(), request.getSenderAddressDetail(), request.getSenderLatitude(), request.getReceiverLongitude(), request.getSenderName(), request.getSenderPhone()))
+                .dropOff(new DropOff(request.getReceiverAddress(), request.getReceiverAddressDetail(), request.getReceiverLatitude(), request.getReceiverLongitude(), request.getReceiverName(), request.getReceiverPhone()))
                 .build();
     }
 
+    @ToString
     @Getter
     @NoArgsConstructor
     private static class ProductInfo {
         private int trayCount; // 포장 묶음 개수 기본 1개, op
         private int totalPrice; // op
         private String size; // xs, s, m, l
+        private List<Product> products = new ArrayList<>(); // op
 
-        private ProductInfo(int price, String size) {
+        private ProductInfo(int price, String name) {
             this.trayCount = 1;
             this.totalPrice = price;
-            this.size = "m";
+            this.size = "M";
+            this.products.add(new Product(price, name));
         }
 
     }
 
+    @ToString
     @Getter
     @NoArgsConstructor
     private static class Product {
@@ -60,29 +67,53 @@ public class KakaoMobilityOrder {
         private String quantity;
         private int price;
         private String detail;
-    }
 
-    @Getter
-    @NoArgsConstructor
-    private static class Pickup { // 출발지
-        private Location location;
-        private OffsetDateTime wishTime; // op, 퀵,퀵 급송, 대형 : 현재 시간 +20분 ~ +14일, 퀵 이코노미 : 현재 시간 +60분 부터 +14일까지
-        private Contact contact;
-        private String note; // op, 출발지 메모
-
-        private Pickup(String basicAddress, String detailAddress, Double latitude, Double longitude) {
-            this.location = new Location(basicAddress, detailAddress, latitude, longitude);
+        public Product(int price, String name) {
+            this.price = price;
+            this.quantity = "1";
+            this.name = name;
+            this.detail = "M";
         }
     }
 
+    @ToString
     @Getter
     @NoArgsConstructor
-    private static class DropOff { // 목적지
+    public static class Pickup { // 출발지
+        private Location location;
+        private String wishTime; // op, 퀵,퀵 급송, 대형 : 현재 시간 +20분 ~ +14일, 퀵 이코노미 : 현재 시간 +60분 부터 +14일까지
+        private Contact contact;
+        private String note; // op, 출발지 메모
+
+        private Pickup(String basicAddress, String detailAddress, Double latitude, Double longitude,
+                       String name, String phone) {
+            this.location = new Location(basicAddress, detailAddress, latitude, longitude);
+            this.contact = new Contact(name, phone);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            this.wishTime = OffsetDateTime.now().plusHours(1).format(formatter); // 밀리초 포함
+            this.note = "배송 시 호출 부탁드립니다.";
+        }
+
+    }
+
+    @ToString
+    @Getter
+    @NoArgsConstructor
+    public static class DropOff { // 목적지
         private Location location;
         private Contact contact;
         private String note;
+
+        private DropOff(String basicAddress, String detailAddress, Double latitude, Double longitude,
+                        String name, String phone) {
+            this.location = new Location(basicAddress, detailAddress, latitude, longitude);
+            this.contact = new Contact(name, phone);
+            this.note = "경비실에 맡겨주세요.";
+        }
+
     }
 
+    @ToString
     @Getter
     @NoArgsConstructor
     private static class Location {
@@ -99,11 +130,18 @@ public class KakaoMobilityOrder {
         }
     }
 
+    @ToString
     @Getter
     @NoArgsConstructor
     private static class Contact {
         private String name;
         private String phone;
+
+        private Contact(String name, String phone) {
+            this.name = name;
+            this.phone = phone;
+        }
+
     }
 
 }

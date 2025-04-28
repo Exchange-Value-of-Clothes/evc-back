@@ -3,14 +3,13 @@ package com.yzgeneration.evc.domain.member.controller;
 import com.yzgeneration.evc.common.dto.CommonResponse;
 import com.yzgeneration.evc.domain.member.dto.ChangeEmail;
 import com.yzgeneration.evc.domain.member.dto.ChangePassword;
+import com.yzgeneration.evc.domain.member.dto.MemberPrivateInfoResponse;
+import com.yzgeneration.evc.domain.member.dto.MemberPrivateInfoUpdate;
 import com.yzgeneration.evc.domain.member.service.MemberAccountService;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/members/account")
@@ -31,4 +30,18 @@ public class MemberAccountController {
         memberAccountService.changePassword(changePassword.getOldPassword(), changePassword.getNewPassword(), memberPrincipal.getId());
         return CommonResponse.success();
     }
+
+    @GetMapping
+    public MemberPrivateInfoResponse getPrivateInfo(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        return memberAccountService.getPrivateInfo(memberPrincipal.getId());
+    }
+
+    @PostMapping
+    public CommonResponse updatePrivateInfo(@RequestBody MemberPrivateInfoUpdate request, @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        memberAccountService.updatePrivateInfo(request.getAccountName(), request.getAccountNumber(), request.getPhoneNumber(), memberPrincipal.getId());
+        return CommonResponse.success();
+    }
+
+
+
 }

@@ -22,4 +22,11 @@ public class Address {
                 .longitude(longitude)
                 .build();
     }
+
+    public void update(String basicAddress, String detailAddress, Double latitude, Double longitude) {
+        this.basicAddress = basicAddress;
+        this.detailAddress = detailAddress;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

@@ -1,8 +1,10 @@
 package com.yzgeneration.evc.mock.member;
 
+import com.yzgeneration.evc.domain.member.dto.MemberPrivateInfoResponse;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.domain.member.model.Member;
 import com.yzgeneration.evc.domain.member.infrastructure.MemberRepository;
+import com.yzgeneration.evc.fixture.MemberFixture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +61,13 @@ public class FakeMemberRepository implements MemberRepository {
     @Override
     public Optional<Member> findSocialMember(String providerType, String providerId) {
         return Optional.empty();
+    }
+
+    @Override
+    public MemberPrivateInfoResponse getPrivateInfo(Long memberId) {
+        Member member = getById(memberId);
+        return MemberFixture.fixtureMemberPrivateInformation(member.getMemberPrivateInformation().getAccountName(),
+                member.getMemberPrivateInformation().getAccountNumber(), member.getMemberPrivateInformation().getPhoneNumber());
     }
 
 }

@@ -19,8 +19,8 @@ public class HealthCheckController {
     }
 
     @GetMapping("/check")
-    public void check() throws NoSuchAlgorithmException {
-        kakaoMobility.authCheck();
+    public String check() throws NoSuchAlgorithmException {
+        return kakaoMobility.authCheck();
     }
 
 }

@@ -24,7 +24,8 @@ public class AddressEntity {
     private double longitude;
 
     @Builder
-    private AddressEntity(Long memberId, String basicAddress, String detailAddress, double latitude, double longitude) {
+    private AddressEntity(Long id, Long memberId, String basicAddress, String detailAddress, double latitude, double longitude) {
+        this.id = id;
         this.memberId = memberId;
         this.basicAddress = basicAddress;
         this.detailAddress = detailAddress;
@@ -34,6 +35,7 @@ public class AddressEntity {
 
     public static AddressEntity from(Address address) {
         return AddressEntity.builder()
+                .id(address.getId())
                 .memberId(address.getMemberId())
                 .basicAddress(address.getBasicAddress())
                 .detailAddress(address.getDetailAddress())
@@ -44,6 +46,7 @@ public class AddressEntity {
 
     public Address toModel() {
         return Address.builder()
+                .id(id)
                 .memberId(memberId)
                 .basicAddress(basicAddress)
                 .detailAddress(detailAddress)
