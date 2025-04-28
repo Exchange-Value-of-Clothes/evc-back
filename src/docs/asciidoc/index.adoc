@@ -45,3 +45,8 @@ include::chat/chat.adoc[]
 == Point API
 
 include::point/point.adoc[]
+
+[[Delivery-API]]
+== Delivery API
+
+include::delivery/delivery.adoc[]
