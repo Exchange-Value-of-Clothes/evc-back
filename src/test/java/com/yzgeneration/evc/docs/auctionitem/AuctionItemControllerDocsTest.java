@@ -84,7 +84,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
     void getAuctionItems() throws Exception {
 
         AuctionItemPriceDetailsResponse auctionItemPriceDetailsResponse = new AuctionItemPriceDetailsResponse(5000, 5000, 1000);
-        GetAuctionItemListResponse getAuctionItemListResponse = new GetAuctionItemListResponse(1L, "title", auctionItemPriceDetailsResponse, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        GetAuctionItemListResponse getAuctionItemListResponse = new GetAuctionItemListResponse(1L, "title", auctionItemPriceDetailsResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
         SliceResponse<GetAuctionItemListResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(auctionItemService.getAuctionItems(any(), any()))
@@ -110,6 +110,8 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                                         .description("경매상품 현재 가격"),
                                 fieldWithPath("content[].bidPrice").type(JsonFieldType.NUMBER)
                                         .description("경매상품 호가"),
+                                fieldWithPath("content[].participantCount").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 경매 참여자수"),
                                 fieldWithPath("content[].imageName").type(JsonFieldType.STRING)
                                         .description("경매상품 이미지 (썸네일)"),
                                 fieldWithPath("content[].startTime").type(JsonFieldType.STRING)
@@ -134,7 +136,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
     void getAuctionItem() throws Exception {
 
         AuctionItemDetailsResponse auctionItemDetailsResponse = new AuctionItemDetailsResponse("title", "category", "content");
-        AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1, 1, 1);
+        AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1L, 1L, 1L);
         List<String> imageNameList = List.of("imageName.jpg");
         GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 1L, "marketNickname", false, ItemStatus.ACTIVE);
 
@@ -186,7 +188,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
     void searchAuctionItems() throws Exception {
 
         AuctionItemPriceDetailsResponse auctionItemPriceDetailsResponse = new AuctionItemPriceDetailsResponse(5000, 5000, 1000);
-        GetAuctionItemListResponse getAuctionItemListResponse = new GetAuctionItemListResponse(1L, "title", auctionItemPriceDetailsResponse, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        GetAuctionItemListResponse getAuctionItemListResponse = new GetAuctionItemListResponse(1L, "title", auctionItemPriceDetailsResponse, 0L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
         SliceResponse<GetAuctionItemListResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(auctionItemService.searchAuctionItems(any(), any(), any()))
@@ -215,6 +217,8 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                                         .description("경매상품 현재 가격"),
                                 fieldWithPath("content[].bidPrice").type(JsonFieldType.NUMBER)
                                         .description("경매상품 호가"),
+                                fieldWithPath("content[].participantCount").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 경매 참여자수"),
                                 fieldWithPath("content[].imageName").type(JsonFieldType.STRING)
                                         .description("경매상품 이미지 (썸네일)"),
                                 fieldWithPath("content[].startTime").type(JsonFieldType.STRING)
