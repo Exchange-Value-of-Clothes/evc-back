@@ -4,6 +4,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.AuctionRoomEntity;
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionRoom;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionRoomRepository;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -27,5 +29,16 @@ public class AuctionRoomRepositoryImpl implements AuctionRoomRepository {
         return Optional.ofNullable(jpaQueryFactory.selectFrom(auctionRoomEntity)
                 .where(auctionRoomEntity.auctionItemId.eq(auctionItemId))
                 .fetchFirst()).map(AuctionRoomEntity::getId);
+    }
+
+    @Override
+    public Long findAuctionItemIdById(Long id) {
+        return Optional.ofNullable(jpaQueryFactory.selectFrom(auctionRoomEntity)
+                        .where(auctionRoomEntity.id.eq(id))
+                        .fetchFirst())
+                .map(AuctionRoomEntity::getAuctionItemId)
+                .orElseThrow(
+                        () -> new CustomException(ErrorCode.AUCTIONITEM_NOT_FOUND)
+                );
     }
 }

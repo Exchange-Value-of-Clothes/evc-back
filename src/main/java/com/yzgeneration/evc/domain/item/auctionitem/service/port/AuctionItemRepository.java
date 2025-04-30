@@ -25,4 +25,6 @@ public interface AuctionItemRepository {
     AuctionItem getById(Long id);
 
     SliceResponse<GetAuctionItemListResponse> searchAuctionItemList(String q, Long memberId, LocalDateTime cursor);
+
+    Long countParticipantById(Long id);
 }

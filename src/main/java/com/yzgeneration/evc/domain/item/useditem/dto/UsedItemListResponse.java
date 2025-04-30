@@ -27,7 +27,7 @@ public class UsedItemListResponse {
 
         private String imageName;
 
-        private int likeCount;
+        private Long likeCount;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime createAt;

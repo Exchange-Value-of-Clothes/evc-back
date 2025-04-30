@@ -60,10 +60,10 @@ public class AuctionItemResponse {
     @AllArgsConstructor
     public static class AuctionItemStatsResponse {
 
-        private int viewCount;
+        private Long viewCount;
 
-        private int likeCount;
+        private Long likeCount;
 
-        private int participantCount;
+        private Long participantCount;
     }
 }

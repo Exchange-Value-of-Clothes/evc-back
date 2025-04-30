@@ -7,11 +7,11 @@ import lombok.Getter;
 @Builder
 public class ItemStats {
 
-    private int viewCount;
+    private Long viewCount;
 
-    private int likeCount;
+    private Long likeCount;
 
-    private int chattingCount;
+    private Long chattingCount;
 
     public static ItemStats create() {
         return ItemStats.builder().build();

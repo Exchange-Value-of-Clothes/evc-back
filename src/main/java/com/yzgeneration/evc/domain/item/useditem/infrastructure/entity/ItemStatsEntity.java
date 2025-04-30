@@ -10,9 +10,9 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemStatsEntity {
-    private int viewCount;
-    private int likeCount;
-    private int chattingCount;
+    private Long viewCount;
+    private Long likeCount;
+    private Long chattingCount;
 
     public static ItemStatsEntity from(ItemStats itemStats) {
         return ItemStatsEntity.builder()

@@ -20,7 +20,7 @@ public class AuctionItem {
 
     private TransactionType transactionType;
 
-    private AuctionItemStats auctionItemStats;
+    private Long viewCount;
 
     private AuctionItemPriceDetails auctionItemPriceDetails;
 
@@ -39,7 +39,6 @@ public class AuctionItem {
                 .memberId(memberId)
                 .auctionItemDetails(AuctionItemDetails.create(createAuctionItemRequest))
                 .transactionType(TransactionType.valueOf(createAuctionItemRequest.getTransactionType()))
-                .auctionItemStats(AuctionItemStats.create())
                 .auctionItemPriceDetails(AuctionItemPriceDetails.create(createAuctionItemRequest))
                 .transactionStatus(TransactionStatus.ONGOING)
                 .itemStatus(ItemStatus.ACTIVE)
