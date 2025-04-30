@@ -3,8 +3,8 @@ package com.yzgeneration.evc.domain.item.auctionitem.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +20,9 @@ public class AuctionItemListResponse {
 
         @JsonUnwrapped
         private AuctionItemPriceDetailsResponse auctionItemPriceDetailsResponse;
+
+        @Setter
+        private Long participantCount;
 
         private String imageName; //썸네일용
 
