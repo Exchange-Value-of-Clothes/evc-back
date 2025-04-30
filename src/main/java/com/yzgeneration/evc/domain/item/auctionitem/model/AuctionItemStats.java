@@ -7,9 +7,9 @@ import lombok.Getter;
 @Builder
 public class AuctionItemStats {
 
-    private int viewCount;
+    private Long viewCount;
 
-    private int participantCount;
+    private Long participantCount;
 
     public static AuctionItemStats create() {
         return AuctionItemStats.builder().build();

@@ -11,9 +11,9 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AuctionItemStatsEntity {
 
-    private int viewCount;
+    private Long viewCount;
 
-    private int participantCount;
+    private Long participantCount;
 
     public static AuctionItemStatsEntity from(AuctionItemStats auctionItemStats){
         return AuctionItemStatsEntity.builder()
