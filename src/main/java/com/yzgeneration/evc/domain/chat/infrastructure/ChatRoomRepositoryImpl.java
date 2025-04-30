@@ -2,6 +2,7 @@ package com.yzgeneration.evc.domain.chat.infrastructure;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.domain.chat.model.ChatRoom;
+import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,9 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
-    public Optional<ChatRoom> findByUsedItemIdAndParticipantId(Long usedItemId, Long participantId) {
-        return chatRoomJpaRepository.findByUsedItemIdAndParticipantId(usedItemId, participantId)
+    public Optional<ChatRoom> findByItemIdAndItemTypeAndParticipantId(Long itemId, ItemType itemType, Long participantId) {
+        return chatRoomJpaRepository.findByItemIdAndItemTypeAndParticipantId(itemId, itemType, participantId)
                 .map(ChatRoomEntity::toModel);
     }
+
 }

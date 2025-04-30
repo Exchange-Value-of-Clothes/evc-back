@@ -4,6 +4,7 @@ import com.yzgeneration.evc.domain.chat.infrastructure.ChatMemberRepository;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatRoomRepository;
 import com.yzgeneration.evc.domain.chat.model.ChatMember;
 import com.yzgeneration.evc.domain.chat.model.ChatRoom;
+import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +20,11 @@ public class ChatRoomManager {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMemberRepository chatMemberRepository;
 
-    public ChatRoom getOrCreate(Long usedItemId, Long ownerId, Long participantId) {
+    public ChatRoom getOrCreate(Long itemId, ItemType itemType, Long ownerId, Long participantId) {
         if (Objects.equals(ownerId, participantId)) throw new CustomException(ErrorCode.SELF_CHAT_NOT_ALLOWED);
-        ChatRoom chatRoom = chatRoomRepository.findByUsedItemIdAndParticipantId(usedItemId, participantId)
+        ChatRoom chatRoom = chatRoomRepository.findByItemIdAndItemTypeAndParticipantId(itemId, itemType, participantId)
                 .orElseGet(() -> {
-                    ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.create(usedItemId, ownerId, participantId));
+                    ChatRoom newChatRoom = chatRoomRepository.save(ChatRoom.create(itemId, ownerId, participantId, itemType));
                     saveChatMembers(ownerId, participantId, newChatRoom); // 새로운 채팅방일 때만 멤버 저장
                     return newChatRoom;
                 });

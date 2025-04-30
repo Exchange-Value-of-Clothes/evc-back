@@ -4,6 +4,7 @@ import com.yzgeneration.evc.common.dto.CommonResponse;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.*;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
+import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +24,7 @@ public class ChatController {
 
     @PostMapping
     public ChatMessageSliceResponse enter(@RequestBody ChatEnter chatEnter, @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
-        return chatService.getChatRoomByTradeRequest(chatEnter.getUsedItemId(), chatEnter.getOwnerId(), memberPrincipal.getId());
+        return chatService.getChatRoomByTradeRequest(chatEnter.getItemId(), ItemType.valueOf(chatEnter.getItemType()),chatEnter.getOwnerId(), memberPrincipal.getId());
     }
 
     @GetMapping

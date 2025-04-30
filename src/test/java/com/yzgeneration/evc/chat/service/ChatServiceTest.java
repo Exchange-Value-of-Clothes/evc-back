@@ -12,6 +12,7 @@ import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
 import com.yzgeneration.evc.domain.chat.model.ChatMember;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
+import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.mock.chat.FakeChatConnectionRepository;
@@ -58,11 +59,12 @@ class ChatServiceTest {
     @DisplayName("거래하기 요청을 통해 채팅방을 (없다면 생성 후) 조회할 수 있다.")
     void getChatRoomByTradeRequest() {
         // given
-        Long usedItemId = 1L;
+        Long itemId = 1L;
+        ItemType itemType = ItemType.USEDITEM;
         Long ownerId = 1L;
         Long participantId = 2L;
         // when
-        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(itemId, itemType, ownerId, participantId);
         // then
         assertThat(chatMessageSliceResponse.getChatRoomId()).isEqualTo(1L);
         assertThat(chatMessageSliceResponse.getContent()).isEqualTo(List.of());
@@ -95,10 +97,11 @@ class ChatServiceTest {
     @DisplayName("채팅방목록들을 최근 메시지와 함께 조회할 수 있다.")
     void getChatRooms() {
         // given
-        Long usedItemId = 1L;
+        Long itemId = 1L;
+        ItemType itemType = ItemType.USEDITEM;
         Long ownerId = 1L;
         Long participantId = 2L;
-        chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        chatService.getChatRoomByTradeRequest(itemId, itemType, ownerId, participantId);
         ChatMessage chatMessage = ChatMessage.create(1L, 1L, "content", false, LocalDateTime.MIN);
         ChatMessage chatMessage2 = ChatMessage.create(1L, 1L, "content2", false, LocalDateTime.now());
         chatMessageRepository.save(chatMessage);
@@ -121,10 +124,11 @@ class ChatServiceTest {
     @DisplayName("채팅방을 나갈 수 있다.")
     void exitChatRoom() {
         // given
-        Long usedItemId = 1L;
+        Long itemId = 1L;
+        ItemType itemType = ItemType.USEDITEM;
         Long ownerId = 1L;
         Long participantId = 2L;
-        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(itemId, itemType, ownerId, participantId);
         Long chatRoomId = chatMessageSliceResponse.getChatRoomId();
         // when
         chatService.exit(chatRoomId, participantId);
@@ -139,10 +143,11 @@ class ChatServiceTest {
     @DisplayName("채팅방을 나가면 채팅방목록이 조회되지 않는다")
     void exitThenCantGetChatRooms() {
         // given
-        Long usedItemId = 1L;
+        Long itemId = 1L;
+        ItemType itemType = ItemType.USEDITEM;
         Long ownerId = 1L;
         Long participantId = 2L;
-        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(itemId, itemType, ownerId, participantId);
         ChatMessage chatMessage = ChatMessage.create(1L, 1L, "content", false, LocalDateTime.MIN);
         ChatMessage chatMessage2 = ChatMessage.create(1L, 1L, "content2", false, LocalDateTime.MIN);
         chatMessageRepository.save(chatMessage);
@@ -167,15 +172,16 @@ class ChatServiceTest {
     @DisplayName("채팅방을 나간 후 다시 거래하기를 요청한다.")
     void exitThenTradeRequest() {
         // given
-        Long usedItemId = 1L;
+        Long itemId = 1L;
+        ItemType itemType = ItemType.USEDITEM;
         Long ownerId = 1L;
         Long participantId = 2L;
-        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(itemId, itemType, ownerId, participantId);
         Long chatRoomId = chatMessageSliceResponse.getChatRoomId();
         chatService.exit(chatRoomId, participantId);
 
         // when
-        chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        chatService.getChatRoomByTradeRequest(itemId, itemType, ownerId, participantId);
 
         // then
         assertThat(chatMemberRepository.get(chatRoomId, 1L).getIsDeleted()).isFalse();
@@ -190,14 +196,15 @@ class ChatServiceTest {
     @DisplayName("거래하기를 여러번 요청해도 채팅방멤버는 중복해서 생성되지 않는다")
     void notDuplicatedChatRoomMember() {
         // given
-        Long usedItemId = 1L;
+        Long itemId = 1L;
+        ItemType itemType = ItemType.USEDITEM;
         Long ownerId = 1L;
         Long participantId = 2L;
-        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        ChatMessageSliceResponse chatMessageSliceResponse = chatService.getChatRoomByTradeRequest(itemId, itemType, ownerId, participantId);
         Long chatRoomId = chatMessageSliceResponse.getChatRoomId();
 
         // when
-        chatService.getChatRoomByTradeRequest(usedItemId, ownerId, participantId);
+        chatService.getChatRoomByTradeRequest(itemId, itemType, ownerId, participantId);
 
         // then
        assertThat(chatMemberRepository.getDataSize()).isEqualTo(2);

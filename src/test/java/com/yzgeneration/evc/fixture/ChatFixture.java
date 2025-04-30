@@ -8,7 +8,8 @@ public final class ChatFixture extends Fixture {
 
     public static ChatEnter chatEnter() {
         return fixtureMonkey.giveMeBuilder(ChatEnter.class)
-                .set("usedItemId", 1L)
+                .set("itemId", 1L)
+                .set("itemType", "USEDITEM")
                 .set("ownerId", 1L)
                 .sample();
     }

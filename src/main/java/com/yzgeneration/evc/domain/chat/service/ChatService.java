@@ -8,6 +8,7 @@ import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.domain.chat.model.ChatRoom;
 
+import com.yzgeneration.evc.domain.image.enums.ItemType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -30,8 +31,8 @@ public class ChatService {
     private final SessionAttributeAccessor sessionAttributeAccessor;
     private final RabbitTemplate rabbitTemplate;
 
-    public ChatMessageSliceResponse getChatRoomByTradeRequest(Long usedItemId, Long ownerId, Long participantId) {
-        ChatRoom chatRoom = chatRoomManager.getOrCreate(usedItemId, ownerId, participantId);
+    public ChatMessageSliceResponse getChatRoomByTradeRequest(Long itemId, ItemType itemType, Long ownerId, Long participantId) {
+        ChatRoom chatRoom = chatRoomManager.getOrCreate(itemId, itemType,ownerId, participantId);
         return chatMessageRepository.getLastMessages(participantId, chatRoom.getId(), LocalDateTime.now());
     }
 
