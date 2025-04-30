@@ -51,7 +51,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
         ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
-        given(chatService.getChatRoomByTradeRequest(any(), any(), any()))
+        given(chatService.getChatRoomByTradeRequest(any(), any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/chat")
@@ -72,8 +72,10 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
-                                fieldWithPath("usedItemId").type(JsonFieldType.NUMBER)
-                                        .description("중고상품 아이디"),
+                                fieldWithPath("itemId").type(JsonFieldType.NUMBER)
+                                        .description("상품 아이디"),
+                                fieldWithPath("itemType").type(JsonFieldType.STRING)
+                                        .description("상품 타입 e.g. USEDITEM, AUCTIONITEM"),
                                 fieldWithPath("ownerId").type(JsonFieldType.NUMBER)
                                         .description("중고상품 소유자 아이디")
                         ),

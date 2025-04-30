@@ -3,6 +3,7 @@ package com.yzgeneration.evc.chat.model;
 import com.yzgeneration.evc.domain.chat.model.ChatMember;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.domain.chat.model.ChatRoom;
+import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.fixture.ChatFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,17 +18,19 @@ class ChatTest {
     @DisplayName("중고 상품의 아이디와 소유자의 아이디로 채팅방을 생성할 수 있다.")
     void createChatRoom() {
         // given
-        Long usedItemId = 1L;
+        Long itemId = 1L;
+        ItemType itemType = ItemType.USEDITEM;
         Long ownerId = 1L;
         Long participantId = 2L;
 
         // when
-        ChatRoom chatRoom = ChatRoom.create(usedItemId, ownerId, participantId);
+        ChatRoom chatRoom = ChatRoom.create(itemId, ownerId, participantId, itemType);
 
         // then
-        assertThat(chatRoom.getUsedItemId()).isEqualTo(usedItemId);
+        assertThat(chatRoom.getItemId()).isEqualTo(itemId);
         assertThat(chatRoom.getOwnerId()).isEqualTo(ownerId);
         assertThat(chatRoom.getParticipantId()).isEqualTo(participantId);
+        assertThat(chatRoom.getItemType()).isEqualTo(itemType);
     }
 
     @Test

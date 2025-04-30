@@ -55,7 +55,7 @@ class ChatControllerTest {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true,"message", LocalDateTime.MIN));
         ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
-        given(chatService.getChatRoomByTradeRequest(any(), any(), any()))
+        given(chatService.getChatRoomByTradeRequest(any(), any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/chat")
