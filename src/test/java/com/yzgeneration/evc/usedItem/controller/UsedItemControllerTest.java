@@ -70,7 +70,7 @@ class UsedItemControllerTest {
     @DisplayName("중고상품 리스트 조회")
     void getUsedItems() throws Exception {
 
-        GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName.jpg", 1, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName.jpg", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE);
         SliceResponse<GetUsedItemListResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(usedItemService.getUsedItems(any()))
@@ -109,9 +109,9 @@ class UsedItemControllerTest {
                 .transactionMode(TransactionMode.BUY)
                 .transactionStatus(TransactionStatus.ONGOING)
                 .imageNames(List.of("imageName.jpg"))
-                .viewCount(0)
-                .likeCount(0)
-                .chattingCount(0)
+                .viewCount(1L)
+                .likeCount(1L)
+                .chattingCount(1L)
                 .marketMemberId(1L)
                 .marketNickname("marketNickname")
                 .isOwned(true)
@@ -133,9 +133,9 @@ class UsedItemControllerTest {
                 .andExpect(jsonPath("$.transactionMode").value("BUY"))
                 .andExpect(jsonPath("$.transactionStatus").value("ONGOING"))
                 .andExpect(jsonPath("$.imageNames[0]").value("imageName.jpg"))
-                .andExpect(jsonPath("$.viewCount").value(0))
-                .andExpect(jsonPath("$.likeCount").value(0))
-                .andExpect(jsonPath("$.chattingCount").value(0))
+                .andExpect(jsonPath("$.viewCount").value(1L))
+                .andExpect(jsonPath("$.likeCount").value(1L))
+                .andExpect(jsonPath("$.chattingCount").value(1L))
                 .andExpect(jsonPath("$.marketMemberId").value(1L))
                 .andExpect(jsonPath("$.marketNickname").value("marketNickname"))
                 .andExpect(jsonPath("$.isOwned").value(true))

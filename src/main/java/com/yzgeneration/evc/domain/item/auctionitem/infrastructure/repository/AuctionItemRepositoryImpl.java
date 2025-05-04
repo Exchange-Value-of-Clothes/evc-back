@@ -10,9 +10,11 @@ import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemDetailsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemStatsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionParticipateResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.AuctionItemEntity;
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
+import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionRoomRepository;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.exception.CustomException;
@@ -20,6 +22,10 @@ import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -36,7 +42,9 @@ import static com.yzgeneration.evc.domain.point.infrastructure.QMemberPointEntit
 @RequiredArgsConstructor
 public class AuctionItemRepositoryImpl implements AuctionItemRepository {
     private final AuctionItemJpaRepository auctionItemJpaRepository;
+    private final AuctionRoomRepository auctionRoomRepository;
     private final JPAQueryFactory jpaQueryFactory;
+    private final MongoTemplate mongoTemplate;
     private static final int SIZE = 10;
     private static final ItemType ITEM_TYPE = ItemType.AUCTIONITEM;
 
@@ -56,6 +64,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                                 auctionItemEntity.auctionItemPriceDetailsEntity.startPrice,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.bidPrice),
+                        Expressions.constant(0L),
                         itemImageEntity.imageName,
                         auctionItemEntity.startTime,
                         auctionItemEntity.endTime,
@@ -74,6 +83,10 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                 .orderBy(auctionItemEntity.startTime.desc())
                 .limit(SIZE + 1)
                 .fetch();
+
+        for (GetAuctionItemListResponse response : auctionItemListResponses) {
+            response.setParticipantCount(countParticipantById(response.getAuctionItemId()));
+        }
 
         boolean hasNext = auctionItemListResponses.size() > SIZE; //true: 조회할 상품이 더 남은 상태 (조회 결과 : 11개)
         if (hasNext) {
@@ -96,10 +109,10 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                                         auctionItemEntity.auctionItemDetailsEntity.category,
                                         auctionItemEntity.auctionItemDetailsEntity.content),
                                 Projections.constructor(AuctionItemStatsResponse.class,
-                                        auctionItemEntity.auctionItemStatsEntity.viewCount,
+                                        auctionItemEntity.viewCount,
                                         //TODO likeCount로 이후에 변경하기 (좋아요 기능 만들면)
-                                        auctionItemEntity.auctionItemStatsEntity.viewCount,
-                                        auctionItemEntity.auctionItemStatsEntity.participantCount),
+                                        auctionItemEntity.viewCount,
+                                        Expressions.constant(countParticipantById(id))),
                                 Expressions.constant(new ArrayList<>()), //이후 setter를 이용해 값 설정
                                 auctionItemEntity.transactionType,
                                 auctionItemEntity.startTime,
@@ -207,5 +220,27 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
         return new SliceResponse<>(
                 new SliceImpl<>(auctionItemListResponses, PageRequest.of(0, SIZE), hasNext), localStartTime
         );
+    }
+
+    @Override
+    public Long countParticipantById(Long id) {
+        Long auctionRoomId = auctionRoomRepository.findByAuctionItemId(id).orElse(0L);
+
+        if (auctionRoomId.equals(0L)) return 0L;
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(Criteria.where("auctionRoomId").is(auctionRoomId)),
+                Aggregation.group().addToSet("bidderId").as("bidderIds"), //중복 참여자 제외
+                Aggregation.project()
+                        .and("bidderIds").size().as("participantCount")
+        );
+
+        AggregationResults<AuctionParticipateResponse> auctionParticipateResponse = mongoTemplate.aggregate(
+                aggregation, "auction_bid", AuctionParticipateResponse.class
+        );
+
+        return Optional.ofNullable(auctionParticipateResponse.getUniqueMappedResult())
+                .map(AuctionParticipateResponse::getParticipantCount)
+                .orElse(0L);
     }
 }

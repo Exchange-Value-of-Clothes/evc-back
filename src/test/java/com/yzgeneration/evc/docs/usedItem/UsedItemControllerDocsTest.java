@@ -80,7 +80,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("중고상품들 조회 (slice)")
     void getUsedItems() throws Exception {
-        GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE);
         SliceResponse<GetUsedItemListResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(usedItemService.getUsedItems(any()))
@@ -138,9 +138,9 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                 .transactionMode(TransactionMode.BUY)
                 .transactionStatus(TransactionStatus.ONGOING)
                 .imageNames(List.of("imageName.jpg"))
-                .viewCount(1)
-                .likeCount(1)
-                .chattingCount(1)
+                .viewCount(1L)
+                .likeCount(1L)
+                .chattingCount(1L)
                 .marketMemberId(1L)
                 .marketNickname("marketNickname")
                 .isOwned(true)
@@ -197,7 +197,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("중고상품 검색 (slice)")
     void searchUsedItems() throws Exception {
-        GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE);
         SliceResponse<GetUsedItemListResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(usedItemService.searchUsedItems(any(), any()))

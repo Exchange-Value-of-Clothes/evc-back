@@ -72,7 +72,7 @@ public class AuctionItemControllerTest {
     void getAuctionItems() throws Exception {
 
         AuctionItemPriceDetailsResponse auctionItemPriceDetailsResponse = new AuctionItemPriceDetailsResponse(5000, 5000, 1000);
-        GetAuctionItemListResponse getAuctionItemListResponse = new GetAuctionItemListResponse(1L, "title", auctionItemPriceDetailsResponse, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        GetAuctionItemListResponse getAuctionItemListResponse = new GetAuctionItemListResponse(1L, "title", auctionItemPriceDetailsResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
         SliceResponse<GetAuctionItemListResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(auctionItemService.getAuctionItems(any(), any()))
@@ -95,7 +95,6 @@ public class AuctionItemControllerTest {
                 .andExpect(jsonPath("$.size").value(10))
                 .andExpect(jsonPath("$.numberOfElements").value(1))
                 .andExpect(jsonPath("$.cursor").value("+1000000000-01-01T00:00:00"));
-        ;
     }
 
     @Test
@@ -104,7 +103,7 @@ public class AuctionItemControllerTest {
     void getAuctionItem() throws Exception {
 
         AuctionItemDetailsResponse auctionItemDetailsResponse = new AuctionItemDetailsResponse("title", "category", "content");
-        AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1, 1, 1);
+        AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1L, 1L, 1L);
         List<String> imageNameList = List.of("imageName.jpg");
         GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 1L, "marketNickname", false, ItemStatus.ACTIVE);
 

@@ -8,4 +8,6 @@ public interface AuctionRoomRepository {
     Long save(AuctionRoom auctionRoom);
 
     Optional<Long> findByAuctionItemId(Long auctionItemId);
+
+    Long findAuctionItemIdById(Long id);
 }

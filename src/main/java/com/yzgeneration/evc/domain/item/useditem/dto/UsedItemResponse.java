@@ -39,11 +39,11 @@ public class UsedItemResponse {
         @Setter
         private List<String> imageNames;
 
-        private int viewCount;
+        private Long viewCount;
 
-        private int likeCount;
+        private Long likeCount;
 
-        private int chattingCount;
+        private Long chattingCount;
 
         // nickName 중북이기에 해당 id값을 이용해서 판매자의 상점 드갈 때 사용
         private Long marketMemberId;
