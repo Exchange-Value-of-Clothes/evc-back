@@ -19,7 +19,7 @@ public class AuctionItemReader {
     public GetAuctionItemResponse getAuctionItemResponse(Long memberId, Long itemId) {
 
         List<String> imageNameList = itemImageRepository.findImageNamesByItemIdAndItemType(itemId, itemType);
-        GetAuctionItemResponse auctionItemResponse = auctionItemRepository.findByIdAndMemberId(memberId, itemId);
+        GetAuctionItemResponse auctionItemResponse = auctionItemRepository.findAuctionItemByMemberIdAndId(memberId, itemId);
         auctionItemResponse.setImageNameList(imageNameList);
         return auctionItemResponse;
     }
