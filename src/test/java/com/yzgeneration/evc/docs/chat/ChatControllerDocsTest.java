@@ -154,11 +154,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
                                         .description("현재 페이지의 요소 개수"),
                                 fieldWithPath("cursor").type(JsonFieldType.STRING)
-                                        .description("다음 페이지를 위한 커서 값"),
-                                fieldWithPath("itemType").type(JsonFieldType.STRING)
-                                        .description("상품 타입"),
-                                fieldWithPath("itemId").type(JsonFieldType.NUMBER)
-                                        .description("상품 아이디")
+                                        .description("다음 페이지를 위한 커서 값")
                         )));
     }
 
