@@ -39,6 +39,10 @@ public class ChatRoomManager {
         chatMemberRepository.save(chatMember);
     }
 
+    public ChatRoom getById(Long chatRoomId) {
+        return chatRoomRepository.getById(chatRoomId);
+    }
+
     private void saveChatMembers(Long ownerId, Long participantId, ChatRoom newChatRoom) {
         chatMemberRepository.saveAll(List.of(
                 ChatMember.create(newChatRoom.getId(), ownerId),

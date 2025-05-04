@@ -6,6 +6,7 @@ import com.yzgeneration.evc.domain.chat.dto.ChatMessageSliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
+import com.yzgeneration.evc.domain.image.enums.ItemType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
 
@@ -74,7 +75,7 @@ public class FakeChatMessageRepository implements ChatMessageRepository {
 
 
     @Override
-    public ChatMessageSliceResponse getLastMessages(Long memberId, Long chatRoomId, LocalDateTime cursor) {
+    public ChatMessageSliceResponse getLastMessages(Long memberId, Long chatRoomId, LocalDateTime cursor, Long ownerId, ItemType itemType, Long itemId) {
         int size = 10;
 
         // 해당 채팅방의 메시지 필터링
@@ -94,7 +95,7 @@ public class FakeChatMessageRepository implements ChatMessageRepository {
 
         LocalDateTime lastCreatedAt = messages.isEmpty() ? null : messages.get(messages.size() - 1).getCreatedAt();
 
-        return new ChatMessageSliceResponse(chatRoomId, memberId, new SliceImpl<>(messages, PageRequest.of(0, size), hasNext), lastCreatedAt);
+        return new ChatMessageSliceResponse(chatRoomId, memberId, ownerId, new SliceImpl<>(messages, PageRequest.of(0, size), hasNext), lastCreatedAt, itemType, itemId);
     }
 
 

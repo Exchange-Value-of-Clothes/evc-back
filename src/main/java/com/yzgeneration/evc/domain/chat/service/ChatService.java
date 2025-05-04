@@ -33,7 +33,7 @@ public class ChatService {
 
     public ChatMessageSliceResponse getChatRoomByTradeRequest(Long itemId, ItemType itemType, Long ownerId, Long participantId) {
         ChatRoom chatRoom = chatRoomManager.getOrCreate(itemId, itemType,ownerId, participantId);
-        return chatMessageRepository.getLastMessages(participantId, chatRoom.getId(), LocalDateTime.now());
+        return chatMessageRepository.getLastMessages(participantId, chatRoom.getId(), LocalDateTime.now(), ownerId, itemType, itemId);
     }
 
     public SliceResponse<ChatRoomListResponse> getChatRooms(Long memberId, LocalDateTime cursor) {
@@ -41,7 +41,8 @@ public class ChatService {
     }
 
     public ChatMessageSliceResponse getChatRoomByListSelection(Long chatRoomId, LocalDateTime cursor, Long memberId) {
-        return chatMessageRepository.getLastMessages(memberId, chatRoomId, cursor);
+        ChatRoom chatRoom = chatRoomManager.getById(chatRoomId);
+        return chatMessageRepository.getLastMessages(memberId, chatRoomId, cursor, chatRoom.getOwnerId(), chatRoom.getItemType(), chatRoom.getItemId());
     }
 
     public void send(StompHeaderAccessor accessor, Chatting chatting) { // todo

@@ -30,4 +30,9 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
                 .map(ChatRoomEntity::toModel);
     }
 
+    @Override
+    public ChatRoom getById(Long id) {
+        return chatRoomJpaRepository.findById(id).orElseThrow(()-> new CustomException(ErrorCode.CHAT_NOT_FOUND, "해당 아이디의 채팅방이 존재하지 않습니다.")).toModel();
+    }
+
 }

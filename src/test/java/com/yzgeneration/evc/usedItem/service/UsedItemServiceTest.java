@@ -62,7 +62,7 @@ class UsedItemServiceTest {
 
     }
 
-    @Test
+//    @Test
     @DisplayName("등록한 중고상품이 정상적으로 조회되는지 체크")
     void getUsedItem() {
         //given

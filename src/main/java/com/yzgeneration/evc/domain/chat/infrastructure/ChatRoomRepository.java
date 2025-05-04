@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ChatRoomRepository {
     ChatRoom save(ChatRoom chatRoom);
     Optional<ChatRoom> findByItemIdAndItemTypeAndParticipantId(Long itemId, ItemType itemType, Long participantId);
+    ChatRoom getById(Long id);
 }
