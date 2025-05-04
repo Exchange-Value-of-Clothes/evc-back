@@ -2,7 +2,7 @@ package com.yzgeneration.evc.domain.item.auctionitem.controller;
 
 import com.yzgeneration.evc.common.dto.CommonResponse;
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.GetAuctionItemListResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemRequest.CreateAuctionItemRequest;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.service.AuctionItemService;
@@ -26,7 +26,7 @@ public class AuctionItemController {
     }
 
     @GetMapping
-    public SliceResponse<GetAuctionItemListResponse> getAuctionItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
+    public SliceResponse<GetAuctionItemsResponse> getAuctionItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
         return auctionItemService.getAuctionItems(memberPrincipal.getId(), cursor);
     }
 
@@ -36,7 +36,7 @@ public class AuctionItemController {
     }
 
     @GetMapping("/search")
-    public SliceResponse<GetAuctionItemListResponse> searchAuctionItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam String q, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
+    public SliceResponse<GetAuctionItemsResponse> searchAuctionItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam String q, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
         return auctionItemService.searchAuctionItems(q, memberPrincipal.getId(), cursor);
     }
 }

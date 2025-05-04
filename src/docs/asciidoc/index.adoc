@@ -50,3 +50,8 @@ include::point/point.adoc[]
 == Delivery API
 
 include::delivery/delivery.adoc[]
+
+[[My-API]]
+== MY API
+
+include::my/my.adoc[]

@@ -1,7 +1,8 @@
 package com.yzgeneration.evc.domain.item.auctionitem.service.port;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.GetAuctionItemListResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetMyOrMemberAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
 
@@ -10,9 +11,9 @@ import java.time.LocalDateTime;
 public interface AuctionItemRepository {
     AuctionItem save(AuctionItem auctionItem);
 
-    SliceResponse<GetAuctionItemListResponse> getAuctionItemList(Long memberId, LocalDateTime cursor);
+    SliceResponse<GetAuctionItemsResponse> getAuctionItems(Long memberId, LocalDateTime cursor);
 
-    GetAuctionItemResponse findByIdAndMemberId(Long memberId, Long id);
+    GetAuctionItemResponse findAuctionItemByMemberIdAndId(Long memberId, Long id);
 
     void updateCurrentPrice(Long id, int point);
 
@@ -24,7 +25,11 @@ public interface AuctionItemRepository {
 
     AuctionItem getById(Long id);
 
-    SliceResponse<GetAuctionItemListResponse> searchAuctionItemList(String q, Long memberId, LocalDateTime cursor);
+    SliceResponse<GetAuctionItemsResponse> searchAuctionItems(String q, Long memberId, LocalDateTime cursor);
 
     Long countParticipantById(Long id);
+
+    SliceResponse<GetMyOrMemberAuctionItemsResponse> getMemberAuctionItems(Long memberId, LocalDateTime cursor);
+
+    Long countAuctionItemByMemberId(Long memberId);
 }

@@ -1,7 +1,9 @@
 package com.yzgeneration.evc.mock.usedItem;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
+import com.yzgeneration.evc.domain.item.enums.TransactionMode;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetMyOrMemberUsedItemsResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
@@ -38,7 +40,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemListResponse> getUsedItemList(LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor) {
         int size = 10;
 
         List<UsedItem> usedItemList = new ArrayList<>(mockUsedItems.stream()
@@ -52,8 +54,8 @@ public class FakeUsedItemRepository implements UsedItemRepository {
             usedItemList.remove(size);
         }
 
-        List<GetUsedItemListResponse> usedItemListResponses = usedItemList.stream().map(
-                usedItem -> new GetUsedItemListResponse(usedItem.getId(), usedItem.getItemDetails().getTitle(), usedItem.getItemDetails().getPrice(), usedItem.getUsedItemTransaction().getTransactionMode(), usedItem.getUsedItemTransaction().getTransactionStatus(), "imageName.jpg",
+        List<GetUsedItemsResponse> usedItemListResponses = usedItemList.stream().map(
+                usedItem -> new GetUsedItemsResponse(usedItem.getId(), usedItem.getItemDetails().getTitle(), usedItem.getItemDetails().getPrice(), usedItem.getUsedItemTransaction().getTransactionMode(), usedItem.getUsedItemTransaction().getTransactionStatus(), "imageName.jpg",
                         usedItem.getItemStats().getLikeCount(), usedItem.getCreatedAt(), usedItem.getItemStatus())
         ).toList();
 
@@ -63,7 +65,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
     }
 
     @Override
-    public Optional<GetUsedItemResponse> findByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
+    public Optional<GetUsedItemResponse> findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
         return mockUsedItems.stream()
                 .filter(usedItem -> usedItem.getId().equals(usedItemId))
                 .findFirst()
@@ -80,7 +82,17 @@ public class FakeUsedItemRepository implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemListResponse> searchUsedItemList(String q, LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor) {
+        return null;
+    }
+
+    @Override
+    public SliceResponse<GetMyOrMemberUsedItemsResponse> getMyOrMemberUsedItems(Long memberId, LocalDateTime cursor, TransactionMode transactionMode) {
+        return null;
+    }
+
+    @Override
+    public Long countUsedItemByMemberId(Long memberId) {
         return null;
     }
 }

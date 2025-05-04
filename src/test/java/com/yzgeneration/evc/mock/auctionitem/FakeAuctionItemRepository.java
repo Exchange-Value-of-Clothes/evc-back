@@ -1,8 +1,9 @@
 package com.yzgeneration.evc.mock.auctionitem;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.AuctionItemPriceDetailsResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.GetAuctionItemListResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.AuctionItemPriceDetailResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetMyOrMemberAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemDetailsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemStatsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
@@ -44,7 +45,7 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
     }
 
     @Override
-    public SliceResponse<GetAuctionItemListResponse> getAuctionItemList(Long memberId, LocalDateTime cursor) {
+    public SliceResponse<GetAuctionItemsResponse> getAuctionItems(Long memberId, LocalDateTime cursor) {
 
         int size = 10;
 
@@ -59,10 +60,10 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
             auctionItemList.remove(size);
         }
 
-        List<GetAuctionItemListResponse> auctionItemListResponses = auctionItemList.stream().map(
+        List<GetAuctionItemsResponse> auctionItemListResponses = auctionItemList.stream().map(
                 auctionItem -> {
-                    AuctionItemPriceDetailsResponse auctionItemPriceDetailsResponse = new AuctionItemPriceDetailsResponse(auctionItem.getAuctionItemPriceDetails().getStartPrice(), auctionItem.getAuctionItemPriceDetails().getCurrentPrice(), auctionItem.getAuctionItemPriceDetails().getBidPrice());
-                    return new GetAuctionItemListResponse(auctionItem.getId(), auctionItem.getAuctionItemDetails().getTitle(), auctionItemPriceDetailsResponse, 1L, "imageName.jpg", auctionItem.getStartTime(), auctionItem.getEndTime(), 1000);
+                    AuctionItemPriceDetailResponse auctionItemPriceDetailResponse = new AuctionItemPriceDetailResponse(auctionItem.getAuctionItemPriceDetails().getStartPrice(), auctionItem.getAuctionItemPriceDetails().getCurrentPrice(), auctionItem.getAuctionItemPriceDetails().getBidPrice());
+                    return new GetAuctionItemsResponse(auctionItem.getId(), auctionItem.getAuctionItemDetails().getTitle(), auctionItemPriceDetailResponse, 1L, "imageName.jpg", auctionItem.getStartTime(), auctionItem.getEndTime(), 1000);
                 }
         ).toList();
 
@@ -72,7 +73,7 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
     }
 
     @Override
-    public GetAuctionItemResponse findByIdAndMemberId(Long memberId, Long id) {
+    public GetAuctionItemResponse findAuctionItemByMemberIdAndId(Long memberId, Long id) {
         return mockAuctionItem.stream()
                 .filter(auction -> auction.getId().equals(id))
                 .findFirst()
@@ -111,12 +112,22 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
     }
 
     @Override
-    public SliceResponse<GetAuctionItemListResponse> searchAuctionItemList(String q, Long memberId, LocalDateTime cursor) {
+    public SliceResponse<GetAuctionItemsResponse> searchAuctionItems(String q, Long memberId, LocalDateTime cursor) {
         return null;
     }
 
     @Override
     public Long countParticipantById(Long id) {
+        return null;
+    }
+
+    @Override
+    public SliceResponse<GetMyOrMemberAuctionItemsResponse> getMemberAuctionItems(Long memberId, LocalDateTime cursor) {
+        return null;
+    }
+
+    @Override
+    public Long countAuctionItemByMemberId(Long memberId) {
         return null;
     }
 }

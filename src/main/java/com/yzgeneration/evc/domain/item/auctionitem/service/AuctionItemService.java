@@ -3,12 +3,15 @@ package com.yzgeneration.evc.domain.item.auctionitem.service;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.domain.image.implement.ItemImageAppender;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.GetAuctionItemListResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemRequest.CreateAuctionItemRequest;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetMyOrMemberAuctionItemsResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.MyOrMemberAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.implement.AuctionItemReader;
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
+import com.yzgeneration.evc.domain.item.implement.ItemCounter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,7 @@ public class AuctionItemService {
     private final AuctionItemRepository auctionItemRepository;
     private final AuctionItemReader auctionItemReader;
     private final ItemImageAppender itemImageAppender;
+    private final ItemCounter itemCounter;
     private final ItemType itemType = ItemType.AUCTIONITEM;
 
     public void createAuctionItem(Long memberId, CreateAuctionItemRequest createAuctionItemRequest) {
@@ -27,15 +31,22 @@ public class AuctionItemService {
         itemImageAppender.createItemImages(auctionItem.getId(), itemType, createAuctionItemRequest.getImageNames());
     }
 
-    public SliceResponse<GetAuctionItemListResponse> getAuctionItems(Long memberId, LocalDateTime cursor) {
-        return auctionItemRepository.getAuctionItemList(memberId, cursor);
+    public SliceResponse<GetAuctionItemsResponse> getAuctionItems(Long memberId, LocalDateTime cursor) {
+        return auctionItemRepository.getAuctionItems(memberId, cursor);
     }
 
     public GetAuctionItemResponse getAuctionItem(Long memberId, Long itemId) {
         return auctionItemReader.getAuctionItemResponse(memberId, itemId);
     }
 
-    public SliceResponse<GetAuctionItemListResponse> searchAuctionItems(String q, Long memberId, LocalDateTime cursor) {
-        return auctionItemRepository.searchAuctionItemList(q, memberId, cursor);
+    public SliceResponse<GetAuctionItemsResponse> searchAuctionItems(String q, Long memberId, LocalDateTime cursor) {
+        return auctionItemRepository.searchAuctionItems(q, memberId, cursor);
+    }
+
+    public MyOrMemberAuctionItemsResponse getMyOrMemberAuctionItems(Long memberId, LocalDateTime cursor) {
+        Long postItemCount = itemCounter.countPostItem(memberId);
+        SliceResponse<GetMyOrMemberAuctionItemsResponse> myOrMemberAuctionItems = auctionItemRepository.getMemberAuctionItems(memberId, cursor);
+        return new MyOrMemberAuctionItemsResponse(postItemCount, myOrMemberAuctionItems);
+
     }
 }

@@ -1,12 +1,15 @@
 package com.yzgeneration.evc.domain.item.useditem.infrastructure.repository;
 
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.image.enums.ItemType;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
+import com.yzgeneration.evc.domain.item.enums.TransactionMode;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetMyOrMemberUsedItemsResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.UsedItemEntity;
@@ -42,10 +45,10 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemListResponse> getUsedItemList(LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor) {
 
-        List<GetUsedItemListResponse> usedItemListResponses = jpaQueryFactory
-                .select(Projections.constructor(GetUsedItemListResponse.class,
+        List<GetUsedItemsResponse> usedItemListResponses = jpaQueryFactory
+                .select(Projections.constructor(GetUsedItemsResponse.class,
                         usedItemEntity.id,
                         usedItemEntity.itemDetailsEntity.title,
                         usedItemEntity.itemDetailsEntity.price,
@@ -83,7 +86,50 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     }
 
     @Override
-    public Optional<GetUsedItemResponse> findByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
+    public SliceResponse<GetMyOrMemberUsedItemsResponse> getMyOrMemberUsedItems(Long memberId, LocalDateTime cursor, TransactionMode transactionMode) {
+
+        List<GetMyOrMemberUsedItemsResponse> memberUsedItemListResponses = jpaQueryFactory
+                .select(Projections.constructor(GetMyOrMemberUsedItemsResponse.class,
+                        usedItemEntity.id,
+                        usedItemEntity.itemDetailsEntity.title,
+                        usedItemEntity.itemDetailsEntity.price,
+                        usedItemEntity.usedItemTransactionEntity.transactionMode,
+                        usedItemEntity.usedItemTransactionEntity.transactionStatus,
+                        itemImageEntity.imageName,
+                        //TODO like 테이블 생기면 join해서 해당 값 채우기
+                        usedItemEntity.itemStatsEntity.likeCount,
+                        usedItemEntity.createdAt,
+                        usedItemEntity.itemStatus)
+                )
+                .from(usedItemEntity)
+                .join(itemImageEntity)
+                .on(itemImageEntity.itemId.eq(usedItemEntity.id)
+                        .and(itemImageEntity.isThumbnail.isTrue())
+                        .and(itemImageEntity.itemType.eq(ITEM_TYPE))
+                )
+                .where(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)
+                        //TODO(판매완료된 거는 빼고 줄까?)
+                        .and(usedItemEntity.memberId.eq(memberId)) //본인이 게시한 거 조회
+                        .and(createFilterbuilder(transactionMode)) //SELL, BUY, ALL 조회 필터링
+                        .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null))
+                .orderBy(usedItemEntity.createdAt.desc())
+                .limit(SIZE + 1)
+                .fetch();
+
+        boolean hasNext = memberUsedItemListResponses.size() > SIZE; //true: 조회할 상품이 더 남은 상태 (조회 결과 : 11개)
+        if (hasNext) {
+            memberUsedItemListResponses.remove(SIZE);
+        }
+
+        LocalDateTime localCreateTime = !memberUsedItemListResponses.isEmpty() ? memberUsedItemListResponses.get(memberUsedItemListResponses.size() - 1).getCreateAt() : null;
+
+        return new SliceResponse<>(
+                new SliceImpl<>(memberUsedItemListResponses, PageRequest.of(0, SIZE), hasNext), localCreateTime
+        );
+    }
+
+    @Override
+    public Optional<GetUsedItemResponse> findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
 
         GetUsedItemResponse usedItemResponse = jpaQueryFactory
                 .select(Projections.constructor(GetUsedItemResponse.class,
@@ -120,10 +166,10 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemListResponse> searchUsedItemList(String q, LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor) {
 
-        List<GetUsedItemListResponse> usedItemListResponses = jpaQueryFactory
-                .select(Projections.constructor(GetUsedItemListResponse.class,
+        List<GetUsedItemsResponse> usedItemListResponses = jpaQueryFactory
+                .select(Projections.constructor(GetUsedItemsResponse.class,
                         usedItemEntity.id,
                         usedItemEntity.itemDetailsEntity.title,
                         usedItemEntity.itemDetailsEntity.price,
@@ -160,5 +206,18 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
         return new SliceResponse<>(
                 new SliceImpl<>(usedItemListResponses, PageRequest.of(0, SIZE), hasNext), localCreateTime
         );
+    }
+
+    @Override
+    public Long countUsedItemByMemberId(Long memberId) {
+        return jpaQueryFactory.select(usedItemEntity.count())
+                .from(usedItemEntity)
+                .where(usedItemEntity.memberId.eq(memberId))
+                .fetchOne();
+    }
+
+    private BooleanBuilder createFilterbuilder(TransactionMode condition) {
+        BooleanBuilder filterBuilder = new BooleanBuilder();
+        return (condition == TransactionMode.SELL || condition == TransactionMode.BUY) ? filterBuilder.and(usedItemEntity.usedItemTransactionEntity.transactionMode.eq(condition)) : filterBuilder;
     }
 }
