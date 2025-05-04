@@ -1,7 +1,9 @@
 package com.yzgeneration.evc.domain.item.useditem.service.port;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
+import com.yzgeneration.evc.domain.item.enums.TransactionMode;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetMyOrMemberUsedItemsResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 
@@ -11,11 +13,15 @@ import java.util.Optional;
 public interface UsedItemRepository {
     UsedItem save(UsedItem usedItem);
 
-    SliceResponse<GetUsedItemListResponse> getUsedItemList(LocalDateTime cursor);
+    SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor);
 
-    Optional<GetUsedItemResponse> findByMemberIdAndUsedItemId(Long memberId, Long usedItemId);
+    Optional<GetUsedItemResponse> findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId);
 
     UsedItem getById(Long id);
 
-    SliceResponse<GetUsedItemListResponse> searchUsedItemList(String q, LocalDateTime cursor);
+    SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor);
+
+    SliceResponse<GetMyOrMemberUsedItemsResponse> getMyOrMemberUsedItems(Long memberId, LocalDateTime cursor, TransactionMode transactionMode);
+
+    Long countUsedItemByMemberId(Long memberId);
 }
