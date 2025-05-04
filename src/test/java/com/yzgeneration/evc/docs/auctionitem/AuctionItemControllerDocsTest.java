@@ -3,8 +3,8 @@ package com.yzgeneration.evc.docs.auctionitem;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.docs.RestDocsSupport;
 import com.yzgeneration.evc.domain.item.auctionitem.controller.AuctionItemController;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.AuctionItemPriceDetailsResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.GetAuctionItemListResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.AuctionItemPriceDetailResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemRequest.CreateAuctionItemRequest;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemDetailsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemStatsResponse;
@@ -80,12 +80,12 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
     }
 
     @Test
-    @DisplayName("경매상품들 조회 (Slice)")
+    @DisplayName("경매상품 전체 조회 (Slice)")
     void getAuctionItems() throws Exception {
 
-        AuctionItemPriceDetailsResponse auctionItemPriceDetailsResponse = new AuctionItemPriceDetailsResponse(5000, 5000, 1000);
-        GetAuctionItemListResponse getAuctionItemListResponse = new GetAuctionItemListResponse(1L, "title", auctionItemPriceDetailsResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
-        SliceResponse<GetAuctionItemListResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
+        AuctionItemPriceDetailResponse auctionItemPriceDetailResponse = new AuctionItemPriceDetailResponse(5000, 5000, 1000);
+        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", auctionItemPriceDetailResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        SliceResponse<GetAuctionItemsResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(auctionItemService.getAuctionItems(any(), any()))
                 .thenReturn(getAuctionItemSliceResponse);
@@ -187,9 +187,9 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
     @DisplayName("경매상품 검색 (Slice)")
     void searchAuctionItems() throws Exception {
 
-        AuctionItemPriceDetailsResponse auctionItemPriceDetailsResponse = new AuctionItemPriceDetailsResponse(5000, 5000, 1000);
-        GetAuctionItemListResponse getAuctionItemListResponse = new GetAuctionItemListResponse(1L, "title", auctionItemPriceDetailsResponse, 0L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
-        SliceResponse<GetAuctionItemListResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
+        AuctionItemPriceDetailResponse auctionItemPriceDetailResponse = new AuctionItemPriceDetailResponse(5000, 5000, 1000);
+        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", auctionItemPriceDetailResponse, 0L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        SliceResponse<GetAuctionItemsResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(auctionItemService.searchAuctionItems(any(), any(), any()))
                 .thenReturn(getAuctionItemSliceResponse);
