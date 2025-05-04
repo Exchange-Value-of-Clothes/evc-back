@@ -2,7 +2,7 @@ package com.yzgeneration.evc.domain.item.useditem.controller;
 
 import com.yzgeneration.evc.common.dto.CommonResponse;
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
@@ -27,7 +27,7 @@ public class UsedItemController {
     }
 
     @GetMapping
-    public SliceResponse<GetUsedItemListResponse> getUsedItems(@RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> getUsedItems(@RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
         return usedItemService.getUsedItems(cursor);
     }
 
@@ -37,7 +37,7 @@ public class UsedItemController {
     }
 
     @GetMapping("/search")
-    public SliceResponse<GetUsedItemListResponse> searchUsedItems(@RequestParam String q, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> searchUsedItems(@RequestParam String q, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
         return usedItemService.searchUsedItems(q, cursor);
     }
 }

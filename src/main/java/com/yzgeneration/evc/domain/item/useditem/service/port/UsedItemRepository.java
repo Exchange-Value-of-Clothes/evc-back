@@ -2,8 +2,8 @@ package com.yzgeneration.evc.domain.item.useditem.service.port;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetMyOrMemberUsedItemsResponse;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemsResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetMyOrMemberUsedItemsResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 
