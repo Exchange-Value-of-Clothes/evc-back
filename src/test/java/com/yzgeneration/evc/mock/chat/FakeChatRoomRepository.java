@@ -42,4 +42,9 @@ public class FakeChatRoomRepository implements ChatRoomRepository {
         return Optional.empty();
     }
 
+    @Override
+    public ChatRoom getById(Long id) {
+        return null;
+    }
+
 }

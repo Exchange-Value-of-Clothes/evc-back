@@ -8,6 +8,7 @@ import com.yzgeneration.evc.domain.chat.dto.ChatMessageSliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
+import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.fixture.ChatFixture;
 
 import com.yzgeneration.evc.mock.WithFakeUser;
@@ -50,7 +51,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     void enter() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, ItemType.USEDITEM, 1L);
         given(chatService.getChatRoomByTradeRequest(any(), any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -68,6 +69,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.size").value(10))
                 .andExpect(jsonPath("$.numberOfElements").value(1))
                 .andExpect(jsonPath("$.cursor").value("+1000000000-01-01T00:00:00"))
+                .andExpect(jsonPath("$.itemType").value("USEDITEM"))
+                .andExpect(jsonPath("$.itemId").value(1))
                 .andDo(document("chat-enter",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -84,6 +87,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                         .description("채팅방 아이디"),
                                 fieldWithPath("yourId").type(JsonFieldType.NUMBER)
                                         .description("본인 아이디"),
+                                fieldWithPath("ownerId").type(JsonFieldType.NUMBER)
+                                        .description("상대방 아이디"),
                                 fieldWithPath("content").type(JsonFieldType.ARRAY)
                                         .description("채팅 정보 리스트"),
                                 fieldWithPath("content[].message").type(JsonFieldType.STRING)
@@ -101,7 +106,11 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
                                         .description("조회된 데이터 개수"),
                                 fieldWithPath("cursor").type(JsonFieldType.STRING)
-                                        .description("다음 페이지 커서")
+                                        .description("다음 페이지 커서"),
+                                fieldWithPath("itemType").type(JsonFieldType.STRING)
+                                        .description("상품 타입"),
+                                fieldWithPath("itemId").type(JsonFieldType.NUMBER)
+                                        .description("상품 아이디")
 
                         )));
     }
@@ -145,7 +154,11 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
                                         .description("현재 페이지의 요소 개수"),
                                 fieldWithPath("cursor").type(JsonFieldType.STRING)
-                                        .description("다음 페이지를 위한 커서 값")
+                                        .description("다음 페이지를 위한 커서 값"),
+                                fieldWithPath("itemType").type(JsonFieldType.STRING)
+                                        .description("상품 타입"),
+                                fieldWithPath("itemId").type(JsonFieldType.NUMBER)
+                                        .description("상품 아이디")
                         )));
     }
 
@@ -154,7 +167,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     void getChatRoom() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, ItemType.USEDITEM, 1L);
         given(chatService.getChatRoomByListSelection(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -164,6 +177,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.chatRoomId").value("1"))
                 .andExpect(jsonPath("$.yourId").value("1"))
+                .andExpect(jsonPath("$.ownerId").value("2"))
                 .andExpect(jsonPath("$.content[0].message").value("message"))
                 .andExpect(jsonPath("$.content[0].senderId").value(1L))
                 .andExpect(jsonPath("$.content[0].isMine").value(true))
@@ -172,6 +186,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.size").value(10))
                 .andExpect(jsonPath("$.numberOfElements").value(1))
                 .andExpect(jsonPath("$.cursor").value("+1000000000-01-01T00:00:00"))
+                .andExpect(jsonPath("$.itemType").value("USEDITEM"))
+                .andExpect(jsonPath("$.itemId").value(1))
                 .andDo(document("chat-getChatRoom",
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -187,6 +203,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                         .description("채팅방 아이디"),
                                 fieldWithPath("yourId").type(JsonFieldType.NUMBER)
                                         .description("본인 아이디"),
+                                fieldWithPath("ownerId").type(JsonFieldType.NUMBER)
+                                        .description("상대방 아이디"),
                                 fieldWithPath("content").type(JsonFieldType.ARRAY)
                                         .description("채팅 정보 리스트"),
                                 fieldWithPath("content[].message").type(JsonFieldType.STRING)
@@ -204,7 +222,11 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
                                         .description("조회된 데이터 개수"),
                                 fieldWithPath("cursor").type(JsonFieldType.STRING)
-                                        .description("다음 페이지 커서")
+                                        .description("다음 페이지 커서"),
+                                fieldWithPath("itemType").type(JsonFieldType.STRING)
+                                        .description("상품 타입"),
+                                fieldWithPath("itemId").type(JsonFieldType.NUMBER)
+                                        .description("상품 아이디")
 
                         )));
     }

@@ -6,6 +6,7 @@ import com.yzgeneration.evc.domain.chat.dto.ChatMessageResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatMessageSliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
+import com.yzgeneration.evc.domain.image.enums.ItemType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -80,7 +81,8 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
     }
 
     @Override
-    public ChatMessageSliceResponse getLastMessages(Long memberId, Long chatRoomId, LocalDateTime cursor) {
+    public ChatMessageSliceResponse getLastMessages(Long memberId, Long chatRoomId, LocalDateTime cursor, Long ownerId,
+                                                    ItemType itemType, Long itemId) {
 
         int size=10;
 
@@ -111,8 +113,8 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
                 : null;
 
         return new ChatMessageSliceResponse(
-                chatRoomId, memberId,new SliceImpl<>(response, PageRequest.of(0, size), hasNext), lastCreatedAt
-        );
+                chatRoomId, memberId, ownerId, new SliceImpl<>(response, PageRequest.of(0, size), hasNext), lastCreatedAt,
+        itemType, itemId);
     }
 
 
