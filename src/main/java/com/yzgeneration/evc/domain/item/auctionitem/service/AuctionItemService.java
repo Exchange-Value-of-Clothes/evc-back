@@ -45,7 +45,7 @@ public class AuctionItemService {
 
     public MyOrMemberAuctionItemsResponse getMyOrMemberAuctionItems(Long memberId, LocalDateTime cursor) {
         Long postItemCount = itemCounter.countPostItem(memberId);
-        SliceResponse<GetMyOrMemberAuctionItemsResponse> myOrMemberAuctionItems = auctionItemRepository.getMemberAuctionItems(memberId, cursor);
+        SliceResponse<GetMyOrMemberAuctionItemsResponse> myOrMemberAuctionItems = auctionItemRepository.getMyOrMemberAuctionItems(memberId, cursor);
         return new MyOrMemberAuctionItemsResponse(postItemCount, myOrMemberAuctionItems);
 
     }
