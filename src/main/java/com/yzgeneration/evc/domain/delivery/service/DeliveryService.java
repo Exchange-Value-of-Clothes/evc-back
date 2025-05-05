@@ -10,8 +10,10 @@ import com.yzgeneration.evc.external.delivery.GetKakaoMobilityOrder;
 import com.yzgeneration.evc.external.delivery.KakaoMobilityOrderResponse;
 import com.yzgeneration.evc.external.delivery.Mobility;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DeliveryService {
@@ -23,6 +25,7 @@ public class DeliveryService {
         if (!sellerId.equals(memberId)) throw new CustomException(ErrorCode.DELIVERY_ONLY_SELLER_REQUEST);
         Delivery delivery = deliveryProcessor.create(itemType, itemId, buyerId, sellerId);
         DeliveryCreate deliveryCreate = deliveryProcessor.prepare(delivery.getOrderId(), itemType, itemId);
+        log.info(deliveryCreate.toString());
         return mobility.delivery(deliveryCreate, delivery.getOrderId());
     }
 

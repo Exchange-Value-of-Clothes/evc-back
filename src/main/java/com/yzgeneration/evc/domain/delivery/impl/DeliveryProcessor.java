@@ -19,6 +19,7 @@ public class DeliveryProcessor {
     private final DeliveryRepository deliveryRepository;
 
     public Delivery create(ItemType itemType, Long itemId, Long buyerId, Long sellerId) {
+        // todo : 상대방 아이디 존재 여부 검증, 상품 아이디 존재 검증
         return deliveryRepository.save(Delivery.create(sellerId, buyerId, itemType, itemId));
     }
 
