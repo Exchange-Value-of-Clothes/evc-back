@@ -5,7 +5,7 @@ public class ExternalApiExceptionV2 extends RuntimeException {
     private final String body;
 
     public ExternalApiExceptionV2(int status, String body) {
-        super("외부 API 오류: " + status);
+        super("외부 API 오류: " + body);
         this.status = status;
         this.body = body;
     }
