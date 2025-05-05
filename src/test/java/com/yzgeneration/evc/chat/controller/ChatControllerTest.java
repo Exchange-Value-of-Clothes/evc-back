@@ -55,7 +55,7 @@ class ChatControllerTest {
     void enter() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true,"message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, ItemType.USEDITEM, 1L);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L);
         given(chatService.getChatRoomByTradeRequest(any(), any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -64,7 +64,8 @@ class ChatControllerTest {
                         .content(objectMapper.writeValueAsString(ChatFixture.chatEnter()))
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.chatRoomId").value("1"))
+                .andExpect(jsonPath("$.chatRoomId").value(1))
+                .andExpect(jsonPath("$.otherPersonId").value(2))
                 .andExpect(jsonPath("$.content[0].message").value("message"))
                 .andExpect(jsonPath("$.content[0].senderId").value(1L))
                 .andExpect(jsonPath("$.content[0].isMine").value(true))
@@ -103,7 +104,7 @@ class ChatControllerTest {
     void getChatRoom() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, ItemType.USEDITEM, 1L);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L);
         given(chatService.getChatRoomByListSelection(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/chat/{chatRoomId}", "1")

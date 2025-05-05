@@ -15,6 +15,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 import static com.yzgeneration.evc.domain.chat.SessionConstant.CHAT_ROOM_KEY;
@@ -33,7 +34,7 @@ public class ChatService {
 
     public ChatMessageSliceResponse getChatRoomByTradeRequest(Long itemId, ItemType itemType, Long ownerId, Long participantId) {
         ChatRoom chatRoom = chatRoomManager.getOrCreate(itemId, itemType,ownerId, participantId);
-        return chatMessageRepository.getLastMessages(participantId, chatRoom.getId(), LocalDateTime.now(), ownerId, itemType, itemId);
+        return chatMessageRepository.getLastMessages(participantId, chatRoom.getId(), LocalDateTime.now(), ownerId, itemType, itemId, ownerId);
     }
 
     public SliceResponse<ChatRoomListResponse> getChatRooms(Long memberId, LocalDateTime cursor) {
@@ -42,7 +43,8 @@ public class ChatService {
 
     public ChatMessageSliceResponse getChatRoomByListSelection(Long chatRoomId, LocalDateTime cursor, Long memberId) {
         ChatRoom chatRoom = chatRoomManager.getById(chatRoomId);
-        return chatMessageRepository.getLastMessages(memberId, chatRoomId, cursor, chatRoom.getOwnerId(), chatRoom.getItemType(), chatRoom.getItemId());
+        Long otherPersonId = !Objects.equals(chatRoom.getOwnerId(), memberId) ? chatRoom.getOwnerId() : chatRoom.getParticipantId();
+        return chatMessageRepository.getLastMessages(memberId, chatRoomId, cursor, chatRoom.getOwnerId(), chatRoom.getItemType(), chatRoom.getItemId(), otherPersonId);
     }
 
     public void send(StompHeaderAccessor accessor, Chatting chatting) { // todo

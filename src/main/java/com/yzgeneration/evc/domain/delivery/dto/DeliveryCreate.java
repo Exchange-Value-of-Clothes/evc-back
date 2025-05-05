@@ -7,6 +7,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
 public class DeliveryCreate {
     private String orderId;

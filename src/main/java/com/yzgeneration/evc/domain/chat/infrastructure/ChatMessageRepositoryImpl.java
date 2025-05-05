@@ -82,7 +82,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
 
     @Override
     public ChatMessageSliceResponse getLastMessages(Long memberId, Long chatRoomId, LocalDateTime cursor, Long ownerId,
-                                                    ItemType itemType, Long itemId) {
+                                                    ItemType itemType, Long itemId, Long otherPersonId) {
 
         int size=10;
 
@@ -113,7 +113,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
                 : null;
 
         return new ChatMessageSliceResponse(
-                chatRoomId, memberId, ownerId, new SliceImpl<>(response, PageRequest.of(0, size), hasNext), lastCreatedAt,
+                chatRoomId, memberId, ownerId, new SliceImpl<>(response, PageRequest.of(0, size), hasNext), lastCreatedAt, otherPersonId,
         itemType, itemId);
     }
 
