@@ -21,6 +21,8 @@ public class AuctionItemsResponse {
 
         private String title;
 
+        private String category;
+
         @JsonUnwrapped
         private AuctionItemPriceDetailResponse auctionItemPriceDetailResponse;
 
