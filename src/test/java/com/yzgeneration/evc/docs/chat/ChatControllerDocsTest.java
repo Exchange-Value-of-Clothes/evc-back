@@ -51,7 +51,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     void enter() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, ItemType.USEDITEM, 1L);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L);
         given(chatService.getChatRoomByTradeRequest(any(), any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -61,6 +61,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.chatRoomId").value("1"))
                 .andExpect(jsonPath("$.yourId").value("1"))
+                .andExpect(jsonPath("$.ownerId").value("2"))
+                .andExpect(jsonPath("$.otherPersonId").value("2"))
                 .andExpect(jsonPath("$.content[0].message").value("message"))
                 .andExpect(jsonPath("$.content[0].senderId").value(1L))
                 .andExpect(jsonPath("$.content[0].isMine").value(true))
@@ -88,6 +90,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("yourId").type(JsonFieldType.NUMBER)
                                         .description("본인 아이디"),
                                 fieldWithPath("ownerId").type(JsonFieldType.NUMBER)
+                                        .description("채팅방 주인 아이디"),
+                                fieldWithPath("otherPersonId").type(JsonFieldType.NUMBER)
                                         .description("상대방 아이디"),
                                 fieldWithPath("content").type(JsonFieldType.ARRAY)
                                         .description("채팅 정보 리스트"),
@@ -163,7 +167,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     void getChatRoom() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, ItemType.USEDITEM, 1L);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L);
         given(chatService.getChatRoomByListSelection(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -174,6 +178,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.chatRoomId").value("1"))
                 .andExpect(jsonPath("$.yourId").value("1"))
                 .andExpect(jsonPath("$.ownerId").value("2"))
+                .andExpect(jsonPath("$.otherPersonId").value("2"))
                 .andExpect(jsonPath("$.content[0].message").value("message"))
                 .andExpect(jsonPath("$.content[0].senderId").value(1L))
                 .andExpect(jsonPath("$.content[0].isMine").value(true))
@@ -200,6 +205,8 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("yourId").type(JsonFieldType.NUMBER)
                                         .description("본인 아이디"),
                                 fieldWithPath("ownerId").type(JsonFieldType.NUMBER)
+                                        .description("채팅방 주인 아이디"),
+                                fieldWithPath("otherPersonId").type(JsonFieldType.NUMBER)
                                         .description("상대방 아이디"),
                                 fieldWithPath("content").type(JsonFieldType.ARRAY)
                                         .description("채팅 정보 리스트"),

@@ -66,12 +66,11 @@ public class KakaoMobility implements Mobility {
                 .header("Authorization", authorization)
                 .header("Content-Type", "application/json")
                 .header("vendor", vendorId)
-                .header("User-Agent", "curl/7.87.0")
                 .body(CustomUtil.jsonSerialization(kakaoMobilityOrder))
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, (req, res) -> {
-                    // 에러 응답 바디를 String으로 읽어와서 ExternalApiException으로 throw
                     String body = new String(res.getBody().readAllBytes(), StandardCharsets.UTF_8);
+                    log.info(body);
                     throw new ExternalApiExceptionV2(res.getStatusCode().value(), body);
                 })
                 .toEntity(KakaoMobilityOrderResponse.class)
