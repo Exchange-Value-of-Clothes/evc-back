@@ -29,7 +29,7 @@ public interface AuctionItemRepository {
 
     Long countParticipantById(Long id);
 
-    SliceResponse<GetMyOrMemberAuctionItemsResponse> getMemberAuctionItems(Long memberId, LocalDateTime cursor);
+    SliceResponse<GetMyOrMemberAuctionItemsResponse> getMyOrMemberAuctionItems(Long memberId, LocalDateTime cursor);
 
     Long countAuctionItemByMemberId(Long memberId);
 }
