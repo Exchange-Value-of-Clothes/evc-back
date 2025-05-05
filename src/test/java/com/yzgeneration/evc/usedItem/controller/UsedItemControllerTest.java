@@ -6,7 +6,7 @@ import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.domain.item.useditem.controller.UsedItemController;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemListResponse.GetUsedItemListResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
@@ -70,8 +70,8 @@ class UsedItemControllerTest {
     @DisplayName("중고상품 리스트 조회")
     void getUsedItems() throws Exception {
 
-        GetUsedItemListResponse getUsedItemListResponse = new GetUsedItemListResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName.jpg", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE);
-        SliceResponse<GetUsedItemListResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemListResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
+        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName.jpg", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        SliceResponse<GetUsedItemsResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(usedItemService.getUsedItems(any()))
                 .thenReturn(getUsedItemSliceResponse);

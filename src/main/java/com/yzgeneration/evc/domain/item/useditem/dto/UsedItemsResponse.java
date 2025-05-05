@@ -9,11 +9,35 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-public class UsedItemListResponse {
+public class UsedItemsResponse {
 
     @Getter
     @AllArgsConstructor
-    public static class GetUsedItemListResponse {
+    public static class GetUsedItemsResponse {
+
+        private Long usedItemId;
+
+        private String title;
+
+        private int price;
+
+        private TransactionMode transactionMode;
+
+        private TransactionStatus transactionStatus;
+
+        private String imageName;
+
+        private Long likeCount;
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        private LocalDateTime createAt;
+
+        private ItemStatus itemStatus;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class GetMyOrMemberUsedItemsResponse {
 
         private Long usedItemId;
 

@@ -5,8 +5,9 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.image.enums.ItemType;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.AuctionItemPriceDetailsResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemListResponse.GetAuctionItemListResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.AuctionItemPriceDetailResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetMyOrMemberAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemDetailsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemStatsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
@@ -15,6 +16,7 @@ import com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.Auctio
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionRoomRepository;
+import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.exception.CustomException;
@@ -54,13 +56,13 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
     }
 
     @Override
-    public SliceResponse<GetAuctionItemListResponse> getAuctionItemList(Long memberId, LocalDateTime cursor) {
+    public SliceResponse<GetAuctionItemsResponse> getAuctionItems(Long memberId, LocalDateTime cursor) {
 
-        List<GetAuctionItemListResponse> auctionItemListResponses = jpaQueryFactory
-                .select(Projections.constructor(GetAuctionItemListResponse.class,
+        List<GetAuctionItemsResponse> auctionItemListResponses = jpaQueryFactory
+                .select(Projections.constructor(GetAuctionItemsResponse.class,
                         auctionItemEntity.id,
                         auctionItemEntity.auctionItemDetailsEntity.title,
-                        Projections.constructor(AuctionItemPriceDetailsResponse.class,
+                        Projections.constructor(AuctionItemPriceDetailResponse.class,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.startPrice,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.bidPrice),
@@ -84,7 +86,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                 .limit(SIZE + 1)
                 .fetch();
 
-        for (GetAuctionItemListResponse response : auctionItemListResponses) {
+        for (GetAuctionItemsResponse response : auctionItemListResponses) {
             response.setParticipantCount(countParticipantById(response.getAuctionItemId()));
         }
 
@@ -101,7 +103,51 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
     }
 
     @Override
-    public GetAuctionItemResponse findByIdAndMemberId(Long memberId, Long id) {
+    public SliceResponse<GetMyOrMemberAuctionItemsResponse> getMemberAuctionItems(Long memberId, LocalDateTime cursor) {
+
+        List<GetMyOrMemberAuctionItemsResponse> memberAuctionItemListResponses = jpaQueryFactory
+                .select(Projections.constructor(GetMyOrMemberAuctionItemsResponse.class,
+                        auctionItemEntity.id,
+                        auctionItemEntity.auctionItemDetailsEntity.title,
+                        auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
+                        Expressions.constant(TransactionMode.AUCTION),
+                        auctionItemEntity.transactionStatus,
+                        itemImageEntity.imageName,
+                        //TODO like 테이블 생기면 join해서 해당 값 채우기
+                        Expressions.constant(0L),
+                        auctionItemEntity.startTime,
+                        auctionItemEntity.itemStatus)
+                )
+                .from(auctionItemEntity)
+                .join(itemImageEntity) //썸네일 조회를 위해 join
+                .on(itemImageEntity.itemId.eq(auctionItemEntity.id)
+                        .and(itemImageEntity.isThumbnail.isTrue())
+                        .and(itemImageEntity.itemType.eq(ITEM_TYPE))
+                )
+                .join(memberPointEntity) //포인트 조회를 위해 join
+                .on(memberPointEntity.memberId.eq(memberId))
+                .where(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE) //게시 중인 경매상품
+                        .and(auctionItemEntity.transactionStatus.eq(TransactionStatus.ONGOING)) //현재 거래중 상태인 경매상품
+                        .and(auctionItemEntity.memberId.eq(memberId)) //본인이 게시한 거 조회
+                        .and(cursor != null ? auctionItemEntity.startTime.lt(cursor) : null))
+                .orderBy(auctionItemEntity.startTime.desc())
+                .limit(SIZE + 1)
+                .fetch();
+
+        boolean hasNext = memberAuctionItemListResponses.size() > SIZE; //true: 조회할 상품이 더 남은 상태 (조회 결과 : 11개)
+        if (hasNext) {
+            memberAuctionItemListResponses.remove(SIZE);
+        }
+
+        LocalDateTime localCreateTime = !memberAuctionItemListResponses.isEmpty() ? memberAuctionItemListResponses.get(memberAuctionItemListResponses.size() - 1).getCreateAt() : null;
+
+        return new SliceResponse<>(
+                new SliceImpl<>(memberAuctionItemListResponses, PageRequest.of(0, SIZE), hasNext), localCreateTime
+        );
+    }
+
+    @Override
+    public GetAuctionItemResponse findAuctionItemByMemberIdAndId(Long memberId, Long id) {
         return Optional.ofNullable(jpaQueryFactory
                         .select(Projections.constructor(GetAuctionItemResponse.class,
                                 Projections.constructor(AuctionItemDetailsResponse.class,
@@ -179,13 +225,13 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
     }
 
     @Override
-    public SliceResponse<GetAuctionItemListResponse> searchAuctionItemList(String q, Long memberId, LocalDateTime cursor) {
+    public SliceResponse<GetAuctionItemsResponse> searchAuctionItems(String q, Long memberId, LocalDateTime cursor) {
 
-        List<GetAuctionItemListResponse> auctionItemListResponses = jpaQueryFactory
-                .select(Projections.constructor(GetAuctionItemListResponse.class,
+        List<GetAuctionItemsResponse> auctionItemListResponses = jpaQueryFactory
+                .select(Projections.constructor(GetAuctionItemsResponse.class,
                         auctionItemEntity.id,
                         auctionItemEntity.auctionItemDetailsEntity.title,
-                        Projections.constructor(AuctionItemPriceDetailsResponse.class,
+                        Projections.constructor(AuctionItemPriceDetailResponse.class,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.startPrice,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.bidPrice),
@@ -242,5 +288,13 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
         return Optional.ofNullable(auctionParticipateResponse.getUniqueMappedResult())
                 .map(AuctionParticipateResponse::getParticipantCount)
                 .orElse(0L);
+    }
+
+    @Override
+    public Long countAuctionItemByMemberId(Long memberId) {
+        return jpaQueryFactory.select(auctionItemEntity.count())
+                .from(auctionItemEntity)
+                .where(auctionItemEntity.memberId.eq(memberId))
+                .fetchOne();
     }
 }

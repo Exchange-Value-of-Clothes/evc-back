@@ -19,7 +19,7 @@ public class UsedItemReader {
     private final ItemType itemType = ItemType.USEDITEM;
 
     public GetUsedItemResponse getUsedItemResponse(Long memberId, Long usedItemId) {
-        GetUsedItemResponse getUsedItemResponse = usedItemRepository.findByMemberIdAndUsedItemId(memberId, usedItemId).orElseThrow(
+        GetUsedItemResponse getUsedItemResponse = usedItemRepository.findUsedItemByMemberIdAndUsedItemId(memberId, usedItemId).orElseThrow(
                 () -> new CustomException(ErrorCode.USEDITEM_NOT_FOUND));
 
         List<String> imageNames = itemImageRepository.findImageNamesByItemIdAndItemType(usedItemId, itemType);
