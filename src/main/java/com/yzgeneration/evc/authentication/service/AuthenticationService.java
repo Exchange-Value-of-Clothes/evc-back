@@ -36,4 +36,8 @@ public class AuthenticationService {
         AuthenticationToken authenticationToken = tokenProvider.create(member.getId());
         return authenticationProcessor.getSocialLoginResponse(authenticationToken);
     }
+
+    public ResponseEntity<Void> logout(String refreshToken) {
+        return authenticationProcessor.deleteRefreshToken(refreshToken);
+    }
 }

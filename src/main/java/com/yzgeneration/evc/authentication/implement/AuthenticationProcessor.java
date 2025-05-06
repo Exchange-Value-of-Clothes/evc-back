@@ -89,4 +89,18 @@ public class AuthenticationProcessor {
                 .header(HttpHeaders.LOCATION, "https://localhost:3000/social-login-success")
                 .body(new LoginResponse(authenticationToken.getAccessToken()));
     }
+
+    public ResponseEntity<Void> deleteRefreshToken(String refreshToken) {
+        ResponseCookie deleteCookie = ResponseCookie.from("refresh_token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0) // 삭제를 위해 만료 시간을 0으로 설정
+                .sameSite("None")
+                .build();
+
+        return ResponseEntity.noContent()
+                .header(HttpHeaders.SET_COOKIE, deleteCookie.toString())
+                .build();
+    }
 }

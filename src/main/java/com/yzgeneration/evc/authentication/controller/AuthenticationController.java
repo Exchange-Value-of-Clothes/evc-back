@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.authentication.controller;
 
+import com.yzgeneration.evc.common.dto.CommonResponse;
 import com.yzgeneration.evc.validator.EnumValidator;
 import com.yzgeneration.evc.authentication.service.AuthenticationService;
 import com.yzgeneration.evc.domain.member.enums.ProviderType;
@@ -15,7 +16,7 @@ import static com.yzgeneration.evc.authentication.dto.AuthenticationResponse.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthenticationController { // TODO EC2 도커 이미지 삭제 cronjob 구축
+public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
@@ -38,6 +39,11 @@ public class AuthenticationController { // TODO EC2 도커 이미지 삭제 cron
     @GetMapping("/access-token")
     public ResponseEntity<LoginResponse> getUserInformation(@RequestParam("provider_type") String providerType, @RequestParam("code") String authorizationCode, @RequestParam("state") String state) {
         return authenticationService.socialLogin(providerType, authorizationCode, state);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@CookieValue(name = "refresh_token") String refreshToken) {
+        return authenticationService.logout(refreshToken);
     }
 
 }
