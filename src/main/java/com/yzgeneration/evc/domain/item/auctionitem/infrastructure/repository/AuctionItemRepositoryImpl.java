@@ -62,6 +62,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                 .select(Projections.constructor(GetAuctionItemsResponse.class,
                         auctionItemEntity.id,
                         auctionItemEntity.auctionItemDetailsEntity.title,
+                        auctionItemEntity.auctionItemDetailsEntity.category,
                         Projections.constructor(AuctionItemPriceDetailResponse.class,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.startPrice,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
@@ -103,7 +104,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
     }
 
     @Override
-    public SliceResponse<GetMyOrMemberAuctionItemsResponse> getMemberAuctionItems(Long memberId, LocalDateTime cursor) {
+    public SliceResponse<GetMyOrMemberAuctionItemsResponse> getMyOrMemberAuctionItems(Long memberId, LocalDateTime cursor) {
 
         List<GetMyOrMemberAuctionItemsResponse> memberAuctionItemListResponses = jpaQueryFactory
                 .select(Projections.constructor(GetMyOrMemberAuctionItemsResponse.class,
@@ -231,10 +232,12 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                 .select(Projections.constructor(GetAuctionItemsResponse.class,
                         auctionItemEntity.id,
                         auctionItemEntity.auctionItemDetailsEntity.title,
+                        auctionItemEntity.auctionItemDetailsEntity.category,
                         Projections.constructor(AuctionItemPriceDetailResponse.class,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.startPrice,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.bidPrice),
+                        Expressions.constant(0L),
                         itemImageEntity.imageName,
                         auctionItemEntity.startTime,
                         auctionItemEntity.endTime,
@@ -255,6 +258,10 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                 .orderBy(auctionItemEntity.startTime.desc())
                 .limit(SIZE + 1)
                 .fetch();
+
+        for (GetAuctionItemsResponse response : auctionItemListResponses) {
+            response.setParticipantCount(countParticipantById(response.getAuctionItemId()));
+        }
 
         boolean hasNext = auctionItemListResponses.size() > SIZE; //true: 조회할 상품이 더 남은 상태 (조회 결과 : 11개)
         if (hasNext) {
