@@ -16,9 +16,13 @@ public class ChatMessageSliceResponse extends SliceResponse<ChatMessageResponse>
     private Long otherPersonId;
     private String itemType;
     private Long itemId;
+    private String transactionType;
+    private String title;
+    private int price;
 
     public ChatMessageSliceResponse(Long chatRoomId, Long yourId, Long ownerId, Slice<ChatMessageResponse> slice, LocalDateTime cursor, Long otherPersonId,
-                                    ItemType itemType, Long itemId) {
+                                    ItemType itemType, Long itemId,
+                                    String transactionType, String title, int price) {
         super(slice, cursor);
         this.chatRoomId = chatRoomId;
         this.yourId = yourId;
@@ -26,6 +30,9 @@ public class ChatMessageSliceResponse extends SliceResponse<ChatMessageResponse>
         this.otherPersonId = otherPersonId;
         this.itemType = itemType.name();
         this.itemId = itemId;
+        this.transactionType = transactionType;
+        this.title = title;
+        this.price = price;
     }
 
 }

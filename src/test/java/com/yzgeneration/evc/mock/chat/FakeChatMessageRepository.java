@@ -7,6 +7,7 @@ import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
 
@@ -64,7 +65,7 @@ public class FakeChatMessageRepository implements ChatMessageRepository {
 
         // ChatRoomListResponse 변환
         List<ChatRoomListResponse> response = messages.stream()
-                .map(msg -> new ChatRoomListResponse(msg.getChatRoomId(), msg.getContent(), msg.getCreatedAt()))
+                .map(msg -> new ChatRoomListResponse(msg.getChatRoomId(), msg.getContent(), 2L,"otherNickname", "profileImageUrl", msg.getCreatedAt()))
                 .toList();
 
         return new SliceResponse<>(
@@ -95,7 +96,8 @@ public class FakeChatMessageRepository implements ChatMessageRepository {
 
         LocalDateTime lastCreatedAt = messages.isEmpty() ? null : messages.get(messages.size() - 1).getCreatedAt();
 
-        return new ChatMessageSliceResponse(chatRoomId, memberId, ownerId, new SliceImpl<>(messages, PageRequest.of(0, size), hasNext), lastCreatedAt, otherPersonId, itemType, itemId);
+        return new ChatMessageSliceResponse(chatRoomId, memberId, ownerId, new SliceImpl<>(messages, PageRequest.of(0, size), hasNext), lastCreatedAt, otherPersonId, itemType, itemId,
+                TransactionType.DELIVERY.name(), "title", 1000);
     }
 
 

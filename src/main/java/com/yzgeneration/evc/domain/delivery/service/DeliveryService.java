@@ -26,7 +26,10 @@ public class DeliveryService {
         Delivery delivery = deliveryProcessor.create(itemType, itemId, buyerId, sellerId);
         DeliveryCreate deliveryCreate = deliveryProcessor.prepare(delivery.getOrderId(), itemType, itemId);
         log.info(deliveryCreate.toString());
-        return mobility.delivery(deliveryCreate, delivery.getOrderId());
+        KakaoMobilityOrderResponse response = mobility.delivery(deliveryCreate, delivery.getOrderId());
+        // todo 메시지 큐 기반으로 재처리 시도
+        if (!response.getReceipt().getStatus().isBlank()) deliveryProcessor.order(delivery);
+        return response;
     }
 
     public GetKakaoMobilityOrder get(String orderId, Long memberId) {

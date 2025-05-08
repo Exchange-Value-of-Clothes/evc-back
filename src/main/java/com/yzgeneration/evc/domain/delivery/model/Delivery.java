@@ -26,4 +26,8 @@ public class Delivery {
                 .itemId(itemId)
                 .build();
     }
+
+    public void order() {
+        this.deliveryStatus = DeliveryStatus.RESERVED;
+    }
 }
