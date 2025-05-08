@@ -31,4 +31,9 @@ public class DeliveryProcessor {
         Delivery delivery = deliveryRepository.get(orderId);
         if (!delivery.getSenderId().equals(memberId) && !delivery.getReceiverId().equals(memberId)) throw new CustomException(ErrorCode.DELIVERY_NOT_FOUND);
     }
+
+    public void order(Delivery delivery) {
+        delivery.order();
+        deliveryRepository.save(delivery);
+    }
 }

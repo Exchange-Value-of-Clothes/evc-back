@@ -8,6 +8,7 @@ import com.yzgeneration.evc.domain.chat.dto.ChatMessageSliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
 import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.fixture.ChatFixture;
 import com.yzgeneration.evc.mock.WithFakeUser;
 import org.junit.jupiter.api.DisplayName;
@@ -55,7 +56,8 @@ class ChatControllerTest {
     void enter() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true,"message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L
+        , TransactionType.DELIVERY.name(), "title", 1000);
         given(chatService.getChatRoomByTradeRequest(any(), any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -81,7 +83,7 @@ class ChatControllerTest {
     @DisplayName("채팅목록을 조회한다.")
     void getChatRooms() throws Exception {
         SliceResponse<ChatRoomListResponse> response = new SliceResponse<>(
-                new SliceImpl<>(List.of(new ChatRoomListResponse(1L,  "lastMessage", LocalDateTime.MIN)), PageRequest.of(0, 5), true),
+                new SliceImpl<>(List.of(new ChatRoomListResponse(1L,  "lastMessage", 2L, "othernickname", "profileUrl",LocalDateTime.MIN)), PageRequest.of(0, 5), true),
                 LocalDateTime.MIN
         );
         given(chatService.getChatRooms(any(), any()))
@@ -104,7 +106,8 @@ class ChatControllerTest {
     void getChatRoom() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L,
+                TransactionType.DELIVERY.name(), "title", 1000);
         given(chatService.getChatRoomByListSelection(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/chat/{chatRoomId}", "1")
