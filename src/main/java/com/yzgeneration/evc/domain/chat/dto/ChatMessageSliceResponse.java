@@ -19,10 +19,11 @@ public class ChatMessageSliceResponse extends SliceResponse<ChatMessageResponse>
     private String transactionType;
     private String title;
     private int price;
+    private String otherPersonProfileUrl;
 
     public ChatMessageSliceResponse(Long chatRoomId, Long yourId, Long ownerId, Slice<ChatMessageResponse> slice, LocalDateTime cursor, Long otherPersonId,
                                     ItemType itemType, Long itemId,
-                                    String transactionType, String title, int price) {
+                                    String transactionType, String title, int price, String otherPersonProfileUrl) {
         super(slice, cursor);
         this.chatRoomId = chatRoomId;
         this.yourId = yourId;
@@ -33,6 +34,7 @@ public class ChatMessageSliceResponse extends SliceResponse<ChatMessageResponse>
         this.transactionType = transactionType;
         this.title = title;
         this.price = price;
+        this.otherPersonProfileUrl = otherPersonProfileUrl;
     }
 
 }

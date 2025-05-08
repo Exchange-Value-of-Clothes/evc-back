@@ -57,7 +57,7 @@ class ChatControllerTest {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true,"message", LocalDateTime.MIN));
         ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L
-        , TransactionType.DELIVERY.name(), "title", 1000);
+        , TransactionType.DELIVERY.name(), "title", 1000, "otherPersonProfileUrl");
         given(chatService.getChatRoomByTradeRequest(any(), any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -107,7 +107,7 @@ class ChatControllerTest {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
         ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L,
-                TransactionType.DELIVERY.name(), "title", 1000);
+                TransactionType.DELIVERY.name(), "title", 1000, "otherPersonProfileUrl");
         given(chatService.getChatRoomByListSelection(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/chat/{chatRoomId}", "1")

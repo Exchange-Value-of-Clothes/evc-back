@@ -52,7 +52,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     void enter() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L, TransactionType.DELIVERY.name(), "title", 1000);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L, TransactionType.DELIVERY.name(), "title", 1000, "otherPersonProfileUrl");
         given(chatService.getChatRoomByTradeRequest(any(), any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -77,6 +77,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.transactionType").value("DELIVERY"))
                 .andExpect(jsonPath("$.title").value("title"))
                 .andExpect(jsonPath("$.price").value(1000))
+                .andExpect(jsonPath("$.otherPersonProfileUrl").value("otherPersonProfileUrl"))
                 .andDo(document("chat-enter",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -124,7 +125,9 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("title").type(JsonFieldType.STRING)
                                         .description("상점 제목"),
                                 fieldWithPath("price").type(JsonFieldType.NUMBER)
-                                        .description("상품 가격")
+                                        .description("상품 가격"),
+                                fieldWithPath("otherPersonProfileUrl").type(JsonFieldType.STRING)
+                                        .description("상대방 프로필")
                         )));
     }
 
@@ -185,7 +188,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     void getChatRoom() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L, TransactionType.DELIVERY.name(), "title", 1000);
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L, TransactionType.DELIVERY.name(), "title", 1000, "otherPersonProfileUrl");
         given(chatService.getChatRoomByListSelection(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -210,6 +213,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.transactionType").value("DELIVERY"))
                 .andExpect(jsonPath("$.title").value("title"))
                 .andExpect(jsonPath("$.price").value(1000))
+                .andExpect(jsonPath("$.otherPersonProfileUrl").value("otherPersonProfileUrl"))
                 .andDo(document("chat-getChatRoom",
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -256,7 +260,9 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("title").type(JsonFieldType.STRING)
                                         .description("상점 제목"),
                                 fieldWithPath("price").type(JsonFieldType.NUMBER)
-                                        .description("상품 가격")
+                                        .description("상품 가격"),
+                                fieldWithPath("otherPersonProfileUrl").type(JsonFieldType.STRING)
+                                        .description("상대방 프로필 url")
 
                         )));
     }
