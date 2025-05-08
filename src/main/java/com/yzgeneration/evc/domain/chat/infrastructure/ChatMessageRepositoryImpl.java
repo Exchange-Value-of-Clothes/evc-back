@@ -204,7 +204,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
 
         return new ChatMessageSliceResponse(
                 chatRoomId, memberId, ownerId, new SliceImpl<>(response, PageRequest.of(0, size), hasNext), lastCreatedAt, otherPersonId,
-        itemType, itemId, Objects.requireNonNull(chatRoomMetaData).getTransactionType().name(), chatRoomMetaData.getTitle(), chatRoomMetaData.getPrice());
+        itemType, itemId, Objects.requireNonNull(chatRoomMetaData).getTransactionType().name(), chatRoomMetaData.getTitle(), chatRoomMetaData.getPrice(), chatRoomMetaData.getOtherPersonProfileUrl());
     }
 
 
