@@ -34,3 +34,12 @@ include::{snippets}/get-delivery-order/path-parameters.adoc[]
 === HTTP Response
 include::{snippets}/get-delivery-order/http-response.adoc[]
 include::{snippets}/get-delivery-order/response-fields.adoc[]
+
+== 배송 목록 조회
+=== HTTP Request
+include::{snippets}/get-delivery-orders/http-request.adoc[]
+include::{snippets}/get-delivery-orders/query-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/get-delivery-orders/http-response.adoc[]
+include::{snippets}/get-delivery-orders/response-fields.adoc[]
