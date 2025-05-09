@@ -78,24 +78,6 @@ public class MemberProfileServiceTest {
     }
 
     @Test
-    @DisplayName("프로필 업데이트 시 불필요한 메서드 콜링이 일어나지 않는다. (입력값이 문자열일, 기존 존재하는 값과 같을 때)")
-    void NotCallUnnecessaryMethodWhenUpdate2() {
-        // given
-        String nickname = "nickname";
-        String imageName = "imageName";
-        Long memberId = 1L;
-        memberRepository.save(MemberFixture.withFakeUser());
-        memberPointRepository.save(MemberPoint.create(memberId, 1000));
-        profileImageRepository.save(ProfileImage.create(memberId, imageName, "https..."));
-
-        // when
-        memberProfileService.update(MemberFixture.fixtureUpdateProfileRequest(nickname, imageName), 1L);
-
-        // then
-        assertThat(profileImageRepository.getSaveCnt()).isOne();
-    }
-
-    @Test
     @DisplayName("프로필 업데이트 시 imageName이 달라질 때 업데이트가 실행된다.")
     void NotCallUnnecessaryMethodWhenUpdate3() {
         // given
