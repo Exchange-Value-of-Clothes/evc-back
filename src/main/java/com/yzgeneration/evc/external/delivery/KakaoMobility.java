@@ -2,7 +2,7 @@ package com.yzgeneration.evc.external.delivery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yzgeneration.evc.common.CustomUtil;
-import com.yzgeneration.evc.domain.delivery.dto.DeliveryCreate;
+import com.yzgeneration.evc.domain.delivery.dto.MobilityCreate;
 import com.yzgeneration.evc.exception.ExternalApiException;
 import com.yzgeneration.evc.exception.ExternalApiExceptionV2;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -50,8 +48,8 @@ public class KakaoMobility implements Mobility {
     }
 
     @Override
-    public KakaoMobilityOrderResponse delivery(DeliveryCreate deliveryCreate, String orderId) {
-        KakaoMobilityOrder kakaoMobilityOrder = KakaoMobilityOrder.from(deliveryCreate,orderId);
+    public KakaoMobilityOrderResponse delivery(MobilityCreate mobilityCreate) {
+        KakaoMobilityOrder kakaoMobilityOrder = KakaoMobilityOrder.from(mobilityCreate);
 
         String authorization = getAuthorization();
         RestClient restClient = RestClient.builder()

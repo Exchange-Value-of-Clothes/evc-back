@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString
 @Builder
 public class Delivery {
 

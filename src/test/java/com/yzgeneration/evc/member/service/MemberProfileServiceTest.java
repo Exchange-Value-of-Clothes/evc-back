@@ -3,13 +3,11 @@ package com.yzgeneration.evc.member.service;
 import com.yzgeneration.evc.domain.image.implement.ProfileImageUpdater;
 import com.yzgeneration.evc.domain.image.model.ProfileImage;
 import com.yzgeneration.evc.domain.member.dto.ProfileResponse;
-import com.yzgeneration.evc.domain.member.dto.UpdateProfileRequest;
-import com.yzgeneration.evc.domain.member.dto.UpdateProfileResponse;
 import com.yzgeneration.evc.domain.member.implement.MemberUpdater;
 import com.yzgeneration.evc.domain.member.service.MemberProfileService;
 import com.yzgeneration.evc.domain.point.model.MemberPoint;
 import com.yzgeneration.evc.fixture.MemberFixture;
-import com.yzgeneration.evc.mock.image.FakeProfileImageRepository;
+import com.yzgeneration.evc.mock.image.StubProfileImageRepository;
 import com.yzgeneration.evc.mock.member.FakeMemberRepository;
 import com.yzgeneration.evc.mock.member.StubMemberProfileRepository;
 import com.yzgeneration.evc.mock.point.FakeMemberPointRepository;
@@ -24,13 +22,13 @@ public class MemberProfileServiceTest {
     private MemberProfileService memberProfileService;
     private FakeMemberRepository memberRepository;
     private FakeMemberPointRepository memberPointRepository;
-    private FakeProfileImageRepository profileImageRepository;
+    private StubProfileImageRepository profileImageRepository;
 
     @BeforeEach
     void init() {
         memberRepository = new FakeMemberRepository();
         memberPointRepository = new FakeMemberPointRepository();
-        profileImageRepository = new FakeProfileImageRepository();
+        profileImageRepository = new StubProfileImageRepository();
         memberProfileService = new MemberProfileService(
                 new StubMemberProfileRepository(),
                 new MemberUpdater(memberRepository),

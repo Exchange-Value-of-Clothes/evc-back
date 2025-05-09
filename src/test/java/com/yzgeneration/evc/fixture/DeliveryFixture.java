@@ -51,8 +51,8 @@ public class DeliveryFixture extends Fixture {
                 .sample();
     }
 
-    public static DeliveryCreate createDeliveryCreate(Delivery delivery) {
-        return fixtureMonkey.giveMeBuilder(DeliveryCreate.class)
+    public static MobilityCreate createDeliveryCreate(Delivery delivery) {
+        return fixtureMonkey.giveMeBuilder(MobilityCreate.class)
                 .set("orderId", delivery.getOrderId())
                 .set("price", 1000)
                 .set("itemName", "itemName")

@@ -1,10 +1,10 @@
 package com.yzgeneration.evc.external.delivery;
 
 
-import com.yzgeneration.evc.domain.delivery.dto.DeliveryCreate;
+import com.yzgeneration.evc.domain.delivery.dto.MobilityCreate;
 
 public interface Mobility {
-    KakaoMobilityOrderResponse delivery(DeliveryCreate create, String orderId);
+    KakaoMobilityOrderResponse delivery(MobilityCreate create);
 
     GetKakaoMobilityOrder get(String orderId);
 }
