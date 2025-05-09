@@ -8,8 +8,9 @@ import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.external.delivery.GetKakaoMobilityOrder;
 import com.yzgeneration.evc.external.delivery.KakaoMobilityOrderResponse;
 import com.yzgeneration.evc.mock.delivery.SpyDeliveryRepository;
+import com.yzgeneration.evc.mock.delivery.StubDeliveryViewRepository;
 import com.yzgeneration.evc.mock.delivery.StubMobility;
-import org.assertj.core.api.Assertions;
+import com.yzgeneration.evc.mock.image.StubProfileImageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ public class DeliveryServiceTest {
 
     @BeforeEach
     void setUp() {
-        deliveryService = new DeliveryService(new DeliveryProcessor(new SpyDeliveryRepository()), new StubMobility());
+        deliveryService = new DeliveryService(new DeliveryProcessor(new SpyDeliveryRepository(), new StubDeliveryViewRepository()), new StubMobility(), new StubProfileImageRepository());
     }
 
     @Test

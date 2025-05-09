@@ -9,8 +9,6 @@ import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.domain.image.infrastructure.entity.QProfileImageEntity;
 
-import com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.QAuctionItemEntity;
-import com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.QUsedItemEntity;
 import com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;

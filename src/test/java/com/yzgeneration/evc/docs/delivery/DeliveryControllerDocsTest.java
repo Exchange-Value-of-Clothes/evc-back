@@ -1,15 +1,22 @@
 package com.yzgeneration.evc.docs.delivery;
 
+import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.docs.RestDocsSupport;
 import com.yzgeneration.evc.domain.delivery.controller.DeliveryController;
+import com.yzgeneration.evc.domain.delivery.model.DeliveryView;
 import com.yzgeneration.evc.domain.delivery.service.DeliveryService;
 import com.yzgeneration.evc.fixture.DeliveryFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -19,8 +26,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -86,8 +92,7 @@ public class DeliveryControllerDocsTest extends RestDocsSupport {
                 .willReturn(DeliveryFixture.createGetKakaoMobilityOrder());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/deliveries/{orderId}", "orderId")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .with(csrf()))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.requestId").value("requestId"))
                 .andExpect(jsonPath("$.partnerOrderId").value("partnerOrderId"))
@@ -151,4 +156,55 @@ public class DeliveryControllerDocsTest extends RestDocsSupport {
                         )));
 
     }
+
+    @Test
+    @DisplayName("나의 주문들을 조회한다.")
+    void get_orders() throws Exception {
+        List<DeliveryView> content = List.of(DeliveryView.builder().orderId("orderId").title("title").imageUrl("imageUrl").memberId(1L).createdAt(LocalDateTime.of(2025, 5, 10, 10, 10)).build());
+        SliceResponse<DeliveryView> response = new SliceResponse<>(
+                new SliceImpl<>(content, PageRequest.of(0,10), true), LocalDateTime.MIN);
+
+        given(deliveryService.findList(any(), any()))
+                .willReturn(response);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/deliveries")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("cursor", LocalDateTime.MIN.toString()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.content[0].orderId").value("orderId"))
+                .andExpect(jsonPath("$.content[0].title").value("title"))
+                .andExpect(jsonPath("$.content[0].imageUrl").value("imageUrl"))
+                .andExpect(jsonPath("$.content[0].createdAt").value("2025-05-10T10:10:00"))
+
+                .andDo(document("get-delivery-orders",
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("cursor")
+                                        .optional()
+                                        .description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")
+                        ),
+                        responseFields(
+                                fieldWithPath("content[].orderId").type(JsonFieldType.STRING)
+                                        .description("주문 아이디"),
+                                fieldWithPath("content[].title").type(JsonFieldType.STRING)
+                                        .description("상품 제목"),
+                                fieldWithPath("content[].imageUrl").type(JsonFieldType.STRING)
+                                        .description("상대방 프로필 이미지 url"),
+                                fieldWithPath("content[].memberId").type(JsonFieldType.NUMBER)
+                                        .description("상대방 아이디"),
+                                fieldWithPath("content[].createdAt").type(JsonFieldType.STRING)
+                                        .description("생성 시간"),
+                                fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재 여부"),
+                                fieldWithPath("size").type(JsonFieldType.NUMBER)
+                                        .description("한 페이지당 요소 개수"),
+                                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER)
+                                        .description("현재 페이지의 요소 개수"),
+                                fieldWithPath("cursor").type(JsonFieldType.STRING)
+                                        .description("다음 페이지를 위한 커서 값")
+                        )));
+
+    }
+
+
 }

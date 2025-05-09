@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.external.delivery;
 
-import com.yzgeneration.evc.domain.delivery.dto.DeliveryCreate;
+import com.yzgeneration.evc.domain.delivery.dto.MobilityCreate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,9 +31,9 @@ public class KakaoMobilityOrder {
         this.dropoff = dropOff;
     }
 
-    public static KakaoMobilityOrder from(DeliveryCreate request, String orderId) {
+    public static KakaoMobilityOrder from(MobilityCreate request) {
         return KakaoMobilityOrder.builder()
-                .partnerOrderId(orderId)
+                .partnerOrderId(request.getOrderId())
                 .orderType("QUICK")
                 .productInfo(new ProductInfo(request.getPrice(), request.getItemName()))
                 .pickup(new Pickup(request.getSenderAddress(), request.getSenderAddressDetail(), request.getSenderLatitude(), request.getReceiverLongitude(), request.getSenderName(), request.getSenderPhone()))

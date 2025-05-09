@@ -7,17 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class FakeProfileImageRepository implements ProfileImageRepository {
+public class StubProfileImageRepository implements ProfileImageRepository {
 
     private final List<ProfileImage> data = new ArrayList<>();
     private int saveCnt = 0;
 
     @Override
     public Optional<ProfileImage> findById(Long memberId) {
-        for (ProfileImage datum : data) {
-            if(datum.getMemberId().equals(memberId)) return Optional.of(datum);
-        }
-        return Optional.empty();
+        return Optional.of(ProfileImage.builder().imageUrl("imageUrl").memberId(memberId).build());
     }
 
     @Override

@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeliveryCreate {
+public class MobilityCreate {
     private String orderId;
     private int price;
     private String itemName;
