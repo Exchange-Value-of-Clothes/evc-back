@@ -1,6 +1,7 @@
 package com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity;
 
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
+import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
@@ -28,6 +29,9 @@ public class AuctionItemEntity {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
+    @Enumerated(EnumType.STRING)
+    private TransactionMode transactionMode;
+
     private Long viewCount;
 
     @Embedded
@@ -49,6 +53,7 @@ public class AuctionItemEntity {
                 .memberId(auctionItem.getMemberId())
                 .auctionItemDetailsEntity(AuctionItemDetailsEntity.from(auctionItem.getAuctionItemDetails()))
                 .transactionType(auctionItem.getTransactionType())
+                .transactionMode(auctionItem.getTransactionMode())
                 .auctionItemPriceDetailsEntity(AuctionItemPriceDetailsEntity.from(auctionItem.getAuctionItemPriceDetails()))
                 .transactionStatus(auctionItem.getTransactionStatus())
                 .itemStatus(auctionItem.getItemStatus())
@@ -63,6 +68,7 @@ public class AuctionItemEntity {
                 .memberId(memberId)
                 .auctionItemDetails(auctionItemDetailsEntity.toModel())
                 .transactionStatus(transactionStatus)
+                .transactionMode(transactionMode)
                 .auctionItemPriceDetails(auctionItemPriceDetailsEntity.toModel())
                 .transactionStatus((transactionStatus))
                 .itemStatus(itemStatus)
