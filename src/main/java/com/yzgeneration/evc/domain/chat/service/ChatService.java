@@ -43,7 +43,10 @@ public class ChatService {
 
     public ChatMessageSliceResponse getChatRoomByListSelection(Long chatRoomId, LocalDateTime cursor, Long memberId) {
         ChatRoom chatRoom = chatRoomManager.getById(chatRoomId);
+        System.out.println("chatRoom.getId() = " + chatRoom.getId());
+        System.out.println("chatRoom.getItemId = " + chatRoom.getItemId());
         Long otherPersonId = !Objects.equals(chatRoom.getOwnerId(), memberId) ? chatRoom.getOwnerId() : chatRoom.getParticipantId();
+        System.out.println("otherPersonId = " + otherPersonId);
         return chatMessageRepository.getLastMessages(memberId, chatRoomId, cursor, chatRoom.getOwnerId(), chatRoom.getItemType(), chatRoom.getItemId(), otherPersonId);
     }
 

@@ -21,6 +21,7 @@ public class ChatEnter implements Validatable {
         this.itemId = itemId;
         this.itemType = itemType;
         this.ownerId = ownerId;
+        valid();
     }
 
     @Override
