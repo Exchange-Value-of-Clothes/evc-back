@@ -17,7 +17,7 @@ public class ChatRoomListResponse {
     private String lastMessage;
     private Long otherMemberId;
     private String otherNickname;
-    private String profileImageUrl;
+    private String profileImageName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 

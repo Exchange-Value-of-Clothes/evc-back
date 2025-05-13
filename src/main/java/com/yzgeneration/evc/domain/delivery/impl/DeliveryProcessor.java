@@ -40,10 +40,10 @@ public class DeliveryProcessor {
     }
 
     @Transactional
-    public void order(Delivery delivery, String title, String profileImageUrl, Long memberId) {
+    public void order(Delivery delivery, String title, String imageName, Long memberId) {
         delivery.order();
         deliveryRepository.save(delivery);
-        deliveryViewRepository.save(DeliveryView.of(delivery.getOrderId(), title, profileImageUrl, memberId));
+        deliveryViewRepository.save(DeliveryView.of(delivery.getOrderId(), title, imageName, memberId));
     }
 
     public SliceResponse<DeliveryView> findList(Long memberId, LocalDateTime cursor) {

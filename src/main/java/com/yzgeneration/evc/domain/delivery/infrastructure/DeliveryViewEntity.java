@@ -20,15 +20,15 @@ public class DeliveryViewEntity {
     @Id
     private String orderId;
     private String title;
-    private String imageUrl;
+    private String imageName;
     private Long memberId;
     private LocalDateTime createdAt;
 
     @Builder
-    private DeliveryViewEntity(String orderId, String title, String imageUrl, Long memberId, LocalDateTime createdAt) {
+    private DeliveryViewEntity(String orderId, String title, String imageName, Long memberId, LocalDateTime createdAt) {
         this.orderId = orderId;
         this.title = title;
-        this.imageUrl = imageUrl;
+        this.imageName = imageName;
         this.memberId = memberId;
         this.createdAt = createdAt;
     }
@@ -37,7 +37,7 @@ public class DeliveryViewEntity {
         return DeliveryViewEntity.builder()
                 .orderId(deliveryView.getOrderId())
                 .title(deliveryView.getTitle())
-                .imageUrl(deliveryView.getImageUrl())
+                .imageName(deliveryView.getImageName())
                 .memberId(deliveryView.getMemberId())
                 .createdAt(deliveryView.getCreatedAt())
                 .build();
@@ -47,7 +47,7 @@ public class DeliveryViewEntity {
         return DeliveryView.builder()
                 .orderId(orderId)
                 .title(title)
-                .imageUrl(imageUrl)
+                .imageName(imageName)
                 .memberId(memberId)
                 .createdAt(createdAt)
                 .build();

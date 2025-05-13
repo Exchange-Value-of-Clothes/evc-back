@@ -43,7 +43,6 @@ public class ChatController {
         chatService.send(accessor, chatting);
     }
 
-    // TODO 모든 인원이 다 나가면 채팅방 및 채팅멤버 삭제
     @PatchMapping("/{chatRoomId}/exit")
     public CommonResponse exit(@PathVariable("chatRoomId") Long chatRoomId , @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
         chatService.exit(chatRoomId, memberPrincipal.getId());

@@ -74,8 +74,8 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
                         Expressions.stringTemplate(
                                 "CASE WHEN {0} = {1} THEN {2} ELSE {3} END",
                                 chatRoom.ownerId, memberId,
-                                participantProfile.imageUrl,
-                                ownerProfile.imageUrl)
+                                participantProfile.name,
+                                ownerProfile.name)
                 ))
                 .from(chatMember)
                 .join(chatRoom).on(chatMember.chatRoomId.eq(chatRoom.id))
@@ -122,7 +122,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
             if (meta != null) {
                 dto.setOtherMemberId(meta.getOtherMemberId());
                 dto.setOtherNickname(meta.getNickname());
-                dto.setProfileImageUrl(meta.getProfileImageUrl());
+                dto.setProfileImageName(meta.getProfileImageUrl());
             }
         }
 
@@ -179,30 +179,30 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
         if (itemType == ItemType.USEDITEM) {
             chatRoomMetaData = jpaQueryFactory.select(Projections.constructor(
                     ChatRoomMetaData.class,
-                    usedItemEntity.usedItemTransactionEntity.transactionType,
+                    usedItemEntity.usedItemTransactionEntity.transactionMode,
                     usedItemEntity.itemDetailsEntity.title,
                     usedItemEntity.itemDetailsEntity.price,
-                    profileImageEntity.imageUrl
+                    profileImageEntity.name
                     )).from(usedItemEntity)
                     .where(usedItemEntity.id.eq(itemId))
-                    .join(profileImageEntity).on(profileImageEntity.memberId.eq(otherPersonId))
+                    .join(profileImageEntity).on(profileImageEntity.memberId.eq(usedItemEntity.memberId))
                     .fetchFirst();
         } else {
             chatRoomMetaData = jpaQueryFactory.select(Projections.constructor(
                             ChatRoomMetaData.class,
-                            auctionItemEntity.transactionType,
+                            auctionItemEntity.transactionMode,
                             auctionItemEntity.auctionItemDetailsEntity.title,
                             auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
-                            profileImageEntity.imageUrl
+                            profileImageEntity.name
                     )).from(auctionItemEntity)
                     .where(auctionItemEntity.id.eq(itemId))
-                    .join(profileImageEntity).on(profileImageEntity.memberId.eq(otherPersonId))
+                    .join(profileImageEntity).on(profileImageEntity.memberId.eq(auctionItemEntity.memberId))
                     .fetchFirst();
         }
 
         return new ChatMessageSliceResponse(
                 chatRoomId, memberId, ownerId, new SliceImpl<>(response, PageRequest.of(0, size), hasNext), lastCreatedAt, otherPersonId,
-        itemType, itemId, Objects.requireNonNull(chatRoomMetaData).getTransactionType().name(), chatRoomMetaData.getTitle(), chatRoomMetaData.getPrice(), chatRoomMetaData.getOtherPersonProfileUrl());
+        itemType, itemId, Objects.requireNonNull(chatRoomMetaData).getTransactionMode().name(), chatRoomMetaData.getTitle(), chatRoomMetaData.getPrice(), chatRoomMetaData.getOtherPersonProfileName());
     }
 
 

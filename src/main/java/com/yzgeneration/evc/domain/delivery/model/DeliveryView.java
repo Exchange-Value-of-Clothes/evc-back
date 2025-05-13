@@ -11,16 +11,16 @@ import java.time.LocalDateTime;
 public class DeliveryView {
     private String orderId;
     private String title;
-    private String imageUrl;
+    private String imageName;
     private Long memberId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
-    public static DeliveryView of(String orderId, String title, String imageUrl, Long memberId) {
+    public static DeliveryView of(String orderId, String title, String imageName, Long memberId) {
         return DeliveryView.builder()
                 .orderId(orderId)
                 .title(title)
-                .imageUrl(imageUrl)
+                .imageName(imageName)
                 .memberId(memberId)
                 .createdAt(LocalDateTime.now())
                 .build();

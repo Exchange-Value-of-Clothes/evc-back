@@ -41,8 +41,8 @@ public class DeliveryService {
 
     private void storeForInquiry(Long buyerId, Long sellerId, Long memberId, Delivery delivery, MobilityCreate mobilityCreate) {
         Long otherPersonId = memberId.equals(buyerId) ? sellerId : memberId;
-        String profileImageUrl = profileImageRepository.findById(otherPersonId).get().getImageUrl();
-        deliveryProcessor.order(delivery, mobilityCreate.getItemName(), profileImageUrl, otherPersonId);
+        String imageName = profileImageRepository.findById(otherPersonId).get().getName();
+        deliveryProcessor.order(delivery, mobilityCreate.getItemName(), imageName, otherPersonId);
     }
 
     public SliceResponse<DeliveryView> findList(LocalDateTime cursor, Long memberId) {
