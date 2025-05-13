@@ -6,6 +6,7 @@ import com.yzgeneration.evc.domain.point.dto.PointChargeOrderRequest;
 import com.yzgeneration.evc.domain.point.dto.PointChargeOrderResponse;
 import com.yzgeneration.evc.domain.point.service.PointChargeService;
 import com.yzgeneration.evc.domain.point.model.PointCharge;
+import com.yzgeneration.evc.external.pg.PaymentStatusChanged;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,10 +37,10 @@ public class PointChargeController {
 
 
     // 웹훅
-//    @PostMapping("/webhook")
-//    public void webhook(@RequestBody PaymentStatusChanged paymentStatusChanged) {
-//        System.out.println("paymentStatusChanged.toString() = " + paymentStatusChanged.toString());
-//    }
+    @PostMapping("/webhook")
+    public void webhook(@RequestBody PaymentStatusChanged paymentStatusChanged) {
+        System.out.println("paymentStatusChanged.toString() = " + paymentStatusChanged.toString());
+    }
 
 
 }
