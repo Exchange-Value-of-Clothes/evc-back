@@ -160,7 +160,7 @@ public class DeliveryControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("나의 주문들을 조회한다.")
     void get_orders() throws Exception {
-        List<DeliveryView> content = List.of(DeliveryView.builder().orderId("orderId").title("title").imageUrl("imageUrl").memberId(1L).createdAt(LocalDateTime.of(2025, 5, 10, 10, 10)).build());
+        List<DeliveryView> content = List.of(DeliveryView.builder().orderId("orderId").title("title").imageName("imageName").memberId(1L).createdAt(LocalDateTime.of(2025, 5, 10, 10, 10)).build());
         SliceResponse<DeliveryView> response = new SliceResponse<>(
                 new SliceImpl<>(content, PageRequest.of(0,10), true), LocalDateTime.MIN);
 
@@ -173,7 +173,7 @@ public class DeliveryControllerDocsTest extends RestDocsSupport {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.content[0].orderId").value("orderId"))
                 .andExpect(jsonPath("$.content[0].title").value("title"))
-                .andExpect(jsonPath("$.content[0].imageUrl").value("imageUrl"))
+                .andExpect(jsonPath("$.content[0].imageName").value("imageName"))
                 .andExpect(jsonPath("$.content[0].createdAt").value("2025-05-10T10:10:00"))
 
                 .andDo(document("get-delivery-orders",
@@ -188,8 +188,8 @@ public class DeliveryControllerDocsTest extends RestDocsSupport {
                                         .description("주문 아이디"),
                                 fieldWithPath("content[].title").type(JsonFieldType.STRING)
                                         .description("상품 제목"),
-                                fieldWithPath("content[].imageUrl").type(JsonFieldType.STRING)
-                                        .description("상대방 프로필 이미지 url"),
+                                fieldWithPath("content[].imageName").type(JsonFieldType.STRING)
+                                        .description("상대방 프로필 이미지 이름"),
                                 fieldWithPath("content[].memberId").type(JsonFieldType.NUMBER)
                                         .description("상대방 아이디"),
                                 fieldWithPath("content[].createdAt").type(JsonFieldType.STRING)

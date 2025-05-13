@@ -190,7 +190,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
         } else {
             chatRoomMetaData = jpaQueryFactory.select(Projections.constructor(
                             ChatRoomMetaData.class,
-                            auctionItemEntity.transactionType, //??
+                            auctionItemEntity.transactionMode,
                             auctionItemEntity.auctionItemDetailsEntity.title,
                             auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
                             profileImageEntity.name

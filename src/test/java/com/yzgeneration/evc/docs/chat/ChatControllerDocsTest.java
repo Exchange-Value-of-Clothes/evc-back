@@ -9,6 +9,7 @@ import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
 import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.fixture.ChatFixture;
 
@@ -52,7 +53,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     void enter() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L, TransactionType.DELIVERY.name(), "title", 1000, "otherPersonProfileUrl");
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L, TransactionMode.SELL.name(), "title", 1000, "otherPersonProfileUrl");
         given(chatService.getChatRoomByTradeRequest(any(), any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -74,10 +75,10 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.cursor").value("+1000000000-01-01T00:00:00"))
                 .andExpect(jsonPath("$.itemType").value("USEDITEM"))
                 .andExpect(jsonPath("$.itemId").value(1))
-                .andExpect(jsonPath("$.transactionType").value("DELIVERY"))
+                .andExpect(jsonPath("$.transactionMode").value("SELL"))
                 .andExpect(jsonPath("$.title").value("title"))
                 .andExpect(jsonPath("$.price").value(1000))
-                .andExpect(jsonPath("$.otherPersonProfileUrl").value("otherPersonProfileUrl"))
+                .andExpect(jsonPath("$.otherPersonProfileName").value("otherPersonProfileUrl"))
                 .andDo(document("chat-enter",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -120,14 +121,14 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                         .description("상품 타입"),
                                 fieldWithPath("itemId").type(JsonFieldType.NUMBER)
                                         .description("상품 아이디"),
-                                fieldWithPath("transactionType").type(JsonFieldType.STRING)
-                                        .description("거래 타입"),
+                                fieldWithPath("transactionMode").type(JsonFieldType.STRING)
+                                        .description("거래 방법"),
                                 fieldWithPath("title").type(JsonFieldType.STRING)
                                         .description("상점 제목"),
+                                fieldWithPath("otherPersonProfileName").type(JsonFieldType.STRING)
+                                        .description("상대방 프로필 이름"),
                                 fieldWithPath("price").type(JsonFieldType.NUMBER)
-                                        .description("상품 가격"),
-                                fieldWithPath("otherPersonProfileUrl").type(JsonFieldType.STRING)
-                                        .description("상대방 프로필")
+                                        .description("상품 가격")
                         )));
     }
 
@@ -165,7 +166,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("content[].otherNickname").type(JsonFieldType.STRING)
                                         .optional()
                                         .description("상대방 프로필 이미지 (없을 수도 있음)"),
-                                fieldWithPath("content[].profileImageUrl").type(JsonFieldType.STRING)
+                                fieldWithPath("content[].profileImageName").type(JsonFieldType.STRING)
                                         .optional()
                                         .description("중고상품 아이디 (없을 수도 있음)"),
                                 fieldWithPath("content[].lastMessage").type(JsonFieldType.STRING)
@@ -188,7 +189,7 @@ public class ChatControllerDocsTest extends RestDocsSupport {
     void getChatRoom() throws Exception {
         List<ChatMessageResponse> response = new ArrayList<>();
         response.add(new ChatMessageResponse(1L, true, "message", LocalDateTime.MIN));
-        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<ChatMessageResponse>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L, TransactionType.DELIVERY.name(), "title", 1000, "otherPersonProfileUrl");
+        ChatMessageSliceResponse chatMessageSliceResponse = new ChatMessageSliceResponse(1L, 1L, 2L, new SliceImpl<>(response, PageRequest.of(0, 10), false), LocalDateTime.MIN, 2L, ItemType.USEDITEM, 1L, TransactionMode.SELL.name(), "title", 1000, "otherPersonProfileUrl");
         given(chatService.getChatRoomByListSelection(any(), any(), any()))
                 .willReturn(chatMessageSliceResponse);
 
@@ -210,10 +211,10 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.cursor").value("+1000000000-01-01T00:00:00"))
                 .andExpect(jsonPath("$.itemType").value("USEDITEM"))
                 .andExpect(jsonPath("$.itemId").value(1))
-                .andExpect(jsonPath("$.transactionType").value("DELIVERY"))
+                .andExpect(jsonPath("$.transactionMode").value("SELL"))
                 .andExpect(jsonPath("$.title").value("title"))
                 .andExpect(jsonPath("$.price").value(1000))
-                .andExpect(jsonPath("$.otherPersonProfileUrl").value("otherPersonProfileUrl"))
+                .andExpect(jsonPath("$.otherPersonProfileName").value("otherPersonProfileUrl"))
                 .andDo(document("chat-getChatRoom",
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -255,13 +256,13 @@ public class ChatControllerDocsTest extends RestDocsSupport {
                                         .description("상품 타입"),
                                 fieldWithPath("itemId").type(JsonFieldType.NUMBER)
                                         .description("상품 아이디"),
-                                fieldWithPath("transactionType").type(JsonFieldType.STRING)
-                                        .description("거래 타입"),
+                                fieldWithPath("transactionMode").type(JsonFieldType.STRING)
+                                        .description("거래 방법"),
                                 fieldWithPath("title").type(JsonFieldType.STRING)
                                         .description("상점 제목"),
                                 fieldWithPath("price").type(JsonFieldType.NUMBER)
                                         .description("상품 가격"),
-                                fieldWithPath("otherPersonProfileUrl").type(JsonFieldType.STRING)
+                                fieldWithPath("otherPersonProfileName").type(JsonFieldType.STRING)
                                         .description("상대방 프로필 url")
 
                         )));
