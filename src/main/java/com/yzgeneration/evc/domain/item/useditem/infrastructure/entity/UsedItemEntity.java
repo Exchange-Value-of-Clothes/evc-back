@@ -36,6 +36,7 @@ public class UsedItemEntity {
 
     public static UsedItemEntity from(UsedItem usedItem) {
         return UsedItemEntity.builder()
+                .id(usedItem.getId())
                 .memberId(usedItem.getMemberId())
                 .itemDetailsEntity(ItemDetailsEntity.from(usedItem.getItemDetails()))
                 .usedItemTransactionEntity(UsedItemTransactionEntity.from(usedItem.getUsedItemTransaction()))

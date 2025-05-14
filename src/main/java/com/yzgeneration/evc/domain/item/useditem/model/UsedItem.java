@@ -1,5 +1,6 @@
 package com.yzgeneration.evc.domain.item.useditem.model;
 
+import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import lombok.Builder;
@@ -34,5 +35,13 @@ public class UsedItem {
                 .itemStats(ItemStats.create())
                 .createdAt(createAt)
                 .build();
+    }
+
+    public void updateTransactionStatus(TransactionStatus transactionMode) {
+        this.usedItemTransaction.updateTransactionStatus(transactionMode);
+    }
+
+    public void updateItemStatus(ItemStatus itemStatus){
+        this.itemStatus = itemStatus;
     }
 }
