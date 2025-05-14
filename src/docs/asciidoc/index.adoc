@@ -23,7 +23,7 @@ include::authentication/authentication.adoc[]
 [[UsedItem-API]]
 == UsedItem API
 
-include::usedItem/usedItem.adoc[]
+include::useditem/useditem.adoc[]
 
 [[AuctionItem-API]]
 == AuctionItem API
