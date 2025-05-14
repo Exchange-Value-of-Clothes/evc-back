@@ -43,11 +43,16 @@ public class AuctionItem {
                 .auctionItemDetails(AuctionItemDetails.create(createAuctionItemRequest))
                 .transactionType(TransactionType.valueOf(createAuctionItemRequest.getTransactionType()))
                 .transactionMode(TransactionMode.AUCTION)
+                .viewCount(0L)
                 .auctionItemPriceDetails(AuctionItemPriceDetails.create(createAuctionItemRequest))
                 .transactionStatus(TransactionStatus.ONGOING)
                 .itemStatus(ItemStatus.ACTIVE)
                 .startTime(now)
                 .endTime(now.plusDays(1))
                 .build();
+    }
+
+    public void updateItemStatus(ItemStatus itemStatus) {
+        this.itemStatus = itemStatus;
     }
 }

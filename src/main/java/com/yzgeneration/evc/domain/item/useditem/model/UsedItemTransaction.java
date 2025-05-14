@@ -24,4 +24,8 @@ public class UsedItemTransaction {
                 .transactionStatus(TransactionStatus.ONGOING)
                 .build();
     }
+
+    public void updateTransactionStatus(TransactionStatus transactionStatus) {
+        this.transactionStatus = transactionStatus;
+    }
 }

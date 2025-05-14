@@ -8,9 +8,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetMyOrMemberUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.UsedItemEntity;
 import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -154,7 +155,8 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                 .from(usedItemEntity)
                 .join(memberEntity)
                 .on(memberEntity.id.eq(usedItemEntity.memberId))
-                .where(usedItemEntity.id.eq(usedItemId))
+                .where(usedItemEntity.id.eq(usedItemId)
+                        .and(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
                 .fetchFirst();
 
         return Optional.ofNullable(usedItemResponse);
@@ -212,7 +214,8 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     public Long countUsedItemByMemberId(Long memberId) {
         return jpaQueryFactory.select(usedItemEntity.count())
                 .from(usedItemEntity)
-                .where(usedItemEntity.memberId.eq(memberId))
+                .where(usedItemEntity.memberId.eq(memberId)
+                        .and(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
                 .fetchOne();
     }
 
