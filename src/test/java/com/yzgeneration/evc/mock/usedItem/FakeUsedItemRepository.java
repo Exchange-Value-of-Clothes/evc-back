@@ -95,4 +95,5 @@ public class FakeUsedItemRepository implements UsedItemRepository {
     public Long countUsedItemByMemberId(Long memberId) {
         return null;
     }
+
 }

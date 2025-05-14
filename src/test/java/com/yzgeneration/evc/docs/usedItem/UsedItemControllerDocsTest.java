@@ -6,9 +6,9 @@ import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.domain.item.useditem.controller.UsedItemController;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
 import org.junit.jupiter.api.DisplayName;
@@ -52,7 +52,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(document("usedItem-create",
+                .andDo(document("useditem-create",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
@@ -90,7 +90,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                         .get("/api/useditems")
                         .param("cursor", LocalDateTime.MIN.toString()))
                 .andExpect(status().isOk())
-                .andDo(document("usedItems-get",
+                .andDo(document("useditems-get",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         queryParameters(parameterWithName("cursor").description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
@@ -154,7 +154,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/useditems/{usedItemId}", 1L))
                 .andExpect(status().isOk())
-                .andDo(document("usedItem-get",
+                .andDo(document("useditem-get",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(parameterWithName("usedItemId").description("중고상품의 id")),
@@ -208,7 +208,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                         .param("q", "query")
                         .param("cursor", LocalDateTime.MIN.toString()))
                 .andExpect(status().isOk())
-                .andDo(document("usedItems-search",
+                .andDo(document("useditems-search",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         queryParameters(
@@ -243,6 +243,38 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("조회된 데이터 개수"),
                                 fieldWithPath("cursor").type(JsonFieldType.STRING)
                                         .description("다음 페이지 커서")
+                        )));
+    }
+
+    @Test
+    @DisplayName("중고상품의 transaction status 변경")
+    void updateUsedItemTransactionStatus() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/useditems/{usedItemId}", 1L)
+                        .queryParam("transactionStatus", TransactionStatus.RESERVE.name()))
+                .andExpect(status().isOk())
+                .andDo(document("useditem-transactionstatus-update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(parameterWithName("usedItemId").description("중고상품의 id")),
+                        queryParameters(parameterWithName("transactionStatus").description("변경할 Transaction Status (ONGOING, RESERVE, COMPLETE)")),
+                        responseFields(
+                                fieldWithPath("success").type(JsonFieldType.BOOLEAN)
+                                        .description("성공여부")
+                        )));
+    }
+
+    @Test
+    @DisplayName("중고상품 삭제")
+    void deleteAuctionItem() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/useditems/{usedItemId}", 1L))
+                .andExpect(status().isOk())
+                .andDo(document("useditem-delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(parameterWithName("usedItemId").description("중고상품의 id")),
+                        responseFields(
+                                fieldWithPath("success").type(JsonFieldType.BOOLEAN)
+                                        .description("성공여부")
                         )));
     }
 }

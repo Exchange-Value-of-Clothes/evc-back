@@ -29,6 +29,7 @@ public enum ErrorCode {
 
     //403 Forbidden
     INACTIVE_MEMBER(HttpStatus.FORBIDDEN, "031", "비활성화 된 계정입니다."),
+    ITEM_ACCESS_DENIED(HttpStatus.FORBIDDEN, "032", "본인의 물품의 상태만 수정할 수 있습니다."),
 
     //404 NotFound
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "041", "해당 회원이 존재하지 않습니다."),

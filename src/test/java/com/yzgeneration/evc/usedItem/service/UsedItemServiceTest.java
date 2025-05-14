@@ -12,6 +12,7 @@ import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedIt
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
+import com.yzgeneration.evc.domain.item.useditem.implement.UsedItemStatusUpdater;
 import com.yzgeneration.evc.domain.item.useditem.implement.UsedItemReader;
 import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
@@ -35,8 +36,9 @@ class UsedItemServiceTest {
         UsedItemReader usedItemReader = new UsedItemReader(usedItemRepository, itemImageRepository);
         ItemImageAppender itemImageAppender = new ItemImageAppender(itemImageRepository);
         ItemCounter itemCounter = new ItemCounter(usedItemRepository, auctionItemRepository);
+        UsedItemStatusUpdater usedItemStatusUpdater = new UsedItemStatusUpdater(usedItemRepository);
 
-        usedItemService = new UsedItemService(usedItemRepository, itemImageAppender, usedItemReader, itemCounter);
+        usedItemService = new UsedItemService(usedItemRepository, itemImageAppender, usedItemReader, itemCounter, usedItemStatusUpdater);
     }
 
     @Test

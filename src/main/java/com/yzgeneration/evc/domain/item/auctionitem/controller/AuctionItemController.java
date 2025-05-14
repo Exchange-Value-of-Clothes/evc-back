@@ -2,9 +2,9 @@ package com.yzgeneration.evc.domain.item.auctionitem.controller;
 
 import com.yzgeneration.evc.common.dto.CommonResponse;
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemRequest.CreateAuctionItemRequest;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.service.AuctionItemService;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +38,11 @@ public class AuctionItemController {
     @GetMapping("/search")
     public SliceResponse<GetAuctionItemsResponse> searchAuctionItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam String q, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
         return auctionItemService.searchAuctionItems(q, memberPrincipal.getId(), cursor);
+    }
+
+    @DeleteMapping("/{auctionItemId}")
+    public CommonResponse deleteAuctionItem(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @PathVariable Long auctionItemId) {
+        auctionItemService.deleteAuctionItem(memberPrincipal.getId(), auctionItemId);
+        return CommonResponse.success();
     }
 }

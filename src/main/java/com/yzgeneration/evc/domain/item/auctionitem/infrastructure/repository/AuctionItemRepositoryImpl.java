@@ -5,12 +5,12 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.image.enums.ItemType;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.AuctionItemPriceDetailResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetMyOrMemberAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemDetailsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemStatsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.AuctionItemPriceDetailResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetMyOrMemberAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionParticipateResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.AuctionItemEntity;
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
@@ -172,7 +172,8 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         .from(auctionItemEntity)
                         .join(memberEntity) //마켓 주인 닉네임 조회를 위해
                         .on(memberEntity.id.eq(auctionItemEntity.memberId))
-                        .where(auctionItemEntity.id.eq(id))
+                        .where(auctionItemEntity.id.eq(id)
+                                .and(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
                         .fetchOne())
                 .orElseThrow(
                         () -> new CustomException(ErrorCode.AUCTIONITEM_NOT_FOUND)
@@ -301,7 +302,8 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
     public Long countAuctionItemByMemberId(Long memberId) {
         return jpaQueryFactory.select(auctionItemEntity.count())
                 .from(auctionItemEntity)
-                .where(auctionItemEntity.memberId.eq(memberId))
+                .where(auctionItemEntity.memberId.eq(memberId)
+                        .and(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
                 .fetchOne();
     }
 }
