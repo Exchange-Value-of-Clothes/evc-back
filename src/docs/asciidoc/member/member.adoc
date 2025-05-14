@@ -57,9 +57,12 @@ include::{snippets}/email-change/request-fields.adoc[]
 include::{snippets}/email-change/http-response.adoc[]
 
 == 비밀번호 변경
+
+=== HTTP Request
 include::{snippets}/password-change/http-request.adoc[]
 include::{snippets}/password-change/request-fields.adoc[]
 
+=== HTTP Response
 include::{snippets}/password-change/http-response.adoc[]
 
 == 계정 조회
