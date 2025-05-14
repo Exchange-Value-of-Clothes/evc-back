@@ -42,3 +42,26 @@ include::{snippets}/usedItems-search/query-parameters.adoc[]
 === HTTP Response
 include::{snippets}/usedItems-search/http-response.adoc[]
 include::{snippets}/usedItems-search/response-fields.adoc[]
+
+[[usedItem-transactionstatus-update]]
+== 중고상품 거래 상태 수정
+
+=== HTTP Request
+include::{snippets}/usedItem-transactionstatus-update/http-request.adoc[]
+include::{snippets}/useditem-transactionstatus-update/path-parameters.adoc[]
+include::{snippets}/usedItem-transactionstatus-update/query-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/usedItem-transactionstatus-update/http-response.adoc[]
+include::{snippets}/usedItem-transactionstatus-update/response-fields.adoc[]
+
+[[useditem-delete]]
+== 중고상품 삭제
+
+=== HTTP Request
+include::{snippets}/useditem-delete/http-request.adoc[]
+include::{snippets}/useditem-delete/path-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/useditem-delete/http-response.adoc[]
+include::{snippets}/useditem-delete/response-fields.adoc[]

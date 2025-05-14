@@ -137,7 +137,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
     @DisplayName("경매상품 조회")
     void getAuctionItem() throws Exception {
 
-        AuctionItemDetailsResponse auctionItemDetailsResponse = new AuctionItemDetailsResponse("title",  "category", "content");
+        AuctionItemDetailsResponse auctionItemDetailsResponse = new AuctionItemDetailsResponse("title", "category", "content");
         AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1L, 1L, 1L);
         List<String> imageNameList = List.of("imageName.jpg");
         GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 1L, "marketNickname", false, ItemStatus.ACTIVE);
@@ -239,6 +239,21 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                                         .description("조회된 데이터 개수"),
                                 fieldWithPath("cursor").type(JsonFieldType.STRING)
                                         .description("다음 페이지 커서")
+                        )));
+    }
+
+    @Test
+    @DisplayName("경매상품 삭제")
+    void deleteAuctionItem() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/auctionitems/{auctionItemId}", 1L))
+                .andExpect(status().isOk())
+                .andDo(document("auctionitem-delete",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(parameterWithName("auctionItemId").description("경매상품의 id")),
+                        responseFields(
+                                fieldWithPath("success").type(JsonFieldType.BOOLEAN)
+                                        .description("성공여부")
                         )));
     }
 }
