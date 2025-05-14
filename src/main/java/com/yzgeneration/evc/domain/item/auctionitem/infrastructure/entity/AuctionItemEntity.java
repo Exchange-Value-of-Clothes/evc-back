@@ -50,6 +50,7 @@ public class AuctionItemEntity {
 
     public static AuctionItemEntity from(AuctionItem auctionItem) {
         return AuctionItemEntity.builder()
+                .id(auctionItem.getId())
                 .memberId(auctionItem.getMemberId())
                 .auctionItemDetailsEntity(AuctionItemDetailsEntity.from(auctionItem.getAuctionItemDetails()))
                 .transactionType(auctionItem.getTransactionType())
