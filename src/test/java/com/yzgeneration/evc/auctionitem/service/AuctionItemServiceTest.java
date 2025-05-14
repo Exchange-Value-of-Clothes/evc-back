@@ -3,10 +3,11 @@ package com.yzgeneration.evc.auctionitem.service;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.image.implement.ItemImageAppender;
 import com.yzgeneration.evc.domain.image.service.port.ItemImageRepository;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemRequest.CreateAuctionItemRequest;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.implement.AuctionItemReader;
+import com.yzgeneration.evc.domain.item.auctionitem.implement.AuctionItemStatusUpdater;
 import com.yzgeneration.evc.domain.item.auctionitem.service.AuctionItemService;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
 import com.yzgeneration.evc.domain.item.implement.ItemCounter;
@@ -32,8 +33,9 @@ public class AuctionItemServiceTest {
         ItemImageAppender itemImageAppender = new ItemImageAppender(itemImageRepository);
         AuctionItemReader auctionItemReader = new AuctionItemReader(auctionItemRepository, itemImageRepository);
         ItemCounter itemCounter = new ItemCounter(usedItemRepository, auctionItemRepository);
+        AuctionItemStatusUpdater auctionItemStatusUpdater = new AuctionItemStatusUpdater(auctionItemRepository);
 
-        auctionItemService = new AuctionItemService(auctionItemRepository, auctionItemReader, itemImageAppender, itemCounter);
+        auctionItemService = new AuctionItemService(auctionItemRepository, auctionItemReader, itemImageAppender, itemCounter, auctionItemStatusUpdater);
     }
 
     @Test
