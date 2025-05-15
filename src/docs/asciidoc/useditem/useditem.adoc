@@ -49,7 +49,7 @@ include::{snippets}/useditems-search/response-fields.adoc[]
 === HTTP Request
 include::{snippets}/useditem-transactionstatus-update/http-request.adoc[]
 include::{snippets}/useditem-transactionstatus-update/path-parameters.adoc[]
-include::{snippets}/usedItem-transactionstatus-update/query-parameters.adoc[]
+include::{snippets}/useditem-transactionstatus-update/query-parameters.adoc[]
 
 === HTTP Response
 include::{snippets}/useditem-transactionstatus-update/http-response.adoc[]
