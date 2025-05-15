@@ -12,7 +12,7 @@ import org.hibernate.annotations.Immutable;
 
 import java.time.LocalDateTime;
 
-@Immutable
+@Immutable // 조회 전용 엔티티
 @Getter
 @Entity
 @Table(name = "delivery_views")
