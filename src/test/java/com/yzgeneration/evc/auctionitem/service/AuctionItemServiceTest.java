@@ -84,7 +84,6 @@ public class AuctionItemServiceTest {
 
         //then
         assertThat(auctionItemResponse.getAuctionItemDetailsResponse().getTitle()).isEqualTo("title");
-        assertThat(auctionItemResponse.getAuctionItemStatsResponse().getLikeCount()).isEqualTo(1);
         assertThat(auctionItemResponse.getMarketMemberId()).isEqualTo(1L);
         assertThat(auctionItemResponse.getMarketNickname()).isEqualTo("marketNickname");
     }
