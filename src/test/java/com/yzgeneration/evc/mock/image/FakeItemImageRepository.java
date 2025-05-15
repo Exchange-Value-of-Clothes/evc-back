@@ -33,4 +33,9 @@ public class FakeItemImageRepository implements ItemImageRepository {
                 .filter(image -> Objects.equals(image.getId(), itemId) && image.getItemType().equals(itemType))
                 .map(ItemImage::getImageName).toList();
     }
+
+    @Override
+    public String findThumbNailImageNameByItemIdAndItemType(Long itemId, ItemType itemType) {
+        return null;
+    }
 }
