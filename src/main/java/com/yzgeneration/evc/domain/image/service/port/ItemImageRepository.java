@@ -11,4 +11,6 @@ public interface ItemImageRepository {
 
     List<String> findImageNamesByItemIdAndItemType(Long itemId, ItemType itemType);
 
+    String findThumbNailImageNameByItemIdAndItemType(Long itemId, ItemType itemType);
+
 }
