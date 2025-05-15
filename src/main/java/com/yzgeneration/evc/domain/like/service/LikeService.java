@@ -32,7 +32,7 @@ public class LikeService {
         return new LikeResponse(!exits, likeRepository.countByItemIdAndItemType(itemId, itemType));
     }
 
-    public SliceResponse<LikeItemsResponse> getLikeItems(Long memberId) {
-        return likeReader.getLikeItems(memberId);
+    public SliceResponse<LikeItemsResponse> getMyLikedItems(Long memberId) {
+        return likeReader.getMyLikedItems(memberId);
     }
 }

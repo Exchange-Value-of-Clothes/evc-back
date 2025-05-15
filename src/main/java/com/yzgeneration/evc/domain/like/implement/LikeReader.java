@@ -26,7 +26,7 @@ public class LikeReader {
     private final ItemImageRepository itemImageRepository;
     private final static int SIZE = 10;
 
-    public SliceResponse<LikeItemsResponse> getLikeItems(Long memberId) {
+    public SliceResponse<LikeItemsResponse> getMyLikedItems(Long memberId) {
         SliceResponse<Like> likes = likeRepository.getLikesByMemberIdAndSize(memberId, SIZE);
 
         List<LikeItemsResponse> likeItems = likes.getContent().stream().map(like -> {

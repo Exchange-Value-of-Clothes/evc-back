@@ -23,7 +23,7 @@ public class LikeController {
     }
 
     @GetMapping("/my")
-    public SliceResponse<LikeItemsResponse> getLikeItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
-        return likeService.getLikeItems(memberPrincipal.getId());
+    public SliceResponse<LikeItemsResponse> getMyLikedItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        return likeService.getMyLikedItems(memberPrincipal.getId());
     }
 }
