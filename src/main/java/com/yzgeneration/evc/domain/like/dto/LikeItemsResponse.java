@@ -3,7 +3,6 @@ package com.yzgeneration.evc.domain.like.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
-import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class LikeItemsResponse {
 
     private Long itemId;

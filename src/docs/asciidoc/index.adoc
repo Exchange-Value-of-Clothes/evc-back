@@ -55,3 +55,8 @@ include::delivery/delivery.adoc[]
 == MY API
 
 include::my/my.adoc[]
+
+[[Like-API]]
+== Like API
+
+include::like/like.adoc[]
