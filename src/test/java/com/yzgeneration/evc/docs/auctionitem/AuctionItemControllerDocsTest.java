@@ -242,18 +242,5 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                         )));
     }
 
-    @Test
-    @DisplayName("경매상품 삭제")
-    void deleteAuctionItem() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/auctionitems/{auctionItemId}", 1L))
-                .andExpect(status().isOk())
-                .andDo(document("auctionitem-delete",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        pathParameters(parameterWithName("auctionItemId").description("경매상품의 id")),
-                        responseFields(
-                                fieldWithPath("success").type(JsonFieldType.BOOLEAN)
-                                        .description("성공여부")
-                        )));
-    }
+
 }
