@@ -5,6 +5,8 @@ import com.yzgeneration.evc.domain.like.model.Like;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Table(name = "likes")
@@ -24,12 +26,15 @@ public class LikeEntity {
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
 
+    private LocalDateTime createAt;
+
     public static LikeEntity from(Like like) {
         return LikeEntity.builder()
                 .id(like.getId())
                 .memberId(like.getMemberId())
                 .itemId(like.getItemId())
                 .itemType(like.getItemType())
+                .createAt(like.getCreateAt())
                 .build();
     }
 
@@ -39,6 +44,7 @@ public class LikeEntity {
                 .memberId(memberId)
                 .itemId(itemId)
                 .itemType(itemType)
+                .createAt(createAt)
                 .build();
     }
 }

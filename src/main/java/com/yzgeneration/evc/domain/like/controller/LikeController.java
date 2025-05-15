@@ -1,6 +1,8 @@
 package com.yzgeneration.evc.domain.like.controller;
 
+import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.item.enums.ItemType;
+import com.yzgeneration.evc.domain.like.dto.LikeItemsResponse;
 import com.yzgeneration.evc.domain.like.dto.LikeResponse;
 import com.yzgeneration.evc.domain.like.service.LikeService;
 import com.yzgeneration.evc.security.MemberPrincipal;
@@ -21,7 +23,7 @@ public class LikeController {
     }
 
     @GetMapping("/my")
-    public void getLikes(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
-
+    public SliceResponse<LikeItemsResponse> getLikeItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        return likeService.getLikeItems(memberPrincipal.getId());
     }
 }
