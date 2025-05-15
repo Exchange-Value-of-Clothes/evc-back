@@ -67,6 +67,7 @@ public class AuctionItemsResponse {
 
         private String imageName;
 
+        @Setter
         private Long likeCount;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")

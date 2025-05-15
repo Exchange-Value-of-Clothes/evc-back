@@ -2,7 +2,7 @@ package com.yzgeneration.evc.mock.chat;
 
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatRoomRepository;
 import com.yzgeneration.evc.domain.chat.model.ChatRoom;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 
 import java.util.ArrayList;
 import java.util.List;

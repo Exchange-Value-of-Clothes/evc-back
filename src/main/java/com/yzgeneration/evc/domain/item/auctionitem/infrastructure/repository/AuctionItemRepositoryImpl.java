@@ -4,7 +4,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemDetailsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemStatsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
@@ -16,6 +15,7 @@ import com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.Auctio
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionRoomRepository;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
@@ -114,7 +114,6 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         Expressions.constant(TransactionMode.AUCTION),
                         auctionItemEntity.transactionStatus,
                         itemImageEntity.imageName,
-                        //TODO like 테이블 생기면 join해서 해당 값 채우기
                         Expressions.constant(0L),
                         auctionItemEntity.startTime,
                         auctionItemEntity.itemStatus)
@@ -158,7 +157,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                                 Projections.constructor(AuctionItemStatsResponse.class,
                                         auctionItemEntity.viewCount,
                                         //TODO likeCount로 이후에 변경하기 (좋아요 기능 만들면)
-                                        auctionItemEntity.viewCount,
+                                        Expressions.constant(0L),
                                         Expressions.constant(countParticipantById(id))),
                                 Expressions.constant(new ArrayList<>()), //이후 setter를 이용해 값 설정
                                 auctionItemEntity.transactionType,

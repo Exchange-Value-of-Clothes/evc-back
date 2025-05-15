@@ -8,7 +8,7 @@ import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.domain.chat.model.ChatRoom;
 
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;

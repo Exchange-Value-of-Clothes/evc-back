@@ -1,7 +1,7 @@
 package com.yzgeneration.evc.domain.chat.dto;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import lombok.Getter;
 import org.springframework.data.domain.Slice;
 

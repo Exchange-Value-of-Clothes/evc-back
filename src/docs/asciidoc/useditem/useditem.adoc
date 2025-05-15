@@ -32,7 +32,7 @@ include::{snippets}/useditem-get/path-parameters.adoc[]
 include::{snippets}/useditem-get/http-response.adoc[]
 include::{snippets}/useditem-get/response-fields.adoc[]
 
-[[usedItems-search]]
+[[useditems-search]]
 == 중고상품 검색 (슬라이드 형태)
 
 === HTTP Request

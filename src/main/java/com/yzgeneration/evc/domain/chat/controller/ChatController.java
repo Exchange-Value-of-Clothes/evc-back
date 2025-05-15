@@ -4,7 +4,7 @@ import com.yzgeneration.evc.common.dto.CommonResponse;
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.*;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.security.MemberPrincipal;
 import lombok.RequiredArgsConstructor;
 

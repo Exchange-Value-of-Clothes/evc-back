@@ -2,9 +2,9 @@ package com.yzgeneration.evc.mock.usedItem;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetMyOrMemberUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
 import org.springframework.data.domain.PageRequest;
@@ -56,7 +56,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
 
         List<GetUsedItemsResponse> usedItemListResponses = usedItemList.stream().map(
                 usedItem -> new GetUsedItemsResponse(usedItem.getId(), usedItem.getItemDetails().getTitle(), usedItem.getItemDetails().getPrice(), usedItem.getUsedItemTransaction().getTransactionMode(), usedItem.getUsedItemTransaction().getTransactionStatus(), "imageName.jpg",
-                        usedItem.getItemStats().getLikeCount(), usedItem.getCreatedAt(), usedItem.getItemStatus())
+                        0L, usedItem.getCreatedAt(), usedItem.getItemStatus())
         ).toList();
 
         LocalDateTime localCreateAt = !usedItemListResponses.isEmpty() ? usedItemListResponses.get(usedItemListResponses.size() - 1).getCreateAt() : null;
@@ -72,7 +72,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
                 .map(usedItem -> {
                     List<String> imageNameList = List.of("imageName.jpg");
                     return new GetUsedItemResponse(usedItem.getItemDetails().getTitle(), usedItem.getItemDetails().getCategory(), usedItem.getItemDetails().getContent(), usedItem.getItemDetails().getPrice(), usedItem.getUsedItemTransaction().getTransactionType(), usedItem.getUsedItemTransaction().getTransactionMode(), usedItem.getUsedItemTransaction().getTransactionStatus(), imageNameList,
-                            usedItem.getItemStats().getViewCount(), usedItem.getItemStats().getLikeCount(), usedItem.getItemStats().getChattingCount(), usedItem.getMemberId(), "marketNickname", usedItem.getMemberId().equals(memberId), usedItem.getCreatedAt(), usedItem.getItemStatus());
+                            usedItem.getItemStats().getViewCount(), 0L, usedItem.getItemStats().getChattingCount(), usedItem.getMemberId(), "marketNickname", usedItem.getMemberId().equals(memberId), usedItem.getCreatedAt(), usedItem.getItemStatus());
                 });
     }
 

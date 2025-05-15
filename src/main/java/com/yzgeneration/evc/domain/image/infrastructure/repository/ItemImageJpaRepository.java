@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.domain.image.infrastructure.repository;
 
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.image.infrastructure.entity.ItemImageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

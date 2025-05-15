@@ -7,7 +7,7 @@ import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.delivery.dto.MobilityCreate;
 import com.yzgeneration.evc.domain.delivery.model.Delivery;
 import com.yzgeneration.evc.domain.delivery.model.DeliveryView;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 
 import com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity;
 import com.yzgeneration.evc.exception.CustomException;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.yzgeneration.evc.domain.delivery.infrastructure.QDeliveryEntity.*;
 import static com.yzgeneration.evc.domain.delivery.infrastructure.QDeliveryViewEntity.deliveryViewEntity;

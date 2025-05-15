@@ -2,7 +2,7 @@ package com.yzgeneration.evc.delivery.service;
 
 import com.yzgeneration.evc.domain.delivery.impl.DeliveryProcessor;
 import com.yzgeneration.evc.domain.delivery.service.DeliveryService;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
 import com.yzgeneration.evc.external.delivery.GetKakaoMobilityOrder;

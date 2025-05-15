@@ -1,8 +1,8 @@
 package com.yzgeneration.evc.domain.item.useditem.service;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.domain.image.implement.ItemImageAppender;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.implement.ItemCounter;
@@ -38,21 +38,21 @@ public class UsedItemService {
     }
 
     public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor) {
-        return usedItemRepository.getUsedItems(cursor);
+        return usedItemReader.getUsedItems(cursor);
     }
 
 
     public GetUsedItemResponse getUsedItem(Long memberId, Long usedItemId) {
-        return usedItemReader.getUsedItemResponse(memberId, usedItemId);
+        return usedItemReader.getUsedItem(memberId, usedItemId);
     }
 
     public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor) {
-        return usedItemRepository.searchUsedItems(q, cursor);
+        return usedItemReader.getUsedItemsBySearch(q, cursor);
     }
 
     public MyOrMemberUsedItemsResponse getMyOrMemberUsedItems(Long memberId, LocalDateTime cursor, TransactionMode transactionMode) {
         Long postItemCount = itemCounter.countPostItem(memberId);
-        SliceResponse<GetMyOrMemberUsedItemsResponse> myOrMemberUsedItems = usedItemRepository.getMyOrMemberUsedItems(memberId, cursor, transactionMode);
+        SliceResponse<GetMyOrMemberUsedItemsResponse> myOrMemberUsedItems = usedItemReader.getMyOrMemberUsedItems(memberId, cursor, transactionMode);
         return new MyOrMemberUsedItemsResponse(postItemCount, myOrMemberUsedItems);
     }
 

@@ -6,7 +6,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetMyOrMemberUsedItemsResponse;
@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -56,8 +55,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         usedItemEntity.usedItemTransactionEntity.transactionMode,
                         usedItemEntity.usedItemTransactionEntity.transactionStatus,
                         itemImageEntity.imageName,
-                        //TODO like 테이블 생기면 join해서 해당 값 채우기
-                        usedItemEntity.itemStatsEntity.likeCount,
+                        Expressions.constant(0L),
                         usedItemEntity.createdAt,
                         usedItemEntity.itemStatus)
                 )
@@ -65,10 +63,8 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                 .join(itemImageEntity)
                 .on(itemImageEntity.itemId.eq(usedItemEntity.id)
                         .and(itemImageEntity.isThumbnail.isTrue())
-                        .and(itemImageEntity.itemType.eq(ITEM_TYPE))
-                )
+                        .and(itemImageEntity.itemType.eq(ITEM_TYPE)))
                 .where(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)
-                        //TODO(판매완료된 거는 빼고 줄까?)
                         .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null))
                 .orderBy(usedItemEntity.createdAt.desc())
                 .limit(SIZE + 1)
@@ -97,8 +93,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         usedItemEntity.usedItemTransactionEntity.transactionMode,
                         usedItemEntity.usedItemTransactionEntity.transactionStatus,
                         itemImageEntity.imageName,
-                        //TODO like 테이블 생기면 join해서 해당 값 채우기
-                        usedItemEntity.itemStatsEntity.likeCount,
+                        Expressions.constant(0L),
                         usedItemEntity.createdAt,
                         usedItemEntity.itemStatus)
                 )
@@ -143,7 +138,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         usedItemEntity.usedItemTransactionEntity.transactionStatus,
                         Expressions.constant(new ArrayList<>()),
                         usedItemEntity.itemStatsEntity.viewCount,
-                        usedItemEntity.itemStatsEntity.likeCount,
+                        Expressions.constant(0L),
                         usedItemEntity.itemStatsEntity.chattingCount,
                         usedItemEntity.memberId,
                         memberEntity.memberPrivateInformationEntity.nickname,
@@ -179,7 +174,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         usedItemEntity.usedItemTransactionEntity.transactionStatus,
                         itemImageEntity.imageName,
                         //TODO like 테이블 생기면 join해서 해당 값 채우기
-                        usedItemEntity.itemStatsEntity.likeCount,
+                        Expressions.constant(0L),
                         usedItemEntity.createdAt,
                         usedItemEntity.itemStatus)
                 )

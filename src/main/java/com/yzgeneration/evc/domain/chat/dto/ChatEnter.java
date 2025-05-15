@@ -2,7 +2,7 @@ package com.yzgeneration.evc.domain.chat.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.validator.EnumValidator;
 import com.yzgeneration.evc.validator.Validatable;
 import lombok.Getter;
