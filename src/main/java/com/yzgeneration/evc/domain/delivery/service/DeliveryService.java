@@ -5,7 +5,7 @@ import com.yzgeneration.evc.domain.delivery.dto.MobilityCreate;
 import com.yzgeneration.evc.domain.delivery.impl.DeliveryProcessor;
 import com.yzgeneration.evc.domain.delivery.model.Delivery;
 import com.yzgeneration.evc.domain.delivery.model.DeliveryView;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.image.infrastructure.repository.ProfileImageRepository;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;

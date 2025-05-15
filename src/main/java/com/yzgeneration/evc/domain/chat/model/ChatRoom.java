@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.domain.chat.model;
 
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import lombok.Builder;
 import lombok.Getter;
 

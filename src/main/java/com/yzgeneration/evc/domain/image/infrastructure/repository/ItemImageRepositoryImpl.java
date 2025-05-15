@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.domain.image.infrastructure.repository;
 
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.image.infrastructure.entity.ItemImageEntity;
 import com.yzgeneration.evc.domain.image.model.ItemImage;
 import com.yzgeneration.evc.domain.image.service.port.ItemImageRepository;

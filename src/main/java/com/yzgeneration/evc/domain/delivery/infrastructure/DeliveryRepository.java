@@ -4,7 +4,7 @@ import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.delivery.dto.MobilityCreate;
 import com.yzgeneration.evc.domain.delivery.model.Delivery;
 import com.yzgeneration.evc.domain.delivery.model.DeliveryView;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 
 import java.time.LocalDateTime;
 
