@@ -3,7 +3,7 @@ package com.yzgeneration.evc.chat.model;
 import com.yzgeneration.evc.domain.chat.model.ChatMember;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
 import com.yzgeneration.evc.domain.chat.model.ChatRoom;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.fixture.ChatFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

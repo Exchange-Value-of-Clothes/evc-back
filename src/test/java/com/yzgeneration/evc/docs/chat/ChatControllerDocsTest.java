@@ -6,14 +6,11 @@ import com.yzgeneration.evc.domain.chat.controller.ChatController;
 import com.yzgeneration.evc.domain.chat.dto.ChatMessageResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatMessageSliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
-import com.yzgeneration.evc.domain.chat.implement.ChatConnectionManager;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
-import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.fixture.ChatFixture;
 
-import com.yzgeneration.evc.mock.WithFakeUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +32,6 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

@@ -6,7 +6,7 @@ import com.yzgeneration.evc.domain.chat.dto.ChatMessageSliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.infrastructure.ChatMessageRepository;
 import com.yzgeneration.evc.domain.chat.model.ChatMessage;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
