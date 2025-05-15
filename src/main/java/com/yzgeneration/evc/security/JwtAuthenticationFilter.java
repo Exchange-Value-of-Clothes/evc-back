@@ -33,7 +33,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
         try {
+            String clientIp = getClientIp(request);
+            log.info("Request from IP: {}", clientIp);
             String accessToken = parseToken(request.getHeader("Authorization"));
+            if (!StringUtils.hasText(accessToken)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
             Long memberId = tokenProvider.getMemberId(accessToken);
             MemberPrincipal memberPrincipal = new MemberPrincipal(memberRepository.getById(memberId));
             Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -64,6 +70,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return authorization.substring(7);
         }
         return null;
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String ipAddress = request.getHeader("X-Forwarded-For");
+        if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getHeader("Proxy-Client-IP");
+        }
+        if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getRemoteAddr();
+        }
+        return ipAddress;
     }
 
 }
