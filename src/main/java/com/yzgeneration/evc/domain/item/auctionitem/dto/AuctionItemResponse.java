@@ -62,6 +62,7 @@ public class AuctionItemResponse {
 
         private Long viewCount;
 
+        @Setter
         private Long likeCount;
 
         private Long participantCount;
