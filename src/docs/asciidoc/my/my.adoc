@@ -21,7 +21,7 @@ include::{snippets}/my-auctionitems-get/http-response.adoc[]
 include::{snippets}/my-auctionitems-get/response-fields.adoc[]
 
 [[my-useditem-transactionstatus-update]]
-== 중고상품 거래 상태 수정
+== 내 중고상품 거래 상태 수정
 
 === HTTP Request
 include::{snippets}/my-useditem-transactionstatus-update/http-request.adoc[]
@@ -33,7 +33,7 @@ include::{snippets}/my-useditem-transactionstatus-update/http-response.adoc[]
 include::{snippets}/my-useditem-transactionstatus-update/response-fields.adoc[]
 
 [[my-useditem-delete]]
-== 중고상품 삭제
+== 내 중고상품 삭제
 
 === HTTP Request
 include::{snippets}/my-useditem-delete/http-request.adoc[]
@@ -46,7 +46,7 @@ include::{snippets}/my-useditem-delete/response-fields.adoc[]
 
 
 [[my-auctionitem-delete]]
-== 경매상품 삭제
+== 내 경매상품 삭제
 
 === HTTP Request
 include::{snippets}/my-auctionitem-delete/http-request.adoc[]
