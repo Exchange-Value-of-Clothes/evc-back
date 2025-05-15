@@ -245,36 +245,4 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("다음 페이지 커서")
                         )));
     }
-
-    @Test
-    @DisplayName("중고상품의 transaction status 변경")
-    void updateUsedItemTransactionStatus() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.patch("/api/useditems/{usedItemId}", 1L)
-                        .queryParam("transactionStatus", TransactionStatus.RESERVE.name()))
-                .andExpect(status().isOk())
-                .andDo(document("useditem-transactionstatus-update",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        pathParameters(parameterWithName("usedItemId").description("중고상품의 id")),
-                        queryParameters(parameterWithName("transactionStatus").description("변경할 Transaction Status (ONGOING, RESERVE, COMPLETE)")),
-                        responseFields(
-                                fieldWithPath("success").type(JsonFieldType.BOOLEAN)
-                                        .description("성공여부")
-                        )));
-    }
-
-    @Test
-    @DisplayName("중고상품 삭제")
-    void deleteAuctionItem() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/useditems/{usedItemId}", 1L))
-                .andExpect(status().isOk())
-                .andDo(document("useditem-delete",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        pathParameters(parameterWithName("usedItemId").description("중고상품의 id")),
-                        responseFields(
-                                fieldWithPath("success").type(JsonFieldType.BOOLEAN)
-                                        .description("성공여부")
-                        )));
-    }
 }

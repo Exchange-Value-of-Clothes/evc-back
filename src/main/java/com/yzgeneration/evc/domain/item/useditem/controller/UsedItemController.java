@@ -41,16 +41,4 @@ public class UsedItemController {
     public SliceResponse<GetUsedItemsResponse> searchUsedItems(@RequestParam String q, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
         return usedItemService.searchUsedItems(q, cursor);
     }
-
-    @PatchMapping("/{usedItemId}")
-    public CommonResponse updateTransactionStatus(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @PathVariable Long usedItemId, @Valid @RequestParam TransactionStatus transactionStatus) {
-        usedItemService.updateTransactionStatus(memberPrincipal.getId(), usedItemId, transactionStatus);
-        return CommonResponse.success();
-    }
-
-    @DeleteMapping("/{usedItemId}")
-    public CommonResponse deleteUsedItem(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @PathVariable Long usedItemId) {
-        usedItemService.deleteUsedItem(memberPrincipal.getId(), usedItemId);
-        return CommonResponse.success();
-    }
 }

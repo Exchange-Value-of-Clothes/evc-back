@@ -1,4 +1,3 @@
-[[useditem-create]]
 == 중고상품 등록
 
 === HTTP Request
@@ -10,7 +9,6 @@ include::{snippets}/useditem-create/http-response.adoc[]
 include::{snippets}/useditem-create/response-fields.adoc[]
 
 
-[[useditems-get]]
 == 중고상품들 조회 (슬라이드 형태)
 
 === HTTP Request
@@ -21,7 +19,7 @@ include::{snippets}/useditems-get/query-parameters.adoc[]
 include::{snippets}/useditems-get/http-response.adoc[]
 include::{snippets}/useditems-get/response-fields.adoc[]
 
-[[useditem-get]]
+
 == 개별 중고상품 조회
 
 === HTTP Request
@@ -32,7 +30,7 @@ include::{snippets}/useditem-get/path-parameters.adoc[]
 include::{snippets}/useditem-get/http-response.adoc[]
 include::{snippets}/useditem-get/response-fields.adoc[]
 
-[[useditems-search]]
+
 == 중고상품 검색 (슬라이드 형태)
 
 === HTTP Request
@@ -42,26 +40,3 @@ include::{snippets}/useditems-search/query-parameters.adoc[]
 === HTTP Response
 include::{snippets}/useditems-search/http-response.adoc[]
 include::{snippets}/useditems-search/response-fields.adoc[]
-
-[[useditem-transactionstatus-update]]
-== 중고상품 거래 상태 수정
-
-=== HTTP Request
-include::{snippets}/useditem-transactionstatus-update/http-request.adoc[]
-include::{snippets}/useditem-transactionstatus-update/path-parameters.adoc[]
-include::{snippets}/useditem-transactionstatus-update/query-parameters.adoc[]
-
-=== HTTP Response
-include::{snippets}/useditem-transactionstatus-update/http-response.adoc[]
-include::{snippets}/useditem-transactionstatus-update/response-fields.adoc[]
-
-[[useditem-delete]]
-== 중고상품 삭제
-
-=== HTTP Request
-include::{snippets}/useditem-delete/http-request.adoc[]
-include::{snippets}/useditem-delete/path-parameters.adoc[]
-
-=== HTTP Response
-include::{snippets}/useditem-delete/http-response.adoc[]
-include::{snippets}/useditem-delete/response-fields.adoc[]

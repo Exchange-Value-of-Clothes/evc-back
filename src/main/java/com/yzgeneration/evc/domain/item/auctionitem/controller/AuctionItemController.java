@@ -39,10 +39,4 @@ public class AuctionItemController {
     public SliceResponse<GetAuctionItemsResponse> searchAuctionItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam String q, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
         return auctionItemService.searchAuctionItems(q, memberPrincipal.getId(), cursor);
     }
-
-    @DeleteMapping("/{auctionItemId}")
-    public CommonResponse deleteAuctionItem(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @PathVariable Long auctionItemId) {
-        auctionItemService.deleteAuctionItem(memberPrincipal.getId(), auctionItemId);
-        return CommonResponse.success();
-    }
 }
