@@ -33,9 +33,6 @@ public class PointChargeController {
         return CommonResponse.success();
     }
 
-    // 결제 조회
-
-
     // 웹훅
     @PostMapping("/webhook")
     public void webhook(@RequestBody PaymentStatusChanged paymentStatusChanged) {
