@@ -82,7 +82,7 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
                     AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1L, 1L, 1L);
                     List<String> imageNameList = List.of("imageName.jpg");
 
-                    return new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, auctionItem.getTransactionType(), auctionItem.getStartTime(), auctionItem.getEndTime(), auctionItem.getAuctionItemPriceDetails().getCurrentPrice(), auctionItem.getMemberId(), "marketNickname", auctionItem.getMemberId().equals(memberId), auctionItem.getItemStatus());
+                    return new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, auctionItem.getTransactionType(), auctionItem.getStartTime(), auctionItem.getEndTime(), auctionItem.getAuctionItemPriceDetails().getStartPrice(), auctionItem.getAuctionItemPriceDetails().getCurrentPrice(), auctionItem.getAuctionItemPriceDetails().getBidPrice(), auctionItem.getMemberId(), "marketNickname", auctionItem.getMemberId().equals(memberId), auctionItem.getItemStatus());
                 }).get();
     }
 

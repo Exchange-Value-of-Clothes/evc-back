@@ -1,6 +1,5 @@
 package com.yzgeneration.evc.domain.item.useditem.model;
 
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,12 +15,19 @@ public class ItemDetails {
 
     private int price;
 
-    public static ItemDetails create(CreateUsedItemRequest createUsedItemRequest) {
+    public static ItemDetails create(String title, String category, String content, int price) {
         return ItemDetails.builder()
-                .title(createUsedItemRequest.getTitle())
-                .category(createUsedItemRequest.getCategory())
-                .content(createUsedItemRequest.getContent())
-                .price(createUsedItemRequest.getPrice())
+                .title(title)
+                .category(category)
+                .content(content)
+                .price(price)
                 .build();
+    }
+
+    public void update(String title, String category, String content, int price) {
+        this.title = title;
+        this.category = category;
+        this.content = content;
+        this.price = price;
     }
 }

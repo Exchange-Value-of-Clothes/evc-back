@@ -12,11 +12,14 @@ import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetMyOrMe
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
 import com.yzgeneration.evc.domain.my.controller.MyStoreController;
+import com.yzgeneration.evc.domain.my.dto.MyAuctionItemUpdateRequest;
+import com.yzgeneration.evc.domain.my.dto.MyUsedItemUpdateRequest;
 import com.yzgeneration.evc.domain.my.service.MyStoreService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -28,10 +31,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MyStoreControllerDocsTest extends RestDocsSupport {
@@ -193,6 +195,78 @@ public class MyStoreControllerDocsTest extends RestDocsSupport {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(parameterWithName("auctionItemId").description("경매상품의 id")),
+                        responseFields(
+                                fieldWithPath("success").type(JsonFieldType.BOOLEAN)
+                                        .description("성공여부")
+                        )));
+    }
+
+    @Test
+    @DisplayName("내 중고상품 수정")
+    void putMyUsedItem() throws Exception {
+
+        MyUsedItemUpdateRequest myUsedItemUpdateRequest = new MyUsedItemUpdateRequest("title", "category", "content", 5000, "DIRECT", "SELL", List.of("imageName"));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/my/store/useditems/{usedItemId}", 1L)
+                        .content(objectMapper.writeValueAsString(myUsedItemUpdateRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("my-useditem-put",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(parameterWithName("usedItemId").description("중고상품 id")),
+                        requestFields(
+                                fieldWithPath("title").type(JsonFieldType.STRING)
+                                        .description("중고상품 제목"),
+                                fieldWithPath("category").type(JsonFieldType.STRING)
+                                        .description("중고상품 카테고리"),
+                                fieldWithPath("content").type(JsonFieldType.STRING)
+                                        .description("중고상품 내용"),
+                                fieldWithPath("price").type(JsonFieldType.NUMBER)
+                                        .description("중고상품 가격"),
+                                fieldWithPath("transactionType").type(JsonFieldType.STRING)
+                                        .description("중고상품 거래유행 (DIRECT, DELIVERY)"),
+                                fieldWithPath("transactionMode").type(JsonFieldType.STRING)
+                                        .description("중고상품 거래방법 (SELL, BUY)"),
+                                fieldWithPath("imageNames").type(JsonFieldType.ARRAY)
+                                        .description("중고상품 이미지 리스트")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").type(JsonFieldType.BOOLEAN)
+                                        .description("성공여부")
+                        )));
+    }
+
+    @Test
+    @DisplayName("내 경매상품 수정")
+    void putMyAuctionItem() throws Exception {
+
+        MyAuctionItemUpdateRequest myAuctionItemUpdateRequest = new MyAuctionItemUpdateRequest("title", "category", "content", 5000, 1000, "DIRECT", List.of("imageName"));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/my/store/auctionitems/{auctionItemId}", 1L)
+                        .content(objectMapper.writeValueAsString(myAuctionItemUpdateRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("my-auctionitem-put",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(parameterWithName("auctionItemId").description("경매상품 id")),
+                        requestFields(
+                                fieldWithPath("title").type(JsonFieldType.STRING)
+                                        .description("경매상품 제목"),
+                                fieldWithPath("category").type(JsonFieldType.STRING)
+                                        .description("경매상품 카테고리"),
+                                fieldWithPath("content").type(JsonFieldType.STRING)
+                                        .description("경매상품 내용"),
+                                fieldWithPath("startPrice").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 시가 (경매 참여자가 있는 경우, 0 또는 기존 값으로 보내기)"),
+                                fieldWithPath("bidPrice").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 호가"),
+                                fieldWithPath("transactionType").type(JsonFieldType.STRING)
+                                        .description("경매상품 거래유행 (DIRECT, DELIVERY)"),
+                                fieldWithPath("imageNames").type(JsonFieldType.ARRAY)
+                                        .description("경매상품 이미지 리스트")
+                        ),
                         responseFields(
                                 fieldWithPath("success").type(JsonFieldType.BOOLEAN)
                                         .description("성공여부")

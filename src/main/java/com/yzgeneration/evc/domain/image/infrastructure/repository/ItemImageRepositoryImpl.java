@@ -9,6 +9,7 @@ import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,5 +41,14 @@ public class ItemImageRepositoryImpl implements ItemImageRepository {
                         .fetchOne())
                 .orElseThrow(() -> new CustomException(ErrorCode.IMAGE_NOT_FOUND))
                 .getImageName();
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllByItemIdAndItemType(Long itemId, ItemType itemType) {
+        jpaQueryFactory.delete(itemImageEntity)
+                .where(itemImageEntity.itemId.eq(itemId)
+                        .and(itemImageEntity.itemType.eq(itemType)))
+                .execute();
     }
 }

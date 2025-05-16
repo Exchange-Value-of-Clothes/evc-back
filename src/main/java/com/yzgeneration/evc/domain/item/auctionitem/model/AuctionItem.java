@@ -5,6 +5,7 @@ import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
+import com.yzgeneration.evc.domain.my.dto.MyAuctionItemUpdateRequest;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -54,5 +55,17 @@ public class AuctionItem {
 
     public void updateItemStatus(ItemStatus itemStatus) {
         this.itemStatus = itemStatus;
+    }
+
+    public void update(MyAuctionItemUpdateRequest myAuctionItemUpdateRequest) {
+        this.getAuctionItemDetails().update(myAuctionItemUpdateRequest.getTitle(), myAuctionItemUpdateRequest.getCategory(), myAuctionItemUpdateRequest.getContent());
+        this.auctionItemPriceDetails.update(myAuctionItemUpdateRequest.getStartPrice(), myAuctionItemUpdateRequest.getBidPrice());
+        this.transactionType = TransactionType.valueOf(myAuctionItemUpdateRequest.getTransactionType());
+    }
+
+    public void updateIfParticipantExists(MyAuctionItemUpdateRequest myAuctionItemUpdateRequest) {
+        this.getAuctionItemDetails().update(myAuctionItemUpdateRequest.getTitle(), myAuctionItemUpdateRequest.getCategory(), myAuctionItemUpdateRequest.getContent());
+        this.auctionItemPriceDetails.updateBidPrice(myAuctionItemUpdateRequest.getBidPrice());
+        this.transactionType = TransactionType.valueOf(myAuctionItemUpdateRequest.getTransactionType());
     }
 }

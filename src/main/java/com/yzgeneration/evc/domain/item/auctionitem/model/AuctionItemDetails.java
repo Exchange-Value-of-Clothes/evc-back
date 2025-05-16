@@ -21,4 +21,10 @@ public class AuctionItemDetails {
                 .content(createAuctionItemRequest.getContent())
                 .build();
     }
+
+    public void update(String title, String category, String content) {
+        this.title = title;
+        this.category = category;
+        this.content = content;
+    }
 }

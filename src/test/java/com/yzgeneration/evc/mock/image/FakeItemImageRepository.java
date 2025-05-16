@@ -38,4 +38,9 @@ public class FakeItemImageRepository implements ItemImageRepository {
     public String findThumbNailImageNameByItemIdAndItemType(Long itemId, ItemType itemType) {
         return null;
     }
+
+    @Override
+    public void deleteAllByItemIdAndItemType(Long itemId, ItemType itemType) {
+
+    }
 }

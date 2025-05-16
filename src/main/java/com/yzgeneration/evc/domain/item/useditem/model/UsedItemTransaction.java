@@ -1,9 +1,9 @@
 package com.yzgeneration.evc.domain.item.useditem.model;
 
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -27,5 +27,10 @@ public class UsedItemTransaction {
 
     public void updateTransactionStatus(TransactionStatus transactionStatus) {
         this.transactionStatus = transactionStatus;
+    }
+
+    public void update(TransactionType transactionType, TransactionMode transactionMode) {
+        this.transactionType = transactionType;
+        this.transactionMode = transactionMode;
     }
 }

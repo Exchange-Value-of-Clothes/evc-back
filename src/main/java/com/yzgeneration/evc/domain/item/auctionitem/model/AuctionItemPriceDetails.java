@@ -22,4 +22,14 @@ public class AuctionItemPriceDetails {
                 .bidPrice(createAuctionItemRequest.getBidPrice())
                 .build();
     }
+
+    public void update(int startPrice, int bidPrice){
+        this.startPrice = startPrice;
+        this.currentPrice = startPrice;
+        this.bidPrice = bidPrice;
+    }
+
+    public void updateBidPrice(int bidPrice) {
+        this.bidPrice = bidPrice;
+    }
 }
