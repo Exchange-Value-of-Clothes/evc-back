@@ -125,7 +125,7 @@ public class AuctionItemControllerTest {
                 .andExpect(jsonPath("$.endTime").value("+1000000000-01-02T00:00:00"))
                 .andExpect(jsonPath("$.startPrice").value(5000))
                 .andExpect(jsonPath("$.currentPrice").value(5000))
-                .andExpect(jsonPath("$.bidPrice").value(5000))
+                .andExpect(jsonPath("$.bidPrice").value(1000))
                 .andExpect(jsonPath("$.marketMemberId").value(1L))
                 .andExpect(jsonPath("$.marketNickname").value("marketNickname"))
                 .andExpect(jsonPath("$.isOwned").value(false))

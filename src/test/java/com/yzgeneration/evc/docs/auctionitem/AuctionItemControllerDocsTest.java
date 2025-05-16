@@ -172,8 +172,12 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                                         .description("경매 시작 시간"),
                                 fieldWithPath("endTime").type(JsonFieldType.STRING)
                                         .description("경매 종료 시간"),
-                                fieldWithPath("currentPrice").type(JsonFieldType.NUMBER)
+                                fieldWithPath("startPrice").type(JsonFieldType.NUMBER)
                                         .description("경매상품 시가"),
+                                fieldWithPath("currentPrice").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 현재가격"),
+                                fieldWithPath("bidPrice").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 호가"),
                                 fieldWithPath("marketMemberId").type(JsonFieldType.NUMBER)
                                         .description("상점 주인의 id (상점 주인 상세페이지 이동에서 사용될 수 있으니 추가함)"),
                                 fieldWithPath("marketNickname").type(JsonFieldType.STRING)
