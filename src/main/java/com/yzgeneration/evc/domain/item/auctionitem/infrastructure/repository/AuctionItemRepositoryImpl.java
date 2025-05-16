@@ -163,7 +163,9 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                                 auctionItemEntity.transactionType,
                                 auctionItemEntity.startTime,
                                 auctionItemEntity.endTime,
+                                auctionItemEntity.auctionItemPriceDetailsEntity.startPrice,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
+                                auctionItemEntity.auctionItemPriceDetailsEntity.bidPrice,
                                 auctionItemEntity.memberId, //상품 주인 id
                                 memberEntity.memberPrivateInformationEntity.nickname, //상품 주인 닉네임
                                 auctionItemEntity.memberId.eq(memberId), //상품 주인과 조회한 회원의 일치 여부

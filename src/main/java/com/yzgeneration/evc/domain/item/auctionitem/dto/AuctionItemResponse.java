@@ -34,7 +34,11 @@ public class AuctionItemResponse {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime endTime;
 
+        private int startPrice;
+
         private int currentPrice;
+
+        private int bidPrice;
 
         private Long marketMemberId;
 
