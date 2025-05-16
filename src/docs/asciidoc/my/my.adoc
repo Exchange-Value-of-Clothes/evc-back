@@ -1,4 +1,3 @@
-[[my-useditmes-get]]
 == 내 중고상품 전체 조회
 
 === HTTP Request
@@ -9,7 +8,7 @@ include::{snippets}/my-useditems-get/query-parameters.adoc[]
 include::{snippets}/my-useditems-get/http-response.adoc[]
 include::{snippets}/my-useditems-get/response-fields.adoc[]
 
-[[my-auctionitems-get]]
+
 == 내 경매상품 전체 조회
 
 === HTTP Request
@@ -20,8 +19,8 @@ include::{snippets}/my-auctionitems-get/query-parameters.adoc[]
 include::{snippets}/my-auctionitems-get/http-response.adoc[]
 include::{snippets}/my-auctionitems-get/response-fields.adoc[]
 
-[[my-useditem-transactionstatus-update]]
-== 중고상품 거래 상태 수정
+
+== 내 중고상품 거래 상태 수정
 
 === HTTP Request
 include::{snippets}/my-useditem-transactionstatus-update/http-request.adoc[]
@@ -32,8 +31,8 @@ include::{snippets}/my-useditem-transactionstatus-update/query-parameters.adoc[]
 include::{snippets}/my-useditem-transactionstatus-update/http-response.adoc[]
 include::{snippets}/my-useditem-transactionstatus-update/response-fields.adoc[]
 
-[[my-useditem-delete]]
-== 중고상품 삭제
+
+== 내 중고상품 삭제
 
 === HTTP Request
 include::{snippets}/my-useditem-delete/http-request.adoc[]
@@ -44,9 +43,7 @@ include::{snippets}/my-useditem-delete/http-response.adoc[]
 include::{snippets}/my-useditem-delete/response-fields.adoc[]
 
 
-
-[[my-auctionitem-delete]]
-== 경매상품 삭제
+== 내 경매상품 삭제
 
 === HTTP Request
 include::{snippets}/my-auctionitem-delete/http-request.adoc[]
@@ -55,3 +52,27 @@ include::{snippets}/my-auctionitem-delete/path-parameters.adoc[]
 === HTTP Response
 include::{snippets}/my-auctionitem-delete/http-response.adoc[]
 include::{snippets}/my-auctionitem-delete/response-fields.adoc[]
+
+
+== 내 중고상품 수정
+
+=== HTTP Request
+include::{snippets}/my-useditem-put/http-request.adoc[]
+include::{snippets}/my-useditem-put/path-parameters.adoc[]
+include::{snippets}/my-useditem-put/request-fields.adoc[]
+
+=== HTTP Response
+include::{snippets}/my-useditem-put/http-response.adoc[]
+include::{snippets}/my-useditem-put/response-fields.adoc[]
+
+
+== 내 경매상품 수정
+
+=== HTTP Request
+include::{snippets}/my-auctionitem-put/http-request.adoc[]
+include::{snippets}/my-auctionitem-put/path-parameters.adoc[]
+include::{snippets}/my-auctionitem-put/request-fields.adoc[]
+
+=== HTTP Response
+include::{snippets}/my-auctionitem-put/http-response.adoc[]
+include::{snippets}/my-auctionitem-put/response-fields.adoc[]
