@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.yzgeneration.evc.domain.image.infrastructure.entity.QItemImageEntity.itemImageEntity;
+import static com.yzgeneration.evc.domain.image.infrastructure.entity.QProfileImageEntity.profileImageEntity;
 import static com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.QAuctionItemEntity.auctionItemEntity;
 import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
 import static com.yzgeneration.evc.domain.point.infrastructure.QMemberPointEntity.memberPointEntity;
@@ -168,11 +169,14 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                                 auctionItemEntity.auctionItemPriceDetailsEntity.bidPrice,
                                 auctionItemEntity.memberId, //상품 주인 id
                                 memberEntity.memberPrivateInformationEntity.nickname, //상품 주인 닉네임
+                                profileImageEntity.name,
                                 auctionItemEntity.memberId.eq(memberId), //상품 주인과 조회한 회원의 일치 여부
                                 auctionItemEntity.itemStatus))
                         .from(auctionItemEntity)
                         .join(memberEntity) //마켓 주인 닉네임 조회를 위해
                         .on(memberEntity.id.eq(auctionItemEntity.memberId))
+                        .join(profileImageEntity) //마켓 주인 프로필 사진 조회를 위해
+                        .on(profileImageEntity.memberId.eq(auctionItemEntity.memberId))
                         .where(auctionItemEntity.id.eq(id)
                                 .and(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
                         .fetchOne())

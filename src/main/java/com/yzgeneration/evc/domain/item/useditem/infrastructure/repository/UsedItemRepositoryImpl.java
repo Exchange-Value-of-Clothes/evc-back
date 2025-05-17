@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.yzgeneration.evc.domain.image.infrastructure.entity.QItemImageEntity.itemImageEntity;
+import static com.yzgeneration.evc.domain.image.infrastructure.entity.QProfileImageEntity.profileImageEntity;
 import static com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.QUsedItemEntity.usedItemEntity;
 import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
 
@@ -142,6 +143,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         usedItemEntity.itemStatsEntity.chattingCount,
                         usedItemEntity.memberId,
                         memberEntity.memberPrivateInformationEntity.nickname,
+                        profileImageEntity.name,
                         //조회한 중고상품의 게시자와 조회자의 일치 체크
                         usedItemEntity.memberId.eq(memberId),
                         usedItemEntity.createdAt,
@@ -150,6 +152,8 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                 .from(usedItemEntity)
                 .join(memberEntity)
                 .on(memberEntity.id.eq(usedItemEntity.memberId))
+                .join(profileImageEntity)
+                .on(profileImageEntity.memberId.eq(usedItemEntity.memberId))
                 .where(usedItemEntity.id.eq(usedItemId)
                         .and(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
                 .fetchFirst();
