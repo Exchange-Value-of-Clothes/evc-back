@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -26,8 +27,8 @@ public class LikeReader {
     private final ItemImageRepository itemImageRepository;
     private final static int SIZE = 10;
 
-    public SliceResponse<LikeItemsResponse> getMyLikedItems(Long memberId) {
-        SliceResponse<Like> likes = likeRepository.getLikesByMemberIdAndSize(memberId, SIZE);
+    public SliceResponse<LikeItemsResponse> getMyLikedItems(Long memberId, LocalDateTime cursor) {
+        SliceResponse<Like> likes = likeRepository.getLikesByMemberIdAndSize(memberId, SIZE, cursor);
 
         List<LikeItemsResponse> likeItems = likes.getContent().stream().map(like -> {
             Long count = likeRepository.countByItemIdAndItemType(like.getItemId(), like.getItemType());

@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/api/likes")
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class LikeController {
     }
 
     @GetMapping("/my")
-    public SliceResponse<LikeItemsResponse> getMyLikedItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
-        return likeService.getMyLikedItems(memberPrincipal.getId());
+    public SliceResponse<LikeItemsResponse> getMyLikedItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
+        return likeService.getMyLikedItems(memberPrincipal.getId(), cursor);
     }
 }
