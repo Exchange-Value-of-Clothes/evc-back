@@ -70,10 +70,10 @@ class UsedItemControllerTest {
     @DisplayName("중고상품 리스트 조회")
     void getUsedItems() throws Exception {
 
-        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName.jpg", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName.jpg", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE, true);
         SliceResponse<GetUsedItemsResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
-        when(usedItemService.getUsedItems(any()))
+        when(usedItemService.getUsedItems(any(), any()))
                 .thenReturn(getUsedItemSliceResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/useditems")
@@ -114,6 +114,7 @@ class UsedItemControllerTest {
                 .chattingCount(1L)
                 .marketMemberId(1L)
                 .marketNickname("marketNickname")
+                .profileImageName("profileImageName")
                 .isOwned(true)
                 .createAt(LocalDateTime.MIN)
                 .itemStatus(ItemStatus.ACTIVE)
@@ -138,6 +139,7 @@ class UsedItemControllerTest {
                 .andExpect(jsonPath("$.chattingCount").value(1L))
                 .andExpect(jsonPath("$.marketMemberId").value(1L))
                 .andExpect(jsonPath("$.marketNickname").value("marketNickname"))
+                .andExpect(jsonPath("$.profileImageName").value("profileImageName"))
                 .andExpect(jsonPath("$.isOwned").value(true))
                 .andExpect(jsonPath("$.createAt").value("+1000000000-01-01T00:00:00"))
                 .andExpect(jsonPath("$.itemStatus").value("ACTIVE"));

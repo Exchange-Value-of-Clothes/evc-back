@@ -51,6 +51,8 @@ public class UsedItemResponse {
 
         private String marketNickname;
 
+        private String profileImageName;
+
         private Boolean isOwned;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")

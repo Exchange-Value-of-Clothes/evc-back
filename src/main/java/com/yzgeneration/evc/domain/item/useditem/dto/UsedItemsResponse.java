@@ -35,6 +35,8 @@ public class UsedItemsResponse {
         private LocalDateTime createAt;
 
         private ItemStatus itemStatus;
+
+        private Boolean isLike;
     }
 
     @Getter
