@@ -80,10 +80,10 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("중고상품 전체 조회 (slice)")
     void getUsedItems() throws Exception {
-        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE, true);
         SliceResponse<GetUsedItemsResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
-        when(usedItemService.getUsedItems(any()))
+        when(usedItemService.getUsedItems(any(), any()))
                 .thenReturn(getUsedItemSliceResponse);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -115,6 +115,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("중고상품 게시시간 (createAt과 현재시간과의 차이값을 프론트 화면에 렌더링)"),
                                 fieldWithPath("content[].itemStatus").type(JsonFieldType.STRING)
                                         .description("중고상품 상태"),
+                                fieldWithPath("content[].isLike").type(JsonFieldType.BOOLEAN)
+                                        .description("회원의 상품 좋아요 여부"),
                                 fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재여부"),
                                 fieldWithPath("size").type(JsonFieldType.NUMBER)
@@ -143,6 +145,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                 .chattingCount(1L)
                 .marketMemberId(1L)
                 .marketNickname("marketNickname")
+                .profileImageName("profileImageName")
                 .isOwned(true)
                 .createAt(LocalDateTime.MIN)
                 .itemStatus(ItemStatus.ACTIVE)
@@ -185,6 +188,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("상점 주인의 id (상점 주인 상세페이지 이동에서 사용될 수 있으니 추가함)"),
                                 fieldWithPath("marketNickname").type(JsonFieldType.STRING)
                                         .description("상점 주인 nickname"),
+                                fieldWithPath("profileImageName").type(JsonFieldType.STRING)
+                                        .description("상점 주인 profileImageName"),
                                 fieldWithPath("isOwned").type(JsonFieldType.BOOLEAN)
                                         .description("내가 작성한 글인지 유무"),
                                 fieldWithPath("createAt").type(JsonFieldType.STRING)
@@ -197,10 +202,10 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("중고상품 검색 (slice)")
     void searchUsedItems() throws Exception {
-        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE, true);
         SliceResponse<GetUsedItemsResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
-        when(usedItemService.searchUsedItems(any(), any()))
+        when(usedItemService.searchUsedItems(any(), any(), any()))
                 .thenReturn(getUsedItemSliceResponse);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -235,6 +240,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("중고상품 게시시간 (createAt과 현재시간과의 차이값을 프론트 화면에 렌더링)"),
                                 fieldWithPath("content[].itemStatus").type(JsonFieldType.STRING)
                                         .description("중고상품 상태"),
+                                fieldWithPath("content[].isLike").type(JsonFieldType.BOOLEAN)
+                                        .description("회원의 상품 좋아요 여부"),
                                 fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재여부"),
                                 fieldWithPath("size").type(JsonFieldType.NUMBER)

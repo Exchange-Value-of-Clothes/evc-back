@@ -44,9 +44,13 @@ public class AuctionItemResponse {
 
         private String marketNickname;
 
+        private String profileImageName;
+
         private Boolean isOwned;
 
         private ItemStatus itemStatus;
+
+        private int point;
     }
 
     @Getter

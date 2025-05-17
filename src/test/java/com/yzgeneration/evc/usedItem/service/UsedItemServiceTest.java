@@ -63,7 +63,7 @@ class UsedItemServiceTest {
     void getUsedItems() {
         //given
         //when
-        SliceResponse<GetUsedItemsResponse> usedItemListResponse = usedItemService.getUsedItems(null);
+        SliceResponse<GetUsedItemsResponse> usedItemListResponse = usedItemService.getUsedItems(null, null);
 
         //then
         assertThat(usedItemListResponse.getContent().get(0).getUsedItemId()).isEqualTo(1L);

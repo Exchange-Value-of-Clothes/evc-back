@@ -38,6 +38,8 @@ public class AuctionItemsResponse {
         private LocalDateTime endTime;
 
         private int point;
+
+        private Boolean isLike;
     }
 
     @Getter
