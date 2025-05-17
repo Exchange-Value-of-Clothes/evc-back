@@ -7,6 +7,8 @@ import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetMyOrMe
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
 
@@ -14,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 public class FakeUsedItemRepository implements UsedItemRepository {
 
@@ -65,7 +66,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
     }
 
     @Override
-    public Optional<GetUsedItemResponse> findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
+    public GetUsedItemResponse findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
         return mockUsedItems.stream()
                 .filter(usedItem -> usedItem.getId().equals(usedItemId))
                 .findFirst()
@@ -73,7 +74,9 @@ public class FakeUsedItemRepository implements UsedItemRepository {
                     List<String> imageNameList = List.of("imageName.jpg");
                     return new GetUsedItemResponse(usedItem.getItemDetails().getTitle(), usedItem.getItemDetails().getCategory(), usedItem.getItemDetails().getContent(), usedItem.getItemDetails().getPrice(), usedItem.getUsedItemTransaction().getTransactionType(), usedItem.getUsedItemTransaction().getTransactionMode(), usedItem.getUsedItemTransaction().getTransactionStatus(), imageNameList,
                             usedItem.getItemStats().getViewCount(), 0L, usedItem.getItemStats().getChattingCount(), usedItem.getMemberId(), "marketNickname", "profileImageName", usedItem.getMemberId().equals(memberId), usedItem.getCreatedAt(), usedItem.getItemStatus());
-                });
+                }).orElseThrow(
+                        () -> new CustomException(ErrorCode.USEDITEM_NOT_FOUND)
+                );
     }
 
     @Override
