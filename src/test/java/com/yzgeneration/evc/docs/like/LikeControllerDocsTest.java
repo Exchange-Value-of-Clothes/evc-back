@@ -66,14 +66,16 @@ public class LikeControllerDocsTest extends RestDocsSupport {
         LikeItemsResponse likeResponse = new LikeItemsResponse(0L, "title", 1000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 0L, LocalDateTime.MIN);
         SliceResponse<LikeItemsResponse> likeItemsResponseSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(likeResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
-        when(likeService.getMyLikedItems(any()))
+        when(likeService.getMyLikedItems(any(), any()))
                 .thenReturn(likeItemsResponseSliceResponse);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/likes/my"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/likes/my")
+                        .param("cursor", LocalDateTime.MIN.toString()))
                 .andExpect(status().isOk())
                 .andDo(document("like-my-get",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        queryParameters(parameterWithName("cursor").description("이전 좋아요 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
                         responseFields(
                                 fieldWithPath("content").type(JsonFieldType.ARRAY)
                                         .description("상품 정보 리스트"),

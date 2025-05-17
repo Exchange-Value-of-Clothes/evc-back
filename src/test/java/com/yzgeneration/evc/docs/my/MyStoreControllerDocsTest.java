@@ -33,7 +33,6 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MyStoreControllerDocsTest extends RestDocsSupport {
@@ -65,7 +64,7 @@ public class MyStoreControllerDocsTest extends RestDocsSupport {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         queryParameters(
-                                parameterWithName("cursor").description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)"),
+                                parameterWithName("cursor").description("이전 중고상품 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)"),
                                 parameterWithName("condition").description("중고상품의 TransactionMode (공백, BUY, SELL / 공백시 전체 조회)")),
                         responseFields(
                                 fieldWithPath("postItemCount").type(JsonFieldType.NUMBER)
@@ -118,7 +117,7 @@ public class MyStoreControllerDocsTest extends RestDocsSupport {
                 .andDo(document("my-auctionitems-get",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        queryParameters(parameterWithName("cursor").description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
+                        queryParameters(parameterWithName("cursor").description("이전 경매상품 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
                         responseFields(
                                 fieldWithPath("postItemCount").type(JsonFieldType.NUMBER)
                                         .description("전체 게시물수"),

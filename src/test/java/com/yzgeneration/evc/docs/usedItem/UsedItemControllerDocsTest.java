@@ -93,7 +93,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                 .andDo(document("useditems-get",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        queryParameters(parameterWithName("cursor").description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
+                        queryParameters(parameterWithName("cursor").description("이전 중고상품 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
                         responseFields(
                                 fieldWithPath("content").type(JsonFieldType.ARRAY)
                                         .description("중고상품 정보 리스트"),
@@ -213,7 +213,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                         preprocessResponse(prettyPrint()),
                         queryParameters(
                                 parameterWithName("q").description("검색어"),
-                                parameterWithName("cursor").description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
+                                parameterWithName("cursor").description("이전 중고상품 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
                         responseFields(
                                 fieldWithPath("content").type(JsonFieldType.ARRAY)
                                         .description("중고상품 정보 리스트 (제목 또는 내용에 검색어가 포함된 모든 항목 조회 / 대소문자 구분 없음)"),
