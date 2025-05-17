@@ -25,8 +25,8 @@ public class UsedItemReader {
     private final LikeRepository likeRepository;
     private final ItemType ITEM_TYPE = ItemType.USEDITEM;
 
-    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor) {
-        SliceResponse<GetUsedItemsResponse> response = usedItemRepository.getUsedItems(cursor);
+    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor, Long memberId) {
+        SliceResponse<GetUsedItemsResponse> response = usedItemRepository.getUsedItems(cursor, memberId);
         response.getContent().forEach(res -> {
             Long count = likeRepository.countByItemIdAndItemType(res.getUsedItemId(), ITEM_TYPE);
             res.setLikeCount(count);

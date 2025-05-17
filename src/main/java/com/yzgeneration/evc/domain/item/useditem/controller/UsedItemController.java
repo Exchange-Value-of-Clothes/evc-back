@@ -2,7 +2,6 @@ package com.yzgeneration.evc.domain.item.useditem.controller;
 
 import com.yzgeneration.evc.common.dto.CommonResponse;
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
@@ -28,8 +27,8 @@ public class UsedItemController {
     }
 
     @GetMapping
-    public SliceResponse<GetUsedItemsResponse> getUsedItems(@RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
-        return usedItemService.getUsedItems(cursor);
+    public SliceResponse<GetUsedItemsResponse> getUsedItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
+        return usedItemService.getUsedItems(cursor, memberPrincipal.getId());
     }
 
     @GetMapping("/{usedItemId}")

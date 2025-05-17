@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface UsedItemRepository {
     UsedItem save(UsedItem usedItem);
 
-    SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor);
+    SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor, Long memberId);
 
     GetUsedItemResponse findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId);
 

@@ -37,8 +37,8 @@ public class UsedItemService {
         itemImageAppender.createItemImages(usedItem.getId(), itemType, createUsedItemRequest.getImageNames());
     }
 
-    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor) {
-        return usedItemReader.getUsedItems(cursor);
+    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor, Long memberId) {
+        return usedItemReader.getUsedItems(cursor, memberId);
     }
 
 

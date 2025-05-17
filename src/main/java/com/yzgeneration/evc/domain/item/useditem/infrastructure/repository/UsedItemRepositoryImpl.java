@@ -30,6 +30,7 @@ import java.util.Optional;
 import static com.yzgeneration.evc.domain.image.infrastructure.entity.QItemImageEntity.itemImageEntity;
 import static com.yzgeneration.evc.domain.image.infrastructure.entity.QProfileImageEntity.profileImageEntity;
 import static com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.QUsedItemEntity.usedItemEntity;
+import static com.yzgeneration.evc.domain.like.infrastructure.entity.QLikeEntity.likeEntity;
 import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
 
 @Repository
@@ -46,7 +47,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor, Long memberId) {
 
         List<GetUsedItemsResponse> usedItemListResponses = jpaQueryFactory
                 .select(Projections.constructor(GetUsedItemsResponse.class,
@@ -58,13 +59,18 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         itemImageEntity.imageName,
                         Expressions.constant(0L),
                         usedItemEntity.createdAt,
-                        usedItemEntity.itemStatus)
+                        usedItemEntity.itemStatus,
+                        likeEntity.id.isNotNull())
                 )
                 .from(usedItemEntity)
                 .join(itemImageEntity)
                 .on(itemImageEntity.itemId.eq(usedItemEntity.id)
                         .and(itemImageEntity.isThumbnail.isTrue())
                         .and(itemImageEntity.itemType.eq(ITEM_TYPE)))
+                .leftJoin(likeEntity)
+                .on(likeEntity.itemId.eq(usedItemEntity.id)
+                        .and(likeEntity.itemType.eq(ITEM_TYPE))
+                        .and(likeEntity.memberId.eq(memberId)))
                 .where(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)
                         .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null))
                 .orderBy(usedItemEntity.createdAt.desc())
