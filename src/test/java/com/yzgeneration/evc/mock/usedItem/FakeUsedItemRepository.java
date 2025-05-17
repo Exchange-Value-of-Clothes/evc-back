@@ -41,7 +41,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor, Long memberId) {
         int size = 10;
 
         List<UsedItem> usedItemList = new ArrayList<>(mockUsedItems.stream()
@@ -57,7 +57,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
 
         List<GetUsedItemsResponse> usedItemListResponses = usedItemList.stream().map(
                 usedItem -> new GetUsedItemsResponse(usedItem.getId(), usedItem.getItemDetails().getTitle(), usedItem.getItemDetails().getPrice(), usedItem.getUsedItemTransaction().getTransactionMode(), usedItem.getUsedItemTransaction().getTransactionStatus(), "imageName.jpg",
-                        0L, usedItem.getCreatedAt(), usedItem.getItemStatus())
+                        0L, usedItem.getCreatedAt(), usedItem.getItemStatus(), true)
         ).toList();
 
         LocalDateTime localCreateAt = !usedItemListResponses.isEmpty() ? usedItemListResponses.get(usedItemListResponses.size() - 1).getCreateAt() : null;

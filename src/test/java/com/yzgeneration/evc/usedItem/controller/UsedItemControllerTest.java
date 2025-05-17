@@ -70,10 +70,10 @@ class UsedItemControllerTest {
     @DisplayName("중고상품 리스트 조회")
     void getUsedItems() throws Exception {
 
-        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName.jpg", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName.jpg", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE, true);
         SliceResponse<GetUsedItemsResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
-        when(usedItemService.getUsedItems(any()))
+        when(usedItemService.getUsedItems(any(), any()))
                 .thenReturn(getUsedItemSliceResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/useditems")

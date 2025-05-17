@@ -80,10 +80,10 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("중고상품 전체 조회 (slice)")
     void getUsedItems() throws Exception {
-        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE, true);
         SliceResponse<GetUsedItemsResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
-        when(usedItemService.getUsedItems(any()))
+        when(usedItemService.getUsedItems(any(), any()))
                 .thenReturn(getUsedItemSliceResponse);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -200,7 +200,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("중고상품 검색 (slice)")
     void searchUsedItems() throws Exception {
-        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE);
+        GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE, true);
         SliceResponse<GetUsedItemsResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(usedItemService.searchUsedItems(any(), any()))
