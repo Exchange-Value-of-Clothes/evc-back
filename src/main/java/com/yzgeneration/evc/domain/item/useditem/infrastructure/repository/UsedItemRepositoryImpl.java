@@ -126,39 +126,39 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     }
 
     @Override
-    public Optional<GetUsedItemResponse> findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
-
-        GetUsedItemResponse usedItemResponse = jpaQueryFactory
-                .select(Projections.constructor(GetUsedItemResponse.class,
-                        usedItemEntity.itemDetailsEntity.title,
-                        usedItemEntity.itemDetailsEntity.category,
-                        usedItemEntity.itemDetailsEntity.content,
-                        usedItemEntity.itemDetailsEntity.price,
-                        usedItemEntity.usedItemTransactionEntity.transactionType,
-                        usedItemEntity.usedItemTransactionEntity.transactionMode,
-                        usedItemEntity.usedItemTransactionEntity.transactionStatus,
-                        Expressions.constant(new ArrayList<>()),
-                        usedItemEntity.itemStatsEntity.viewCount,
-                        Expressions.constant(0L),
-                        usedItemEntity.itemStatsEntity.chattingCount,
-                        usedItemEntity.memberId,
-                        memberEntity.memberPrivateInformationEntity.nickname,
-                        profileImageEntity.name,
-                        //조회한 중고상품의 게시자와 조회자의 일치 체크
-                        usedItemEntity.memberId.eq(memberId),
-                        usedItemEntity.createdAt,
-                        usedItemEntity.itemStatus
-                ))
-                .from(usedItemEntity)
-                .join(memberEntity)
-                .on(memberEntity.id.eq(usedItemEntity.memberId))
-                .join(profileImageEntity)
-                .on(profileImageEntity.memberId.eq(usedItemEntity.memberId))
-                .where(usedItemEntity.id.eq(usedItemId)
-                        .and(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
-                .fetchFirst();
-
-        return Optional.ofNullable(usedItemResponse);
+    public GetUsedItemResponse findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
+        return Optional.ofNullable(jpaQueryFactory
+                        .select(Projections.constructor(GetUsedItemResponse.class,
+                                usedItemEntity.itemDetailsEntity.title,
+                                usedItemEntity.itemDetailsEntity.category,
+                                usedItemEntity.itemDetailsEntity.content,
+                                usedItemEntity.itemDetailsEntity.price,
+                                usedItemEntity.usedItemTransactionEntity.transactionType,
+                                usedItemEntity.usedItemTransactionEntity.transactionMode,
+                                usedItemEntity.usedItemTransactionEntity.transactionStatus,
+                                Expressions.constant(new ArrayList<>()),
+                                usedItemEntity.itemStatsEntity.viewCount,
+                                Expressions.constant(0L),
+                                usedItemEntity.itemStatsEntity.chattingCount,
+                                usedItemEntity.memberId,
+                                memberEntity.memberPrivateInformationEntity.nickname,
+                                profileImageEntity.name,
+                                //조회한 중고상품의 게시자와 조회자의 일치 체크
+                                usedItemEntity.memberId.eq(memberId),
+                                usedItemEntity.createdAt,
+                                usedItemEntity.itemStatus
+                        ))
+                        .from(usedItemEntity)
+                        .join(memberEntity)
+                        .on(memberEntity.id.eq(usedItemEntity.memberId))
+                        .join(profileImageEntity)
+                        .on(profileImageEntity.memberId.eq(usedItemEntity.memberId))
+                        .where(usedItemEntity.id.eq(usedItemId)
+                                .and(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
+                        .fetchFirst())
+                .orElseThrow(
+                        () -> new CustomException(ErrorCode.USEDITEM_NOT_FOUND)
+                );
     }
 
     @Override
