@@ -46,8 +46,8 @@ public class UsedItemService {
         return usedItemReader.getUsedItem(memberId, usedItemId);
     }
 
-    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor) {
-        return usedItemReader.getUsedItemsBySearch(q, cursor);
+    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor, Long memberId) {
+        return usedItemReader.getUsedItemsBySearch(q, cursor, memberId);
     }
 
     public MyOrMemberUsedItemsResponse getMyOrMemberUsedItems(Long memberId, LocalDateTime cursor, TransactionMode transactionMode) {

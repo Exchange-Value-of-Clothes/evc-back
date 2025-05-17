@@ -253,7 +253,8 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         itemImageEntity.imageName,
                         auctionItemEntity.startTime,
                         auctionItemEntity.endTime,
-                        memberPointEntity.point))
+                        memberPointEntity.point,
+                        likeEntity.id.isNotNull()))
                 .from(auctionItemEntity)
                 .join(itemImageEntity) //썸네일 조회를 위해 join
                 .on(itemImageEntity.itemId.eq(auctionItemEntity.id)
@@ -262,6 +263,10 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                 )
                 .join(memberPointEntity) //포인트 조회를 위해 join
                 .on(memberPointEntity.memberId.eq(memberId))
+                .leftJoin(likeEntity)
+                .on(likeEntity.itemId.eq(auctionItemEntity.id) //좋아요 조회를 위해
+                        .and(likeEntity.itemType.eq(ITEM_TYPE))
+                        .and(likeEntity.memberId.eq(memberId)))
                 .where(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE) //게시 중인 경매상품
                         .and(auctionItemEntity.transactionStatus.eq(TransactionStatus.ONGOING)) //현재 거래중 상태인 경매상품
                         .and(cursor != null ? auctionItemEntity.startTime.lt(cursor) : null)

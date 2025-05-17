@@ -173,7 +173,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor, Long memberId) {
 
         List<GetUsedItemsResponse> usedItemListResponses = jpaQueryFactory
                 .select(Projections.constructor(GetUsedItemsResponse.class,
@@ -186,7 +186,8 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         //TODO like 테이블 생기면 join해서 해당 값 채우기
                         Expressions.constant(0L),
                         usedItemEntity.createdAt,
-                        usedItemEntity.itemStatus)
+                        usedItemEntity.itemStatus,
+                        likeEntity.id.isNotNull())
                 )
                 .from(usedItemEntity)
                 .join(itemImageEntity)
@@ -194,6 +195,10 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         .and(itemImageEntity.isThumbnail.isTrue())
                         .and(itemImageEntity.itemType.eq(ITEM_TYPE))
                 )
+                .leftJoin(likeEntity)
+                .on(likeEntity.itemId.eq(usedItemEntity.id)
+                        .and(likeEntity.itemType.eq(ITEM_TYPE))
+                        .and(likeEntity.memberId.eq(memberId)))
                 .where(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)
                         //TODO(판매완료된 거는 빼고 줄까?)
                         .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null)

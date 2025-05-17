@@ -37,7 +37,7 @@ public class UsedItemController {
     }
 
     @GetMapping("/search")
-    public SliceResponse<GetUsedItemsResponse> searchUsedItems(@RequestParam String q, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
-        return usedItemService.searchUsedItems(q, cursor);
+    public SliceResponse<GetUsedItemsResponse> searchUsedItems(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestParam String q, @RequestParam(value = "cursor", required = false) LocalDateTime cursor) {
+        return usedItemService.searchUsedItems(q, cursor, memberPrincipal.getId());
     }
 }

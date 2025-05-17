@@ -9,8 +9,6 @@ import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetMyOrMe
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
 import com.yzgeneration.evc.domain.like.service.port.LikeRepository;
-import com.yzgeneration.evc.exception.CustomException;
-import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -46,8 +44,8 @@ public class UsedItemReader {
         return getUsedItemResponse;
     }
 
-    public SliceResponse<GetUsedItemsResponse> getUsedItemsBySearch(String q, LocalDateTime cursor) {
-        SliceResponse<GetUsedItemsResponse> response = usedItemRepository.searchUsedItems(q, cursor);
+    public SliceResponse<GetUsedItemsResponse> getUsedItemsBySearch(String q, LocalDateTime cursor, Long memberId) {
+        SliceResponse<GetUsedItemsResponse> response = usedItemRepository.searchUsedItems(q, cursor, memberId);
         response.getContent().forEach(res -> {
             Long count = likeRepository.countByItemIdAndItemType(res.getUsedItemId(), ITEM_TYPE);
             res.setLikeCount(count);
