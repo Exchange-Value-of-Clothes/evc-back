@@ -115,6 +115,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("중고상품 게시시간 (createAt과 현재시간과의 차이값을 프론트 화면에 렌더링)"),
                                 fieldWithPath("content[].itemStatus").type(JsonFieldType.STRING)
                                         .description("중고상품 상태"),
+                                fieldWithPath("content[].isLike").type(JsonFieldType.BOOLEAN)
+                                        .description("회원의 상품 좋아요 여부"),
                                 fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재여부"),
                                 fieldWithPath("size").type(JsonFieldType.NUMBER)
@@ -203,7 +205,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
         GetUsedItemsResponse getUsedItemsResponse = new GetUsedItemsResponse(1L, "title", 5000, TransactionMode.BUY, TransactionStatus.ONGOING, "imageName", 1L, LocalDateTime.MIN, ItemStatus.ACTIVE, true);
         SliceResponse<GetUsedItemsResponse> getUsedItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getUsedItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
-        when(usedItemService.searchUsedItems(any(), any()))
+        when(usedItemService.searchUsedItems(any(), any(), any()))
                 .thenReturn(getUsedItemSliceResponse);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -238,6 +240,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("중고상품 게시시간 (createAt과 현재시간과의 차이값을 프론트 화면에 렌더링)"),
                                 fieldWithPath("content[].itemStatus").type(JsonFieldType.STRING)
                                         .description("중고상품 상태"),
+                                fieldWithPath("content[].isLike").type(JsonFieldType.BOOLEAN)
+                                        .description("회원의 상품 좋아요 여부"),
                                 fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재여부"),
                                 fieldWithPath("size").type(JsonFieldType.NUMBER)

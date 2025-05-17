@@ -84,7 +84,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
     void getAuctionItems() throws Exception {
 
         AuctionItemPriceDetailResponse auctionItemPriceDetailResponse = new AuctionItemPriceDetailResponse(5000, 5000, 1000);
-        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000, true);
         SliceResponse<GetAuctionItemsResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(auctionItemService.getAuctionItems(any(), any()))
@@ -122,6 +122,8 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                                         .description("경매 종료 시간 (시작 시간 + 24시간 / 남은 시간 : end - start)"),
                                 fieldWithPath("content[].point").type(JsonFieldType.NUMBER)
                                         .description("회원의 포인트"),
+                                fieldWithPath("content[].isLike").type(JsonFieldType.BOOLEAN)
+                                        .description("회원의 상품 좋아요 여부"),
                                 fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재여부"),
                                 fieldWithPath("size").type(JsonFieldType.NUMBER)
@@ -196,7 +198,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
     void searchAuctionItems() throws Exception {
 
         AuctionItemPriceDetailResponse auctionItemPriceDetailResponse = new AuctionItemPriceDetailResponse(5000, 5000, 1000);
-        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 0L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 0L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000, true);
         SliceResponse<GetAuctionItemsResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(auctionItemService.searchAuctionItems(any(), any(), any()))
@@ -237,6 +239,8 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                                         .description("경매 종료 시간 (시작 시간 + 24시간 / 남은 시간 : end - start)"),
                                 fieldWithPath("content[].point").type(JsonFieldType.NUMBER)
                                         .description("회원의 포인트"),
+                                fieldWithPath("content[].isLike").type(JsonFieldType.BOOLEAN)
+                                        .description("회원의 상품 좋아요 여부"),
                                 fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재여부"),
                                 fieldWithPath("size").type(JsonFieldType.NUMBER)

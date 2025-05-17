@@ -72,7 +72,7 @@ public class AuctionItemControllerTest {
     void getAuctionItems() throws Exception {
 
         AuctionItemPriceDetailResponse auctionItemPriceDetailResponse = new AuctionItemPriceDetailResponse(5000, 5000, 1000);
-        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000, true);
         SliceResponse<GetAuctionItemsResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(auctionItemService.getAuctionItems(any(), any()))

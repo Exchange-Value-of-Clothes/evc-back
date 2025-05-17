@@ -85,7 +85,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor, Long memberId) {
         return null;
     }
 
