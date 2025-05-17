@@ -11,6 +11,8 @@ import com.yzgeneration.evc.domain.like.service.port.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class LikeService {
@@ -32,7 +34,7 @@ public class LikeService {
         return new LikeResponse(!exits, likeRepository.countByItemIdAndItemType(itemId, itemType));
     }
 
-    public SliceResponse<LikeItemsResponse> getMyLikedItems(Long memberId) {
-        return likeReader.getMyLikedItems(memberId);
+    public SliceResponse<LikeItemsResponse> getMyLikedItems(Long memberId, LocalDateTime cursor) {
+        return likeReader.getMyLikedItems(memberId, cursor);
     }
 }

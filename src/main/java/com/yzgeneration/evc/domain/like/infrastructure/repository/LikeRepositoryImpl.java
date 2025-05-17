@@ -64,9 +64,10 @@ public class LikeRepositoryImpl implements LikeRepository {
     }
 
     @Override
-    public SliceResponse<Like> getLikesByMemberIdAndSize(Long memberId, int size) {
+    public SliceResponse<Like> getLikesByMemberIdAndSize(Long memberId, int size, LocalDateTime cursor) {
         List<Like> likes = jpaQueryFactory.selectFrom(likeEntity)
-                .where(likeEntity.memberId.eq(memberId))
+                .where(likeEntity.memberId.eq(memberId)
+                        .and(cursor != null ? likeEntity.createAt.lt(cursor) : null))
                 .orderBy(likeEntity.createAt.desc()) //최신순
                 .limit(size + 1)
                 .fetch()

@@ -5,6 +5,8 @@ import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.like.model.Like;
 import com.yzgeneration.evc.domain.like.service.port.LikeRepository;
 
+import java.time.LocalDateTime;
+
 public class FakeLikeRepository implements LikeRepository {
     @Override
     public Like save(Like like) {
@@ -27,7 +29,7 @@ public class FakeLikeRepository implements LikeRepository {
     }
 
     @Override
-    public SliceResponse<Like> getLikesByMemberIdAndSize(Long memberId, int size) {
+    public SliceResponse<Like> getLikesByMemberIdAndSize(Long memberId, int size, LocalDateTime cursor) {
         return null;
     }
 }
