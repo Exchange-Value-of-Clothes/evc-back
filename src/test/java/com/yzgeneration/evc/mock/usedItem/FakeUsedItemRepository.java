@@ -72,7 +72,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
                 .map(usedItem -> {
                     List<String> imageNameList = List.of("imageName.jpg");
                     return new GetUsedItemResponse(usedItem.getItemDetails().getTitle(), usedItem.getItemDetails().getCategory(), usedItem.getItemDetails().getContent(), usedItem.getItemDetails().getPrice(), usedItem.getUsedItemTransaction().getTransactionType(), usedItem.getUsedItemTransaction().getTransactionMode(), usedItem.getUsedItemTransaction().getTransactionStatus(), imageNameList,
-                            usedItem.getItemStats().getViewCount(), 0L, usedItem.getItemStats().getChattingCount(), usedItem.getMemberId(), "marketNickname", usedItem.getMemberId().equals(memberId), usedItem.getCreatedAt(), usedItem.getItemStatus());
+                            usedItem.getItemStats().getViewCount(), 0L, usedItem.getItemStats().getChattingCount(), usedItem.getMemberId(), "marketNickname", "profileImageName", usedItem.getMemberId().equals(memberId), usedItem.getCreatedAt(), usedItem.getItemStatus());
                 });
     }
 

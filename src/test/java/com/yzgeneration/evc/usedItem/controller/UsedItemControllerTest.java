@@ -114,6 +114,7 @@ class UsedItemControllerTest {
                 .chattingCount(1L)
                 .marketMemberId(1L)
                 .marketNickname("marketNickname")
+                .profileImageName("profileImageName")
                 .isOwned(true)
                 .createAt(LocalDateTime.MIN)
                 .itemStatus(ItemStatus.ACTIVE)
@@ -138,6 +139,7 @@ class UsedItemControllerTest {
                 .andExpect(jsonPath("$.chattingCount").value(1L))
                 .andExpect(jsonPath("$.marketMemberId").value(1L))
                 .andExpect(jsonPath("$.marketNickname").value("marketNickname"))
+                .andExpect(jsonPath("$.profileImageName").value("profileImageName"))
                 .andExpect(jsonPath("$.isOwned").value(true))
                 .andExpect(jsonPath("$.createAt").value("+1000000000-01-01T00:00:00"))
                 .andExpect(jsonPath("$.itemStatus").value("ACTIVE"));

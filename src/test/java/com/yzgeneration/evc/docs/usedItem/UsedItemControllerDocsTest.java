@@ -143,6 +143,7 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                 .chattingCount(1L)
                 .marketMemberId(1L)
                 .marketNickname("marketNickname")
+                .profileImageName("profileImageName")
                 .isOwned(true)
                 .createAt(LocalDateTime.MIN)
                 .itemStatus(ItemStatus.ACTIVE)
@@ -185,6 +186,8 @@ public class UsedItemControllerDocsTest extends RestDocsSupport {
                                         .description("상점 주인의 id (상점 주인 상세페이지 이동에서 사용될 수 있으니 추가함)"),
                                 fieldWithPath("marketNickname").type(JsonFieldType.STRING)
                                         .description("상점 주인 nickname"),
+                                fieldWithPath("profileImageName").type(JsonFieldType.STRING)
+                                        .description("상점 주인 profileImageName"),
                                 fieldWithPath("isOwned").type(JsonFieldType.BOOLEAN)
                                         .description("내가 작성한 글인지 유무"),
                                 fieldWithPath("createAt").type(JsonFieldType.STRING)
