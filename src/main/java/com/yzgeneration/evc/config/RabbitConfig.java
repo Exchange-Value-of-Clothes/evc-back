@@ -2,10 +2,7 @@ package com.yzgeneration.evc.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -63,6 +60,22 @@ public class RabbitConfig {
     public Binding bindingForAuction(@Qualifier("auctionQueue") Queue queue,
                                      @Qualifier("auctionTopic") TopicExchange topicExchangeForAuction) {
         return BindingBuilder.bind(queue).to(topicExchangeForAuction).with("auction-room.*");
+    }
+
+    @Bean(name = "tossWebhookQueue")
+    public Queue tossWebhookQueue() {
+        return new Queue("toss.webhook.queue", true);
+    }
+
+    @Bean(name = "tossWebhookExchange")
+    public DirectExchange tossWebhookExchange() {
+        return new DirectExchange("toss.webhook.exchange", true, false);
+    }
+
+    @Bean
+    public Binding tossWebhookBinding(@Qualifier("tossWebhookQueue") Queue tossWebhookQueue,
+                                      @Qualifier("tossWebhookExchange") DirectExchange tossWebhookExchange) {
+        return BindingBuilder.bind(tossWebhookQueue).to(tossWebhookExchange).with("payment");
     }
 
     @Bean

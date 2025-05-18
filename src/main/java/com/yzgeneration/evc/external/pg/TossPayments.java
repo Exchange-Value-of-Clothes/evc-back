@@ -41,6 +41,18 @@ public class TossPayments implements PaymentGateway {
                 .toEntity(Payment.class).getBody();
     }
 
+    @Override
+    public void confirmWithWebhook(String orderId, String paymentKey, int amount) {
+        String credentials = secret + ":";
+        String secretKey =  Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
+        RestClient.create("https://api.tosspayments.com/v1/payments/confirm")
+                .post()
+                .header("Authorization", "Basic "+ secretKey)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(createRequestBody(new TossConfirmRequest(orderId, paymentKey, amount)))
+                .retrieve()
+                .toBodilessEntity();
+    }
 
 
     private String createRequestBody(TossConfirmRequest request) {

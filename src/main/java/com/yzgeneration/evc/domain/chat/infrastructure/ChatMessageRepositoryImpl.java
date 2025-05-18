@@ -185,7 +185,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
                     profileImageEntity.name
                     )).from(usedItemEntity)
                     .where(usedItemEntity.id.eq(itemId))
-                    .join(profileImageEntity).on(profileImageEntity.memberId.eq(usedItemEntity.memberId))
+                    .join(profileImageEntity).on(profileImageEntity.memberId.eq(otherPersonId))
                     .fetchFirst();
         } else {
             chatRoomMetaData = jpaQueryFactory.select(Projections.constructor(
@@ -196,7 +196,7 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
                             profileImageEntity.name
                     )).from(auctionItemEntity)
                     .where(auctionItemEntity.id.eq(itemId))
-                    .join(profileImageEntity).on(profileImageEntity.memberId.eq(auctionItemEntity.memberId))
+                    .join(profileImageEntity).on(profileImageEntity.memberId.eq(otherPersonId))
                     .fetchFirst();
         }
 
