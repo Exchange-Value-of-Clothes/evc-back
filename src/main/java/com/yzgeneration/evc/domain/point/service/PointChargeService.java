@@ -7,6 +7,7 @@ import com.yzgeneration.evc.domain.point.model.PointCharge;
 
 import com.yzgeneration.evc.external.pg.Payment;
 import com.yzgeneration.evc.external.pg.PaymentGateway;
+import com.yzgeneration.evc.external.pg.PaymentStatusChanged;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +29,14 @@ public class PointChargeService {
         Payment payment = paymentGateway.confirm(orderId, paymentKey, amount);
         PointCharge pointCharge = pointChargeRepository.getById(orderId);
         pointChargeProcessor.charge(pointCharge, memberId, payment.getTotalAmount());
+    }
+
+    public void confirmWithWebhook(String orderId, String paymentKey, int amount, Long id) {
+        pointChargeValidator.validate(orderId, amount);
+        paymentGateway.confirmWithWebhook(orderId, paymentKey, amount);
+    }
+
+    public void consumeWebhook(PaymentStatusChanged paymentStatusChanged) {
+        pointChargeProcessor.sendEvent(paymentStatusChanged);
     }
 }

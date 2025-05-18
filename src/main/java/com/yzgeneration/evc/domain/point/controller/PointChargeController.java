@@ -36,7 +36,13 @@ public class PointChargeController {
     // 웹훅
     @PostMapping("/webhook")
     public void webhook(@RequestBody PaymentStatusChanged paymentStatusChanged) {
-        System.out.println("paymentStatusChanged.toString() = " + paymentStatusChanged.toString());
+        pointChargeService.consumeWebhook(paymentStatusChanged);
+    }
+
+    @PostMapping("/v2/confirm")
+    public CommonResponse confirmV2(@RequestBody PointChargeConfirmRequest pointChargeConfirmRequest, MemberPrincipal memberPrincipal) {
+        pointChargeService.confirmWithWebhook(pointChargeConfirmRequest.getOrderId(), pointChargeConfirmRequest.getPaymentKey(), pointChargeConfirmRequest.getAmount(), memberPrincipal.getId());
+        return CommonResponse.success();
     }
 
 
