@@ -142,7 +142,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
         AuctionItemDetailsResponse auctionItemDetailsResponse = new AuctionItemDetailsResponse("title", "category", "content");
         AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1L, 1L, 1L);
         List<String> imageNameList = List.of("imageName.jpg");
-        GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 5000, 1000, 1L, "marketNickname", "profileImageName", false, ItemStatus.ACTIVE);
+        GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 5000, 1000, 1L, "marketNickname", "profileImageName", false, ItemStatus.ACTIVE, 1000);
 
         when(auctionItemService.getAuctionItem(any(), any()))
                 .thenReturn(getAuctionItemResponse);
@@ -189,7 +189,9 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("isOwned").type(JsonFieldType.BOOLEAN)
                                         .description("내가 작성한 글인지 유무"),
                                 fieldWithPath("itemStatus").type(JsonFieldType.STRING)
-                                        .description("중고상품 게시상태 (ACTIVE, DELETED, BAN)")
+                                        .description("중고상품 게시상태 (ACTIVE, DELETED, BAN)"),
+                                fieldWithPath("point").type(JsonFieldType.NUMBER)
+                                        .description("회원의 포인트")
                         )));
     }
 

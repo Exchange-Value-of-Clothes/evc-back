@@ -131,8 +131,6 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         .and(itemImageEntity.isThumbnail.isTrue())
                         .and(itemImageEntity.itemType.eq(ITEM_TYPE))
                 )
-                .join(memberPointEntity) //포인트 조회를 위해 join
-                .on(memberPointEntity.memberId.eq(memberId))
                 .where(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE) //게시 중인 경매상품
                         .and(auctionItemEntity.transactionStatus.eq(TransactionStatus.ONGOING)) //현재 거래중 상태인 경매상품
                         .and(auctionItemEntity.memberId.eq(memberId)) //본인이 게시한 거 조회
@@ -177,12 +175,15 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                                 memberEntity.memberPrivateInformationEntity.nickname, //상품 주인 닉네임
                                 profileImageEntity.name,
                                 auctionItemEntity.memberId.eq(memberId), //상품 주인과 조회한 회원의 일치 여부
-                                auctionItemEntity.itemStatus))
+                                auctionItemEntity.itemStatus,
+                                memberPointEntity.point))
                         .from(auctionItemEntity)
                         .join(memberEntity) //마켓 주인 닉네임 조회를 위해
                         .on(memberEntity.id.eq(auctionItemEntity.memberId))
                         .join(profileImageEntity) //마켓 주인 프로필 사진 조회를 위해
                         .on(profileImageEntity.memberId.eq(auctionItemEntity.memberId))
+                        .join(memberPointEntity) //포인트 조회를 위해 join
+                        .on(memberPointEntity.memberId.eq(memberId))
                         .where(auctionItemEntity.id.eq(id)
                                 .and(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
                         .fetchOne())

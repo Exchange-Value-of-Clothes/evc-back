@@ -49,6 +49,8 @@ public class AuctionItemResponse {
         private Boolean isOwned;
 
         private ItemStatus itemStatus;
+
+        private int point;
     }
 
     @Getter
