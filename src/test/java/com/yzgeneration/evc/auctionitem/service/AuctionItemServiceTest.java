@@ -12,8 +12,10 @@ import com.yzgeneration.evc.domain.item.auctionitem.service.AuctionItemService;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
 import com.yzgeneration.evc.domain.item.implement.ItemCounter;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
+import com.yzgeneration.evc.domain.like.service.port.LikeRepository;
 import com.yzgeneration.evc.mock.auctionitem.FakeAuctionItemRepository;
 import com.yzgeneration.evc.mock.image.FakeItemImageRepository;
+import com.yzgeneration.evc.mock.like.FakeLikeRepository;
 import com.yzgeneration.evc.mock.usedItem.FakeUsedItemRepository;
 import org.junit.jupiter.api.*;
 
@@ -30,8 +32,9 @@ public class AuctionItemServiceTest {
         UsedItemRepository usedItemRepository = new FakeUsedItemRepository();
         AuctionItemRepository auctionItemRepository = new FakeAuctionItemRepository();
         ItemImageRepository itemImageRepository = new FakeItemImageRepository();
+        LikeRepository likeRepository = new FakeLikeRepository();
         ItemImageAppender itemImageAppender = new ItemImageAppender(itemImageRepository);
-        AuctionItemReader auctionItemReader = new AuctionItemReader(auctionItemRepository, itemImageRepository);
+        AuctionItemReader auctionItemReader = new AuctionItemReader(auctionItemRepository, itemImageRepository, likeRepository);
         ItemCounter itemCounter = new ItemCounter(usedItemRepository, auctionItemRepository);
         AuctionItemStatusUpdater auctionItemStatusUpdater = new AuctionItemStatusUpdater(auctionItemRepository);
 
@@ -81,7 +84,6 @@ public class AuctionItemServiceTest {
 
         //then
         assertThat(auctionItemResponse.getAuctionItemDetailsResponse().getTitle()).isEqualTo("title");
-        assertThat(auctionItemResponse.getAuctionItemStatsResponse().getLikeCount()).isEqualTo(1);
         assertThat(auctionItemResponse.getMarketMemberId()).isEqualTo(1L);
         assertThat(auctionItemResponse.getMarketNickname()).isEqualTo("marketNickname");
     }

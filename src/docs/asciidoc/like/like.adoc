@@ -1,0 +1,21 @@
+[[like-toggle]]
+== 상품 좋아요 토글
+
+=== HTTP Request
+include::{snippets}/like-toggle/http-request.adoc[]
+include::{snippets}/like-toggle/path-parameters.adoc[]
+include::{snippets}/like-toggle/query-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/like-toggle/http-response.adoc[]
+include::{snippets}/like-toggle/response-fields.adoc[]
+
+[[like-my-get]]
+== 내 좋아요 상품 조회 (슬라이스 형태)
+
+=== HTTP Request
+include::{snippets}/like-my-get/http-request.adoc[]
+
+=== HTTP Response
+include::{snippets}/like-my-get/http-response.adoc[]
+include::{snippets}/like-my-get/response-fields.adoc[]

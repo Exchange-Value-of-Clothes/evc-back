@@ -1,6 +1,6 @@
 package com.yzgeneration.evc.mock.image;
 
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.image.model.ItemImage;
 import com.yzgeneration.evc.domain.image.service.port.ItemImageRepository;
 
@@ -32,5 +32,15 @@ public class FakeItemImageRepository implements ItemImageRepository {
         return mockItemImages.stream()
                 .filter(image -> Objects.equals(image.getId(), itemId) && image.getItemType().equals(itemType))
                 .map(ItemImage::getImageName).toList();
+    }
+
+    @Override
+    public String findThumbNailImageNameByItemIdAndItemType(Long itemId, ItemType itemType) {
+        return null;
+    }
+
+    @Override
+    public void deleteAllByItemIdAndItemType(Long itemId, ItemType itemType) {
+
     }
 }

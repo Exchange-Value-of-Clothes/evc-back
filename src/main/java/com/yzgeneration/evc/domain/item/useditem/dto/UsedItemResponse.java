@@ -5,7 +5,6 @@ import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
-import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,6 +38,7 @@ public class UsedItemResponse {
         @Setter
         private List<String> imageNames;
 
+        @Setter
         private Long viewCount;
 
         private Long likeCount;
@@ -50,6 +50,8 @@ public class UsedItemResponse {
 
         private String marketNickname;
 
+        private String profileImageName;
+
         private Boolean isOwned;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -59,25 +61,25 @@ public class UsedItemResponse {
 
         //TODO 회원의 프로필 사진 response
 
-        public static GetUsedItemResponse create(UsedItem usedItem, List<String> imageNames, String marketNickname, Long memberId) {
-            return GetUsedItemResponse.builder()
-                    .title(usedItem.getItemDetails().getTitle())
-                    .category(usedItem.getItemDetails().getCategory())
-                    .content(usedItem.getItemDetails().getContent())
-                    .price(usedItem.getItemDetails().getPrice())
-                    .transactionType(usedItem.getUsedItemTransaction().getTransactionType())
-                    .transactionMode(usedItem.getUsedItemTransaction().getTransactionMode())
-                    .transactionStatus(usedItem.getUsedItemTransaction().getTransactionStatus())
-                    .imageNames(imageNames)
-                    .viewCount(usedItem.getItemStats().getViewCount())
-                    .likeCount(usedItem.getItemStats().getLikeCount())
-                    .chattingCount(usedItem.getItemStats().getChattingCount())
-                    .marketMemberId(usedItem.getMemberId())
-                    .marketNickname(marketNickname)
-                    .isOwned(usedItem.getMemberId().equals(memberId))
-                    .createAt(usedItem.getCreatedAt())
-                    .itemStatus(usedItem.getItemStatus())
-                    .build();
-        }
+//        public static GetUsedItemResponse create(UsedItem usedItem, List<String> imageNames, String marketNickname, Long memberId) {
+//            return GetUsedItemResponse.builder()
+//                    .title(usedItem.getItemDetails().getTitle())
+//                    .category(usedItem.getItemDetails().getCategory())
+//                    .content(usedItem.getItemDetails().getContent())
+//                    .price(usedItem.getItemDetails().getPrice())
+//                    .transactionType(usedItem.getUsedItemTransaction().getTransactionType())
+//                    .transactionMode(usedItem.getUsedItemTransaction().getTransactionMode())
+//                    .transactionStatus(usedItem.getUsedItemTransaction().getTransactionStatus())
+//                    .imageNames(imageNames)
+//                    .viewCount(usedItem.getItemStats().getViewCount())
+//                    .likeCount(usedItem.getItemStats().getLikeCount())
+//                    .chattingCount(usedItem.getItemStats().getChattingCount())
+//                    .marketMemberId(usedItem.getMemberId())
+//                    .marketNickname(marketNickname)
+//                    .isOwned(usedItem.getMemberId().equals(memberId))
+//                    .createAt(usedItem.getCreatedAt())
+//                    .itemStatus(usedItem.getItemStatus())
+//                    .build();
+//        }
     }
 }

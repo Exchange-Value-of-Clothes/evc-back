@@ -11,13 +11,11 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemStatsEntity {
     private Long viewCount;
-    private Long likeCount;
     private Long chattingCount;
 
     public static ItemStatsEntity from(ItemStats itemStats) {
         return ItemStatsEntity.builder()
                 .viewCount(itemStats.getViewCount())
-                .likeCount(itemStats.getLikeCount())
                 .chattingCount(itemStats.getChattingCount())
                 .build();
     }
@@ -25,7 +23,6 @@ public class ItemStatsEntity {
     public ItemStats toModel() {
         return ItemStats.builder()
                 .viewCount(viewCount)
-                .likeCount(likeCount)
                 .chattingCount(chattingCount)
                 .build();
     }

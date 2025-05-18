@@ -2,11 +2,13 @@ package com.yzgeneration.evc.mock.usedItem;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetMyOrMemberUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
 
@@ -14,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 public class FakeUsedItemRepository implements UsedItemRepository {
 
@@ -40,7 +41,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor, Long memberId) {
         int size = 10;
 
         List<UsedItem> usedItemList = new ArrayList<>(mockUsedItems.stream()
@@ -56,7 +57,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
 
         List<GetUsedItemsResponse> usedItemListResponses = usedItemList.stream().map(
                 usedItem -> new GetUsedItemsResponse(usedItem.getId(), usedItem.getItemDetails().getTitle(), usedItem.getItemDetails().getPrice(), usedItem.getUsedItemTransaction().getTransactionMode(), usedItem.getUsedItemTransaction().getTransactionStatus(), "imageName.jpg",
-                        usedItem.getItemStats().getLikeCount(), usedItem.getCreatedAt(), usedItem.getItemStatus())
+                        0L, usedItem.getCreatedAt(), usedItem.getItemStatus(), true)
         ).toList();
 
         LocalDateTime localCreateAt = !usedItemListResponses.isEmpty() ? usedItemListResponses.get(usedItemListResponses.size() - 1).getCreateAt() : null;
@@ -65,15 +66,17 @@ public class FakeUsedItemRepository implements UsedItemRepository {
     }
 
     @Override
-    public Optional<GetUsedItemResponse> findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
+    public GetUsedItemResponse findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
         return mockUsedItems.stream()
                 .filter(usedItem -> usedItem.getId().equals(usedItemId))
                 .findFirst()
                 .map(usedItem -> {
                     List<String> imageNameList = List.of("imageName.jpg");
                     return new GetUsedItemResponse(usedItem.getItemDetails().getTitle(), usedItem.getItemDetails().getCategory(), usedItem.getItemDetails().getContent(), usedItem.getItemDetails().getPrice(), usedItem.getUsedItemTransaction().getTransactionType(), usedItem.getUsedItemTransaction().getTransactionMode(), usedItem.getUsedItemTransaction().getTransactionStatus(), imageNameList,
-                            usedItem.getItemStats().getViewCount(), usedItem.getItemStats().getLikeCount(), usedItem.getItemStats().getChattingCount(), usedItem.getMemberId(), "marketNickname", usedItem.getMemberId().equals(memberId), usedItem.getCreatedAt(), usedItem.getItemStatus());
-                });
+                            usedItem.getItemStats().getViewCount(), 0L, usedItem.getItemStats().getChattingCount(), usedItem.getMemberId(), "marketNickname", "profileImageName", usedItem.getMemberId().equals(memberId), usedItem.getCreatedAt(), usedItem.getItemStatus());
+                }).orElseThrow(
+                        () -> new CustomException(ErrorCode.USEDITEM_NOT_FOUND)
+                );
     }
 
     @Override
@@ -82,7 +85,7 @@ public class FakeUsedItemRepository implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor, Long memberId) {
         return null;
     }
 

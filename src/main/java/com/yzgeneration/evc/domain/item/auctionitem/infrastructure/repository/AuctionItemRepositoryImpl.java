@@ -4,7 +4,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemDetailsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemStatsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
@@ -16,6 +15,7 @@ import com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.Auctio
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionRoomRepository;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
@@ -36,7 +36,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.yzgeneration.evc.domain.image.infrastructure.entity.QItemImageEntity.itemImageEntity;
+import static com.yzgeneration.evc.domain.image.infrastructure.entity.QProfileImageEntity.profileImageEntity;
 import static com.yzgeneration.evc.domain.item.auctionitem.infrastructure.entity.QAuctionItemEntity.auctionItemEntity;
+import static com.yzgeneration.evc.domain.like.infrastructure.entity.QLikeEntity.likeEntity;
 import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
 import static com.yzgeneration.evc.domain.point.infrastructure.QMemberPointEntity.memberPointEntity;
 
@@ -71,7 +73,8 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         itemImageEntity.imageName,
                         auctionItemEntity.startTime,
                         auctionItemEntity.endTime,
-                        memberPointEntity.point))
+                        memberPointEntity.point,
+                        likeEntity.id.isNotNull()))
                 .from(auctionItemEntity)
                 .join(itemImageEntity) //썸네일 조회를 위해 join
                 .on(itemImageEntity.itemId.eq(auctionItemEntity.id)
@@ -80,6 +83,10 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                 )
                 .join(memberPointEntity) //포인트 조회를 위해 join
                 .on(memberPointEntity.memberId.eq(memberId))
+                .leftJoin(likeEntity)
+                .on(likeEntity.itemId.eq(auctionItemEntity.id) //좋아요 조회를 위해
+                        .and(likeEntity.itemType.eq(ITEM_TYPE))
+                        .and(likeEntity.memberId.eq(memberId)))
                 .where(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE) //게시 중인 경매상품
                         .and(auctionItemEntity.transactionStatus.eq(TransactionStatus.ONGOING)) //현재 거래중 상태인 경매상품
                         .and(cursor != null ? auctionItemEntity.startTime.lt(cursor) : null))
@@ -114,7 +121,6 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         Expressions.constant(TransactionMode.AUCTION),
                         auctionItemEntity.transactionStatus,
                         itemImageEntity.imageName,
-                        //TODO like 테이블 생기면 join해서 해당 값 채우기
                         Expressions.constant(0L),
                         auctionItemEntity.startTime,
                         auctionItemEntity.itemStatus)
@@ -125,8 +131,6 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         .and(itemImageEntity.isThumbnail.isTrue())
                         .and(itemImageEntity.itemType.eq(ITEM_TYPE))
                 )
-                .join(memberPointEntity) //포인트 조회를 위해 join
-                .on(memberPointEntity.memberId.eq(memberId))
                 .where(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE) //게시 중인 경매상품
                         .and(auctionItemEntity.transactionStatus.eq(TransactionStatus.ONGOING)) //현재 거래중 상태인 경매상품
                         .and(auctionItemEntity.memberId.eq(memberId)) //본인이 게시한 거 조회
@@ -158,20 +162,28 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                                 Projections.constructor(AuctionItemStatsResponse.class,
                                         auctionItemEntity.viewCount,
                                         //TODO likeCount로 이후에 변경하기 (좋아요 기능 만들면)
-                                        auctionItemEntity.viewCount,
+                                        Expressions.constant(0L),
                                         Expressions.constant(countParticipantById(id))),
                                 Expressions.constant(new ArrayList<>()), //이후 setter를 이용해 값 설정
                                 auctionItemEntity.transactionType,
                                 auctionItemEntity.startTime,
                                 auctionItemEntity.endTime,
+                                auctionItemEntity.auctionItemPriceDetailsEntity.startPrice,
                                 auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice,
+                                auctionItemEntity.auctionItemPriceDetailsEntity.bidPrice,
                                 auctionItemEntity.memberId, //상품 주인 id
                                 memberEntity.memberPrivateInformationEntity.nickname, //상품 주인 닉네임
+                                profileImageEntity.name,
                                 auctionItemEntity.memberId.eq(memberId), //상품 주인과 조회한 회원의 일치 여부
-                                auctionItemEntity.itemStatus))
+                                auctionItemEntity.itemStatus,
+                                memberPointEntity.point))
                         .from(auctionItemEntity)
                         .join(memberEntity) //마켓 주인 닉네임 조회를 위해
                         .on(memberEntity.id.eq(auctionItemEntity.memberId))
+                        .join(profileImageEntity) //마켓 주인 프로필 사진 조회를 위해
+                        .on(profileImageEntity.memberId.eq(auctionItemEntity.memberId))
+                        .join(memberPointEntity) //포인트 조회를 위해 join
+                        .on(memberPointEntity.memberId.eq(memberId))
                         .where(auctionItemEntity.id.eq(id)
                                 .and(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
                         .fetchOne())
@@ -242,7 +254,8 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         itemImageEntity.imageName,
                         auctionItemEntity.startTime,
                         auctionItemEntity.endTime,
-                        memberPointEntity.point))
+                        memberPointEntity.point,
+                        likeEntity.id.isNotNull()))
                 .from(auctionItemEntity)
                 .join(itemImageEntity) //썸네일 조회를 위해 join
                 .on(itemImageEntity.itemId.eq(auctionItemEntity.id)
@@ -251,6 +264,10 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                 )
                 .join(memberPointEntity) //포인트 조회를 위해 join
                 .on(memberPointEntity.memberId.eq(memberId))
+                .leftJoin(likeEntity)
+                .on(likeEntity.itemId.eq(auctionItemEntity.id) //좋아요 조회를 위해
+                        .and(likeEntity.itemType.eq(ITEM_TYPE))
+                        .and(likeEntity.memberId.eq(memberId)))
                 .where(auctionItemEntity.itemStatus.eq(ItemStatus.ACTIVE) //게시 중인 경매상품
                         .and(auctionItemEntity.transactionStatus.eq(TransactionStatus.ONGOING)) //현재 거래중 상태인 경매상품
                         .and(cursor != null ? auctionItemEntity.startTime.lt(cursor) : null)

@@ -8,16 +8,18 @@ import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.domain.item.implement.ItemCounter;
-import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemRequest.CreateUsedItemRequest;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
+import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetUsedItemsResponse;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
-import com.yzgeneration.evc.domain.item.useditem.implement.UsedItemStatusUpdater;
 import com.yzgeneration.evc.domain.item.useditem.implement.UsedItemReader;
+import com.yzgeneration.evc.domain.item.useditem.implement.UsedItemStatusUpdater;
 import com.yzgeneration.evc.domain.item.useditem.service.UsedItemService;
 import com.yzgeneration.evc.domain.item.useditem.service.port.UsedItemRepository;
+import com.yzgeneration.evc.domain.like.service.port.LikeRepository;
 import com.yzgeneration.evc.mock.auctionitem.FakeAuctionItemRepository;
 import com.yzgeneration.evc.mock.image.FakeItemImageRepository;
+import com.yzgeneration.evc.mock.like.FakeLikeRepository;
 import com.yzgeneration.evc.mock.usedItem.FakeUsedItemRepository;
 import org.junit.jupiter.api.*;
 
@@ -33,7 +35,9 @@ class UsedItemServiceTest {
         UsedItemRepository usedItemRepository = new FakeUsedItemRepository();
         AuctionItemRepository auctionItemRepository = new FakeAuctionItemRepository();
         ItemImageRepository itemImageRepository = new FakeItemImageRepository();
-        UsedItemReader usedItemReader = new UsedItemReader(usedItemRepository, itemImageRepository);
+        LikeRepository likeRepository = new FakeLikeRepository();
+
+        UsedItemReader usedItemReader = new UsedItemReader(usedItemRepository, itemImageRepository, likeRepository);
         ItemImageAppender itemImageAppender = new ItemImageAppender(itemImageRepository);
         ItemCounter itemCounter = new ItemCounter(usedItemRepository, auctionItemRepository);
         UsedItemStatusUpdater usedItemStatusUpdater = new UsedItemStatusUpdater(usedItemRepository);
@@ -59,7 +63,7 @@ class UsedItemServiceTest {
     void getUsedItems() {
         //given
         //when
-        SliceResponse<GetUsedItemsResponse> usedItemListResponse = usedItemService.getUsedItems(null);
+        SliceResponse<GetUsedItemsResponse> usedItemListResponse = usedItemService.getUsedItems(null, null);
 
         //then
         assertThat(usedItemListResponse.getContent().get(0).getUsedItemId()).isEqualTo(1L);
@@ -69,7 +73,7 @@ class UsedItemServiceTest {
 
     }
 
-//    @Test
+    //    @Test
     @DisplayName("등록한 중고상품이 정상적으로 조회되는지 체크")
     void getUsedItem() {
         //given

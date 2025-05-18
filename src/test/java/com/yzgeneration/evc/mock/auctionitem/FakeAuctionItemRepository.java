@@ -1,12 +1,12 @@
 package com.yzgeneration.evc.mock.auctionitem;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.AuctionItemPriceDetailResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
-import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetMyOrMemberAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemDetailsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.AuctionItemStatsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.AuctionItemPriceDetailResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetAuctionItemsResponse;
+import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemsResponse.GetMyOrMemberAuctionItemsResponse;
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
@@ -63,7 +63,7 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
         List<GetAuctionItemsResponse> auctionItemListResponses = auctionItemList.stream().map(
                 auctionItem -> {
                     AuctionItemPriceDetailResponse auctionItemPriceDetailResponse = new AuctionItemPriceDetailResponse(auctionItem.getAuctionItemPriceDetails().getStartPrice(), auctionItem.getAuctionItemPriceDetails().getCurrentPrice(), auctionItem.getAuctionItemPriceDetails().getBidPrice());
-                    return new GetAuctionItemsResponse(auctionItem.getId(), auctionItem.getAuctionItemDetails().getTitle(), auctionItem.getAuctionItemDetails().getCategory(), auctionItemPriceDetailResponse, 1L, "imageName.jpg", auctionItem.getStartTime(), auctionItem.getEndTime(), 1000);
+                    return new GetAuctionItemsResponse(auctionItem.getId(), auctionItem.getAuctionItemDetails().getTitle(), auctionItem.getAuctionItemDetails().getCategory(), auctionItemPriceDetailResponse, 1L, "imageName.jpg", auctionItem.getStartTime(), auctionItem.getEndTime(), 1000, true);
                 }
         ).toList();
 
@@ -82,7 +82,7 @@ public class FakeAuctionItemRepository implements AuctionItemRepository {
                     AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1L, 1L, 1L);
                     List<String> imageNameList = List.of("imageName.jpg");
 
-                    return new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, auctionItem.getTransactionType(), auctionItem.getStartTime(), auctionItem.getEndTime(), auctionItem.getAuctionItemPriceDetails().getCurrentPrice(), auctionItem.getMemberId(), "marketNickname", auctionItem.getMemberId().equals(memberId), auctionItem.getItemStatus());
+                    return new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, auctionItem.getTransactionType(), auctionItem.getStartTime(), auctionItem.getEndTime(), auctionItem.getAuctionItemPriceDetails().getStartPrice(), auctionItem.getAuctionItemPriceDetails().getCurrentPrice(), auctionItem.getAuctionItemPriceDetails().getBidPrice(), auctionItem.getMemberId(), "marketNickname", "profileImageName", auctionItem.getMemberId().equals(memberId), auctionItem.getItemStatus(), 1000);
                 }).get();
     }
 

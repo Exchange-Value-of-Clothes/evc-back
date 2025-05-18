@@ -7,7 +7,7 @@ import com.yzgeneration.evc.domain.delivery.infrastructure.DeliveryRepository;
 import com.yzgeneration.evc.domain.delivery.infrastructure.DeliveryViewRepository;
 import com.yzgeneration.evc.domain.delivery.model.Delivery;
 import com.yzgeneration.evc.domain.delivery.model.DeliveryView;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 
 
 import com.yzgeneration.evc.exception.CustomException;

@@ -34,15 +34,23 @@ public class AuctionItemResponse {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime endTime;
 
+        private int startPrice;
+
         private int currentPrice;
+
+        private int bidPrice;
 
         private Long marketMemberId;
 
         private String marketNickname;
 
+        private String profileImageName;
+
         private Boolean isOwned;
 
         private ItemStatus itemStatus;
+
+        private int point;
     }
 
     @Getter
@@ -62,6 +70,7 @@ public class AuctionItemResponse {
 
         private Long viewCount;
 
+        @Setter
         private Long likeCount;
 
         private Long participantCount;

@@ -2,7 +2,7 @@ package com.yzgeneration.evc.domain.chat.infrastructure;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.domain.chat.model.ChatRoom;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.exception.CustomException;
 import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

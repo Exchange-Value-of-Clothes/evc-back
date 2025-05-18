@@ -72,7 +72,7 @@ public class AuctionItemControllerTest {
     void getAuctionItems() throws Exception {
 
         AuctionItemPriceDetailResponse auctionItemPriceDetailResponse = new AuctionItemPriceDetailResponse(5000, 5000, 1000);
-        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000, true);
         SliceResponse<GetAuctionItemsResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(auctionItemService.getAuctionItems(any(), any()))
@@ -105,7 +105,7 @@ public class AuctionItemControllerTest {
         AuctionItemDetailsResponse auctionItemDetailsResponse = new AuctionItemDetailsResponse("title", "category", "content");
         AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1L, 1L, 1L);
         List<String> imageNameList = List.of("imageName.jpg");
-        GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 1L, "marketNickname", false, ItemStatus.ACTIVE);
+        GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 5000, 1000, 1L, "marketNickname", "profileImageName", false, ItemStatus.ACTIVE, 1000);
 
         when(auctionItemService.getAuctionItem(any(), any()))
                 .thenReturn(getAuctionItemResponse);
@@ -123,9 +123,12 @@ public class AuctionItemControllerTest {
                 .andExpect(jsonPath("$.transactionType").value("DIRECT"))
                 .andExpect(jsonPath("$.startTime").value("+1000000000-01-01T00:00:00"))
                 .andExpect(jsonPath("$.endTime").value("+1000000000-01-02T00:00:00"))
+                .andExpect(jsonPath("$.startPrice").value(5000))
                 .andExpect(jsonPath("$.currentPrice").value(5000))
+                .andExpect(jsonPath("$.bidPrice").value(1000))
                 .andExpect(jsonPath("$.marketMemberId").value(1L))
                 .andExpect(jsonPath("$.marketNickname").value("marketNickname"))
+                .andExpect(jsonPath("$.profileImageName").value("profileImageName"))
                 .andExpect(jsonPath("$.isOwned").value(false))
                 .andExpect(jsonPath("$.itemStatus").value("ACTIVE"));
     }

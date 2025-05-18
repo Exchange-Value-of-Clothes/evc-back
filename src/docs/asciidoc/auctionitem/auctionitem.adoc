@@ -9,7 +9,6 @@ include::{snippets}/auctionitem-create/request-fields.adoc[]
 include::{snippets}/auctionitem-create/http-response.adoc[]
 include::{snippets}/auctionitem-create/response-fields.adoc[]
 
-
 [[auctionitems-get]]
 == 경매상품 조회 (슬라이드 형태)
 
@@ -42,14 +41,3 @@ include::{snippets}/auctionitems-search/query-parameters.adoc[]
 === HTTP Response
 include::{snippets}/auctionitems-search/http-response.adoc[]
 include::{snippets}/auctionitems-search/response-fields.adoc[]
-
-[[auctionitem-delete]]
-== 경매상품 삭제
-
-=== HTTP Request
-include::{snippets}/auctionitem-delete/http-request.adoc[]
-include::{snippets}/auctionitem-delete/path-parameters.adoc[]
-
-=== HTTP Response
-include::{snippets}/auctionitem-delete/http-response.adoc[]
-include::{snippets}/auctionitem-delete/response-fields.adoc[]

@@ -6,7 +6,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemResponse.GetUsedItemResponse;
 import com.yzgeneration.evc.domain.item.useditem.dto.UsedItemsResponse.GetMyOrMemberUsedItemsResponse;
@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +28,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.yzgeneration.evc.domain.image.infrastructure.entity.QItemImageEntity.itemImageEntity;
+import static com.yzgeneration.evc.domain.image.infrastructure.entity.QProfileImageEntity.profileImageEntity;
 import static com.yzgeneration.evc.domain.item.useditem.infrastructure.entity.QUsedItemEntity.usedItemEntity;
+import static com.yzgeneration.evc.domain.like.infrastructure.entity.QLikeEntity.likeEntity;
 import static com.yzgeneration.evc.domain.member.infrastructure.QMemberEntity.memberEntity;
 
 @Repository
@@ -46,7 +47,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor, Long memberId) {
 
         List<GetUsedItemsResponse> usedItemListResponses = jpaQueryFactory
                 .select(Projections.constructor(GetUsedItemsResponse.class,
@@ -56,19 +57,21 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         usedItemEntity.usedItemTransactionEntity.transactionMode,
                         usedItemEntity.usedItemTransactionEntity.transactionStatus,
                         itemImageEntity.imageName,
-                        //TODO like 테이블 생기면 join해서 해당 값 채우기
-                        usedItemEntity.itemStatsEntity.likeCount,
+                        Expressions.constant(0L),
                         usedItemEntity.createdAt,
-                        usedItemEntity.itemStatus)
+                        usedItemEntity.itemStatus,
+                        likeEntity.id.isNotNull())
                 )
                 .from(usedItemEntity)
                 .join(itemImageEntity)
                 .on(itemImageEntity.itemId.eq(usedItemEntity.id)
                         .and(itemImageEntity.isThumbnail.isTrue())
-                        .and(itemImageEntity.itemType.eq(ITEM_TYPE))
-                )
+                        .and(itemImageEntity.itemType.eq(ITEM_TYPE)))
+                .leftJoin(likeEntity)
+                .on(likeEntity.itemId.eq(usedItemEntity.id)
+                        .and(likeEntity.itemType.eq(ITEM_TYPE))
+                        .and(likeEntity.memberId.eq(memberId)))
                 .where(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)
-                        //TODO(판매완료된 거는 빼고 줄까?)
                         .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null))
                 .orderBy(usedItemEntity.createdAt.desc())
                 .limit(SIZE + 1)
@@ -97,8 +100,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         usedItemEntity.usedItemTransactionEntity.transactionMode,
                         usedItemEntity.usedItemTransactionEntity.transactionStatus,
                         itemImageEntity.imageName,
-                        //TODO like 테이블 생기면 join해서 해당 값 채우기
-                        usedItemEntity.itemStatsEntity.likeCount,
+                        Expressions.constant(0L),
                         usedItemEntity.createdAt,
                         usedItemEntity.itemStatus)
                 )
@@ -130,36 +132,39 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     }
 
     @Override
-    public Optional<GetUsedItemResponse> findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
-
-        GetUsedItemResponse usedItemResponse = jpaQueryFactory
-                .select(Projections.constructor(GetUsedItemResponse.class,
-                        usedItemEntity.itemDetailsEntity.title,
-                        usedItemEntity.itemDetailsEntity.category,
-                        usedItemEntity.itemDetailsEntity.content,
-                        usedItemEntity.itemDetailsEntity.price,
-                        usedItemEntity.usedItemTransactionEntity.transactionType,
-                        usedItemEntity.usedItemTransactionEntity.transactionMode,
-                        usedItemEntity.usedItemTransactionEntity.transactionStatus,
-                        Expressions.constant(new ArrayList<>()),
-                        usedItemEntity.itemStatsEntity.viewCount,
-                        usedItemEntity.itemStatsEntity.likeCount,
-                        usedItemEntity.itemStatsEntity.chattingCount,
-                        usedItemEntity.memberId,
-                        memberEntity.memberPrivateInformationEntity.nickname,
-                        //조회한 중고상품의 게시자와 조회자의 일치 체크
-                        usedItemEntity.memberId.eq(memberId),
-                        usedItemEntity.createdAt,
-                        usedItemEntity.itemStatus
-                ))
-                .from(usedItemEntity)
-                .join(memberEntity)
-                .on(memberEntity.id.eq(usedItemEntity.memberId))
-                .where(usedItemEntity.id.eq(usedItemId)
-                        .and(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
-                .fetchFirst();
-
-        return Optional.ofNullable(usedItemResponse);
+    public GetUsedItemResponse findUsedItemByMemberIdAndUsedItemId(Long memberId, Long usedItemId) {
+        return Optional.ofNullable(jpaQueryFactory
+                        .select(Projections.constructor(GetUsedItemResponse.class,
+                                usedItemEntity.itemDetailsEntity.title,
+                                usedItemEntity.itemDetailsEntity.category,
+                                usedItemEntity.itemDetailsEntity.content,
+                                usedItemEntity.itemDetailsEntity.price,
+                                usedItemEntity.usedItemTransactionEntity.transactionType,
+                                usedItemEntity.usedItemTransactionEntity.transactionMode,
+                                usedItemEntity.usedItemTransactionEntity.transactionStatus,
+                                Expressions.constant(new ArrayList<>()),
+                                usedItemEntity.itemStatsEntity.viewCount,
+                                Expressions.constant(0L),
+                                usedItemEntity.itemStatsEntity.chattingCount,
+                                usedItemEntity.memberId,
+                                memberEntity.memberPrivateInformationEntity.nickname,
+                                profileImageEntity.name,
+                                //조회한 중고상품의 게시자와 조회자의 일치 체크
+                                usedItemEntity.memberId.eq(memberId),
+                                usedItemEntity.createdAt,
+                                usedItemEntity.itemStatus
+                        ))
+                        .from(usedItemEntity)
+                        .join(memberEntity)
+                        .on(memberEntity.id.eq(usedItemEntity.memberId))
+                        .join(profileImageEntity)
+                        .on(profileImageEntity.memberId.eq(usedItemEntity.memberId))
+                        .where(usedItemEntity.id.eq(usedItemId)
+                                .and(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)))
+                        .fetchFirst())
+                .orElseThrow(
+                        () -> new CustomException(ErrorCode.USEDITEM_NOT_FOUND)
+                );
     }
 
     @Override
@@ -168,7 +173,7 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
     }
 
     @Override
-    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor) {
+    public SliceResponse<GetUsedItemsResponse> searchUsedItems(String q, LocalDateTime cursor, Long memberId) {
 
         List<GetUsedItemsResponse> usedItemListResponses = jpaQueryFactory
                 .select(Projections.constructor(GetUsedItemsResponse.class,
@@ -179,9 +184,10 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         usedItemEntity.usedItemTransactionEntity.transactionStatus,
                         itemImageEntity.imageName,
                         //TODO like 테이블 생기면 join해서 해당 값 채우기
-                        usedItemEntity.itemStatsEntity.likeCount,
+                        Expressions.constant(0L),
                         usedItemEntity.createdAt,
-                        usedItemEntity.itemStatus)
+                        usedItemEntity.itemStatus,
+                        likeEntity.id.isNotNull())
                 )
                 .from(usedItemEntity)
                 .join(itemImageEntity)
@@ -189,6 +195,10 @@ public class UsedItemRepositoryImpl implements UsedItemRepository {
                         .and(itemImageEntity.isThumbnail.isTrue())
                         .and(itemImageEntity.itemType.eq(ITEM_TYPE))
                 )
+                .leftJoin(likeEntity)
+                .on(likeEntity.itemId.eq(usedItemEntity.id)
+                        .and(likeEntity.itemType.eq(ITEM_TYPE))
+                        .and(likeEntity.memberId.eq(memberId)))
                 .where(usedItemEntity.itemStatus.eq(ItemStatus.ACTIVE)
                         //TODO(판매완료된 거는 빼고 줄까?)
                         .and(cursor != null ? usedItemEntity.createdAt.lt(cursor) : null)

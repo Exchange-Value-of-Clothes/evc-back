@@ -84,7 +84,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
     void getAuctionItems() throws Exception {
 
         AuctionItemPriceDetailResponse auctionItemPriceDetailResponse = new AuctionItemPriceDetailResponse(5000, 5000, 1000);
-        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 1L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000, true);
         SliceResponse<GetAuctionItemsResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(auctionItemService.getAuctionItems(any(), any()))
@@ -96,7 +96,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                 .andDo(document("auctionitems-get",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        queryParameters(parameterWithName("cursor").description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
+                        queryParameters(parameterWithName("cursor").description("이전 경매상품 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
                         responseFields(
                                 fieldWithPath("content").type(JsonFieldType.ARRAY)
                                         .description("경매상품 정보 리스트"),
@@ -122,6 +122,8 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                                         .description("경매 종료 시간 (시작 시간 + 24시간 / 남은 시간 : end - start)"),
                                 fieldWithPath("content[].point").type(JsonFieldType.NUMBER)
                                         .description("회원의 포인트"),
+                                fieldWithPath("content[].isLike").type(JsonFieldType.BOOLEAN)
+                                        .description("회원의 상품 좋아요 여부"),
                                 fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재여부"),
                                 fieldWithPath("size").type(JsonFieldType.NUMBER)
@@ -140,7 +142,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
         AuctionItemDetailsResponse auctionItemDetailsResponse = new AuctionItemDetailsResponse("title", "category", "content");
         AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1L, 1L, 1L);
         List<String> imageNameList = List.of("imageName.jpg");
-        GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 1L, "marketNickname", false, ItemStatus.ACTIVE);
+        GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 5000, 1000, 1L, "marketNickname", "profileImageName", false, ItemStatus.ACTIVE, 1000);
 
         when(auctionItemService.getAuctionItem(any(), any()))
                 .thenReturn(getAuctionItemResponse);
@@ -172,16 +174,24 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                                         .description("경매 시작 시간"),
                                 fieldWithPath("endTime").type(JsonFieldType.STRING)
                                         .description("경매 종료 시간"),
-                                fieldWithPath("currentPrice").type(JsonFieldType.NUMBER)
+                                fieldWithPath("startPrice").type(JsonFieldType.NUMBER)
                                         .description("경매상품 시가"),
+                                fieldWithPath("currentPrice").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 현재가격"),
+                                fieldWithPath("bidPrice").type(JsonFieldType.NUMBER)
+                                        .description("경매상품 호가"),
                                 fieldWithPath("marketMemberId").type(JsonFieldType.NUMBER)
                                         .description("상점 주인의 id (상점 주인 상세페이지 이동에서 사용될 수 있으니 추가함)"),
                                 fieldWithPath("marketNickname").type(JsonFieldType.STRING)
                                         .description("상점 주인 nickname"),
+                                fieldWithPath("profileImageName").type(JsonFieldType.STRING)
+                                        .description("상점 주인 profileImageName"),
                                 fieldWithPath("isOwned").type(JsonFieldType.BOOLEAN)
                                         .description("내가 작성한 글인지 유무"),
                                 fieldWithPath("itemStatus").type(JsonFieldType.STRING)
-                                        .description("중고상품 게시상태 (ACTIVE, DELETED, BAN)")
+                                        .description("중고상품 게시상태 (ACTIVE, DELETED, BAN)"),
+                                fieldWithPath("point").type(JsonFieldType.NUMBER)
+                                        .description("회원의 포인트")
                         )));
     }
 
@@ -190,7 +200,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
     void searchAuctionItems() throws Exception {
 
         AuctionItemPriceDetailResponse auctionItemPriceDetailResponse = new AuctionItemPriceDetailResponse(5000, 5000, 1000);
-        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 0L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000);
+        GetAuctionItemsResponse getAuctionItemsResponse = new GetAuctionItemsResponse(1L, "title", "category", auctionItemPriceDetailResponse, 0L, "imageNamge.jpg", LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 1000, true);
         SliceResponse<GetAuctionItemsResponse> getAuctionItemSliceResponse = new SliceResponse<>(new SliceImpl<>(List.of(getAuctionItemsResponse), PageRequest.of(0, 10), true), LocalDateTime.MIN);
 
         when(auctionItemService.searchAuctionItems(any(), any(), any()))
@@ -205,7 +215,7 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                         preprocessResponse(prettyPrint()),
                         queryParameters(
                                 parameterWithName("q").description("검색어"),
-                                parameterWithName("cursor").description("이전 메시지 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
+                                parameterWithName("cursor").description("이전 경매상품 조회를 위한 커서 (ISO-8601 형식: yyyy-MM-dd'T'HH:mm:ss)")),
                         responseFields(
                                 fieldWithPath("content").type(JsonFieldType.ARRAY)
                                         .description("경매상품 정보 리스트 (제목 또는 내용에 검색어가 포함된 모든 항목 조회 / 대소문자 구분 없음)"),
@@ -231,6 +241,8 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                                         .description("경매 종료 시간 (시작 시간 + 24시간 / 남은 시간 : end - start)"),
                                 fieldWithPath("content[].point").type(JsonFieldType.NUMBER)
                                         .description("회원의 포인트"),
+                                fieldWithPath("content[].isLike").type(JsonFieldType.BOOLEAN)
+                                        .description("회원의 상품 좋아요 여부"),
                                 fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재여부"),
                                 fieldWithPath("size").type(JsonFieldType.NUMBER)
@@ -242,18 +254,5 @@ public class AuctionItemControllerDocsTest extends RestDocsSupport {
                         )));
     }
 
-    @Test
-    @DisplayName("경매상품 삭제")
-    void deleteAuctionItem() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/auctionitems/{auctionItemId}", 1L))
-                .andExpect(status().isOk())
-                .andDo(document("auctionitem-delete",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        pathParameters(parameterWithName("auctionItemId").description("경매상품의 id")),
-                        responseFields(
-                                fieldWithPath("success").type(JsonFieldType.BOOLEAN)
-                                        .description("성공여부")
-                        )));
-    }
+
 }

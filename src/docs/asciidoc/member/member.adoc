@@ -82,3 +82,26 @@ include::{snippets}/change-privateInfo/request-fields.adoc[]
 
 === HTTP Response
 include::{snippets}/change-privateInfo/http-response.adoc[]
+
+== 회원 상점 중고상품 조회
+
+=== HTTP Request
+include::{snippets}/member-useditems-get/http-request.adoc[]
+include::{snippets}/member-useditems-get/path-parameters.adoc[]
+include::{snippets}/member-useditems-get/query-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/member-useditems-get/http-response.adoc[]
+include::{snippets}/member-useditems-get/response-fields.adoc[]
+
+
+== 회원 상점 경매상품 조회
+
+=== HTTP Request
+include::{snippets}/member-auctionitems-get/http-request.adoc[]
+include::{snippets}/member-auctionitems-get/path-parameters.adoc[]
+include::{snippets}/member-auctionitems-get/query-parameters.adoc[]
+
+=== HTTP Response
+include::{snippets}/member-auctionitems-get/http-response.adoc[]
+include::{snippets}/member-auctionitems-get/response-fields.adoc[]

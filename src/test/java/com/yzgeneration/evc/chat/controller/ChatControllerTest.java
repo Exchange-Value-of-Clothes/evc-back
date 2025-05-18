@@ -7,7 +7,7 @@ import com.yzgeneration.evc.domain.chat.dto.ChatMessageResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatMessageSliceResponse;
 import com.yzgeneration.evc.domain.chat.dto.ChatRoomListResponse;
 import com.yzgeneration.evc.domain.chat.service.ChatService;
-import com.yzgeneration.evc.domain.image.enums.ItemType;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.fixture.ChatFixture;
 import com.yzgeneration.evc.mock.WithFakeUser;

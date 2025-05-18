@@ -6,6 +6,7 @@ import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -27,12 +28,15 @@ public class UsedItemsResponse {
 
         private String imageName;
 
+        @Setter
         private Long likeCount;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime createAt;
 
         private ItemStatus itemStatus;
+
+        private Boolean isLike;
     }
 
     @Getter
@@ -51,6 +55,7 @@ public class UsedItemsResponse {
 
         private String imageName;
 
+        @Setter
         private Long likeCount;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
