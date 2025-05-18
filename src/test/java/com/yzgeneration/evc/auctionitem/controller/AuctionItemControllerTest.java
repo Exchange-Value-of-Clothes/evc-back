@@ -105,7 +105,7 @@ public class AuctionItemControllerTest {
         AuctionItemDetailsResponse auctionItemDetailsResponse = new AuctionItemDetailsResponse("title", "category", "content");
         AuctionItemStatsResponse auctionItemStatsResponse = new AuctionItemStatsResponse(1L, 1L, 1L);
         List<String> imageNameList = List.of("imageName.jpg");
-        GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 5000, 1000, 1L, "marketNickname", "profileImageName", false, ItemStatus.ACTIVE);
+        GetAuctionItemResponse getAuctionItemResponse = new GetAuctionItemResponse(auctionItemDetailsResponse, auctionItemStatsResponse, imageNameList, TransactionType.DIRECT, LocalDateTime.MIN, LocalDateTime.MIN.plusDays(1), 5000, 5000, 1000, 1L, "marketNickname", "profileImageName", false, ItemStatus.ACTIVE, 1000);
 
         when(auctionItemService.getAuctionItem(any(), any()))
                 .thenReturn(getAuctionItemResponse);
