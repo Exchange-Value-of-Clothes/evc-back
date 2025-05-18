@@ -9,4 +9,9 @@ public class SpyPaymentGateway implements PaymentGateway {
     public Payment confirm(String orderId, String paymentKey, int amount) {
         return PaymentFixture.of(orderId, paymentKey, amount);
     }
+
+    @Override
+    public void confirmWithWebhook(String orderId, String paymentKey, int amount) {
+
+    }
 }

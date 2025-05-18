@@ -13,6 +13,7 @@ import com.yzgeneration.evc.mock.point.FakePointChargeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -30,7 +31,7 @@ public class PointChargeServiceTest {
                 pointChargeRepository,
                 new PointChargeValidator(pointChargeRepository),
                 new SpyPaymentGateway(),
-                new PointChargeProcessor(pointChargeRepository, new FakeMemberPointRepository())
+                new PointChargeProcessor(pointChargeRepository, new FakeMemberPointRepository(), new RabbitTemplate())
         );
     }
 
