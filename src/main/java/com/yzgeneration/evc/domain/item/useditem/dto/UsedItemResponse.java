@@ -5,7 +5,6 @@ import com.yzgeneration.evc.domain.item.enums.TransactionMode;
 import com.yzgeneration.evc.domain.item.enums.TransactionStatus;
 import com.yzgeneration.evc.domain.item.enums.TransactionType;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
-import com.yzgeneration.evc.domain.item.useditem.model.UsedItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
