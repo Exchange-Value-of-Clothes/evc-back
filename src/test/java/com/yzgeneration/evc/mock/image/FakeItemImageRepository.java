@@ -33,7 +33,7 @@ public class FakeItemImageRepository implements ItemImageRepository {
 
     @Override
     public ItemImage findByImageName(String imageName) {
-        return null;
+        return mockItemImages.get(0);
     }
 
 

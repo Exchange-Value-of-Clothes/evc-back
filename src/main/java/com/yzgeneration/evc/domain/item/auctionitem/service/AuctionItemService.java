@@ -31,7 +31,9 @@ public class AuctionItemService {
 
     public void createAuctionItem(Long memberId, CreateAuctionItemRequest createAuctionItemRequest) {
         AuctionItem auctionItem = auctionItemRepository.save(AuctionItem.create(memberId, createAuctionItemRequest));
-        itemImageAppender.createItemImages(auctionItem.getId(), ITEM_TYPE, createAuctionItemRequest.getImageNames(), createAuctionItemRequest.getImageNames().get(0));
+        if (!createAuctionItemRequest.getImageNames().isEmpty()) {
+            itemImageAppender.createItemImages(auctionItem.getId(), ITEM_TYPE, createAuctionItemRequest.getImageNames(), createAuctionItemRequest.getImageNames().get(0));
+        }
     }
 
     public SliceResponse<GetAuctionItemsResponse> getAuctionItems(Long memberId, LocalDateTime cursor) {
