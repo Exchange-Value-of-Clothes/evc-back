@@ -204,7 +204,7 @@ public class MyStoreControllerDocsTest extends RestDocsSupport {
     @DisplayName("내 중고상품 수정")
     void putMyUsedItem() throws Exception {
 
-        MyUsedItemUpdateRequest myUsedItemUpdateRequest = new MyUsedItemUpdateRequest("title", "category", "content", 5000, "DIRECT", "SELL", List.of("imageName"));
+        MyUsedItemUpdateRequest myUsedItemUpdateRequest = new MyUsedItemUpdateRequest("title", "category", "content", 5000, "DIRECT", "SELL", List.of("addImageName"), List.of("removeImageName"), "thumbnail");
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/my/store/useditems/{usedItemId}", 1L)
                         .content(objectMapper.writeValueAsString(myUsedItemUpdateRequest))
@@ -227,8 +227,12 @@ public class MyStoreControllerDocsTest extends RestDocsSupport {
                                         .description("중고상품 거래유행 (DIRECT, DELIVERY)"),
                                 fieldWithPath("transactionMode").type(JsonFieldType.STRING)
                                         .description("중고상품 거래방법 (SELL, BUY)"),
-                                fieldWithPath("imageNames").type(JsonFieldType.ARRAY)
-                                        .description("중고상품 이미지 리스트")
+                                fieldWithPath("addImageNames").type(JsonFieldType.ARRAY)
+                                        .description("중고상품 추가 이미지 리스트"),
+                                fieldWithPath("removeImageNames").type(JsonFieldType.ARRAY)
+                                        .description("중고상품 삭제 이미지 리스트"),
+                                fieldWithPath("thumbnailImage").type(JsonFieldType.STRING)
+                                        .description("중고상품 썸네일 이미지 (이미지의 변경사항이 없는 경우, 썸네일도 변경 X)")
                         ),
                         responseFields(
                                 fieldWithPath("success").type(JsonFieldType.BOOLEAN)
@@ -240,7 +244,7 @@ public class MyStoreControllerDocsTest extends RestDocsSupport {
     @DisplayName("내 경매상품 수정")
     void putMyAuctionItem() throws Exception {
 
-        MyAuctionItemUpdateRequest myAuctionItemUpdateRequest = new MyAuctionItemUpdateRequest("title", "category", "content", 5000, 1000, "DIRECT", List.of("imageName"));
+        MyAuctionItemUpdateRequest myAuctionItemUpdateRequest = new MyAuctionItemUpdateRequest("title", "category", "content", 5000, 1000, "DIRECT", List.of("addImageName"), List.of("removeImageName"), "thumbnail");
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/my/store/auctionitems/{auctionItemId}", 1L)
                         .content(objectMapper.writeValueAsString(myAuctionItemUpdateRequest))
@@ -263,8 +267,12 @@ public class MyStoreControllerDocsTest extends RestDocsSupport {
                                         .description("경매상품 호가"),
                                 fieldWithPath("transactionType").type(JsonFieldType.STRING)
                                         .description("경매상품 거래유행 (DIRECT, DELIVERY)"),
-                                fieldWithPath("imageNames").type(JsonFieldType.ARRAY)
-                                        .description("경매상품 이미지 리스트")
+                                fieldWithPath("addImageNames").type(JsonFieldType.ARRAY)
+                                        .description("경매상품 추가 이미지 리스트"),
+                                fieldWithPath("removeImageNames").type(JsonFieldType.ARRAY)
+                                        .description("경매상품 삭제 이미지 리스트"),
+                                fieldWithPath("thumbnailImage").type(JsonFieldType.STRING)
+                                        .description("경매상품 썸네일 이미지 (이미지의 변경사항이 없는 경우, 썸네일도 변경 X)")
                         ),
                         responseFields(
                                 fieldWithPath("success").type(JsonFieldType.BOOLEAN)

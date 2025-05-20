@@ -31,7 +31,11 @@ public class MyUsedItemUpdateRequest implements Validatable {
 
     private String transactionMode;
 
-    private List<String> imageNames = new ArrayList<>();
+    private List<String> addImageNames = new ArrayList<>();
+
+    private List<String> removeImageNames = new ArrayList<>();
+
+    private String thumbnailImage;
 
     @Override
     public void valid() {

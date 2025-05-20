@@ -34,7 +34,7 @@ public class UsedItemService {
 
     public void createUsedItem(Long memberId, CreateUsedItemRequest createUsedItemRequest) {
         UsedItem usedItem = usedItemRepository.save(UsedItem.create(memberId, createUsedItemRequest, LocalDateTime.now()));
-        itemImageAppender.createItemImages(usedItem.getId(), itemType, createUsedItemRequest.getImageNames());
+        itemImageAppender.createItemImages(usedItem.getId(), itemType, createUsedItemRequest.getImageNames(), createUsedItemRequest.getImageNames().get(0));
     }
 
     public SliceResponse<GetUsedItemsResponse> getUsedItems(LocalDateTime cursor, Long memberId) {

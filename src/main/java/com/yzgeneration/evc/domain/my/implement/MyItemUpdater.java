@@ -21,21 +21,25 @@ public class MyItemUpdater {
 
     public void updateUsedItem(Long usedItemId, MyUsedItemUpdateRequest myUsedItemUpdateRequest) {
         UsedItem usedItem = usedItemRepository.getById(usedItemId);
-        itemImageUpdater.updateItemImage(usedItem.getId(), ItemType.USEDITEM, myUsedItemUpdateRequest.getImageNames());
+        if (!myUsedItemUpdateRequest.getAddImageNames().isEmpty() || !myUsedItemUpdateRequest.getRemoveImageNames().isEmpty()) {
+            itemImageUpdater.updateItemImage(usedItem.getId(), ItemType.USEDITEM, myUsedItemUpdateRequest.getAddImageNames(), myUsedItemUpdateRequest.getRemoveImageNames(), myUsedItemUpdateRequest.getThumbnailImage());
+        }
+
         usedItem.update(myUsedItemUpdateRequest);
         usedItemRepository.save(usedItem);
     }
 
     public void updateAuctionItem(Long auctionItemId, MyAuctionItemUpdateRequest myAuctionItemUpdateRequest) {
         AuctionItem auctionItem = auctionItemRepository.getById(auctionItemId);
-        if (auctionItemRepository.countParticipantById(auctionItem.getId()) > 0) {
-            itemImageUpdater.updateItemImage(auctionItem.getId(), ItemType.AUCTIONITEM, myAuctionItemUpdateRequest.getImageNames());
-            auctionItem.updateIfParticipantExists(myAuctionItemUpdateRequest);
-            auctionItemRepository.save(auctionItem);
-        } else {
-            itemImageUpdater.updateItemImage(auctionItem.getId(), ItemType.AUCTIONITEM, myAuctionItemUpdateRequest.getImageNames());
-            auctionItem.update(myAuctionItemUpdateRequest);
-            auctionItemRepository.save(auctionItem);
+        if (!myAuctionItemUpdateRequest.getAddImageNames().isEmpty() || !myAuctionItemUpdateRequest.getRemoveImageNames().isEmpty()) {
+            itemImageUpdater.updateItemImage(auctionItem.getId(), ItemType.AUCTIONITEM, myAuctionItemUpdateRequest.getAddImageNames(), myAuctionItemUpdateRequest.getRemoveImageNames(), myAuctionItemUpdateRequest.getThumbnailImage());
         }
+
+        if (auctionItemRepository.countParticipantById(auctionItem.getId()) > 0) { //참여자가 있으면 시가 변경 X
+            auctionItem.updateIfParticipantExists(myAuctionItemUpdateRequest);
+        } else {
+            auctionItem.update(myAuctionItemUpdateRequest);
+        }
+        auctionItemRepository.save(auctionItem);
     }
 }

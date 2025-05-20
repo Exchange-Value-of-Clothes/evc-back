@@ -32,7 +32,7 @@ public class LikeReader {
 
         List<LikeItemsResponse> likeItems = likes.getContent().stream().map(like -> {
             Long count = likeRepository.countByItemIdAndItemType(like.getItemId(), like.getItemType());
-            String imageName = itemImageRepository.findThumbNailImageNameByItemIdAndItemType(like.getItemId(), like.getItemType());
+            String imageName = itemImageRepository.findThumbNailNameByItemIdAndItemType(like.getItemId(), like.getItemType());
 
             if (like.getItemType().equals(ItemType.USEDITEM)) {
                 UsedItem usedItem = usedItemRepository.getById(like.getItemId());

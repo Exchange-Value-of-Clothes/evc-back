@@ -31,7 +31,11 @@ public class MyAuctionItemUpdateRequest implements Validatable {
 
     private String transactionType;
 
-    private List<String> imageNames = new ArrayList<>();
+    private List<String> addImageNames = new ArrayList<>();
+
+    private List<String> removeImageNames = new ArrayList<>();
+
+    private String thumbnailImage;
 
     @Override
     public void valid() {
