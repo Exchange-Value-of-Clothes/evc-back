@@ -25,6 +25,7 @@ public class MyItemUpdater {
         UsedItem usedItem = usedItemRepository.getById(usedItemId);
         if (myUsedItemUpdateRequest.getAddImageNames().isEmpty() && myUsedItemUpdateRequest.getRemoveImageNames().isEmpty()) {
             // 변경할 이미지가 없으므로 처리하지 않음
+            return;
         }
         log.info("updateUsedItem : {}", usedItem.getItemDetails().getTitle());
         itemImageUpdater.updateItemImage(usedItem.getId(), ItemType.USEDITEM, myUsedItemUpdateRequest.getAddImageNames(), myUsedItemUpdateRequest.getRemoveImageNames(), myUsedItemUpdateRequest.getThumbnailImage());
@@ -35,7 +36,7 @@ public class MyItemUpdater {
     public void updateAuctionItem(Long auctionItemId, MyAuctionItemUpdateRequest myAuctionItemUpdateRequest) {
         AuctionItem auctionItem = auctionItemRepository.getById(auctionItemId);
         if (myAuctionItemUpdateRequest.getAddImageNames().isEmpty() && myAuctionItemUpdateRequest.getRemoveImageNames().isEmpty()) {
-            // 변경할 이미지가 없으므로 처리하지 않음
+            return;
         }
 
         if (auctionItemRepository.countParticipantById(auctionItem.getId()) > 0) { //참여자가 있으면 시가 변경 X
