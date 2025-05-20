@@ -1,7 +1,6 @@
 package com.yzgeneration.evc.domain.item.auctionitem.service;
 
 import com.yzgeneration.evc.common.dto.SliceResponse;
-import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.image.implement.ItemImageAppender;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemRequest.CreateAuctionItemRequest;
 import com.yzgeneration.evc.domain.item.auctionitem.dto.AuctionItemResponse.GetAuctionItemResponse;
@@ -12,6 +11,7 @@ import com.yzgeneration.evc.domain.item.auctionitem.implement.AuctionItemReader;
 import com.yzgeneration.evc.domain.item.auctionitem.implement.AuctionItemStatusUpdater;
 import com.yzgeneration.evc.domain.item.auctionitem.model.AuctionItem;
 import com.yzgeneration.evc.domain.item.auctionitem.service.port.AuctionItemRepository;
+import com.yzgeneration.evc.domain.item.enums.ItemType;
 import com.yzgeneration.evc.domain.item.implement.ItemCounter;
 import com.yzgeneration.evc.domain.item.useditem.enums.ItemStatus;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class AuctionItemService {
 
     public void createAuctionItem(Long memberId, CreateAuctionItemRequest createAuctionItemRequest) {
         AuctionItem auctionItem = auctionItemRepository.save(AuctionItem.create(memberId, createAuctionItemRequest));
-        itemImageAppender.createItemImages(auctionItem.getId(), ITEM_TYPE, createAuctionItemRequest.getImageNames());
+        itemImageAppender.createItemImages(auctionItem.getId(), ITEM_TYPE, createAuctionItemRequest.getImageNames(), createAuctionItemRequest.getImageNames().get(0));
     }
 
     public SliceResponse<GetAuctionItemsResponse> getAuctionItems(Long memberId, LocalDateTime cursor) {
