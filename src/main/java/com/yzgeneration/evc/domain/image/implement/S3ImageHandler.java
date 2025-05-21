@@ -45,8 +45,7 @@ public class S3ImageHandler implements ImageHandler {
     }
 
     @Override
-    public void removeImage(String prefix, String fileName) {
-        String key = prefix + "/" + fileName;
+    public void removeImage(String key) {
         log.info("deleteS3Image: {}", key);
         try {
             if (!amazonS3.doesObjectExist(bucket, key)) {

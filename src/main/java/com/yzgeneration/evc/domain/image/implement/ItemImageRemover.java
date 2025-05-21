@@ -14,10 +14,9 @@ public class ItemImageRemover {
     private final ImageHandler imageHandler;
 
     public void removeItemImage(Long itemId, ItemType itemType, List<String> itemImages) {
-        String prefix = itemType.equals(ItemType.USEDITEM) ? "useditem" : "auctionitem";
         itemImageRepository.deleteByImageNames(itemId, itemType, itemImages);
         for (String itemImage : itemImages) {
-            imageHandler.removeImage(prefix, itemImage);
+            imageHandler.removeImage(itemImage);
         }
     }
 }

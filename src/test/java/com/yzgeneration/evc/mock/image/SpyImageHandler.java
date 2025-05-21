@@ -13,7 +13,7 @@ public class SpyImageHandler implements ImageHandler {
     }
 
     @Override
-    public void removeImage(String prefix, String fileName) {
+    public void removeImage(String key) {
 
     }
 }
