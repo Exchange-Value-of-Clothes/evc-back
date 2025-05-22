@@ -28,4 +28,14 @@ public class FakePointChargeRepository implements PointChargeRepository {
                 .findFirst()
                 .orElseThrow(() -> new CustomException(POINT_NOT_FOUND));
     }
+
+    @Override
+    public void charge(String orderId) {
+
+    }
+
+    @Override
+    public void cancel(String orderId) {
+
+    }
 }

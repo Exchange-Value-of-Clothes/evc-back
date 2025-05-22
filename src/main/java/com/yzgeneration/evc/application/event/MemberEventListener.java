@@ -6,9 +6,12 @@ import com.yzgeneration.evc.domain.member.MemberCreatedEvent;
 import com.yzgeneration.evc.domain.point.infrastructure.MemberPointRepository;
 import com.yzgeneration.evc.domain.point.model.MemberPoint;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class MemberEventListener {
@@ -18,6 +21,7 @@ public class MemberEventListener {
 
     @TransactionalEventListener
     public void initPoint(MemberCreatedEvent event) {
+        log.info("initPoint - Transaction active : {}", TransactionSynchronizationManager.isActualTransactionActive());
         Long memberId = event.getMemberId();
         memberPointRepository.save(MemberPoint.create(memberId, 0));
     }

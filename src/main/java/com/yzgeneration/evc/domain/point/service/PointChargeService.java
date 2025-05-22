@@ -28,7 +28,7 @@ public class PointChargeService {
         pointChargeValidator.validate(orderId, amount);
         Payment payment = paymentGateway.confirm(orderId, paymentKey, amount);
         PointCharge pointCharge = pointChargeRepository.getById(orderId);
-        pointChargeProcessor.charge(pointCharge, memberId, payment.getTotalAmount());
+        pointChargeProcessor.chargeMemberPointAndPointCharge(pointCharge, memberId, payment.getTotalAmount());
     }
 
     public void confirmWithWebhook(String orderId, String paymentKey, int amount, Long id) {
@@ -36,7 +36,7 @@ public class PointChargeService {
         paymentGateway.confirmWithWebhook(orderId, paymentKey, amount);
     }
 
-    public void consumeWebhook(PaymentStatusChanged paymentStatusChanged) {
-        pointChargeProcessor.sendEvent(paymentStatusChanged);
+    public void consumeWebhook(PaymentStatusChanged paymentStatusChanged, Long memberId) {
+        if (paymentStatusChanged.getEventType().equals("PAYMENT_STATUS_CHANGED")) pointChargeProcessor.sendEvent(paymentStatusChanged, memberId);
     }
 }

@@ -1,5 +1,7 @@
 package com.yzgeneration.evc.domain.point.implement;
 
+import com.yzgeneration.evc.application.event.TossPaymentEvent;
+import com.yzgeneration.evc.domain.point.enums.PointChargeStatus;
 import com.yzgeneration.evc.domain.point.infrastructure.MemberPointRepository;
 import com.yzgeneration.evc.domain.point.infrastructure.PointChargeRepository;
 import com.yzgeneration.evc.domain.point.model.PointCharge;
@@ -18,13 +20,24 @@ public class PointChargeProcessor {
     private final RabbitTemplate rabbitTemplate;
 
     @Transactional
-    public void charge(PointCharge pointCharge, Long memberId, int point) {
+    public void chargeMemberPointAndPointCharge(PointCharge pointCharge, Long memberId, int point) {
         memberPointRepository.charge(memberId, point);
         pointCharge.confirm();
         pointChargeRepository.save(pointCharge);
     }
 
-    public void sendEvent(PaymentStatusChanged paymentStatusChanged) {
-        rabbitTemplate.convertAndSend("tossWebhookExchange", "payment", paymentStatusChanged); // todo
+    public void sendEvent(PaymentStatusChanged event, Long memberId) {
+        rabbitTemplate.convertAndSend("tossWebhookExchange", "payment", TossPaymentEvent.of(event, memberId));
     }
+
+    @Transactional
+    public void charge(String orderId, Long memberId, int point) {
+        pointChargeRepository.charge(orderId);
+        memberPointRepository.charge(memberId, point);
+    }
+
+    public void cancel(String orderId) {
+        pointChargeRepository.cancel(orderId);
+    }
+
 }

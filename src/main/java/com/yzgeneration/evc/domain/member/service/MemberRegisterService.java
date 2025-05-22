@@ -12,10 +12,13 @@ import com.yzgeneration.evc.domain.verification.enums.EmailVerificationType;
 import com.yzgeneration.evc.domain.verification.model.EmailVerification;
 import com.yzgeneration.evc.domain.verification.implement.EmailVerificationProcessor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberRegisterService {
@@ -27,8 +30,10 @@ public class MemberRegisterService {
 
     @Transactional
     public Member createMemberByEmail(EmailSignup emailSignup) {
+        log.info("createMemberByEmail - Transaction start : {}", TransactionSynchronizationManager.isActualTransactionActive());
         Member member = memberAppender.createByEmail(emailSignup);
         eventPublisher.publishEvent(new MemberCreatedEvent(member.getId(), null));
+        log.info("createMemberByEmail - Transaction end : {}", TransactionSynchronizationManager.isActualTransactionActive());
         return member;
     }
 

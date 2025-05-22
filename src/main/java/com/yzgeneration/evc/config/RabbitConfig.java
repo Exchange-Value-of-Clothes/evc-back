@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.support.RetryTemplate;
 
 @EnableRabbit
 @Configuration
@@ -64,7 +65,11 @@ public class RabbitConfig {
 
     @Bean(name = "tossWebhookQueue")
     public Queue tossWebhookQueue() {
-        return new Queue("toss.webhook.queue", true);
+        return QueueBuilder.durable("toss.webhook.queue")
+                .deadLetterExchange("toss.webhook.dead.letter.exchange")
+//                .autoDelete()
+//                .ttl()
+                .build();
     }
 
     @Bean(name = "tossWebhookExchange")
@@ -76,6 +81,22 @@ public class RabbitConfig {
     public Binding tossWebhookBinding(@Qualifier("tossWebhookQueue") Queue tossWebhookQueue,
                                       @Qualifier("tossWebhookExchange") DirectExchange tossWebhookExchange) {
         return BindingBuilder.bind(tossWebhookQueue).to(tossWebhookExchange).with("payment");
+    }
+
+    @Bean(name = "tossWebhookDeadLetterQueue")
+    public Queue tossWebhookDeadLetterQueue() {
+        return new Queue("toss.webhook.dead.letter.queue", true);
+    }
+
+    @Bean(name = "tossWebhookDeadLetterExchange")
+    public DirectExchange tossWebhookDeadLetterExchange() {
+        return new DirectExchange("toss.webhook.dead.letter.exchange", true, false);
+    }
+
+    @Bean
+    public Binding tossWebhookDeadLetterBinding(@Qualifier("tossWebhookDeadLetterQueue") Queue tossWebhookDeadLetterQueue,
+                                                @Qualifier("tossWebhookDeadLetterExchange") DirectExchange tossWebhookDeadLetterExchange) {
+        return BindingBuilder.bind(tossWebhookDeadLetterQueue).to(tossWebhookDeadLetterExchange).with("#");
     }
 
     @Bean
@@ -104,4 +125,6 @@ public class RabbitConfig {
         objectMapper.registerModule(new JavaTimeModule());
         return new Jackson2JsonMessageConverter(objectMapper);
     }
+
+
 }
