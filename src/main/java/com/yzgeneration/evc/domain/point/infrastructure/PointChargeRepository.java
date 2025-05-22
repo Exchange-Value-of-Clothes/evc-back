@@ -5,4 +5,7 @@ import com.yzgeneration.evc.domain.point.model.PointCharge;
 public interface PointChargeRepository {
     PointCharge save(PointCharge pointCharge);
     PointCharge getById(String orderId);
+    void charge(String orderId);
+    void cancel(String orderId);
+
 }
