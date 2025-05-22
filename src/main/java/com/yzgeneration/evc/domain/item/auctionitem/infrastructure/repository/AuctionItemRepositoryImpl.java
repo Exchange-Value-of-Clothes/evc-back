@@ -76,7 +76,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         memberPointEntity.point,
                         likeEntity.id.isNotNull()))
                 .from(auctionItemEntity)
-                .join(itemImageEntity) //썸네일 조회를 위해 join
+                .leftJoin(itemImageEntity) //썸네일 조회를 위해 join
                 .on(itemImageEntity.itemId.eq(auctionItemEntity.id)
                         .and(itemImageEntity.isThumbnail.isTrue())
                         .and(itemImageEntity.itemType.eq(ITEM_TYPE))
@@ -126,7 +126,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         auctionItemEntity.itemStatus)
                 )
                 .from(auctionItemEntity)
-                .join(itemImageEntity) //썸네일 조회를 위해 join
+                .leftJoin(itemImageEntity) //썸네일 조회를 위해 join
                 .on(itemImageEntity.itemId.eq(auctionItemEntity.id)
                         .and(itemImageEntity.isThumbnail.isTrue())
                         .and(itemImageEntity.itemType.eq(ITEM_TYPE))
@@ -257,7 +257,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
                         memberPointEntity.point,
                         likeEntity.id.isNotNull()))
                 .from(auctionItemEntity)
-                .join(itemImageEntity) //썸네일 조회를 위해 join
+                .leftJoin(itemImageEntity) //썸네일 조회를 위해 join
                 .on(itemImageEntity.itemId.eq(auctionItemEntity.id)
                         .and(itemImageEntity.isThumbnail.isTrue())
                         .and(itemImageEntity.itemType.eq(ITEM_TYPE))
