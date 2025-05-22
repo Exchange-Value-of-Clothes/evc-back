@@ -23,8 +23,21 @@ public class ItemImageRepositoryImpl implements ItemImageRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
+    public ItemImage save(ItemImage itemImage) {
+        return itemImageJPARepository.save(ItemImageEntity.from(itemImage)).toModel();
+    }
+
+    @Override
     public void saveAll(List<ItemImage> itemImages) {
         itemImageJPARepository.saveAll(itemImages.stream().map(ItemImageEntity::from).toList());
+    }
+
+    @Override
+    public ItemImage findByImageName(String imageName) {
+        return Optional.ofNullable(jpaQueryFactory.selectFrom(itemImageEntity)
+                        .where(itemImageEntity.imageName.eq(imageName))
+                        .fetchOne())
+                .orElseThrow(() -> new CustomException(ErrorCode.IMAGE_NOT_FOUND)).toModel();
     }
 
     @Override
@@ -33,11 +46,11 @@ public class ItemImageRepositoryImpl implements ItemImageRepository {
     }
 
     @Override
-    public String findThumbNailImageNameByItemIdAndItemType(Long itemId, ItemType itemType) {
+    public String findThumbNailNameByItemIdAndItemType(Long itemId, ItemType itemType) {
         return Optional.ofNullable(jpaQueryFactory.selectFrom(itemImageEntity)
                         .where(itemImageEntity.itemId.eq(itemId)
                                 .and(itemImageEntity.itemType.eq(itemType))
-                                .and(itemImageEntity.isThumbnail))
+                                .and(itemImageEntity.isThumbnail.isTrue()))
                         .fetchOne())
                 .orElseThrow(() -> new CustomException(ErrorCode.IMAGE_NOT_FOUND))
                 .getImageName();
@@ -50,5 +63,26 @@ public class ItemImageRepositoryImpl implements ItemImageRepository {
                 .where(itemImageEntity.itemId.eq(itemId)
                         .and(itemImageEntity.itemType.eq(itemType)))
                 .execute();
+    }
+
+    @Override
+    @Transactional
+    public void deleteByImageNames(Long itemId, ItemType itemType, List<String> imageNames) {
+        jpaQueryFactory.delete(itemImageEntity)
+                .where(itemImageEntity.itemId.eq(itemId)
+                        .and(itemImageEntity.itemType.eq(itemType))
+                        .and(itemImageEntity.imageName.in(imageNames)))
+                .execute();
+    }
+
+    @Override
+    public ItemImage findThumbnailByItemIdAndItemType(Long itemId, ItemType itemType) {
+        return Optional.ofNullable(jpaQueryFactory.selectFrom(itemImageEntity)
+                        .where(itemImageEntity.itemId.eq(itemId)
+                                .and(itemImageEntity.itemType.eq(itemType))
+                                    .and(itemImageEntity.isThumbnail.isTrue()))
+                        .fetchOne())
+                .orElseThrow(() -> new CustomException(ErrorCode.IMAGE_NOT_FOUND))
+                .toModel();
     }
 }

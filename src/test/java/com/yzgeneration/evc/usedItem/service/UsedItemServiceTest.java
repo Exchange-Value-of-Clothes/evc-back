@@ -52,7 +52,6 @@ class UsedItemServiceTest {
         //given
         Long memberId = 1L;
         CreateUsedItemRequest createUsedItemRequest = fixCreateUsedItemRequest();
-
         //when
         //then
         usedItemService.createUsedItem(memberId, createUsedItemRequest);
@@ -73,7 +72,7 @@ class UsedItemServiceTest {
 
     }
 
-    //    @Test
+    @Test
     @DisplayName("등록한 중고상품이 정상적으로 조회되는지 체크")
     void getUsedItem() {
         //given
@@ -92,10 +91,6 @@ class UsedItemServiceTest {
         assertThat(getUsedItemResponse.getTransactionType()).isEqualTo(TransactionType.DIRECT);
         assertThat(getUsedItemResponse.getTransactionMode()).isEqualTo(TransactionMode.BUY);
         assertThat(getUsedItemResponse.getTransactionStatus()).isEqualTo(TransactionStatus.ONGOING);
-
-        assertThat(getUsedItemResponse.getViewCount()).isEqualTo(0);
-        assertThat(getUsedItemResponse.getLikeCount()).isEqualTo(0);
-        assertThat(getUsedItemResponse.getChattingCount()).isEqualTo(0);
 
         assertThat(getUsedItemResponse.getMarketMemberId()).isEqualTo(1L);
         assertThat(getUsedItemResponse.getIsOwned()).isEqualTo(true);

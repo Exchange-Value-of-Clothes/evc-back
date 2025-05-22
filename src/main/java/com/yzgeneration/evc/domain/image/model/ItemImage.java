@@ -18,12 +18,16 @@ public class ItemImage {
 
     private boolean isThumbnail;
 
-    public static ItemImage create(Long itemId, ItemType itemType, String imageName, boolean isThumbnail) {
+    public static ItemImage create(Long itemId, ItemType itemType, String imageName) {
         return ItemImage.builder()
                 .itemId(itemId)
                 .itemType(itemType)
                 .imageName(imageName)
-                .isThumbnail(isThumbnail)
+                .isThumbnail(false)
                 .build();
+    }
+
+    public void toggleIsThumbnail() {
+        this.isThumbnail = !isThumbnail;
     }
 }

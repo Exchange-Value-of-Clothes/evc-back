@@ -28,6 +28,7 @@ public class ItemImageEntity {
 
     public static ItemImageEntity from(ItemImage itemImage) {
         return ItemImageEntity.builder()
+                .id(itemImage.getId())
                 .itemId(itemImage.getItemId())
                 .itemType(itemImage.getItemType())
                 .imageName(itemImage.getImageName())

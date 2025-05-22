@@ -49,12 +49,12 @@ public class RabbitConfig {
 
     @Bean(name = "auctionQueue")
     public Queue queueForAuction() {
-        return new Queue("auction.queue", false);
+        return new Queue("auction.queue", true);
     }
 
     @Bean(name = "auctionTopic")
     public TopicExchange topicExchangeForAuction() {
-        return new TopicExchange("auction.topic", false, true);
+        return new TopicExchange("auction.topic", true, false);
     }
 
     @Bean

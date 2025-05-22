@@ -4,4 +4,6 @@ import com.yzgeneration.evc.domain.image.dto.ImageResponse;
 
 public interface ImageHandler {
     ImageResponse getPresignedURLForUpload(String prefix, String fileName);
+
+    void removeImage(String key);
 }

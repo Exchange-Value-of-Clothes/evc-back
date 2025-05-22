@@ -1,18 +1,24 @@
 package com.yzgeneration.evc.domain.image.implement;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.yzgeneration.evc.common.implement.port.UuidHolder;
 import com.yzgeneration.evc.domain.image.dto.ImageResponse;
+import com.yzgeneration.evc.exception.CustomException;
+import com.yzgeneration.evc.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class S3ImageHandler implements ImageHandler {
@@ -38,6 +44,21 @@ public class S3ImageHandler implements ImageHandler {
                 .build();
     }
 
+    @Override
+    public void removeImage(String key) {
+        log.info("deleteS3Image: {}", key);
+        try {
+            if (!amazonS3.doesObjectExist(bucket, key)) {
+                log.info("deleteS3Image: {}", "객체가 없음");
+                throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
+            }
+            amazonS3.deleteObject(new DeleteObjectRequest(bucket, key));
+        } catch (AmazonServiceException e) {
+            log.info("deleteS3Image: {}", e.getMessage());
+            throw new CustomException(ErrorCode.IMAGE_NOT_FOUND);
+        }
+    }
+
     private GeneratePresignedUrlRequest generatePresignedURLForUpload(String fileName) {
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, fileName)
                 .withMethod(HttpMethod.PUT)
@@ -45,7 +66,7 @@ public class S3ImageHandler implements ImageHandler {
 
         generatePresignedUrlRequest.addRequestParameter(
                 Headers.S3_CANNED_ACL,
-                CannedAccessControlList.PublicRead.toString());
+                CannedAccessControlList.PublicReadWrite.toString());
 
         return generatePresignedUrlRequest;
     }

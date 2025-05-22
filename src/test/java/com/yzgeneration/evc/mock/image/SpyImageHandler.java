@@ -11,4 +11,9 @@ public class SpyImageHandler implements ImageHandler {
                 .imageName(prefix + "/abc-" + fileName)
                 .build();
     }
+
+    @Override
+    public void removeImage(String key) {
+
+    }
 }
