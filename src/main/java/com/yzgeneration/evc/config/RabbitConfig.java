@@ -63,41 +63,41 @@ public class RabbitConfig {
         return BindingBuilder.bind(queue).to(topicExchangeForAuction).with("auction-room.*");
     }
 
-    @Bean(name = "tossWebhookQueue")
-    public Queue tossWebhookQueue() {
-        return QueueBuilder.durable("toss.webhook.queue")
-                .deadLetterExchange("toss.webhook.dead.letter.exchange")
-//                .autoDelete()
-//                .ttl()
-                .build();
-    }
+//    @Bean(name = "tossWebhookQueue")
+//    public Queue tossWebhookQueue() {
+//        return QueueBuilder.durable("toss.webhook.queue")
+//                .deadLetterExchange("toss.webhook.dead.letter.exchange")
+////                .autoDelete()
+////                .ttl()
+//                .build();
+//    }
 
-    @Bean(name = "tossWebhookExchange")
-    public DirectExchange tossWebhookExchange() {
-        return new DirectExchange("toss.webhook.exchange", true, false);
-    }
-
-    @Bean
-    public Binding tossWebhookBinding(@Qualifier("tossWebhookQueue") Queue tossWebhookQueue,
-                                      @Qualifier("tossWebhookExchange") DirectExchange tossWebhookExchange) {
-        return BindingBuilder.bind(tossWebhookQueue).to(tossWebhookExchange).with("payment");
-    }
-
-    @Bean(name = "tossWebhookDeadLetterQueue")
-    public Queue tossWebhookDeadLetterQueue() {
-        return new Queue("toss.webhook.dead.letter.queue", true);
-    }
-
-    @Bean(name = "tossWebhookDeadLetterExchange")
-    public DirectExchange tossWebhookDeadLetterExchange() {
-        return new DirectExchange("toss.webhook.dead.letter.exchange", true, false);
-    }
-
-    @Bean
-    public Binding tossWebhookDeadLetterBinding(@Qualifier("tossWebhookDeadLetterQueue") Queue tossWebhookDeadLetterQueue,
-                                                @Qualifier("tossWebhookDeadLetterExchange") DirectExchange tossWebhookDeadLetterExchange) {
-        return BindingBuilder.bind(tossWebhookDeadLetterQueue).to(tossWebhookDeadLetterExchange).with("#");
-    }
+//    @Bean(name = "tossWebhookExchange")
+//    public DirectExchange tossWebhookExchange() {
+//        return new DirectExchange("toss.webhook.exchange", true, false);
+//    }
+//
+//    @Bean
+//    public Binding tossWebhookBinding(@Qualifier("tossWebhookQueue") Queue tossWebhookQueue,
+//                                      @Qualifier("tossWebhookExchange") DirectExchange tossWebhookExchange) {
+//        return BindingBuilder.bind(tossWebhookQueue).to(tossWebhookExchange).with("payment");
+//    }
+//
+//    @Bean(name = "tossWebhookDeadLetterQueue")
+//    public Queue tossWebhookDeadLetterQueue() {
+//        return new Queue("toss.webhook.dead.letter.queue", true);
+//    }
+//
+//    @Bean(name = "tossWebhookDeadLetterExchange")
+//    public DirectExchange tossWebhookDeadLetterExchange() {
+//        return new DirectExchange("toss.webhook.dead.letter.exchange", true, false);
+//    }
+//
+//    @Bean
+//    public Binding tossWebhookDeadLetterBinding(@Qualifier("tossWebhookDeadLetterQueue") Queue tossWebhookDeadLetterQueue,
+//                                                @Qualifier("tossWebhookDeadLetterExchange") DirectExchange tossWebhookDeadLetterExchange) {
+//        return BindingBuilder.bind(tossWebhookDeadLetterQueue).to(tossWebhookDeadLetterExchange).with("#");
+//    }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {

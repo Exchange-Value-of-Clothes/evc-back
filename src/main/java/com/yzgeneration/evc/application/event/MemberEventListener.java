@@ -8,6 +8,8 @@ import com.yzgeneration.evc.domain.point.model.MemberPoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -20,13 +22,15 @@ public class MemberEventListener {
     private final ProfileImageRepository profileImageRepository;
 
     @TransactionalEventListener
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void initPoint(MemberCreatedEvent event) {
-        log.info("initPoint - Transaction active : {}", TransactionSynchronizationManager.isActualTransactionActive());
+        log.info("initPoint - Transaction active : {}", TransactionSynchronizationManager.isSynchronizationActive());
         Long memberId = event.getMemberId();
         memberPointRepository.save(MemberPoint.create(memberId, 0));
     }
 
     @TransactionalEventListener
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void initProfileImage(MemberCreatedEvent event) {
         Long memberId = event.getMemberId();
         profileImageRepository.save(ProfileImage.create(memberId, null, event.getImageUrl()));
