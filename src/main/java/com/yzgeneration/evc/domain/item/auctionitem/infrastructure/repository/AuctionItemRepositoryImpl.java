@@ -195,7 +195,7 @@ public class AuctionItemRepositoryImpl implements AuctionItemRepository {
     @Override
     public void updateCurrentPrice(Long id, int point) {
         jpaQueryFactory.update(auctionItemEntity)
-                .set(auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice, auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice.add(point))
+                .set(auctionItemEntity.auctionItemPriceDetailsEntity.currentPrice, point)
                 .where(auctionItemEntity.id.eq(id))
                 .execute();
     }
