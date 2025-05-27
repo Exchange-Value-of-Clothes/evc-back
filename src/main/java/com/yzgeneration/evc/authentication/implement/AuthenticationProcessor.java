@@ -86,7 +86,7 @@ public class AuthenticationProcessor {
                 .build();
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .header(HttpHeaders.LOCATION, "https://localhost:3000/social-login-success")
+                .header(HttpHeaders.LOCATION, "https://d1vw7pjo2v9aef.cloudfront.net/social-login-success")
                 .body(new LoginResponse(authenticationToken.getAccessToken()));
     }
 
