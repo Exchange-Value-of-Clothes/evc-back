@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -21,16 +22,14 @@ public class MemberEventListener {
     private final MemberPointRepository memberPointRepository;
     private final ProfileImageRepository profileImageRepository;
 
-    @TransactionalEventListener
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void initPoint(MemberCreatedEvent event) {
         log.info("initPoint - Transaction active : {}", TransactionSynchronizationManager.isSynchronizationActive());
         Long memberId = event.getMemberId();
         memberPointRepository.save(MemberPoint.create(memberId, 0));
     }
 
-    @TransactionalEventListener
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void initProfileImage(MemberCreatedEvent event) {
         Long memberId = event.getMemberId();
         profileImageRepository.save(ProfileImage.create(memberId, null, event.getImageUrl()));
